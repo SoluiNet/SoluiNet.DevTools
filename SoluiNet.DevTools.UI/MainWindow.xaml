@@ -1,0 +1,51 @@
+﻿<Window x:Class="SoluiNet.DevTools.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SoluiNet.DevTools.UI"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid x:Name="MainGrid">
+        <TabControl Margin="0" x:Name="MainTabs">
+            <TabItem x:Name="SqlTab" Header="Custom SQL">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Name="Project" Margin="5,5,305,5" VerticalAlignment="Top" Grid.Column="2" SelectionChanged="Project_SelectionChanged" />
+                    <ComboBox x:Name="Environments" HorizontalAlignment="Right" Margin="5,5,155,0" VerticalAlignment="Top" Width="145" Grid.Column="2" SelectionChanged="Environments_SelectionChanged" />
+                    <ComboBox x:Name="Actions" HorizontalAlignment="Right" Margin="5,5,5,0" VerticalAlignment="Top" Width="145" Grid.Column="2">
+                        <Button x:Name="PrepareText" Content="PrepareText" Click="PrepareText_Click"/>
+                    </ComboBox>
+                    <!-- x:Name="SqlCommandText" Height="150" TextWrapping="Wrap" VerticalAlignment="Top" Margin="5,30,50,0" AcceptsReturn="True" KeyDown="SqlCommandText_KeyDown" Grid.Column="2" /-->
+                    <avalonedit:TextEditor Name="SqlCommandText" FontFamily="Consolas" SyntaxHighlighting="SQL" FontSize="10pt" Foreground="GhostWhite" Height="150" VerticalAlignment="Top" Margin="5,30,50,0" KeyDown="SqlCommandText_KeyDown" Grid.Column="2" Background="#FF303030" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"/>
+                    <Button x:Name="ExecuteSql" Content="Execute SQL" Height="40" Width="150" Margin="0,30,5,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="ExecuteSql_Click" Grid.Column="2">
+                        <Button.LayoutTransform>
+                            <RotateTransform Angle="90" />
+                        </Button.LayoutTransform>
+                    </Button>
+                    <TabControl x:Name="SqlResults" Margin="5,180,5,5" Grid.Column="2" />
+                    <Button x:Name="ExpandButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="30" FontSize="16" VerticalAlignment="Stretch" HorizontalAlignment="Left" Grid.Column="1" Click="ExpandButton_Click">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#808080" Offset="0"/>
+                                <GradientStop Color="#FFC8C8C8" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background> &gt;
+                    </Button>
+                    <TreeView x:Name="DatabaseSchema" Grid.Column="0" Width="250" Visibility="Collapsed" PreviewMouseRightButtonDown="DatabaseSchema_PreviewMouseRightButtonDown" MouseDoubleClick="DatabaseSchema_MouseDoubleClick" >
+                        <TreeView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="SelectTopThousand" Header="Select TOP 1000" Click="SelectTopThousand_Click"/>
+                            </ContextMenu>
+                        </TreeView.ContextMenu>
+                    </TreeView>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

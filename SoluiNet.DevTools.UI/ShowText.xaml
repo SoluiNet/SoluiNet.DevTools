@@ -1,0 +1,14 @@
+﻿<Window x:Class="SoluiNet.DevTools.UI.ShowText"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:local="clr-namespace:SoluiNet.DevTools.UI"
+        mc:Ignorable="d"
+        Title="ShowText" Height="450" Width="800">
+    <Grid>
+        <avalonEdit:TextEditor Name="TextToShow" FontFamily="Consolas" SyntaxHighlighting="SQL" FontSize="10pt" Foreground="GhostWhite" Margin="5,5,5,35" Background="#FF303030"/>
+        <Button Content="Close" HorizontalAlignment="Right" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="75" Height="25" Click="Button_Click"/>
+    </Grid>
+</Window>
