@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="SqlScript"
+    targetNamespace="http://tempuri.org/SqlScript.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/SqlScript.xsd"
+    xmlns:mstns="http://tempuri.org/SqlScript.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:complexType name="SqlScript">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" />
+      <xs:element name="Description" type="xs:string" />
+      <xs:element name="CommandText" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="SqlScripts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SqlScript" type="SqlScript" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

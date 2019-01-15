@@ -1,0 +1,1 @@
+"%programfiles(x86)%\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.2 Tools\xsd.exe" /c /namespace:SoluiNet.DevTools.Core.ScriptEngine /language:CS SqlScript.xsd
