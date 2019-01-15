@@ -68,7 +68,10 @@ namespace SoluiNet.DevTools.Core.Formatter
             var formatOptions = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatterOptions()
             {
                 TrailingCommas = true,
-                BreakJoinOnSections = true
+                BreakJoinOnSections = true,
+                IndentString = IndentationString,
+                UppercaseKeywords = true,
+                SpacesPerTab = 2
             };
 
             var formatter = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatter(formatOptions);
