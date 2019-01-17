@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace SoluiNet.DevTools.Core
 {
@@ -22,6 +23,26 @@ namespace SoluiNet.DevTools.Core
         /// The plugin name
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// The first colour accent
+        /// </summary>
+        Color AccentColour1 { get; }
+
+        /// <summary>
+        /// The second colour accent
+        /// </summary>
+        Color AccentColor2 { get; }
+
+        /// <summary>
+        /// The foreground colour
+        /// </summary>
+        Color ForegroundColor { get; }
+
+        /// <summary>
+        /// The background colour
+        /// </summary>
+        Color BackgroundColor { get; }
 
         /// <summary>
         /// The environment in which the plugin should run in.
