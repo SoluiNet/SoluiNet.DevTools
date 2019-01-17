@@ -1,0 +1,8 @@
+Debug
+.v15/**
+.vs/**
+packages/**
+/SoluiNet.DevTools.UI/ConnectionStrings.config
+/UpgradeLog2.htm
+/UpgradeLog.htm
+/**/*.ConnectionStrings.config
