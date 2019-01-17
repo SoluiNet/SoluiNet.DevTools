@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SoluiNet.DevTools.Core.Formatter;
 using SoluiNet.DevTools.Core.Tools.UI;
 
 namespace SoluiNet.DevTools.UI
@@ -35,9 +36,15 @@ namespace SoluiNet.DevTools.UI
             TextToShow.SyntaxHighlighting = highlighting;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void FormatSQL_Click(object sender, RoutedEventArgs e)
+        {
+            var formatter = new SqlFormatter();
+            TextToShow.Text = formatter.FormatString(TextToShow.Text);
         }
     }
 }
