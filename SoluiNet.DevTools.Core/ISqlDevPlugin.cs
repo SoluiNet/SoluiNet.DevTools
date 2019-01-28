@@ -32,17 +32,22 @@ namespace SoluiNet.DevTools.Core
         /// <summary>
         /// The second colour accent
         /// </summary>
-        Color AccentColor2 { get; }
+        Color AccentColour2 { get; }
 
         /// <summary>
         /// The foreground colour
         /// </summary>
-        Color ForegroundColor { get; }
+        Color ForegroundColour { get; }
 
         /// <summary>
         /// The background colour
         /// </summary>
-        Color BackgroundColor { get; }
+        Color BackgroundColour { get; }
+
+        /// <summary>
+        /// The background accent colour
+        /// </summary>
+        Color BackgroundAccentColour { get; }
 
         /// <summary>
         /// The environment in which the plugin should run in.
