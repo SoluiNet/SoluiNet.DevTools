@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using NLog;
 using NLog.Internal;
 using SoluiNet.DevTools.Core;
@@ -67,6 +69,120 @@ namespace SoluiNet.DevTools.UI
             LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
         }
 
+        private static void PopulateGridContextMenu(DataGrid dataGrid)
+        {
+            var contextMenu = dataGrid.ContextMenu;
+
+            if (contextMenu == null)
+                return;
+
+            #region Copy to Clipboard
+            var copyToClipboardMenuItem = new MenuItem()
+            {
+                Header = "Copy to Clipboard"
+            };
+
+            copyToClipboardMenuItem.Click += (sender, eventInfo) =>
+            {
+                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+
+                if (containingGrid == null)
+                    return;
+
+                //Clipboard.SetData(DataFormats.StringFormat, UIHelper.GetDataGridData(containingGrid));
+                Clipboard.SetText(UIHelper.GetDataGridAsText(containingGrid));
+            };
+
+            contextMenu.Items.Add(copyToClipboardMenuItem);
+            #endregion
+
+            #region Copy selected rows to Clipboard
+            var copySelectionToClipboardMenuItem = new MenuItem()
+            {
+                Header = "Copy selected rows to Clipboard"
+            };
+
+            copySelectionToClipboardMenuItem.Click += (sender, eventInfo) =>
+            {
+                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+
+                if (containingGrid == null)
+                    return;
+
+                Clipboard.SetText(UIHelper.GetDataGridSelectedRowsAsText(containingGrid));
+            };
+
+            contextMenu.Items.Add(copySelectionToClipboardMenuItem);
+            #endregion
+
+            #region Copy column to Clipboard
+            var copyColumnToClipboardMenuItem = new MenuItem()
+            {
+                Header = "Copy column to Clipboard"
+            };
+
+            copyColumnToClipboardMenuItem.Click += (sender, eventInfo) =>
+            {
+                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+
+                if (containingGrid == null)
+                    return;
+
+                Clipboard.SetText(UIHelper.GetDataGridColumnsAsText(containingGrid));
+            };
+
+            contextMenu.Items.Add(copyColumnToClipboardMenuItem);
+            #endregion
+
+            #region Copy selected column to Clipboard
+            var copySelectedColumnToClipboardMenuItem = new MenuItem()
+            {
+                Header = "Copy selected column to Clipboard"
+            };
+
+            copySelectedColumnToClipboardMenuItem.Click += (sender, eventInfo) =>
+            {
+                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+
+                if (containingGrid == null)
+                    return;
+
+                Clipboard.SetText(UIHelper.GetDataGridSelectedColumnsAsText(containingGrid));
+            };
+
+            contextMenu.Items.Add(copySelectedColumnToClipboardMenuItem);
+            #endregion
+
+            contextMenu.Items.Add(new Separator());
+
+            #region Save as CSV
+            var saveAsCsvMenuItem = new MenuItem()
+            {
+                Header = "Save as CSV"
+            };
+
+            saveAsCsvMenuItem.Click += (sender, eventInfo) =>
+            {
+                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+
+                if (containingGrid == null)
+                    return;
+
+                var saveFileDialog = new SaveFileDialog()
+                {
+                    DefaultExt = ".csv",
+                    Filter = "Comma Seperated Values (*.csv)|*.csv",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                    File.WriteAllText(saveFileDialog.FileName, UIHelper.GetDataGridAsText(containingGrid, ",", "\r\n", true), Encoding.UTF8);
+            };
+
+            contextMenu.Items.Add(saveAsCsvMenuItem);
+            #endregion
+        }
+
         private void ExecuteSqlCommand()
         {
             var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == Project.Text);
@@ -84,26 +200,11 @@ namespace SoluiNet.DevTools.UI
 
             var dataGridSqlResults = new DataGrid();
             //dataGridSqlResults.AutoGenerateColumns = true;
+            dataGridSqlResults.BeginningEdit += BeginEditSqlResult;
 
             dataGridSqlResults.ContextMenu = new ContextMenu();
 
-            var copyToClipboardMenuItem = new MenuItem()
-            {
-                Header = "Copy to Clipboard"
-            };
-
-            copyToClipboardMenuItem.Click += (sender, eventInfo) =>
-            {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
-
-                if (containingGrid == null)
-                    return;
-
-                //Clipboard.SetData(DataFormats.StringFormat, UIHelper.GetDataGridData(containingGrid));
-                Clipboard.SetText(UIHelper.GetDataGridAsText(containingGrid));
-            };
-
-            dataGridSqlResults.ContextMenu.Items.Add(copyToClipboardMenuItem);
+            PopulateGridContextMenu(dataGridSqlResults);
 
             dataGridSqlResults.LoadingRow += (sender, eventInfo) =>
             {
@@ -149,6 +250,13 @@ namespace SoluiNet.DevTools.UI
             }
 
             SqlResults.SelectedIndex = tabIndexSqlResults;
+        }
+
+        private void BeginEditSqlResult(object sender, DataGridBeginningEditEventArgs e)
+        {
+            //throw new NotImplementedException();
+
+            e.Cancel = true;
         }
 
         private void ExecuteSql_Click(object sender, RoutedEventArgs e)
@@ -286,7 +394,7 @@ namespace SoluiNet.DevTools.UI
                                  "FROM sys.objects obj " +
                                  "JOIN sys.sql_modules mod ON mod.object_id = obj.object_id " +
                                  "WHERE obj.type = 'V'";
-                
+
                 var data = plugin.ExecuteSql(sqlCommand);
 
                 foreach (DataRowView record in data.DefaultView)
