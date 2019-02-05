@@ -153,6 +153,25 @@ namespace SoluiNet.DevTools.UI
             contextMenu.Items.Add(copySelectedColumnToClipboardMenuItem);
             #endregion
 
+            #region Copy selected cell to Clipboard
+            var copySelectedCellToClipboardMenuItem = new MenuItem()
+            {
+                Header = "Copy selected cell to Clipboard"
+            };
+
+            copySelectedCellToClipboardMenuItem.Click += (sender, eventInfo) =>
+            {
+                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+
+                if (containingGrid == null)
+                    return;
+
+                Clipboard.SetText(UIHelper.GetSelectedCellAsText(containingGrid));
+            };
+
+            contextMenu.Items.Add(copySelectedCellToClipboardMenuItem);
+            #endregion
+
             contextMenu.Items.Add(new Separator());
 
             #region Save as CSV
@@ -180,6 +199,62 @@ namespace SoluiNet.DevTools.UI
             };
 
             contextMenu.Items.Add(saveAsCsvMenuItem);
+            #endregion
+
+            #region Save as XML
+            var saveAsXmlMenuItem = new MenuItem()
+            {
+                Header = "Save as XML"
+            };
+
+            saveAsXmlMenuItem.Click += (sender, eventInfo) =>
+            {
+                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+
+                if (containingGrid == null)
+                    return;
+
+                var saveFileDialog = new SaveFileDialog()
+                {
+                    DefaultExt = ".xml",
+                    Filter = "Extensible Markup Language (*.xml)|*.xml",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                    File.WriteAllText(saveFileDialog.FileName, UIHelper.GetDataGridAsXml(containingGrid), Encoding.UTF8);
+            };
+
+            contextMenu.Items.Add(saveAsXmlMenuItem);
+            #endregion
+
+            #region Save as XML
+            var saveAsSqlMenuItem = new MenuItem()
+            {
+                Header = "Save as SQL"
+            };
+
+            saveAsSqlMenuItem.Click += (sender, eventInfo) =>
+            {
+                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+
+                if (containingGrid == null)
+                    return;
+
+                var saveFileDialog = new SaveFileDialog()
+                {
+                    DefaultExt = ".sql",
+                    Filter = "Structured Query Language (*.sql)|*.sql",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                    File.WriteAllText(saveFileDialog.FileName, string.Format("/*{0}*/\r\n{1}",
+                        ((TabItem)containingGrid.Parent).Tag.ToString(),
+                        UIHelper.GetDataGridAsSql(containingGrid)), Encoding.UTF8);
+            };
+
+            contextMenu.Items.Add(saveAsSqlMenuItem);
             #endregion
         }
 
