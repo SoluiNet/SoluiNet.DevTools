@@ -228,7 +228,7 @@ namespace SoluiNet.DevTools.UI
             contextMenu.Items.Add(saveAsXmlMenuItem);
             #endregion
 
-            #region Save as XML
+            #region Save as SQL
             var saveAsSqlMenuItem = new MenuItem()
             {
                 Header = "Save as SQL"
