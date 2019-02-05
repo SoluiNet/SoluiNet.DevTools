@@ -72,14 +72,14 @@ namespace SoluiNet.DevTools.Core.Tools.UI
             {
                 foreach (var row in dataGrid.Items)
                 {
-                    dataTable.Rows.Add(((DataRowView) row).Row.ItemArray);
+                    dataTable.Rows.Add(((DataRowView)row).Row.ItemArray);
                 }
             }
             else
             {
                 foreach (var row in dataGrid.Items)
                 {
-                    var itemArray = ((DataRowView) row).Row.ItemArray;
+                    var itemArray = ((DataRowView)row).Row.ItemArray;
 
                     var rowArray = itemArray.Where((t, i) => columnsToAdd.ContainsValue(i)).ToList();
 
@@ -200,11 +200,137 @@ namespace SoluiNet.DevTools.Core.Tools.UI
             return data;
         }
 
+        private static string GetXmlStringForDataTable(DataTable dataTable, string rootElementName = "Table", string recordElementName = "Record")
+        {
+            var data = string.Empty;
+
+            data += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n";
+            data += string.Format("<{0}>", rootElementName);
+
+            foreach (var row in dataTable.Rows)
+            {
+                data += string.Format("<{0}>", recordElementName);
+
+                for (var i = 0; i < dataTable.Columns.Count; i++)
+                {
+                    var column = dataTable.Columns[i];
+
+                    data += string.Format("<{0}>", column.ColumnName);
+
+                    var columnData = ((DataRow)row)[column.ColumnName].ToString();
+                    data += columnData;
+
+                    data += string.Format("</{0}>", column.ColumnName);
+                }
+
+                data += string.Format("</{0}>", recordElementName);
+            }
+
+            data += string.Format("</{0}>", rootElementName);
+
+            return data;
+        }
+
+        private static string GetSqlStringForDataTable(DataTable dataTable, string tableName = "Table")
+        {
+            var intRegex = new Regex("^\\d+$");
+            var floatRegex = new Regex("^\\d+.\\d+$");
+            var dateRegex = new Regex(@"^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))(\s+|T)(([01]\d|2[0-4]):([0-5]\d):([0-5]\d))$");
+            var germanDateRegex = new Regex(@"^((0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.[12]\d{3})(\s+|T)(([01]\d|2[0-4]):([0-5]\d):([0-5]\d))$");
+
+
+            var data = string.Empty;
+
+            data += string.Format("INSERT INTO {0} (", tableName);
+
+            for (var i = 0; i < dataTable.Columns.Count; i++)
+            {
+                var column = dataTable.Columns[i];
+
+                data += column.ColumnName;
+
+                if (i < dataTable.Columns.Count - 1)
+                {
+                    data += ", ";
+                }
+            }
+
+            data += ") VALUES ";
+
+            foreach (var row in dataTable.Rows)
+            {
+                data += "(";
+
+                for (var i = 0; i < dataTable.Columns.Count; i++)
+                {
+                    var column = dataTable.Columns[i];
+
+                    var columnData = ((DataRow)row)[column.ColumnName];
+
+                    if (string.IsNullOrEmpty(columnData.ToString()))
+                    {
+                        data += "NULL";
+                    }
+                    else if (dateRegex.IsMatch(columnData.ToString()) || germanDateRegex.IsMatch(columnData.ToString()))
+                    {
+                        var dateValue = Convert.ToDateTime(columnData);
+
+                        //data += string.Format("CAST('{0}' AS DATETIME)", dateValue.ToString("yyyy-MM-ddTHH:mm:ss.ffffzzz"));
+                        //data += string.Format("CONVERT(DATETIME, '{0}', 127)", dateValue.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz"));
+                        data += string.Format("CONVERT(DATETIME, '{0}', 126)", dateValue.ToString("yyyy-MM-ddTHH:mm:ss.fff"));
+                    }
+                    else if (intRegex.IsMatch(columnData.ToString()) || floatRegex.IsMatch(columnData.ToString()))
+                    {
+                        data += columnData;
+                    }
+                    else switch (columnData)
+                        {
+                            case int _:
+                            case float _:
+                                data += columnData;
+                                break;
+                            case DateTime _:
+                                data += string.Format("CAST('{0}' AS DATETIME)", ((DateTime)columnData).ToString("yyyy-MM-ddTHH:mm:ss.ffffzzz"));
+                                break;
+                            default:
+                                data += string.Format("'{0}'", columnData.ToString().Replace("'", "''"));
+                                break;
+                        }
+
+                    if (i < dataTable.Columns.Count - 1)
+                    {
+                        data += ", ";
+                    }
+                }
+
+                data += "), ";
+            }
+
+            data = data.Substring(0, data.Length - 2);
+            data += ";";
+
+            return data;
+        }
+
         public static string GetDataGridAsText(DataGrid dataGrid, string separator = "\t", string rowSeparator = "\r\n", bool quoteTexts = false, string textQuote = "\"")
         {
             var dataTable = GetDataGridData(dataGrid);
 
             return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+        }
+
+        public static string GetDataGridAsXml(DataGrid dataGrid, string rootElementName = "Table", string recordElementName = "Record")
+        {
+            var dataTable = GetDataGridData(dataGrid);
+
+            return GetXmlStringForDataTable(dataTable, rootElementName, recordElementName);
+        }
+
+        public static string GetDataGridAsSql(DataGrid dataGrid, string tableName = "Table")
+        {
+            var dataTable = GetDataGridData(dataGrid);
+
+            return GetSqlStringForDataTable(dataTable, tableName);
         }
 
         public static string GetDataGridSelectedRowsAsText(DataGrid dataGrid, string separator = "\t", string rowSeparator = "\r\n", bool quoteTexts = false, string textQuote = "\"")
@@ -226,6 +352,11 @@ namespace SoluiNet.DevTools.Core.Tools.UI
             var dataTable = GetDataGridSelectedRowsData(dataGrid, new List<string> { dataGrid.CurrentCell.Column.Header.ToString() });
 
             return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+        }
+
+        public static string GetSelectedCellAsText(DataGrid dataGrid)
+        {
+            return dataGrid.CurrentCell.ToString();
         }
 
         public static IHighlightingDefinition LoadHighlightingDefinition(Type type, string resourceName)
