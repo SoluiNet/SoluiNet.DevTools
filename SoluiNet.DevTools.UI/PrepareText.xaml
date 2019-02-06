@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoluiNet.DevTools.UI"
         mc:Ignorable="d"
-        Title="PrepareText" Height="450" Width="800">
+        Title="SoluiNet.DevTools - Prepare Text(s)" Height="450" Width="800">
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

@@ -6,7 +6,7 @@
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:local="clr-namespace:SoluiNet.DevTools.UI"
         mc:Ignorable="d"
-        Title="ShowText" Height="450" Width="800">
+        Title="SoluiNet.DevTools - Show SQL Text" Height="450" Width="800">
     <Grid>
         <avalonEdit:TextEditor Name="TextToShow" FontFamily="Consolas" SyntaxHighlighting="SQL" FontSize="10pt" Foreground="GhostWhite" Margin="5,5,5,35" Background="#FF303030"/>
         <Button Name="FormatSQL" Content="Format SQL" HorizontalAlignment="Left" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="120" Height="25" Click="FormatSQL_Click"/>

@@ -1,0 +1,19 @@
+﻿<Window x:Class="SoluiNet.DevTools.UI.Options"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SoluiNet.DevTools.UI"
+        mc:Ignorable="d"
+        Title="SoluiNet.DevTools - Options" Height="450" Width="800">
+    <Grid x:Name="OptionsMainGrid">
+        <TreeView x:Name="OptionEntries" Margin="0,0,0,40" Width="170" HorizontalAlignment="Left">
+            <TreeViewItem x:Name="GeneralSettings" Header="General" >
+                <TreeViewItem x:Name="ConnectionStringSettings" Header="Connection Strings" Selected="ConnectionStringSettings_Selected" />
+            </TreeViewItem>
+            <TreeViewItem x:Name="PluginSettings" Header="Plugins" />
+        </TreeView>
+        <Grid x:Name="OptionDetails" Margin="175,0,0,40"/>
+        <Button x:Name="CloseOptions" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="CloseOptions_Click"/>
+    </Grid>
+</Window>

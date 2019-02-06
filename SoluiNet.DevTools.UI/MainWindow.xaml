@@ -6,9 +6,23 @@
         xmlns:local="clr-namespace:SoluiNet.DevTools.UI"
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="SoluiNet.DevTools" Height="450" Width="800">
     <Grid x:Name="MainGrid">
-        <TabControl Margin="0" x:Name="MainTabs">
+        <DockPanel>
+            <Menu x:Name="TopMenu" DockPanel.Dock="Top" Height="20">
+                <MenuItem Header="_File">
+                    <MenuItem x:Name="FileCloseMenuItem" Header="_Close" Click="FileCloseMenuItem_Click"/>
+                </MenuItem>
+                <MenuItem Header="_Extras">
+                    <MenuItem x:Name="ExtrasOptionsMenuItem" Header="_Options" Click="ExtrasOptionsMenuItem_Click"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem x:Name="HelpInfoMenuItem" Header="_Info"></MenuItem>
+                </MenuItem>
+            </Menu>
+            <StackPanel></StackPanel>
+        </DockPanel>
+        <TabControl Margin="0,20,0,0" x:Name="MainTabs">
             <TabItem x:Name="SqlTab" Header="Custom SQL">
                 <Grid>
                     <Grid.ColumnDefinitions>

@@ -644,5 +644,17 @@ namespace SoluiNet.DevTools.UI
 
             plugin.Environment = (sender as ComboBox)?.SelectedItem as string;
         }
+
+        private void FileCloseMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ExtrasOptionsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Options();
+
+            dialog.Show();
+        }
     }
 }
