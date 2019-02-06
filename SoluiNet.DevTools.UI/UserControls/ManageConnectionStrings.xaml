@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="SoluiNet.DevTools.UI.UserControls.ManageConnectionStrings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SoluiNet.DevTools.UI.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized">
+    <Grid>
+        <Button x:Name="SaveConnectionStrings" Content="Save" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="25" Width="75" Click="SaveConnectionStrings_Click"/>
+        <Button x:Name="ReloadConnectionStrings" Content="Reload" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Height="25" Width="75" Click="ReloadConnectionStrings_Click"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0,45" >
+            <Grid x:Name="MainContent" Margin="0,0,30,0"/>
+        </ScrollViewer>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Connection Strings" VerticalAlignment="Top" FontSize="20"/>
+    </Grid>
+</UserControl>
