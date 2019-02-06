@@ -81,6 +81,15 @@
     <Compile Include="ShowText.xaml.cs">
       <DependentUpon>ShowText.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Options.xaml.cs">
+      <DependentUpon>Options.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ConnectionString.xaml.cs">
+      <DependentUpon>ConnectionString.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ManageConnectionStrings.xaml.cs">
+      <DependentUpon>ManageConnectionStrings.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -98,6 +107,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ShowText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ConnectionString.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ManageConnectionStrings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -125,6 +146,7 @@
     </EmbeddedResource>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="ConnectionStrings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
