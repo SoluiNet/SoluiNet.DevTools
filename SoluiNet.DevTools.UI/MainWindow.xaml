@@ -13,7 +13,7 @@
                 <MenuItem Header="_File">
                     <MenuItem x:Name="FileCloseMenuItem" Header="_Close" Click="FileCloseMenuItem_Click"/>
                 </MenuItem>
-                <MenuItem Header="_Extras">
+                <MenuItem x:Name="ExtrasMenuItem" Header="_Extras">
                     <MenuItem x:Name="ExtrasOptionsMenuItem" Header="_Options" Click="ExtrasOptionsMenuItem_Click"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="_Help">

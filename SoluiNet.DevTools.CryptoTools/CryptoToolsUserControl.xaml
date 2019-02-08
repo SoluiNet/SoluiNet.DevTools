@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="SoluiNet.DevTools.CryptoTools.CryptToolsUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SoluiNet.DevTools.CryptoTools"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="61*"/>
+            <RowDefinition Height="149*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="Encrypt" Content="Encrypt" HorizontalAlignment="Left" Margin="707,10,0,0" VerticalAlignment="Top" Width="75" Click="Encrypt_Click"/>
+        <TextBox x:Name="DecryptedText" HorizontalAlignment="Left" Height="84" Margin="10,203.705,0,0" TextWrapping="Wrap" Text="Decrypted Text" VerticalAlignment="Top" Width="772" Grid.Row="1"/>
+        <TextBox x:Name="EncryptedText" HorizontalAlignment="Left" Height="84" Margin="10,114.705,0,0" TextWrapping="Wrap" Text="Encrypted Text" VerticalAlignment="Top" Width="772" Grid.Row="1"/>
+        <Button x:Name="Decrypt" Content="Decrypt" HorizontalAlignment="Left" Margin="707,39,0,0" VerticalAlignment="Top" Width="75" Click="Decrypt_Click"/>
+        <CheckBox x:Name="Base64Encoded" Content="Is base64 Encoded?" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <CheckBox x:Name="EncodeWithBase64" Content="Should be encoded with base64" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <ComboBox x:Name="ChosenEncoding" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.9,3.727" Grid.Row="1">
+            <ListBoxItem Content="ASCII"/>
+            <ListBoxItem Content="ByteString"/>
+            <ListBoxItem Content="ISO-8859-1"/>
+            <ListBoxItem Content="UTF7"/>
+            <ListBoxItem Content="UTF8"/>
+            <ListBoxItem Content="UTF16"/>
+            <ListBoxItem Content="UTF16 BE"/>
+            <ListBoxItem Content="UTF32"/>
+        </ComboBox>
+        <TabControl x:Name="EncryptionMethodTabs" HorizontalAlignment="Left" Height="153" Margin="10,10,0,0" VerticalAlignment="Top" Width="645" Grid.RowSpan="2">
+            <TabItem x:Name="RsaTab" Header="RSA">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="PrivateKeyPath" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" Text="Private Key Path" VerticalAlignment="Top" Width="461"/>
+                    <TextBox x:Name="PublicKeyPath" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" Text="Public Key Path" VerticalAlignment="Top" Width="461"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="AesTab" Header="AES">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="AesKey" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="AES Key" VerticalAlignment="Top" Width="461" Grid.Column="1"/>
+                    <TextBox x:Name="AesIniValue" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" TextWrapping="Wrap" Text="AES Initialization Value" VerticalAlignment="Top" Width="461" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="SimpleTab" Header="Base64">
+                <Grid Background="#FFE5E5E5">
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -90,6 +90,9 @@
     <Compile Include="UserControls\ManageConnectionStrings.xaml.cs">
       <DependentUpon>ManageConnectionStrings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VisualPluginContainer.xaml.cs">
+      <DependentUpon>VisualPluginContainer.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -119,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ManageConnectionStrings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VisualPluginContainer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

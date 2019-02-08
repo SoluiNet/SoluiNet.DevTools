@@ -18,6 +18,8 @@ namespace SoluiNet.DevTools.UI
     {
         internal ICollection<ISqlDevPlugin> Plugins { get; set; }
 
+        internal ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
+
         static Assembly LoadAssembly(object sender, ResolveEventArgs args)
         {
             var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -35,7 +37,7 @@ namespace SoluiNet.DevTools.UI
 
             if (File.Exists(assemblyPath))
                 assembly = Assembly.LoadFrom(assemblyPath);
-            else if(File.Exists(assemblyPluginPath))
+            else if (File.Exists(assemblyPluginPath))
                 assembly = Assembly.LoadFrom(assemblyPluginPath);
 
             return assembly;
@@ -69,7 +71,8 @@ namespace SoluiNet.DevTools.UI
             }
 
             Type pluginType = typeof(ISqlDevPlugin);
-            ICollection<Type> pluginTypes = new List<Type>();
+            Type utilityPluginType = typeof(IUtilitiesDevPlugin);
+            IDictionary<Type, string> pluginTypes = new Dictionary<Type, string>();
             foreach (var assembly in assemblies)
             {
                 if (assembly == null)
@@ -87,16 +90,30 @@ namespace SoluiNet.DevTools.UI
 
                     if (type.GetInterface(pluginType.FullName) != null)
                     {
-                        pluginTypes.Add(type);
+                        pluginTypes.Add(type, "SqlDev");
+                    }
+                    else if (type.GetInterface(utilityPluginType.FullName) != null)
+                    {
+                        pluginTypes.Add(type, "UtilityDev");
                     }
                 }
             }
 
-            Plugins = new List<ISqlDevPlugin>(pluginTypes.Count);
+            Plugins = new List<ISqlDevPlugin>();
+            UtilityPlugins = new List<IUtilitiesDevPlugin>();
+
             foreach (var type in pluginTypes)
             {
-                var plugin = (ISqlDevPlugin)Activator.CreateInstance(type);
-                Plugins.Add(plugin);
+                if (type.Value == "SqlDev")
+                {
+                    var plugin = (ISqlDevPlugin)Activator.CreateInstance(type.Key);
+                    Plugins.Add(plugin);
+                }
+                else if (type.Value == "UtilityDev")
+                {
+                    var plugin = (IUtilitiesDevPlugin)Activator.CreateInstance(type.Key);
+                    UtilityPlugins.Add(plugin);
+                }
             }
 
             AppDomain currentDomain = AppDomain.CurrentDomain;

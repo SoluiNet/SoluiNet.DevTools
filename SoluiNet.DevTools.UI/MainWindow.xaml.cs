@@ -66,6 +66,35 @@ namespace SoluiNet.DevTools.UI
                 }
             }
 
+            foreach (var utilityPlugin in ((App)Application.Current).UtilityPlugins)
+            {
+                try
+                {
+                    var utilityPluginMenuItem = new MenuItem()
+                    {
+                        Header = utilityPlugin.MenuItemLabel
+                    };
+
+                    utilityPluginMenuItem.Click += (sender, args) =>
+                    {
+                        utilityPlugin.Execute(x =>
+                            {
+                                var pluginVisualizeWindow = new VisualPluginContainer();
+
+                                pluginVisualizeWindow.ContentGrid.Children.Add(x);
+
+                                pluginVisualizeWindow.Show();
+                            });
+                    };
+
+                    ExtrasMenuItem.Items.Add(utilityPluginMenuItem);
+                }
+                catch (Exception exception)
+                {
+                    Logger.Error(exception);
+                }
+            }
+
             LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
         }
 

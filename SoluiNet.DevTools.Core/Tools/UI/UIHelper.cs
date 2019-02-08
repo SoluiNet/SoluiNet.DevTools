@@ -356,7 +356,11 @@ namespace SoluiNet.DevTools.Core.Tools.UI
 
         public static string GetSelectedCellAsText(DataGrid dataGrid)
         {
-            return dataGrid.CurrentCell.ToString();
+            var dataRow = (DataRowView)dataGrid.SelectedItem;
+            var index = dataGrid.CurrentCell.Column.DisplayIndex;
+            var cellValue = dataRow.Row.ItemArray[index].ToString();
+
+            return cellValue;
         }
 
         public static IHighlightingDefinition LoadHighlightingDefinition(Type type, string resourceName)

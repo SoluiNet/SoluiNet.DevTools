@@ -55,6 +55,7 @@
     <Compile Include="Formatter\SqlFormatter.cs" />
     <Compile Include="Formatter\IFormatter.cs" />
     <Compile Include="ISqlDevPlugin.cs" />
+    <Compile Include="IUtilitiesDevPlugin.cs" />
     <Compile Include="Models\IDatabaseElement.cs" />
     <Compile Include="Models\StoredProcedure.cs" />
     <Compile Include="Models\View.cs" />
