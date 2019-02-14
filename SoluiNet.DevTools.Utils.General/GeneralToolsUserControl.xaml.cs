@@ -65,13 +65,75 @@ namespace SoluiNet.DevTools.Utils.General
 
         private void Calculate_Click(object sender, RoutedEventArgs e)
         {
-            if (Direction.SelectedItem.ToString() == "To Binary")
-            {
+            var selectedDirection = (Direction.SelectedItem as ComboBoxItem).Content;
+            var selectedBinaryType = (BinaryType.SelectedItem as ComboBoxItem).Content;
 
+            if (selectedDirection.ToString() == "To Binary")
+            {
+                int baseForCalculation;
+
+                switch (selectedBinaryType.ToString())
+                {
+                    case "Hexadecimal":
+                        baseForCalculation = 16;
+                        break;
+                    case "Octal":
+                        baseForCalculation = 8;
+                        break;
+                    case "Binary":
+                        baseForCalculation = 2;
+                        break;
+                    case "Decimal":
+                    default:
+                        baseForCalculation = 10;
+                        break;
+                }
+
+                var decimalValue = Convert.ToInt64(NumberOutput.Text);
+
+                var binaryResult = string.Empty;
+
+                var numberArray = GeneralTools.GetNumberArrayByBase(decimalValue, baseForCalculation);
+
+                for(int i = 0; i < numberArray.Length; i++)
+                {
+                    binaryResult += baseForCalculation == 16 ? GeneralTools.GetHexadecimalValue(numberArray[i]) : numberArray[i].ToString();
+                }
+
+                BinaryInput.Text = binaryResult;
             }
-            else if(Direction.SelectedItem.ToString() == "To Decimal")
+            else if(selectedDirection.ToString() == "To Decimal")
             {
+                int baseForCalculation;
 
+                switch (selectedBinaryType.ToString())
+                {
+                    case "Hexadecimal":
+                        baseForCalculation = 16;
+                        break;
+                    case "Octal":
+                        baseForCalculation = 8;
+                        break;
+                    case "Binary":
+                        baseForCalculation = 2;
+                        break;
+                    case "Decimal":
+                    default:
+                        baseForCalculation = 10;
+                        break;
+                }
+
+                long decimalValue = 0;
+
+                for(int i = 0; i < BinaryInput.Text.Length; i++)
+                {
+                    var valence = Convert.ToInt64(Math.Pow(baseForCalculation, BinaryInput.Text.Length - 1 - i));
+                    var quantity = baseForCalculation == 16 ? GeneralTools.GetDecimalValueForHex(BinaryInput.Text[i]) : Convert.ToInt64(BinaryInput.Text[i].ToString());
+
+                    decimalValue += quantity * valence;
+                }
+
+                NumberOutput.Text = decimalValue.ToString();
             }
         }
 

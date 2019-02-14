@@ -44,6 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneralTools.cs" />
     <Compile Include="GeneralToolsPlugin.cs" />
     <Compile Include="GeneralToolsUserControl.xaml.cs">
       <DependentUpon>GeneralToolsUserControl.xaml</DependentUpon>

@@ -64,6 +64,7 @@
     <Compile Include="ScriptEngine\SqlScript.cs" />
     <Compile Include="SyntaxHighlighting\SqlSyntaxProvider.cs" />
     <Compile Include="Tools\Database\DbHelper.cs" />
+    <Compile Include="Tools\File\FileHelper.cs" />
     <Compile Include="Tools\Plugin\PluginHelper.cs" />
     <Compile Include="Tools\UI\UIHelper.cs" />
   </ItemGroup>
