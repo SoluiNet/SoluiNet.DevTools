@@ -15,6 +15,7 @@
                 </MenuItem>
                 <MenuItem x:Name="ExtrasMenuItem" Header="_Extras">
                     <MenuItem x:Name="ExtrasOptionsMenuItem" Header="_Options" Click="ExtrasOptionsMenuItem_Click"></MenuItem>
+                    <Separator></Separator>
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem x:Name="HelpInfoMenuItem" Header="_Info"></MenuItem>

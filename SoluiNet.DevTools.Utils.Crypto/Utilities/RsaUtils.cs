@@ -9,7 +9,7 @@ using Org.BouncyCastle.Crypto.Encodings;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.OpenSsl;
 
-namespace SoluiNet.DevTools.CryptoTools.Utilities
+namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 {
     public class RsaUtils: ICryptoUtil
     {

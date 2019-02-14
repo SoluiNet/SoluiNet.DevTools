@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using SoluiNet.DevTools.Core;
 
-namespace SoluiNet.DevTools.CryptoTools
+namespace SoluiNet.DevTools.Utils.General
 {
-    public class CryptoToolsPlugin : IUtilitiesDevPlugin
+    public class GeneralToolsPlugin : IUtilitiesDevPlugin
     {
         public string Name
         {
-            get { return "CryptoToolsPlugin"; }
+            get { return "GeneralToolsPlugin"; }
         }
 
         public string MenuItemLabel
         {
-            get { return "Crypto Tools"; }
+            get { return "General Tools"; }
         }
 
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
-            displayInPluginContainer(new CryptToolsUserControl());
+            displayInPluginContainer(new GeneralToolsUserControl());
         }
     }
 }

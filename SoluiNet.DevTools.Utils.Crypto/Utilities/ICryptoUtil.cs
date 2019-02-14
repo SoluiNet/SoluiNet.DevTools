@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoluiNet.DevTools.CryptoTools.Utilities
+namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 {
     public interface ICryptoUtil
     {

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("SoluiNet.DevTools.CryptoTools")]
+[assembly: AssemblyTitle("SoluiNet.DevTools.Utils.XmlTransformation")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Swiss Post Solutions GmbH")]
-[assembly: AssemblyProduct("SoluiNet.DevTools.CryptoTools")]
-[assembly: AssemblyCopyright("Copyright © Swiss Post Solutions GmbH 2019")]
+[assembly: AssemblyCompany("SoluiNet")]
+[assembly: AssemblyProduct("SoluiNet.DevTools.Utils.XmlTransformation")]
+[assembly: AssemblyCopyright("Copyright © SoluiNet 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("cc0bc4d1-0bfa-469f-87a7-677c6bc3e8dc")]
+[assembly: Guid("3325b906-cc21-4ac9-a8e6-f18be994b9f4")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

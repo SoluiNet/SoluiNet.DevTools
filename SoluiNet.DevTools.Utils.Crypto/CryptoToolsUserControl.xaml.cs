@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SoluiNet.DevTools.CryptoTools
+namespace SoluiNet.DevTools.Utils.Crypto
 {
     /// <summary>
     /// Interaktionslogik für UserControl1.xaml

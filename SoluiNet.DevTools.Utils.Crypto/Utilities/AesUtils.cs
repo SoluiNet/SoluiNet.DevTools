@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoluiNet.DevTools.CryptoTools.Utilities
+namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 {
     public class AesUtils: ICryptoUtil
     {

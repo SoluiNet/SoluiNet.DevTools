@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SoluiNet.DevTools.CryptoTools.Utilities;
+using SoluiNet.DevTools.Utils.Crypto.Utilities;
 
-namespace SoluiNet.DevTools.CryptoTools
+namespace SoluiNet.DevTools.Utils.Crypto
 {
     public class CryptoTools
     {
