@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Configuration\ConfigurationSchema.cs" />
     <Compile Include="Extensions\GridExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Formatter\SqlFormatter.cs" />
@@ -70,6 +71,10 @@
     <Compile Include="Tools\UI\UIHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Configuration\ConfigurationSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Configuration\generate_xsd_classes.bat" />
     <None Include="packages.config" />
     <None Include="ScriptEngine\generate_xsd.bat" />
     <None Include="ScriptEngine\SqlScript.xsd">

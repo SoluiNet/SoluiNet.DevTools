@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ConfigurationSchema"
+    targetNamespace="http://solui.net/ConfigurationSchema.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://solui.net/ConfigurationSchema.xsd"
+    xmlns:mstns="http://solui.net/ConfigurationSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:complexType name="SoluiNet.ConfigurationEntryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="SoluiNet.PluginType">
+    <xs:sequence>
+      <xs:element type="SoluiNet.ConfigurationEntryType" name="SoluiNet.ConfigurationEntry" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="SoluiNet.ConfigurationType">
+    <xs:sequence>
+      <xs:element type="SoluiNet.PluginType" name="SoluiNet.Plugin" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="SoluiNet.Configuration" type="SoluiNet.ConfigurationType"/>
+</xs:schema>
