@@ -50,6 +50,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Extensions\GridExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Formatter\SqlFormatter.cs" />
