@@ -12,6 +12,7 @@ using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using SoluiNet.DevTools.Core.Extensions;
+using SoluiNet.DevTools.Core.Tools.String;
 
 namespace SoluiNet.DevTools.Core.Tools.UI
 {
@@ -22,13 +23,14 @@ namespace SoluiNet.DevTools.Core.Tools.UI
             var tableKey = title.Replace(" ", string.Empty);
 
             var dataGrid = new DataGrid();
+            dataGrid.IsReadOnly = true;
 
             var tabIndexCdv = containingGrid.FindChild<TabControl>(key + "_TabItem_Tabs").Items.Add(new TabItem() { Name = key + "_Grid_" + tableKey, Header = title });
             ((TabItem)containingGrid.FindChild<TabControl>(key + "_TabItem_Tabs").Items[tabIndexCdv]).Content = dataGrid;
 
             foreach (var field in fields)
             {
-                dataGrid.Columns.Add(new DataGridTextColumn() { Header = field, Binding = new Binding(field) });
+                dataGrid.Columns.Add(new DataGridTextColumn() { Header = StringHelper.PrepareHeaderLabel(field), Binding = new Binding(field) });
             }
 
             foreach (var item in results)

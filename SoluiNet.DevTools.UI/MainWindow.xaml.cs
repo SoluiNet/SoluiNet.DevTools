@@ -25,6 +25,7 @@ using SoluiNet.DevTools.Core.Formatter;
 using SoluiNet.DevTools.Core.Models;
 using SoluiNet.DevTools.Core.ScriptEngine;
 using SoluiNet.DevTools.Core.Tools;
+using SoluiNet.DevTools.Core.Tools.String;
 using SoluiNet.DevTools.Core.Tools.UI;
 
 namespace SoluiNet.DevTools.UI
@@ -343,7 +344,7 @@ namespace SoluiNet.DevTools.UI
 
             foreach (DataColumn column in data.Columns)
             {
-                dataGridSqlResults.Columns.Add(new DataGridTextColumn() { Header = column.ColumnName, Binding = new Binding(column.ColumnName) });
+                dataGridSqlResults.Columns.Add(new DataGridTextColumn() { Header = StringHelper.PrepareHeaderLabel(column.ColumnName), Binding = new Binding(column.ColumnName) });
             }
 
             //dataGridSqlResults.DataContext = data.DefaultView;
