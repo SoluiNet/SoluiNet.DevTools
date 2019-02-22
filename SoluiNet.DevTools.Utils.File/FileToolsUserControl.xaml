@@ -4,9 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SoluiNet.DevTools.Utils.File"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <TextBox x:Name="FilePath" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <Button x:Name="OpenFile" Content="..." HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenFile_Click"/>
+        <TextBox x:Name="SearchPattern" HorizontalAlignment="Left" Height="25" Margin="10,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <CheckBox x:Name="IsRegEx" Content="Is RegEx" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SearchLines" Content="Extract Lines For Search Pattern" HorizontalAlignment="Left" Margin="265,60,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="SearchLines_Click"/>
+        <avalonedit:TextEditor x:Name="Output" Margin="5,5,6,5" VerticalAlignment="Bottom" Height="300" ShowLineNumbers="True"/>
+
     </Grid>
 </UserControl>

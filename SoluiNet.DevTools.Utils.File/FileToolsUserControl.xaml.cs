@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using SoluiNet.DevTools.Core.Tools.File;
 
 namespace SoluiNet.DevTools.Utils.File
 {
@@ -23,6 +25,42 @@ namespace SoluiNet.DevTools.Utils.File
         public FileToolsUserControl()
         {
             InitializeComponent();
+        }
+
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new OpenFileDialog()
+            {
+                RestoreDirectory = true,
+                Filter = "All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                FilePath.Text = fileDialog.FileName;
+            }
+        }
+
+        private void SearchLines_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> extractedLines;
+
+            if (IsRegEx.IsChecked ?? false)
+            {
+                extractedLines = FileTools.ExtractLinesMatchingRegEx(FilePath.Text, SearchPattern.Text);
+            }
+            else
+            {
+                extractedLines = FileTools.ExtractLinesContainingSearchPattern(FilePath.Text, SearchPattern.Text);
+            }
+
+            Output.Text = string.Empty;
+
+            foreach (var line in extractedLines)
+            {
+                Output.Text += line + "\r\n";
+            }
         }
     }
 }
