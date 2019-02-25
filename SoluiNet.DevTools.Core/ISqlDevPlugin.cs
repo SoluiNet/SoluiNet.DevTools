@@ -70,5 +70,12 @@ namespace SoluiNet.DevTools.Core
         /// <param name="sqlCommand">The SQL Command</param>
         /// <returns>A DataTable which has the results</returns>
         DataTable ExecuteSql(string sqlCommand);
+
+        /// <summary>
+        /// Execute a custom SQL command
+        /// </summary>
+        /// <param name="sqlCommand">The SQL Command</param>
+        /// <returns>A DataTable which has the results</returns>
+        List<DataTable> ExecuteSqlScript(string sqlCommand);
     }
 }

@@ -25,7 +25,6 @@ using SoluiNet.DevTools.Core.Formatter;
 using SoluiNet.DevTools.Core.Models;
 using SoluiNet.DevTools.Core.ScriptEngine;
 using SoluiNet.DevTools.Core.Tools;
-using SoluiNet.DevTools.Core.Tools.String;
 using SoluiNet.DevTools.Core.Tools.UI;
 
 namespace SoluiNet.DevTools.UI
@@ -301,60 +300,63 @@ namespace SoluiNet.DevTools.UI
 
             Logger.Info(string.Format("[{1} ({2})] Executing SQL command: {0}", sqlCommand, Project.Text, plugin.Environment));
 
-            var data = plugin.ExecuteSql(sqlCommand);
+            var data = plugin.ExecuteSqlScript(sqlCommand);
 
-            var dataGridSqlResults = new DataGrid();
-            //dataGridSqlResults.AutoGenerateColumns = true;
-            dataGridSqlResults.BeginningEdit += BeginEditSqlResult;
-
-            dataGridSqlResults.ContextMenu = new ContextMenu();
-
-            PopulateGridContextMenu(dataGridSqlResults);
-
-            dataGridSqlResults.LoadingRow += (sender, eventInfo) =>
+            foreach (var table in data)
             {
-                eventInfo.Row.Header = (eventInfo.Row.GetIndex() + 1).ToString();
-            };
+                var dataGridSqlResults = new DataGrid();
+                //dataGridSqlResults.AutoGenerateColumns = true;
+                dataGridSqlResults.BeginningEdit += BeginEditSqlResult;
 
-            var tabIndexSqlResults = SqlResults.Items.Add(new TabItem()
-            {
-                Header = new ContentControl()
+                dataGridSqlResults.ContextMenu = new ContextMenu();
+
+                PopulateGridContextMenu(dataGridSqlResults);
+
+                dataGridSqlResults.LoadingRow += (sender, eventInfo) =>
                 {
-                    Content = string.Format("{0} - {1:yyyy-MM-dd\"T\"HH:mm:ss}", plugin.Name, DateTime.Now)
-                }
-            });
+                    eventInfo.Row.Header = (eventInfo.Row.GetIndex() + 1).ToString();
+                };
 
-            var tabItem = (TabItem)SqlResults.Items[tabIndexSqlResults];
-
-            tabItem.Content = dataGridSqlResults;
-            tabItem.Tag = sqlCommand;
-
-            ((ContentControl)tabItem.Header).MouseRightButtonDown += (element, mouseEvent) =>
-            {
-                SqlResults.Items.Remove((TabItem)((ContentControl)element).Parent);
-            };
-
-            ((ContentControl)tabItem.Header).MouseDown += (element, mouseEvent) =>
-            {
-                if (mouseEvent.ChangedButton == MouseButton.Middle && mouseEvent.ButtonState == MouseButtonState.Pressed)
+                var tabIndexSqlResults = SqlResults.Items.Add(new TabItem()
                 {
-                    MessageBox.Show(((TabItem)((ContentControl)element).Parent).Tag.ToString());
+                    Header = new ContentControl()
+                    {
+                        Content = string.Format("{0} - {1:yyyy-MM-dd\"T\"HH:mm:ss}", plugin.Name, DateTime.Now)
+                    }
+                });
+
+                var tabItem = (TabItem)SqlResults.Items[tabIndexSqlResults];
+
+                tabItem.Content = dataGridSqlResults;
+                tabItem.Tag = table.ExtendedProperties["SqlCommand"];
+
+                ((ContentControl)tabItem.Header).MouseRightButtonDown += (element, mouseEvent) =>
+                {
+                    SqlResults.Items.Remove((TabItem)((ContentControl)element).Parent);
+                };
+
+                ((ContentControl)tabItem.Header).MouseDown += (element, mouseEvent) =>
+                {
+                    if (mouseEvent.ChangedButton == MouseButton.Middle && mouseEvent.ButtonState == MouseButtonState.Pressed)
+                    {
+                        MessageBox.Show(((TabItem)((ContentControl)element).Parent).Tag.ToString());
+                    }
+                };
+
+                foreach (DataColumn column in table.Columns)
+                {
+                    dataGridSqlResults.Columns.Add(new DataGridTextColumn() { Header = StringHelper.PrepareHeaderLabel(column.ColumnName), Binding = new Binding(column.ColumnName) });
                 }
-            };
 
-            foreach (DataColumn column in data.Columns)
-            {
-                dataGridSqlResults.Columns.Add(new DataGridTextColumn() { Header = StringHelper.PrepareHeaderLabel(column.ColumnName), Binding = new Binding(column.ColumnName) });
+                //dataGridSqlResults.DataContext = data.DefaultView;
+
+                foreach (var row in table.DefaultView)
+                {
+                    dataGridSqlResults.Items.Add(row);
+                }
+
+                SqlResults.SelectedIndex = tabIndexSqlResults;
             }
-
-            //dataGridSqlResults.DataContext = data.DefaultView;
-
-            foreach (var row in data.DefaultView)
-            {
-                dataGridSqlResults.Items.Add(row);
-            }
-
-            SqlResults.SelectedIndex = tabIndexSqlResults;
         }
 
         private void BeginEditSqlResult(object sender, DataGridBeginningEditEventArgs e)
