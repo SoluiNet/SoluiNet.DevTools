@@ -35,5 +35,30 @@ namespace SoluiNet.DevTools.Utils.File
 
             return result;
         }
+
+        public static string CalculateChecksum(string hashType, string filePath)
+        {
+            //// todo: get hash type from enumeration
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return string.Empty;
+            }
+
+            if (hashType.ToLowerInvariant() == "md5")
+            {
+                using (var md5 = System.Security.Cryptography.MD5.Create())
+                {
+                    using (var stream = System.IO.File.OpenRead(filePath))
+                    {
+                        var hash = md5.ComputeHash(stream);
+
+                        return BitConverter.ToString(hash).Replace("-", string.Empty).ToLowerInvariant();
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
     }
 }

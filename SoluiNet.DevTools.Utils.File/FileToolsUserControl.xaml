@@ -10,6 +10,10 @@
     <Grid>
         <TextBox x:Name="FilePath" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
         <Button x:Name="OpenFile" Content="..." HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenFile_Click"/>
+        <ComboBox x:Name="ChecksumType" HorizontalAlignment="Right" Margin="0,10,145,0" VerticalAlignment="Top" Width="120" Height="25">
+            <ComboBoxItem Content="MD5" />
+        </ComboBox>
+        <Button x:Name="CalculateChecksum" Content="Calculate Checksum" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="25" Click="CalculateChecksum_Click"/>
         <TextBox x:Name="SearchPattern" HorizontalAlignment="Left" Height="25" Margin="10,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
         <CheckBox x:Name="IsRegEx" Content="Is RegEx" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
         <Button x:Name="SearchLines" Content="Extract Lines For Search Pattern" HorizontalAlignment="Left" Margin="265,60,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="SearchLines_Click"/>

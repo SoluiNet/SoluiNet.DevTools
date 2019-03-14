@@ -62,5 +62,10 @@ namespace SoluiNet.DevTools.Utils.File
                 Output.Text += line + "\r\n";
             }
         }
+
+        private void CalculateChecksum_Click(object sender, RoutedEventArgs e)
+        {
+            Output.Text = FileTools.CalculateChecksum(ChecksumType.Text, FilePath.Text);
+        }
     }
 }
