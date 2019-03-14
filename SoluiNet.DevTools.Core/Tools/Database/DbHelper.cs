@@ -110,6 +110,20 @@ namespace SoluiNet.DevTools.Core.Tools.Database
                                 return new List<DataTable>() { dataTable };
                             }
                         }
+                        else if (sqlCommand.IsSqlExecute() && !sqlCommand.IsScript())
+                        {
+                            var command = new SqlCommand(sqlCommand, connection);
+
+                            using (var reader = command.ExecuteReader())
+                            {
+                                var dataTable = new DataTable("QueryResult");
+
+                                dataTable.Load(reader);
+                                dataTable.ExtendedProperties.Add("SqlCommand", sqlCommand);
+
+                                return new List<DataTable>() { dataTable };
+                            }
+                        }
                         else if (sqlCommand.IsScript() && !sqlCommand.ContainsDdlCommand())
                         {
                             var dataTables = new List<DataTable>();

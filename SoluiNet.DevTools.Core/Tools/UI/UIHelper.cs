@@ -358,9 +358,18 @@ namespace SoluiNet.DevTools.Core.Tools.UI
 
         public static string GetSelectedCellAsText(DataGrid dataGrid)
         {
-            var dataRow = (DataRowView)dataGrid.SelectedItem;
-            var index = dataGrid.CurrentCell.Column.DisplayIndex;
-            var cellValue = dataRow.Row.ItemArray[index].ToString();
+            var cellValue = string.Empty;
+
+            try
+            {
+                var dataRow = (DataRowView) dataGrid.SelectedItem;
+                var index = dataGrid.CurrentCell.Column.DisplayIndex;
+                cellValue = dataRow.Row.ItemArray[index].ToString();
+            }
+            catch
+            {
+                cellValue = "CELL_VALUE_ERROR";
+            }
 
             return cellValue;
         }
