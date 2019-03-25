@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="SoluiNet.DevTools.Utils.WebClient.WebClientUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SoluiNet.DevTools.Utils.WebClient"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <ComboBox x:Name="HttpMethod" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0">
+            <ComboBoxItem>GET</ComboBoxItem>
+            <ComboBoxItem>POST</ComboBoxItem>
+            <ComboBoxItem>PUT</ComboBoxItem>
+            <ComboBoxItem>DELETE</ComboBoxItem>
+        </ComboBox>
+        <ComboBox x:Name="ContentType" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="160,5,0,0">
+            <ComboBoxItem>application/json</ComboBoxItem>
+            <ComboBoxItem>application/xml</ComboBoxItem>
+            <ComboBoxItem>text/html</ComboBoxItem>
+            <ComboBoxItem>text/xml</ComboBoxItem>
+        </ComboBox>
+        <TextBox x:Name="TargetUrl" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="315,5,0,0" />
+        <TextBox x:Name="SoapAction" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="570,5,0,0" />
+        <Button x:Name="Execute" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5" Content="Execute" Click="Execute_Click" />
+        <avalonedit:TextEditor x:Name="Input" Margin="5,5,5,5" VerticalAlignment="Bottom" ShowLineNumbers="True" Grid.Column="0" Grid.Row="1" Foreground="GhostWhite" Background="#FF303030" />
+        <avalonedit:TextEditor x:Name="Output" Margin="5,5,5,5" VerticalAlignment="Bottom" ShowLineNumbers="True" Grid.Column="1" Grid.Row="1" Foreground="GhostWhite" Background="#FF303030" />
+    </Grid>
+</UserControl>

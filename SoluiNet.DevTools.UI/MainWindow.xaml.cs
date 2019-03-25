@@ -751,6 +751,7 @@ namespace SoluiNet.DevTools.UI
 
         private void Environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var chosenProject = (sender as ComboBox).SelectedItem as string;
             var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == Project.SelectedItem as string);
 
             if (plugin == null)
@@ -759,6 +760,8 @@ namespace SoluiNet.DevTools.UI
             }
 
             plugin.Environment = (sender as ComboBox)?.SelectedItem as string;
+
+            ChangeProjectConnection(chosenProject);
         }
 
         private void FileCloseMenuItem_Click(object sender, RoutedEventArgs e)
