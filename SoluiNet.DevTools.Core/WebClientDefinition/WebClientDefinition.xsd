@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="WebClientDefinition"
+    targetNamespace="http://tempuri.org/WebClientDefinition.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/WebClientDefinition.xsd"
+    xmlns:mstns="http://tempuri.org/WebClientDefinition.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:simpleType name="HttpMethod" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="POST" />
+      <xs:enumeration value="GET" />
+      <xs:enumeration value="PUT" />
+      <xs:enumeration value="DELETE" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="HttpHeader">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="Name" type="xs:string">
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="WebMethod">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" />
+      <xs:element name="Description" type="xs:string" />
+      <xs:element name="RequestContent" type="xs:string" />
+      <xs:element name="SupportedHttpMethods" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="HttpMethod" type="HttpMethod" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PreparedHttpHeaders" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="HttpHeader" type="HttpHeader" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Endpoint">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" />
+      <xs:element name="Description" type="xs:string" />
+      <xs:element name="Url" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="WebClientDefinition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Endpoints" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Endpoint" type="Endpoint" maxOccurs="unbounded" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Methods" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="WebMethod" type="WebMethod" maxOccurs="unbounded" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

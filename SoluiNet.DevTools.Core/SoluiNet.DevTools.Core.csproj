@@ -52,12 +52,16 @@
   <ItemGroup>
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigurationSchema.cs" />
+    <Compile Include="Enums\WebClientFormatEnum.cs" />
+    <Compile Include="Enums\WebClientTypeEnum.cs" />
     <Compile Include="Extensions\GridExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Formatter\SqlFormatter.cs" />
     <Compile Include="Formatter\IFormatter.cs" />
+    <Compile Include="IBasePlugin.cs" />
     <Compile Include="ISqlDevPlugin.cs" />
     <Compile Include="IUtilitiesDevPlugin.cs" />
+    <Compile Include="IWebClientSupportPlugin.cs" />
     <Compile Include="Models\IDatabaseElement.cs" />
     <Compile Include="Models\StoredFunction.cs" />
     <Compile Include="Models\StoredProcedure.cs" />
@@ -72,6 +76,9 @@
     <Compile Include="Tools\Sql\SqlHelper.cs" />
     <Compile Include="Tools\String\StringHelper.cs" />
     <Compile Include="Tools\UI\UIHelper.cs" />
+    <Compile Include="WebClientDefinition\WebClientDefinition.cs">
+      <DependentUpon>WebClientDefinition.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Configuration\ConfigurationSchema.xsd">
@@ -79,6 +86,10 @@
     </None>
     <None Include="Configuration\generate_xsd_classes.bat" />
     <None Include="packages.config" />
+    <None Include="WebClientDefinition\generate_xsd.bat" />
+    <None Include="WebClientDefinition\WebClientDefinition.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="ScriptEngine\generate_xsd.bat" />
     <None Include="ScriptEngine\SqlScript.xsd">
       <SubType>Designer</SubType>

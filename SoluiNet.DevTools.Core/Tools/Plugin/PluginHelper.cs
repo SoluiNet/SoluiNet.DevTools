@@ -85,7 +85,7 @@ namespace SoluiNet.DevTools.Core.Tools
             return fieldList;
         }
 
-        public static IList<string> GetEmbeddedResources(ISqlDevPlugin plugin, string type = "Script")
+        public static IList<string> GetEmbeddedResources(IBasePlugin plugin, string type = "Script")
         {
             if (plugin == null)
                 return null;
@@ -122,6 +122,29 @@ namespace SoluiNet.DevTools.Core.Tools
             }
 
             return scriptList;
+        }
+
+        public static WebClientDefinition.WebClientDefinition GetWebClientDefinition(IWebClientSupportPlugin plugin)
+        {
+            if (plugin == null)
+                return null;
+
+            var embeddedWebClientDefs = GetEmbeddedResources(plugin, "WebClientDefinition");
+            var xmlSerializer = new XmlSerializer(typeof(WebClientDefinition.WebClientDefinition));
+
+            var webClientDefContainer = embeddedWebClientDefs.FirstOrDefault();
+
+            if (webClientDefContainer == null)
+                return null;
+
+            var webClientDefStream = plugin.GetType().Assembly.GetManifestResourceStream(webClientDefContainer);
+
+            if (webClientDefStream == null)
+                return null;
+
+            var webClientDef = (WebClientDefinition.WebClientDefinition) xmlSerializer.Deserialize(webClientDefStream);
+
+            return webClientDef;
         }
 
         public static string GetEnvironment(ISqlDevPlugin plugin)

@@ -7,13 +7,8 @@ using System.Windows.Controls;
 
 namespace SoluiNet.DevTools.Core
 {
-    public interface IUtilitiesDevPlugin
+    public interface IUtilitiesDevPlugin : IBasePlugin
     {
-        /// <summary>
-        /// The plugin name
-        /// </summary>
-        string Name { get; }
-
         /// <summary>
         /// The label which should be used for menu items
         /// </summary>

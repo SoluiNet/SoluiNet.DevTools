@@ -31,7 +31,7 @@
         <TextBox x:Name="TargetUrl" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="315,5,0,0" />
         <TextBox x:Name="SoapAction" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="570,5,0,0" />
         <Button x:Name="Execute" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5" Content="Execute" Click="Execute_Click" />
-        <avalonedit:TextEditor x:Name="Input" Margin="5,5,5,5" VerticalAlignment="Bottom" ShowLineNumbers="True" Grid.Column="0" Grid.Row="1" Foreground="GhostWhite" Background="#FF303030" />
-        <avalonedit:TextEditor x:Name="Output" Margin="5,5,5,5" VerticalAlignment="Bottom" ShowLineNumbers="True" Grid.Column="1" Grid.Row="1" Foreground="GhostWhite" Background="#FF303030" />
+        <avalonedit:TextEditor x:Name="Input" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="0" Grid.Row="1" Foreground="GhostWhite" Background="#FF303030" />
+        <avalonedit:TextEditor x:Name="Output" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="1" Grid.Row="1" Foreground="GhostWhite" Background="#FF303030" />
     </Grid>
 </UserControl>

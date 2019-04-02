@@ -12,17 +12,12 @@ namespace SoluiNet.DevTools.Core
     /// <summary>
     /// The DIP Plugin interface
     /// </summary>
-    public interface ISqlDevPlugin
+    public interface ISqlDevPlugin : IBasePlugin
     {
         /// <summary>
         /// Method which should be executed to display the plugin in an WPF application
         /// </summary>
         void DisplayForWpf(Grid mainGrid);
-
-        /// <summary>
-        /// The plugin name
-        /// </summary>
-        string Name { get; }
 
         /// <summary>
         /// The first colour accent
