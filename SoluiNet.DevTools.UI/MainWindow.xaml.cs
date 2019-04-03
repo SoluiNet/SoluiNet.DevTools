@@ -46,7 +46,7 @@ namespace SoluiNet.DevTools.UI
 
             SqlCommandText.SyntaxHighlighting = highlighting;
 
-            foreach (var plugin in ((App)Application.Current).Plugins)
+            foreach (var plugin in ((App)Application.Current).SqlPlugins)
             {
                 try
                 {
@@ -307,7 +307,7 @@ namespace SoluiNet.DevTools.UI
 
         private void ExecuteSqlCommand()
         {
-            var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == Project.Text);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == Project.Text);
 
             if (plugin == null)
             {
@@ -335,6 +335,13 @@ namespace SoluiNet.DevTools.UI
                 dataGridSqlResults.LoadingRow += (sender, eventInfo) =>
                 {
                     eventInfo.Row.Header = (eventInfo.Row.GetIndex() + 1).ToString();
+                };
+
+                dataGridSqlResults.CopyingRowClipboardContent += (sender, args) =>
+                {
+                    args.ClipboardRowContent.Clear();
+                    args.ClipboardRowContent.Add(new DataGridClipboardCellContent(args.Item, (sender as DataGrid).Columns[0], UIHelper.GetSelectedCellAsText(sender as DataGrid)));
+
                 };
 
                 var tabIndexSqlResults = SqlResults.Items.Add(new TabItem()
@@ -415,28 +422,28 @@ namespace SoluiNet.DevTools.UI
 
         private IList<Type> GetEntityTypes(string chosenProject)
         {
-            var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEntityTypes(plugin);
         }
 
         private IList<string> GetEntityFields(string chosenProject, string entityName)
         {
-            var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEntityFields(plugin, entityName);
         }
 
         private IList<SqlScript> GetSqlScripts(string chosenProject)
         {
-            var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetSqlScripts(plugin);
         }
 
         private IList<string> GetEnvironments(string chosenProject)
         {
-            var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEnvironments(plugin);
         }
@@ -452,7 +459,7 @@ namespace SoluiNet.DevTools.UI
                 return;
             }
 
-            var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             if (plugin == null)
             {
@@ -708,7 +715,7 @@ namespace SoluiNet.DevTools.UI
         {
             var chosenProject = Project.Text;
 
-            var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             if (plugin == null)
             {
@@ -752,7 +759,7 @@ namespace SoluiNet.DevTools.UI
         private void Environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var chosenProject = (sender as ComboBox).SelectedItem as string;
-            var plugin = ((App)Application.Current).Plugins.FirstOrDefault(x => x.Name == Project.SelectedItem as string);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == Project.SelectedItem as string);
 
             if (plugin == null)
             {

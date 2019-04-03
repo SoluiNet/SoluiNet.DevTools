@@ -20,17 +20,17 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://tempuri.org/WebClientDefinition.xsd")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://tempuri.org/WebClientDefinition.xsd", IsNullable=false)]
-    public partial class WebClientDefinition {
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://solui.net/WebClientDefinition.xsd")]
+    [System.Xml.Serialization.XmlRootAttribute("SoluiNet.WebClientDefinition", Namespace="http://solui.net/WebClientDefinition.xsd", IsNullable=false)]
+    public partial class SoluiNetWebClientDefinition {
         
-        private Endpoint[] endpointsField;
+        private SoluiNetEndpointType[] endpointsField;
         
-        private WebMethod[] methodsField;
+        private SoluiNetWebMethodType[] methodsField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
-        public Endpoint[] Endpoints {
+        [System.Xml.Serialization.XmlArrayItemAttribute("Endpoint", IsNullable=false)]
+        public SoluiNetEndpointType[] Endpoints {
             get {
                 return this.endpointsField;
             }
@@ -40,8 +40,8 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
-        public WebMethod[] Methods {
+        [System.Xml.Serialization.XmlArrayItemAttribute("WebMethod", IsNullable=false)]
+        public SoluiNetWebMethodType[] Methods {
             get {
                 return this.methodsField;
             }
@@ -56,8 +56,8 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/WebClientDefinition.xsd")]
-    public partial class Endpoint {
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="SoluiNet.EndpointType", Namespace="http://solui.net/WebClientDefinition.xsd")]
+    public partial class SoluiNetEndpointType {
         
         private string nameField;
         
@@ -101,8 +101,8 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/WebClientDefinition.xsd")]
-    public partial class HttpHeader {
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="SoluiNet.HttpHeaderType", Namespace="http://solui.net/WebClientDefinition.xsd")]
+    public partial class SoluiNetHttpHeaderType {
         
         private string nameField;
         
@@ -136,8 +136,8 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/WebClientDefinition.xsd")]
-    public partial class WebMethod {
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="SoluiNet.WebMethodType", Namespace="http://solui.net/WebClientDefinition.xsd")]
+    public partial class SoluiNetWebMethodType {
         
         private string nameField;
         
@@ -145,9 +145,9 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
         
         private string requestContentField;
         
-        private HttpMethod[] supportedHttpMethodsField;
+        private SoluiNetHttpMethodType[] supportedHttpMethodsField;
         
-        private HttpHeader[] preparedHttpHeadersField;
+        private SoluiNetHttpHeaderType[] preparedHttpHeadersField;
         
         /// <remarks/>
         public string Name {
@@ -180,7 +180,8 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
         }
         
         /// <remarks/>
-        public HttpMethod[] SupportedHttpMethods {
+        [System.Xml.Serialization.XmlArrayItemAttribute("HttpMethod", IsNullable=false)]
+        public SoluiNetHttpMethodType[] SupportedHttpMethods {
             get {
                 return this.supportedHttpMethodsField;
             }
@@ -190,8 +191,8 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
-        public HttpHeader[] PreparedHttpHeaders {
+        [System.Xml.Serialization.XmlArrayItemAttribute("HttpHeader", IsNullable=false)]
+        public SoluiNetHttpHeaderType[] PreparedHttpHeaders {
             get {
                 return this.preparedHttpHeadersField;
             }
@@ -204,8 +205,8 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.7.3081.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/WebClientDefinition.xsd")]
-    public enum HttpMethod {
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="SoluiNet.HttpMethodType", Namespace="http://solui.net/WebClientDefinition.xsd")]
+    public enum SoluiNetHttpMethodType {
         
         /// <remarks/>
         POST,

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ConfigurationSchema"
+    targetNamespace="http://solui.net/SettingSchema.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://solui.net/SettingSchema.xsd"
+    xmlns:mstns="http://solui.net/SettingSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:complexType name="SoluiNet.SettingEntryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="SoluiNet.EnvironmentType">
+    <xs:sequence>
+      <xs:element type="SoluiNet.SettingEntryType" name="SoluiNet.SettingEntry" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="SoluiNet.SettingType">
+    <xs:sequence>
+      <xs:element type="SoluiNet.EnvironmentType" name="SoluiNet.Environment" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="SoluiNet.Settings" type="SoluiNet.SettingType"/>
+</xs:schema>

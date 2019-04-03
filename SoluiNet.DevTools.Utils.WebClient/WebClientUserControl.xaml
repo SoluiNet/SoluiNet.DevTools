@@ -7,13 +7,14 @@
              xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid x:Name="WebClientMainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
+            <RowDefinition Height="0" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <ComboBox x:Name="HttpMethod" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0">
@@ -28,10 +29,14 @@
             <ComboBoxItem>text/html</ComboBoxItem>
             <ComboBoxItem>text/xml</ComboBoxItem>
         </ComboBox>
-        <TextBox x:Name="TargetUrl" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="315,5,0,0" />
-        <TextBox x:Name="SoapAction" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="570,5,0,0" />
+        <TextBox x:Name="TargetUrl" Text="URL" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="315,5,0,0" VerticalContentAlignment="Center" />
+        <Button x:Name="ReadFromPlugin" Content="Plugins" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="70" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,135,0" VerticalContentAlignment="Center" Click="ReadFromPlugin_Click" />
         <Button x:Name="Execute" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5" Content="Execute" Click="Execute_Click" />
-        <avalonedit:TextEditor x:Name="Input" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="0" Grid.Row="1" Foreground="GhostWhite" Background="#FF303030" />
-        <avalonedit:TextEditor x:Name="Output" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="1" Grid.Row="1" Foreground="GhostWhite" Background="#FF303030" />
+        <Button x:Name="ToggleAdditionalOptions" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="20" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="110, 5" Content="v" Click="AdditionalOptions_Click" />
+        <avalonedit:TextEditor x:Name="Input" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="0" Grid.Row="2" Foreground="GhostWhite" Background="#FF303030" />
+        <avalonedit:TextEditor x:Name="Output" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="1" Grid.Row="2" Foreground="GhostWhite" Background="#FF303030" />
+        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+            <local:WebClientAdditionalOptionsControl x:Name="AdditionalOptions"></local:WebClientAdditionalOptionsControl>
+        </Grid>
     </Grid>
 </UserControl>

@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using SoluiNet.DevTools.Core;
+using SoluiNet.DevTools.Core.Tools;
 
 namespace SoluiNet.DevTools.UI
 {
@@ -16,32 +17,11 @@ namespace SoluiNet.DevTools.UI
     /// </summary>
     public partial class App : Application
     {
-        internal ICollection<ISqlDevPlugin> Plugins { get; set; }
+        internal ICollection<IBasePlugin> Plugins { get; set; }
+
+        internal ICollection<ISqlDevPlugin> SqlPlugins { get; set; }
 
         internal ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
-
-        static Assembly LoadAssembly(object sender, ResolveEventArgs args)
-        {
-            var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            if (string.IsNullOrEmpty(folderPath))
-                return null;
-
-            var assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
-            var assemblyPluginPath = Path.Combine(folderPath, "Plugins", new AssemblyName(args.Name).Name + ".dll");
-
-            if (!File.Exists(assemblyPath) && !File.Exists(assemblyPluginPath))
-                return null;
-
-            Assembly assembly = null;
-
-            if (File.Exists(assemblyPath))
-                assembly = Assembly.LoadFrom(assemblyPath);
-            else if (File.Exists(assemblyPluginPath))
-                assembly = Assembly.LoadFrom(assemblyPluginPath);
-
-            return assembly;
-        }
 
         /// <summary>
         /// Event handling for start up
@@ -70,9 +50,12 @@ namespace SoluiNet.DevTools.UI
                 assemblies.Add(assembly);
             }
 
-            Type pluginType = typeof(ISqlDevPlugin);
+            Type pluginType = typeof(IBasePlugin);
+            Type sqlPluginType = typeof(ISqlDevPlugin);
             Type utilityPluginType = typeof(IUtilitiesDevPlugin);
-            IDictionary<Type, string> pluginTypes = new Dictionary<Type, string>();
+
+            IDictionary<Type, List<string>> pluginTypes = new Dictionary<Type, List<string>>();
+
             foreach (var assembly in assemblies)
             {
                 if (assembly == null)
@@ -90,26 +73,61 @@ namespace SoluiNet.DevTools.UI
 
                     if (type.GetInterface(pluginType.FullName) != null)
                     {
-                        pluginTypes.Add(type, "SqlDev");
+                        if (pluginTypes.ContainsKey(type))
+                        {
+                            pluginTypes[type].Add("PluginDev");
+                        }
+                        else
+                        {
+                            pluginTypes.Add(type, new List<string> () { "PluginDev" });
+                        }
                     }
-                    else if (type.GetInterface(utilityPluginType.FullName) != null)
+
+                    if (type.GetInterface(sqlPluginType.FullName) != null)
                     {
-                        pluginTypes.Add(type, "UtilityDev");
+                        if (pluginTypes.ContainsKey(type))
+                        {
+                            pluginTypes[type].Add("SqlDev");
+                        }
+                        else
+                        {
+                            pluginTypes.Add(type, new List<string>() { "SqlDev" });
+                        }
+                    }
+
+                    if (type.GetInterface(utilityPluginType.FullName) != null)
+                    {
+                        if (pluginTypes.ContainsKey(type))
+                        {
+                            pluginTypes[type].Add("UtilityDev");
+                        }
+                        else
+                        {
+                            pluginTypes.Add(type, new List<string>() { "UtilityDev" });
+                        }
                     }
                 }
             }
 
-            Plugins = new List<ISqlDevPlugin>();
+            Plugins = new List<IBasePlugin>();
+            SqlPlugins = new List<ISqlDevPlugin>();
             UtilityPlugins = new List<IUtilitiesDevPlugin>();
 
             foreach (var type in pluginTypes)
             {
-                if (type.Value == "SqlDev")
+                if (type.Value.Contains("PluginDev"))
                 {
-                    var plugin = (ISqlDevPlugin)Activator.CreateInstance(type.Key);
+                    var plugin = (IBasePlugin)Activator.CreateInstance(type.Key);
                     Plugins.Add(plugin);
                 }
-                else if (type.Value == "UtilityDev")
+
+                if (type.Value.Contains("SqlDev"))
+                {
+                    var plugin = (ISqlDevPlugin)Activator.CreateInstance(type.Key);
+                    SqlPlugins.Add(plugin);
+                }
+
+                if (type.Value.Contains("UtilityDev"))
                 {
                     var plugin = (IUtilitiesDevPlugin)Activator.CreateInstance(type.Key);
                     UtilityPlugins.Add(plugin);
@@ -117,7 +135,7 @@ namespace SoluiNet.DevTools.UI
             }
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.AssemblyResolve += new ResolveEventHandler(LoadAssembly);
+            currentDomain.AssemblyResolve += new ResolveEventHandler(PluginHelper.LoadAssembly);
         }
     }
 }

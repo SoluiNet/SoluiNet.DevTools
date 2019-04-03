@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="WebClientDefinition"
-    targetNamespace="http://tempuri.org/WebClientDefinition.xsd"
+    targetNamespace="http://solui.net/WebClientDefinition.xsd"
     elementFormDefault="qualified"
-    xmlns="http://tempuri.org/WebClientDefinition.xsd"
-    xmlns:mstns="http://tempuri.org/WebClientDefinition.xsd"
+    xmlns="http://solui.net/WebClientDefinition.xsd"
+    xmlns:mstns="http://solui.net/WebClientDefinition.xsd"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
-  <xs:simpleType name="HttpMethod" final="restriction" >
+  <xs:simpleType name="SoluiNet.HttpMethodType" final="restriction" >
     <xs:restriction base="xs:string">
       <xs:enumeration value="POST" />
       <xs:enumeration value="GET" />
@@ -15,7 +15,7 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <xs:complexType name="HttpHeader">
+  <xs:complexType name="SoluiNet.HttpHeaderType">
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="Name" type="xs:string">
@@ -24,7 +24,7 @@
     </xs:simpleContent>
   </xs:complexType>
 
-  <xs:complexType name="WebMethod">
+  <xs:complexType name="SoluiNet.WebMethodType">
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
       <xs:element name="Description" type="xs:string" />
@@ -32,21 +32,21 @@
       <xs:element name="SupportedHttpMethods" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="HttpMethod" type="HttpMethod" maxOccurs="unbounded" />
+            <xs:element name="HttpMethod" type="SoluiNet.HttpMethodType" maxOccurs="unbounded" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="PreparedHttpHeaders" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="HttpHeader" type="HttpHeader" maxOccurs="unbounded" />
+            <xs:element name="HttpHeader" type="SoluiNet.HttpHeaderType" maxOccurs="unbounded" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="Endpoint">
+  <xs:complexType name="SoluiNet.EndpointType">
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
       <xs:element name="Description" type="xs:string" />
@@ -54,20 +54,20 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:element name="WebClientDefinition">
+  <xs:element name="SoluiNet.WebClientDefinition">
     <xs:complexType>
       <xs:sequence>
         <xs:element name="Endpoints" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Endpoint" type="Endpoint" maxOccurs="unbounded" />
+              <xs:element name="Endpoint" type="SoluiNet.EndpointType" maxOccurs="unbounded" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:element name="Methods" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="WebMethod" type="WebMethod" maxOccurs="unbounded" />
+              <xs:element name="WebMethod" type="SoluiNet.WebMethodType" maxOccurs="unbounded" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

@@ -59,6 +59,7 @@
     <Compile Include="Formatter\SqlFormatter.cs" />
     <Compile Include="Formatter\IFormatter.cs" />
     <Compile Include="IBasePlugin.cs" />
+    <Compile Include="IPluginWithSettings.cs" />
     <Compile Include="ISqlDevPlugin.cs" />
     <Compile Include="IUtilitiesDevPlugin.cs" />
     <Compile Include="IWebClientSupportPlugin.cs" />
@@ -69,6 +70,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptEngine\ScriptParser.cs" />
     <Compile Include="ScriptEngine\SqlScript.cs" />
+    <Compile Include="Settings\SettingSchema.cs">
+      <DependentUpon>SettingSchema.xsd</DependentUpon>
+    </Compile>
     <Compile Include="SyntaxHighlighting\SqlSyntaxProvider.cs" />
     <Compile Include="Tools\Database\DbHelper.cs" />
     <Compile Include="Tools\File\FileHelper.cs" />
@@ -76,8 +80,8 @@
     <Compile Include="Tools\Sql\SqlHelper.cs" />
     <Compile Include="Tools\String\StringHelper.cs" />
     <Compile Include="Tools\UI\UIHelper.cs" />
-    <Compile Include="WebClientDefinition\WebClientDefinition.cs">
-      <DependentUpon>WebClientDefinition.xsd</DependentUpon>
+    <Compile Include="WebClientDefinition\WebClientDefinitionSchema.cs">
+      <DependentUpon>WebClientDefinitionSchema.xsd</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -86,8 +90,12 @@
     </None>
     <None Include="Configuration\generate_xsd_classes.bat" />
     <None Include="packages.config" />
+    <None Include="Settings\SettingSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Settings\generate_xsd_classes.bat" />
     <None Include="WebClientDefinition\generate_xsd.bat" />
-    <None Include="WebClientDefinition\WebClientDefinition.xsd">
+    <None Include="WebClientDefinition\WebClientDefinitionSchema.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="ScriptEngine\generate_xsd.bat" />
