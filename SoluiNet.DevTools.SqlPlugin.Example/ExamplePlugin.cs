@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using SoluiNet.DevTools.Core;
+using SoluiNet.DevTools.Core.Enums;
 using SoluiNet.DevTools.Core.Extensions;
 using SoluiNet.DevTools.Core.Tools;
 using SoluiNet.DevTools.Core.Tools.Database;
@@ -16,7 +17,7 @@ using SoluiNet.DevTools.Core.Tools.UI;
 
 namespace SoluiNet.DevTools.SqlPlugin.Example
 {
-    public class ExamplePlugin: ISqlDevPlugin
+    public class ExamplePlugin: ISqlDevPlugin, IWebClientSupportPlugin, IPluginWithSettings
     {
         private Grid MainGrid { get; set; }
 
@@ -134,6 +135,16 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         public List<DataTable> ExecuteSqlScript(string sqlCommand)
         {
             return DbHelper.ExecuteSqlServerScript(ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString, sqlCommand);
+        }
+
+        public WebClientFormatEnum Format
+        {
+            get { return WebClientFormatEnum.Xml; }
+        }
+
+        public WebClientTypeEnum Type
+        {
+            get { return WebClientTypeEnum.Soap; }
         }
     }
 }

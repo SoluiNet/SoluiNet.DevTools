@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SoluiNet.Settings
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://solui.net/SettingsSchema.xsd">
+  <SoluiNet.Environment name="Default">
+    <SoluiNet.SettingEntry name="AES.IniValue">7E892875A52C59A3B588306B13C31FBD</SoluiNet.SettingEntry>
+    <SoluiNet.SettingEntry name="AES.Key">B374A26A71490437AA024E4FADD5B497FDFF1A8EA6FF12F6FB65AF2720B59CCF</SoluiNet.SettingEntry>
+  </SoluiNet.Environment>
+</SoluiNet.Settings>

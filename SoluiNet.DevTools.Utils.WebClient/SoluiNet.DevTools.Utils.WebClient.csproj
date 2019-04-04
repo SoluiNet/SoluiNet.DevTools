@@ -56,6 +56,9 @@
     </Compile>
     <Compile Include="WebClientPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebClientPluginSelection.xaml.cs">
+      <DependentUpon>WebClientPluginSelection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WebClientTools.cs" />
     <Compile Include="WebClientUserControl.xaml.cs">
       <DependentUpon>WebClientUserControl.xaml</DependentUpon>
@@ -76,6 +79,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WebClientAdditionalOptionsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WebClientPluginSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using SoluiNet.DevTools.Core.ScriptEngine;
+using SoluiNet.DevTools.Core.Tools.XML;
 
 namespace SoluiNet.DevTools.Core.Tools
 {
@@ -108,7 +109,6 @@ namespace SoluiNet.DevTools.Core.Tools
                 return null;
 
             var embeddedScripts = GetEmbeddedResources(plugin, "Script");
-            var xmlSerializer = new XmlSerializer(typeof(SqlScripts));
 
             foreach (var scriptContainer in embeddedScripts)
             {
@@ -117,7 +117,7 @@ namespace SoluiNet.DevTools.Core.Tools
                 if (scriptsStream == null)
                     continue;
 
-                var scripts = (SqlScripts)xmlSerializer.Deserialize(scriptsStream);
+                var scripts = XmlHelper.Deserialize<SqlScripts>(scriptsStream);
 
                 scriptList.AddRange(scripts.SqlScript);
             }
@@ -131,7 +131,6 @@ namespace SoluiNet.DevTools.Core.Tools
                 return null;
 
             var embeddedWebClientDefs = GetEmbeddedResources(plugin, "WebClientDefinition");
-            var xmlSerializer = new XmlSerializer(typeof(WebClientDefinition.SoluiNetWebClientDefinition));
 
             var webClientDefContainer = embeddedWebClientDefs.FirstOrDefault();
 
@@ -143,7 +142,7 @@ namespace SoluiNet.DevTools.Core.Tools
             if (webClientDefStream == null)
                 return null;
 
-            var webClientDef = (WebClientDefinition.SoluiNetWebClientDefinition) xmlSerializer.Deserialize(webClientDefStream);
+            var webClientDef = XmlHelper.Deserialize<WebClientDefinition.SoluiNetWebClientDefinition>(webClientDefStream);
 
             return webClientDef;
         }
@@ -154,7 +153,6 @@ namespace SoluiNet.DevTools.Core.Tools
                 return null;
 
             var embeddedSettings = GetEmbeddedResources(plugin, "Settings");
-            var xmlSerializer = new XmlSerializer(typeof(Settings.SoluiNetSettingType));
 
             var settingsContainer = embeddedSettings.FirstOrDefault();
 
@@ -166,7 +164,7 @@ namespace SoluiNet.DevTools.Core.Tools
             if (settingsStream == null)
                 return null;
 
-            var settings = (Settings.SoluiNetSettingType)xmlSerializer.Deserialize(settingsStream);
+            var settings = XmlHelper.Deserialize<Settings.SoluiNetSettingType>(settingsStream);
 
             return settings;
         }

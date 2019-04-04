@@ -68,5 +68,9 @@
     <None Include="SoluiNet.DevTools.SqlPlugin.Example.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Settings\Settings.xml" />
+    <EmbeddedResource Include="WebClientDefinition\WebClientDefinition.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

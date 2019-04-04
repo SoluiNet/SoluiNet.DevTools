@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Document created with online XML Editor http://xmlgrid.net 2019/04/02 13:9:44  -->
+<SoluiNet.WebClientDefinition
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://solui.net/WebClientDefinition.xsd">
+  <Endpoints>
+    <Endpoint>
+      <Name>Example Service</Name>
+      <Description>The example service</Description>
+      <Url>http://www.dneonline.com/calculator.asmx</Url>
+    </Endpoint>
+  </Endpoints>
+  <Methods>
+    <WebMethod>
+      <Name>Add</Name>
+      <Description>Add two numbers</Description>
+      <RequestContent>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Add xmlns="http://tempuri.org/">
+      <intA>int</intA>
+      <intB>int</intB>
+    </Add>
+  </soap:Body>
+</soap:Envelope>]]></RequestContent>
+      <SupportedHttpMethods>
+        <HttpMethod>POST</HttpMethod>
+      </SupportedHttpMethods>
+      <PreparedHttpHeaders>
+        <HttpHeader Name="SOAPAction">"http://tempuri.org/Add"</HttpHeader>
+        <HttpHeader Name="Length"><![CDATA[<[ContentLength]>]]></HttpHeader>
+      </PreparedHttpHeaders>
+    </WebMethod>
+  </Methods>
+</SoluiNet.WebClientDefinition>

@@ -27,6 +27,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             try
             {
                 var request = (HttpWebRequest)WebRequest.Create(TargetUrl.Text);
+                var content = Input.Text.InjectCommonValues();
 
                 //request.Accept = "text/xml";
                 request.Method = HttpMethod.Text;
@@ -37,7 +38,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 {
                     var injectionDictionary = new Dictionary<string, string>()
                     {
-                        { "ContentLength", Input.Text.Length.ToString() }
+                        { "ContentLength", content.Length.ToString() }
                     };
 
                     request.ContentType = ContentType.Text;
@@ -48,6 +49,9 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     }
 
                     var soapEnvelopeXml = new XmlDocument();
+
+                    soapEnvelopeXml.LoadXml(content);
+                    
                     WebClientTools.InsertSoapEnvelope(soapEnvelopeXml, request);
                 }
 
@@ -100,11 +104,27 @@ namespace SoluiNet.DevTools.Utils.WebClient
         private void ReadFromPlugin_Click(object sender, RoutedEventArgs e)
         {
             var plugins = PluginHelper.GetPlugins<IWebClientSupportPlugin>();
-
-            foreach (var plugin in plugins)
+            
+            var window = new Window
             {
-                // do something
-            }
+                Title = "Select Web Method from plugin list",
+                Content = new WebClientPluginSelection(plugins)
+                {
+                    ReturnChosenMethod = (endpoints, content, methods, options) =>
+                    {
+                        Input.Text = content;
+                        TargetUrl.Text = endpoints.First();
+                        HttpMethod.SelectedValue = methods.First();
+
+                        foreach (var option in options)
+                        {
+                            AdditionalOptions.AddOption(option.Key, option.Value);
+                        }
+                    }
+                }
+            };
+
+            window.ShowDialog();
         }
     }
 }

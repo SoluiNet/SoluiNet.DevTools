@@ -13,9 +13,16 @@
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
+  <xs:complexType name="SoluiNet.EnvironmentType">
+    <xs:sequence>
+      <xs:element type="SoluiNet.ConfigurationEntryType" name="SoluiNet.ConfigurationEntry" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" />
+  </xs:complexType>
   <xs:complexType name="SoluiNet.PluginType">
     <xs:sequence>
       <xs:element type="SoluiNet.ConfigurationEntryType" name="SoluiNet.ConfigurationEntry" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="SoluiNet.EnvironmentType" name="SoluiNet.Environment" maxOccurs="unbounded" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute type="xs:string" name="name" use="optional"/>
   </xs:complexType>
