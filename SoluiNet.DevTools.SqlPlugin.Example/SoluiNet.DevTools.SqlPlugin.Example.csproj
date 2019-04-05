@@ -42,6 +42,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +55,9 @@
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="ExampleContext.cs" />
     <Compile Include="ExamplePlugin.cs" />
+    <Compile Include="ExampleUserControl.xaml.cs">
+      <DependentUpon>ExampleUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,10 +71,15 @@
     <None Include="packages.config" />
     <None Include="SoluiNet.DevTools.SqlPlugin.Example.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Settings\Settings.xml" />
     <EmbeddedResource Include="WebClientDefinition\WebClientDefinition.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="ExampleUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -17,7 +17,7 @@ using SoluiNet.DevTools.Core.Tools.UI;
 
 namespace SoluiNet.DevTools.SqlPlugin.Example
 {
-    public class ExamplePlugin: ISqlDevPlugin, IWebClientSupportPlugin, IPluginWithSettings
+    public class ExamplePlugin: ISqlDevPlugin, IWebClientSupportPlugin, IPluginWithSettings, IGroupedUtilitiesDevPlugin
     {
         private Grid MainGrid { get; set; }
 
@@ -145,6 +145,21 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         public WebClientTypeEnum Type
         {
             get { return WebClientTypeEnum.Soap; }
+        }
+
+        public string MenuItemLabel
+        {
+            get { return "Utility Example"; }
+        }
+
+        public void Execute(Action<UserControl> displayInPluginContainer)
+        {
+            displayInPluginContainer(new ExampleUserControl());
+        }
+
+        public string Group
+        {
+            get { return "Example"; }
         }
     }
 }

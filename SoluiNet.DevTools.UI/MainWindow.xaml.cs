@@ -64,14 +64,18 @@ namespace SoluiNet.DevTools.UI
             {
                 try
                 {
-                    var utilityPluginMenuItem = new MenuItem()
+                    if (utilityPlugin is IGroupedUtilitiesDevPlugin)
                     {
-                        Header = utilityPlugin.MenuItemLabel
-                    };
+                        var groupPluginMenuItem = UIHelper.GetMenuItemByName(ExtrasMenuItem, (utilityPlugin as IGroupedUtilitiesDevPlugin).Group);
 
-                    utilityPluginMenuItem.Click += (sender, args) =>
-                    {
-                        utilityPlugin.Execute(x =>
+                        var utilityPluginMenuItem = new MenuItem()
+                        {
+                            Header = utilityPlugin.MenuItemLabel
+                        };
+
+                        utilityPluginMenuItem.Click += (sender, args) =>
+                        {
+                            utilityPlugin.Execute(x =>
                             {
                                 var pluginVisualizeWindow = new VisualPluginContainer();
 
@@ -79,9 +83,31 @@ namespace SoluiNet.DevTools.UI
 
                                 pluginVisualizeWindow.Show();
                             });
-                    };
+                        };
 
-                    ExtrasMenuItem.Items.Add(utilityPluginMenuItem);
+                        groupPluginMenuItem.Items.Add(utilityPluginMenuItem);
+                    }
+                    else
+                    {
+                        var utilityPluginMenuItem = new MenuItem()
+                        {
+                            Header = utilityPlugin.MenuItemLabel
+                        };
+
+                        utilityPluginMenuItem.Click += (sender, args) =>
+                        {
+                            utilityPlugin.Execute(x =>
+                            {
+                                var pluginVisualizeWindow = new VisualPluginContainer();
+
+                                pluginVisualizeWindow.ContentGrid.Children.Add(x);
+
+                                pluginVisualizeWindow.Show();
+                            });
+                        };
+
+                        ExtrasMenuItem.Items.Add(utilityPluginMenuItem);
+                    }
                 }
                 catch (Exception exception)
                 {

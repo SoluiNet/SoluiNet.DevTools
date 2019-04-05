@@ -386,5 +386,33 @@ namespace SoluiNet.DevTools.Core.Tools.UI
                 }
             }
         }
+
+        public static MenuItem GetMenuItemByName(MenuItem parentMenuItem, string name)
+        {
+            MenuItem menuItem = null;
+
+            foreach (var item in parentMenuItem.Items)
+            {
+                var childMenuItem = (item as MenuItem);
+
+                if (childMenuItem == null || childMenuItem.Header.ToString() != name)
+                    continue;
+
+                menuItem = item as MenuItem;
+                break;
+            }
+
+            if (menuItem == null)
+            {
+                menuItem = new MenuItem()
+                {
+                    Header = name
+                };
+
+                parentMenuItem.Items.Add(menuItem);
+            }
+
+            return menuItem;
+        }
     }
 }
