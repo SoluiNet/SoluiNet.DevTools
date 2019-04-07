@@ -13,10 +13,17 @@ namespace SoluiNet.DevTools.Utils.File
         {
             var result = new List<string>();
 
-            foreach (var line in System.IO.File.ReadAllLines(filePath))
+            try
             {
-                if(line.Contains(searchPattern))
-                    result.Add(line);
+                foreach (var line in System.IO.File.ReadAllLines(filePath))
+                {
+                    if (line.Contains(searchPattern))
+                        result.Add(line);
+                }
+            }
+            catch(Exception exception)
+            {
+                result.Add(string.Format("##ERROR## Couldn't extract lines from file {0} - {1} ##ERROR##", filePath, exception.Message));
             }
 
             return result;

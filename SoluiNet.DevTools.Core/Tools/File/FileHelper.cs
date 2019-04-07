@@ -22,5 +22,35 @@ namespace SoluiNet.DevTools.Core.Tools.File
             // Open the file to read from.
             return System.IO.File.ReadAllText(path);
         }
+
+        /// <summary>
+        /// Get all files which are contained in the overgiven directory
+        /// </summary>
+        /// <param name="directoryPath">The directory path</param>
+        /// <param name="filter">The filter</param>
+        /// <param name="searchRecursively">Search recursively in sub folders</param>
+        /// <returns>A <see cref="List{string}"/> of all file paths which matches the filter</returns>
+        public static List<string> GetFilesInDirectory(string directoryPath, string filter = "*.*", bool searchRecursively = false)
+        {
+            var fileList = new List<string>();
+
+            /*foreach (string directory in Directory.GetDirectories(directoryPath))
+            {
+                foreach (string file in Directory.EnumerateFiles(directory, filter, SearchOption.TopDirectoryOnly))
+                {
+                    fileList.Add(file);
+                }
+
+                if (searchRecursively)
+                    fileList.AddRange(GetFilesInDirectory(directoryPath, filter, searchRecursively));
+            }*/
+
+            foreach(string file in Directory.EnumerateFiles(directoryPath, filter, searchRecursively ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
+            {
+                fileList.Add(file);
+            }
+
+            return fileList;
+        }
     }
 }
