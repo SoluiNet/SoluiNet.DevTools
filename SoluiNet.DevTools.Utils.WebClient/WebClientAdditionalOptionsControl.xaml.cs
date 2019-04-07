@@ -50,28 +50,28 @@ namespace SoluiNet.DevTools.Utils.WebClient
             newOption.Key.Text = key;
             newOption.Value.Text = value;
 
-            newOption.SetValue(Grid.RowProperty, 1);
+            newOption.SetValue(Grid.RowProperty, OptionsGrid.RowDefinitions.Count - 1);
 
             newOption.RemoveElement.Click += (sourceElement, args) =>
             {
-                OptionsMainGrid.Children.Remove(newOption);
+                OptionsGrid.Children.Remove(newOption);
             };
 
-            OptionsMainGrid.Children.Add(newOption);
+            OptionsGrid.Children.Add(newOption);
         }
 
         private void AddAdditionalOption_Click(object sender, RoutedEventArgs e)
         {
             var newOption = new WebClientAdditionalOptionControl();
 
-            newOption.SetValue(Grid.RowProperty, 1);
+            newOption.SetValue(Grid.RowProperty, OptionsGrid.RowDefinitions.Count - 1);
 
             newOption.RemoveElement.Click += (sourceElement, args) =>
             {
-                OptionsMainGrid.Children.Remove(newOption);
+                OptionsGrid.Children.Remove(newOption);
             };
 
-            OptionsMainGrid.Children.Add(newOption);
+            OptionsGrid.Children.Add(newOption);
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Xml;
 using SoluiNet.DevTools.Core;
 using SoluiNet.DevTools.Core.Extensions;
 using SoluiNet.DevTools.Core.Tools;
+using SoluiNet.DevTools.Core.Tools.XML;
 
 namespace SoluiNet.DevTools.Utils.WebClient
 {
@@ -70,6 +71,11 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     using (var reader = new StreamReader(response.GetResponseStream()))
                     {
                         result = reader.ReadToEnd();
+
+                        if (response.ContentType.Contains("xml"))
+                        {
+                            result = XmlHelper.Format(result);
+                        }
                     }
                 }
 

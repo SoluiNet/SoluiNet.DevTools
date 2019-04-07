@@ -12,5 +12,8 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Button Content="+" x:Name="AddAdditionalOption" Width="25" Height="25" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top" Click="AddAdditionalOption_Click" Grid.Row="0" />
+        <Grid x:Name="OptionsGrid" Grid.Row="1">
+            <Grid.RowDefinitions />
+        </Grid>
     </Grid>
 </UserControl>
