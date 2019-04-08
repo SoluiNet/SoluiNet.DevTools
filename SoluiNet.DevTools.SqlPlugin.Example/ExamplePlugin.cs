@@ -130,11 +130,11 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
         public DataTable ExecuteSql(string sqlCommand)
         {
-            return DbHelper.ExecuteSqlServerCommand(ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString, sqlCommand);
+            return DbHelper.ExecuteSqlCommand(ConfigurationManager.ConnectionStrings[ConnectionStringName].ProviderName, ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString, sqlCommand);
         }
         public List<DataTable> ExecuteSqlScript(string sqlCommand)
         {
-            return DbHelper.ExecuteSqlServerScript(ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString, sqlCommand);
+            return DbHelper.ExecuteSqlScript(ConfigurationManager.ConnectionStrings[ConnectionStringName].ProviderName, ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString, sqlCommand);
         }
 
         public WebClientFormatEnum Format

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,7 +14,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 {
     public static class DbHelper
     {
-        public static DataTable ExecuteSqlCommand<connection, command>(string connectionString, string sqlCommand, string environment = "Default") 
+        public static DataTable ExecuteSqlCommand<connection, command>(string connectionString, string sqlCommand, string environment = "Default")
             where connection : IDbConnection
             where command : IDbCommand
         {
@@ -21,7 +22,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
             ConstructorInfo connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
 
             var commandType = typeof(command);
-            ConstructorInfo commandConstructor = connectionType.GetConstructor(new[] { typeof(string), connectionType });
+            ConstructorInfo commandConstructor = commandType.GetConstructor(new[] { typeof(string), connectionType });
 
             using (connection con = (connection)connectionConstructor.Invoke(new object[] { connectionString }))
             {
@@ -102,7 +103,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
             ConstructorInfo connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
 
             var commandType = typeof(command);
-            ConstructorInfo commandConstructor = connectionType.GetConstructor(new[] { typeof(string), connectionType });
+            ConstructorInfo commandConstructor = commandType.GetConstructor(new[] { typeof(string), connectionType });
 
             using (connection con = (connection)connectionConstructor.Invoke(new object[] { connectionString }))
             {
@@ -241,10 +242,32 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         {
             return ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
         }
-        
+
         public static List<DataTable> ExecuteSqlServerScript(string connectionString, string sqlCommand, string environment = "Default")
         {
             return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+        }
+
+        public static DataTable ExecuteSqlCommand(string providerType, string connectionString, string sqlCommand, string environment = "Default")
+        {
+            if (providerType == "System.Data.SqlClient")
+                return ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+
+            if (providerType == "System.Data.SQLite")
+                return ExecuteSqlCommand<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+
+            return null;
+        }
+
+        public static List<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default")
+        {
+            if (providerType == "System.Data.SqlClient")
+                return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+
+            if (providerType == "System.Data.SQLite")
+                return ExecuteSqlScript<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+
+            return null;
         }
     }
 }
