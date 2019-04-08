@@ -59,6 +59,7 @@
     <Compile Include="Formatter\SqlFormatter.cs" />
     <Compile Include="Formatter\IFormatter.cs" />
     <Compile Include="IBasePlugin.cs" />
+    <Compile Include="IFileEditor.cs" />
     <Compile Include="IPluginWithSettings.cs" />
     <Compile Include="ISqlDevPlugin.cs" />
     <Compile Include="IGroupedUtilitiesDevPlugin.cs" />

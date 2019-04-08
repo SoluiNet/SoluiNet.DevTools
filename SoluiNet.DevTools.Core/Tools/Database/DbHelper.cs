@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using SoluiNet.DevTools.Core.Extensions;
@@ -12,21 +13,29 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 {
     public static class DbHelper
     {
-        public static DataTable ExecuteSqlServerCommand(string connectionString, string sqlCommand, string environment = "Default")
+        public static DataTable ExecuteSqlCommand<connection, command>(string connectionString, string sqlCommand, string environment = "Default") 
+            where connection : IDbConnection
+            where command : IDbCommand
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            var connectionType = typeof(connection);
+            ConstructorInfo connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
+
+            var commandType = typeof(command);
+            ConstructorInfo commandConstructor = connectionType.GetConstructor(new[] { typeof(string), connectionType });
+
+            using (connection con = (connection)connectionConstructor.Invoke(new object[] { connectionString }))
             {
                 try
                 {
                     try
                     {
-                        connection.Open();
+                        con.Open();
 
-                        var command = new SqlCommand(sqlCommand, connection);
+                        var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
                         if (sqlCommand.IsSqlQuery())
                         {
-                            using (var reader = command.ExecuteReader())
+                            using (var reader = cmd.ExecuteReader())
                             {
                                 var dataTable = new DataTable("QueryResult");
 
@@ -37,13 +46,13 @@ namespace SoluiNet.DevTools.Core.Tools.Database
                         }
                         else
                         {
-                            using (var transaction = connection.BeginTransaction())
+                            using (var transaction = con.BeginTransaction())
                             {
                                 try
                                 {
-                                    command.Transaction = transaction;
+                                    cmd.Transaction = transaction;
 
-                                    var affectedRows = command.ExecuteNonQuery();
+                                    var affectedRows = cmd.ExecuteNonQuery();
 
                                     var dataTable = new DataTable("ExecutionResult");
 
@@ -77,30 +86,37 @@ namespace SoluiNet.DevTools.Core.Tools.Database
                 }
                 finally
                 {
-                    if (connection.State == ConnectionState.Open)
+                    if (con.State == ConnectionState.Open)
                     {
-                        connection.Close();
+                        con.Close();
                     }
                 }
             }
         }
 
-
-        public static List<DataTable> ExecuteSqlServerScript(string connectionString, string sqlCommand, string environment = "Default")
+        public static List<DataTable> ExecuteSqlScript<connection, command>(string connectionString, string sqlCommand, string environment = "Default")
+           where connection : IDbConnection
+           where command : IDbCommand
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            var connectionType = typeof(connection);
+            ConstructorInfo connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
+
+            var commandType = typeof(command);
+            ConstructorInfo commandConstructor = connectionType.GetConstructor(new[] { typeof(string), connectionType });
+
+            using (connection con = (connection)connectionConstructor.Invoke(new object[] { connectionString }))
             {
                 try
                 {
                     try
                     {
-                        connection.Open();
+                        con.Open();
 
                         if (sqlCommand.IsSqlQuery() && !sqlCommand.IsScript())
                         {
-                            var command = new SqlCommand(sqlCommand, connection);
+                            var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
-                            using (var reader = command.ExecuteReader())
+                            using (var reader = cmd.ExecuteReader())
                             {
                                 var dataTable = new DataTable("QueryResult");
 
@@ -112,9 +128,9 @@ namespace SoluiNet.DevTools.Core.Tools.Database
                         }
                         else if (sqlCommand.IsSqlExecute() && !sqlCommand.IsScript())
                         {
-                            var command = new SqlCommand(sqlCommand, connection);
+                            var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
-                            using (var reader = command.ExecuteReader())
+                            using (var reader = cmd.ExecuteReader())
                             {
                                 var dataTable = new DataTable("QueryResult");
 
@@ -130,17 +146,17 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 
                             foreach (var sqlScriptPart in sqlCommand.GetSingleScripts())
                             {
-                                var command = new SqlCommand(sqlScriptPart, connection);
+                                var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
-                                using (var transaction = connection.BeginTransaction())
+                                using (var transaction = con.BeginTransaction())
                                 {
                                     try
                                     {
-                                        command.Transaction = transaction;
+                                        cmd.Transaction = transaction;
 
-                                        using (var reader = command.ExecuteReader())
+                                        using (var reader = cmd.ExecuteReader())
                                         {
-                                            var dataTable = new DataTable(string.Format("QueryResult-{0:D}", Guid.NewGuid()));                                            
+                                            var dataTable = new DataTable(string.Format("QueryResult-{0:D}", Guid.NewGuid()));
 
                                             dataTable.Load(reader);
                                             dataTable.ExtendedProperties.Add("SqlCommand", sqlScriptPart);
@@ -167,15 +183,15 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 
                             foreach (var sqlScriptPart in sqlCommand.GetSingleScripts())
                             {
-                                var command = new SqlCommand(sqlScriptPart, connection);
+                                var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
-                                using (var transaction = connection.BeginTransaction())
+                                using (var transaction = con.BeginTransaction())
                                 {
                                     try
                                     {
-                                        command.Transaction = transaction;
+                                        cmd.Transaction = transaction;
 
-                                        var affectedRows = command.ExecuteNonQuery();
+                                        var affectedRows = cmd.ExecuteNonQuery();
 
                                         var dataTable = new DataTable(string.Format("ExecutionResult-{0:D}", Guid.NewGuid()));
 
@@ -213,12 +229,22 @@ namespace SoluiNet.DevTools.Core.Tools.Database
                 }
                 finally
                 {
-                    if (connection.State == ConnectionState.Open)
+                    if (con.State == ConnectionState.Open)
                     {
-                        connection.Close();
+                        con.Close();
                     }
                 }
             }
+        }
+
+        public static DataTable ExecuteSqlServerCommand(string connectionString, string sqlCommand, string environment = "Default")
+        {
+            return ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+        }
+        
+        public static List<DataTable> ExecuteSqlServerScript(string connectionString, string sqlCommand, string environment = "Default")
+        {
+            return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
         }
     }
 }
