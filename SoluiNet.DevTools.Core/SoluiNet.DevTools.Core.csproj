@@ -82,6 +82,7 @@
     <Compile Include="Tools\String\StringHelper.cs" />
     <Compile Include="Tools\UI\UIHelper.cs" />
     <Compile Include="Tools\XML\XmlHelper.cs" />
+    <Compile Include="UI\CompletionData.cs" />
     <Compile Include="WebClientDefinition\WebClientDefinitionSchema.cs">
       <DependentUpon>WebClientDefinitionSchema.xsd</DependentUpon>
     </Compile>

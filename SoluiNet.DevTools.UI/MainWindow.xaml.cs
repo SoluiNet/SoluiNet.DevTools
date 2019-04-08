@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using ICSharpCode.AvalonEdit.CodeCompletion;
+using Microsoft.Win32;
 using NLog;
 using NLog.Internal;
 using SoluiNet.DevTools.Core;
@@ -7,6 +8,7 @@ using SoluiNet.DevTools.Core.Models;
 using SoluiNet.DevTools.Core.ScriptEngine;
 using SoluiNet.DevTools.Core.Tools;
 using SoluiNet.DevTools.Core.Tools.UI;
+using SoluiNet.DevTools.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -807,6 +809,30 @@ namespace SoluiNet.DevTools.UI
             var dialog = new Options();
 
             dialog.Show();
+        }
+
+        private void SqlCommandText_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (e.Text == ".")
+            {
+                var chosenProject = (sender as ComboBox).SelectedItem as string;
+                var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == Project.SelectedItem as string);
+
+                // Open code completion after the user has pressed dot:
+                var completionWindow = new CompletionWindow(SqlCommandText.TextArea);
+
+                IList<ICompletionData> completionData = completionWindow.CompletionList.CompletionData;
+
+                foreach(var databaseElement in GetEntityTypes(chosenProject))
+                {
+                    completionData.Add(new CompletionData(databaseElement.Name));
+                }
+
+                completionWindow.Show();
+                completionWindow.Closed += delegate {
+                    completionWindow = null;
+                };
+            }
         }
     }
 }
