@@ -47,6 +47,7 @@ namespace SoluiNet.DevTools.UI
             var highlighting = UIHelper.LoadHighlightingDefinition(typeof(ShowText), "SQL.xshd");
 
             SqlCommandText.SyntaxHighlighting = highlighting;
+            SqlCommandText.TextArea.TextEntered += SqlCommandText_TextEntered;
 
             foreach (var plugin in ((App)Application.Current).SqlPlugins)
             {
@@ -811,27 +812,36 @@ namespace SoluiNet.DevTools.UI
             dialog.Show();
         }
 
-        private void SqlCommandText_TextInput(object sender, TextCompositionEventArgs e)
+        private void ShowCodeComplete()
+        {
+            var chosenProject = Project.SelectedItem as string;
+
+            if (string.IsNullOrEmpty(chosenProject))
+                return;
+
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+
+            // Open code completion after the user has pressed dot:
+            var completionWindow = new CompletionWindow(SqlCommandText.TextArea);
+
+            IList<ICompletionData> completionData = completionWindow.CompletionList.CompletionData;
+
+            foreach (var databaseElement in GetEntityTypes(chosenProject))
+            {
+                completionData.Add(new CompletionData(databaseElement.Name));
+            }
+
+            completionWindow.Show();
+            completionWindow.Closed += delegate {
+                completionWindow = null;
+            };
+        }
+
+        private void SqlCommandText_TextEntered(object sender, TextCompositionEventArgs e)
         {
             if (e.Text == ".")
             {
-                var chosenProject = (sender as ComboBox).SelectedItem as string;
-                var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == Project.SelectedItem as string);
-
-                // Open code completion after the user has pressed dot:
-                var completionWindow = new CompletionWindow(SqlCommandText.TextArea);
-
-                IList<ICompletionData> completionData = completionWindow.CompletionList.CompletionData;
-
-                foreach(var databaseElement in GetEntityTypes(chosenProject))
-                {
-                    completionData.Add(new CompletionData(databaseElement.Name));
-                }
-
-                completionWindow.Show();
-                completionWindow.Closed += delegate {
-                    completionWindow = null;
-                };
+                ShowCodeComplete();
             }
         }
     }
