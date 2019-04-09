@@ -1,4 +1,6 @@
-﻿using ICSharpCode.AvalonEdit.CodeCompletion;
+﻿using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.CodeCompletion;
+using ICSharpCode.AvalonEdit.Editing;
 using Microsoft.Win32;
 using NLog;
 using NLog.Internal;
@@ -7,6 +9,7 @@ using SoluiNet.DevTools.Core.Formatter;
 using SoluiNet.DevTools.Core.Models;
 using SoluiNet.DevTools.Core.ScriptEngine;
 using SoluiNet.DevTools.Core.Tools;
+using SoluiNet.DevTools.Core.Tools.Sql;
 using SoluiNet.DevTools.Core.Tools.UI;
 using SoluiNet.DevTools.Core.UI;
 using System;
@@ -812,7 +815,7 @@ namespace SoluiNet.DevTools.UI
             dialog.Show();
         }
 
-        private void ShowCodeComplete()
+        private void ShowCodeComplete(string table = "")
         {
             var chosenProject = Project.SelectedItem as string;
 
@@ -826,9 +829,12 @@ namespace SoluiNet.DevTools.UI
 
             IList<ICompletionData> completionData = completionWindow.CompletionList.CompletionData;
 
-            foreach (var databaseElement in GetEntityTypes(chosenProject))
+            foreach (var databaseElement in GetEntityTypes(chosenProject)
+                .Where(x => x.Name == table || string.IsNullOrEmpty(table))
+                .SelectMany(x => !string.IsNullOrEmpty(table) ? 
+                    x.GetProperties().Select(y => y.Name) : new List<string>() { x.Name }))
             {
-                completionData.Add(new CompletionData(databaseElement.Name));
+                completionData.Add(new CompletionData(databaseElement));
             }
 
             completionWindow.Show();
@@ -841,7 +847,11 @@ namespace SoluiNet.DevTools.UI
         {
             if (e.Text == ".")
             {
-                ShowCodeComplete();
+                var sqlCommand = SqlHelper.GetSqlCommandByPosition(SqlCommandText.Text, SqlCommandText.SelectionStart);
+                var alias = SqlHelper.GetAliasByPosition(SqlCommandText.Text, SqlCommandText.SelectionStart);
+                var table = SqlHelper.GetTableByAlias(sqlCommand, alias);
+
+                ShowCodeComplete(table);
             }
         }
     }
