@@ -37,7 +37,7 @@
                         <Button x:Name="PrepareText" Content="PrepareText" Click="PrepareText_Click"/>
                     </ComboBox>
                     <!-- x:Name="SqlCommandText" Height="150" TextWrapping="Wrap" VerticalAlignment="Top" Margin="5,30,50,0" AcceptsReturn="True" KeyDown="SqlCommandText_KeyDown" Grid.Column="2" /-->
-                    <avalonedit:TextEditor Name="SqlCommandText" FontFamily="Consolas" SyntaxHighlighting="SQL" FontSize="10pt" Foreground="GhostWhite" Height="150" VerticalAlignment="Top" Margin="5,30,50,0" KeyDown="SqlCommandText_KeyDown" Grid.Column="2" Background="#FF303030" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"/>
+                    <avalonedit:TextEditor Name="SqlCommandText" FontFamily="Consolas" SyntaxHighlighting="SQL" FontSize="10pt" Foreground="GhostWhite" Height="150" VerticalAlignment="Top" Margin="5,30,50,0" KeyDown="SqlCommandText_KeyDown" Grid.Column="2" Background="#FF303030" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" />
                     <Button x:Name="ExecuteSql" Content="Execute SQL" Height="40" Width="150" Margin="0,30,5,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="ExecuteSql_Click" Grid.Column="2">
                         <Button.LayoutTransform>
                             <RotateTransform Angle="90" />

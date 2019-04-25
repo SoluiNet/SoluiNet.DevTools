@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.Xsl;
 
 namespace SoluiNet.DevTools.Core.Tools.XML
 {
@@ -41,6 +43,80 @@ namespace SoluiNet.DevTools.Core.Tools.XML
             {
                 xmlSerializer.Serialize(writer, instance);
                 return writer.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Format the overgiven XML string
+        /// Taken from: https://stackoverflow.com/questions/1123718/format-xml-string-to-print-friendly-xml-string
+        /// </summary>
+        /// <param name="xmlString">The XML string</param>
+        /// <returns>Returns an indented XML string</returns>
+        public static string Format(string xmlString)
+        {
+            string result = "";
+
+            var stream = new MemoryStream();
+            var xmlWriter = new XmlTextWriter(stream, Encoding.Unicode);
+            var xmlDoc = new XmlDocument();
+
+            try
+            {
+                // Load the XmlDocument with the XML.
+                xmlDoc.LoadXml(xmlString);
+
+                xmlWriter.Formatting = Formatting.Indented;
+
+                // Write the XML into a formatting XmlTextWriter
+                xmlDoc.WriteContentTo(xmlWriter);
+                xmlWriter.Flush();
+                stream.Flush();
+
+                // Have to rewind the MemoryStream in order to read
+                // its contents.
+                stream.Position = 0;
+
+                // Read MemoryStream contents into a StreamReader.
+                var reader = new StreamReader(stream);
+
+                // Extract the text from the StreamReader.
+                var formattedXml = reader.ReadToEnd();
+
+                result = formattedXml;
+            }
+            catch (XmlException)
+            {
+                // Handle the exception
+                return string.Empty;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Transforms a XML String with the overgiven XSL template
+        /// </summary>
+        /// <param name="xsl">The XSL template</param>
+        /// <param name="xml">The XML string</param>
+        /// <returns>Returns the transformed XML</returns>
+        public static string Transform(string xslTemplate, string xmlString)
+        {
+            using (var xslStringReader = new StringReader(xslTemplate))
+            using (var xmlStringReader = new StringReader(xmlString))
+            {
+                using (var xslReader = XmlReader.Create(xslStringReader))
+                using (var xmlReader = XmlReader.Create(xmlStringReader))
+                {
+                    var xslTransformation = new XslCompiledTransform();
+                    xslTransformation.Load(xslReader);
+
+                    using (var outputWriter = new StringWriter())
+                    using (var xmlWriter = XmlWriter.Create(outputWriter, xslTransformation.OutputSettings))
+                    {
+                        xslTransformation.Transform(xmlReader, xmlWriter);
+                        return outputWriter.ToString();
+                    }
+                }
             }
         }
     }

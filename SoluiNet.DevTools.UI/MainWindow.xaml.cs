@@ -1,4 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.CodeCompletion;
+using ICSharpCode.AvalonEdit.Editing;
+using Microsoft.Win32;
 using NLog;
 using NLog.Internal;
 using SoluiNet.DevTools.Core;
@@ -6,7 +9,9 @@ using SoluiNet.DevTools.Core.Formatter;
 using SoluiNet.DevTools.Core.Models;
 using SoluiNet.DevTools.Core.ScriptEngine;
 using SoluiNet.DevTools.Core.Tools;
+using SoluiNet.DevTools.Core.Tools.Sql;
 using SoluiNet.DevTools.Core.Tools.UI;
+using SoluiNet.DevTools.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -45,6 +50,7 @@ namespace SoluiNet.DevTools.UI
             var highlighting = UIHelper.LoadHighlightingDefinition(typeof(ShowText), "SQL.xshd");
 
             SqlCommandText.SyntaxHighlighting = highlighting;
+            SqlCommandText.TextArea.TextEntered += SqlCommandText_TextEntered;
 
             foreach (var plugin in ((App)Application.Current).SqlPlugins)
             {
@@ -807,6 +813,46 @@ namespace SoluiNet.DevTools.UI
             var dialog = new Options();
 
             dialog.Show();
+        }
+
+        private void ShowCodeComplete(string table = "")
+        {
+            var chosenProject = Project.SelectedItem as string;
+
+            if (string.IsNullOrEmpty(chosenProject))
+                return;
+
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+
+            // Open code completion after the user has pressed dot:
+            var completionWindow = new CompletionWindow(SqlCommandText.TextArea);
+
+            IList<ICompletionData> completionData = completionWindow.CompletionList.CompletionData;
+
+            foreach (var databaseElement in GetEntityTypes(chosenProject)
+                .Where(x => x.Name == table || string.IsNullOrEmpty(table))
+                .SelectMany(x => !string.IsNullOrEmpty(table) ? 
+                    x.GetProperties().Select(y => y.Name) : new List<string>() { x.Name }))
+            {
+                completionData.Add(new CompletionData(databaseElement));
+            }
+
+            completionWindow.Show();
+            completionWindow.Closed += delegate {
+                completionWindow = null;
+            };
+        }
+
+        private void SqlCommandText_TextEntered(object sender, TextCompositionEventArgs e)
+        {
+            if (e.Text == ".")
+            {
+                var sqlCommand = SqlHelper.GetSqlCommandByPosition(SqlCommandText.Text, SqlCommandText.SelectionStart);
+                var alias = SqlHelper.GetAliasByPosition(SqlCommandText.Text, SqlCommandText.SelectionStart);
+                var table = SqlHelper.GetTableByAlias(sqlCommand, alias);
+
+                ShowCodeComplete(table);
+            }
         }
     }
 }

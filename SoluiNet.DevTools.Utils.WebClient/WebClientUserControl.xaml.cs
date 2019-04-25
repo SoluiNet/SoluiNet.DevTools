@@ -10,6 +10,7 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
+using SoluiNet.DevTools.Core.Tools.XML;
 
 namespace SoluiNet.DevTools.Utils.WebClient
 {

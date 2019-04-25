@@ -8,16 +8,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBox x:Name="FilePath" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <TextBox x:Name="FilePath" Text="File" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
         <Button x:Name="OpenFile" Content="..." HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenFile_Click"/>
+        <TextBox x:Name="FolderPath" Text="Folder" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Height="25" Margin="10,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <Button x:Name="OpenFolder" Content="..." HorizontalAlignment="Left" Margin="265,45,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenFolder_Click"/>
+        <TextBox x:Name="Filter" Text="*.*" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Height="25" Margin="330,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="40"/>
         <ComboBox x:Name="ChecksumType" HorizontalAlignment="Right" Margin="0,10,145,0" VerticalAlignment="Top" Width="120" Height="25">
             <ComboBoxItem Content="MD5" />
         </ComboBox>
         <Button x:Name="CalculateChecksum" Content="Calculate Checksum" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="25" Click="CalculateChecksum_Click"/>
-        <TextBox x:Name="SearchPattern" HorizontalAlignment="Left" Height="25" Margin="10,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
-        <CheckBox x:Name="IsRegEx" Content="Is RegEx" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="SearchLines" Content="Extract Lines For Search Pattern" HorizontalAlignment="Left" Margin="265,60,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="SearchLines_Click"/>
-        <avalonedit:TextEditor x:Name="Output" Margin="5,5,6,5" VerticalAlignment="Bottom" Height="300" ShowLineNumbers="True"/>
+        <TextBox x:Name="SearchPattern" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="25" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <CheckBox x:Name="IsRegEx" Content="Is RegEx" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SearchLines" Content="Extract Lines For Search Pattern" HorizontalAlignment="Left" Margin="265,80,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="SearchLines_Click"/>
+        <avalonedit:TextEditor x:Name="Output" Margin="5,130,6,5" VerticalAlignment="Bottom" Height="300" ShowLineNumbers="True"/>
 
     </Grid>
 </UserControl>

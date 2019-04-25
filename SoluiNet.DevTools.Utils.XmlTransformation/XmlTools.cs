@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoluiNet.DevTools.Core.Tools.XML;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,43 +21,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
         /// <returns>Returns an indented XML string</returns>
         public static string Format(string xmlString)
         {
-            string result = "";
-
-            var stream = new MemoryStream();
-            var xmlWriter = new XmlTextWriter(stream, Encoding.Unicode);
-            var xmlDoc = new XmlDocument();
-
-            try
-            {
-                // Load the XmlDocument with the XML.
-                xmlDoc.LoadXml(xmlString);
-
-                xmlWriter.Formatting = Formatting.Indented;
-
-                // Write the XML into a formatting XmlTextWriter
-                xmlDoc.WriteContentTo(xmlWriter);
-                xmlWriter.Flush();
-                stream.Flush();
-
-                // Have to rewind the MemoryStream in order to read
-                // its contents.
-                stream.Position = 0;
-
-                // Read MemoryStream contents into a StreamReader.
-                var reader = new StreamReader(stream);
-
-                // Extract the text from the StreamReader.
-                var formattedXml = reader.ReadToEnd();
-
-                result = formattedXml;
-            }
-            catch (XmlException)
-            {
-                // Handle the exception
-                return string.Empty;
-            }
-
-            return result;
+            return XmlHelper.Format(xmlString);
         }
 
         /// <summary>
@@ -67,26 +32,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
         /// <returns>Returns the transformed XML</returns>
         public static string Transform(string xslTemplate, string xmlString)
         {
-            /*var xslTransformation = new XslCompiledTransform();
-            xslTransformation.Load(new XmlTextReader(new StringReader(XslInput.Text)));*/
-
-            using (var xslStringReader = new StringReader(xslTemplate))
-            using (var xmlStringReader = new StringReader(xmlString))
-            {
-                using (var xslReader = XmlReader.Create(xslStringReader))
-                using (var xmlReader = XmlReader.Create(xmlStringReader))
-                {
-                    var xslTransformation = new XslCompiledTransform();
-                    xslTransformation.Load(xslReader);
-
-                    using (var outputWriter = new StringWriter())
-                    using (var xmlWriter = XmlWriter.Create(outputWriter, xslTransformation.OutputSettings))
-                    {
-                        xslTransformation.Transform(xmlReader, xmlWriter);
-                        return outputWriter.ToString();
-                    }
-                }
-            }
+            return XmlHelper.Transform(xslTemplate, xmlString);
         }
 
         public static string ValidateAgainstSchema(string xmlSchemaString, string xmlString)
