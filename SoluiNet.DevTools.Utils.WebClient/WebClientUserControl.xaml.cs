@@ -1,4 +1,8 @@
-﻿using System;
+﻿using SoluiNet.DevTools.Core;
+using SoluiNet.DevTools.Core.Extensions;
+using SoluiNet.DevTools.Core.Tools;
+using SoluiNet.DevTools.Core.Tools.XML;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,9 +10,6 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
-using SoluiNet.DevTools.Core;
-using SoluiNet.DevTools.Core.Extensions;
-using SoluiNet.DevTools.Core.Tools;
 
 namespace SoluiNet.DevTools.Utils.WebClient
 {
@@ -51,7 +52,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     var soapEnvelopeXml = new XmlDocument();
 
                     soapEnvelopeXml.LoadXml(content);
-                    
+
                     WebClientTools.InsertSoapEnvelope(soapEnvelopeXml, request);
                 }
 
@@ -70,6 +71,11 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     using (var reader = new StreamReader(response.GetResponseStream()))
                     {
                         result = reader.ReadToEnd();
+
+                        if (response.ContentType.Contains("xml"))
+                        {
+                            result = XmlHelper.Format(result);
+                        }
                     }
                 }
 
@@ -104,7 +110,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
         private void ReadFromPlugin_Click(object sender, RoutedEventArgs e)
         {
             var plugins = PluginHelper.GetPlugins<IWebClientSupportPlugin>();
-            
+
             var window = new Window
             {
                 Title = "Select Web Method from plugin list",
@@ -113,8 +119,14 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     ReturnChosenMethod = (endpoints, content, methods, options) =>
                     {
                         Input.Text = content;
-                        TargetUrl.Text = endpoints.First();
-                        HttpMethod.SelectedValue = methods.First();
+
+                        TargetUrl.Items.Clear();
+                        foreach (var comboBoxItem in endpoints.Select(x => new ComboBoxItem() { Content = x }))
+                        {
+                            TargetUrl.Items.Add(comboBoxItem);
+                        }
+
+                        HttpMethod.SelectedIndex = HttpMethod.Items.IndexOf(methods.First());
 
                         foreach (var option in options)
                         {

@@ -37,6 +37,9 @@ namespace SoluiNet.DevTools.Utils.Crypto
                     return "AES";
                 // Base64
                 case 2:
+                    return "Hashing";
+                // Base64
+                case 3:
                     return "Base64";
             }
 
@@ -60,6 +63,10 @@ namespace SoluiNet.DevTools.Utils.Crypto
             {
                 options.Add("key", AesKey.Text);
                 options.Add("iniValue", AesIniValue.Text);
+            }
+            else if (GetEncryptionMethod() == "Hashing")
+            {
+                options.Add("hashMethod", HashMethod.Text);
             }
 
             EncryptedText.Text = CryptoTools.Encrypt(DecryptedText.Text, options);
@@ -85,6 +92,14 @@ namespace SoluiNet.DevTools.Utils.Crypto
             }
 
             DecryptedText.Text = CryptoTools.Decrypt(EncryptedText.Text, options);
+        }
+
+        private void EncryptionMethodTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            {
+                Decrypt.IsEnabled = !HashTab.IsSelected;
+            }
         }
     }
 }

@@ -27,7 +27,7 @@
             <ListBoxItem Content="UTF16 BE"/>
             <ListBoxItem Content="UTF32"/>
         </ComboBox>
-        <TabControl x:Name="EncryptionMethodTabs" HorizontalAlignment="Left" Height="153" Margin="10,10,0,0" VerticalAlignment="Top" Width="645" Grid.RowSpan="2">
+        <TabControl x:Name="EncryptionMethodTabs" HorizontalAlignment="Left" Height="153" Margin="10,10,0,0" VerticalAlignment="Top" Width="645" Grid.RowSpan="2" SelectionChanged="EncryptionMethodTabs_SelectionChanged">
             <TabItem x:Name="RsaTab" Header="RSA">
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="PrivateKeyPath" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" Text="Private Key Path" VerticalAlignment="Top" Width="461"/>
@@ -38,6 +38,15 @@
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="AesKey" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="AES Key" VerticalAlignment="Top" Width="461" Grid.Column="1"/>
                     <TextBox x:Name="AesIniValue" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" TextWrapping="Wrap" Text="AES Initialization Value" VerticalAlignment="Top" Width="461" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="HashTab" Header="Hashing">
+                <Grid Background="#FFE5E5E5">
+                    <ComboBox x:Name="HashMethod" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" VerticalAlignment="Top" Width="461" Grid.Column="1">
+                        <ComboBoxItem>MD5</ComboBoxItem>
+                        <ComboBoxItem>SHA1</ComboBoxItem>
+                        <ComboBoxItem>SHA256</ComboBoxItem>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem x:Name="SimpleTab" Header="Base64">

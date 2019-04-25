@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using SoluiNet.DevTools.Utils.Crypto.Utilities;
@@ -53,6 +54,43 @@ namespace SoluiNet.DevTools.Utils.Crypto
                 // Base64
                 case "Base64":
                     encryptedText = GeneralUtils.Base64Encode(toEncrypt);
+                    break;
+                // Hashing
+                case "Hashing":
+                    switch (options["hashMethod"].ToString())
+                    {
+                        case "MD5":
+                            //create new instance of MD5
+                            var md5 = MD5.Create();
+
+                            //convert the input text to array of bytes
+                            var hashDataMd5 = md5.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
+
+                            // return hexadecimal string
+                            encryptedText = BitConverter.ToString(hashDataMd5).Replace("-", "");
+                            break;
+                        case "SHA1":
+                            //create new instance of SHA1
+                            var sha1 = SHA1.Create();
+
+                            //convert the input text to array of bytes
+                            var hashDataSha1 = sha1.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
+
+                            // return hexadecimal string
+                            encryptedText = BitConverter.ToString(hashDataSha1).Replace("-", "");
+                            break;
+                        case "SHA2":
+                        case "SHA256":
+                            //create new instance of SHA256
+                            var sha2 = SHA256.Create();
+
+                            //convert the input text to array of bytes
+                            var hashDataSha2 = sha2.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
+
+                            // return hexadecimal string
+                            encryptedText = BitConverter.ToString(hashDataSha2).Replace("-", "");
+                            break;
+                    }
                     break;
             }
 
