@@ -31,7 +31,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             {
                 var options = new Dictionary<string, string>();
 
-                foreach (var option in OptionsMainGrid.Children)
+                foreach (var option in OptionsGrid.Children)
                 {
                     if (option is WebClientAdditionalOptionControl control)
                     {

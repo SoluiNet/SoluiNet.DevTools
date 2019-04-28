@@ -9,8 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Resources;
 using System.Xml;
-using SoluiNet.DevTools.Core.Tools.XML;
 
 namespace SoluiNet.DevTools.Utils.WebClient
 {
@@ -117,7 +117,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 Title = "Select Web Method from plugin list",
                 Content = new WebClientPluginSelection(plugins)
                 {
-                    ReturnChosenMethod = (endpoints, content, methods, options) =>
+                    ReturnChosenMethod = (endpoints, content, methods, contentTypes, options) =>
                     {
                         Input.Text = content;
 
@@ -127,7 +127,8 @@ namespace SoluiNet.DevTools.Utils.WebClient
                             TargetUrl.Items.Add(comboBoxItem);
                         }
 
-                        HttpMethod.SelectedIndex = HttpMethod.Items.IndexOf(methods.First());
+                        HttpMethod.SelectedItem = HttpMethod.Items.OfType<ComboBoxItem>().FirstOrDefault(x => x.Content != null && x.Content.ToString() == methods.First());
+                        ContentType.SelectedItem = ContentType.Items.OfType<ComboBoxItem>().FirstOrDefault(x => x.Content != null && x.Content.ToString() == contentTypes.First());
 
                         foreach (var option in options)
                         {

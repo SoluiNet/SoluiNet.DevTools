@@ -147,6 +147,8 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
         
         private SoluiNetHttpMethodType[] supportedHttpMethodsField;
         
+        private SoluiNetContentType[] supportedContentTypesField;
+        
         private SoluiNetHttpHeaderType[] preparedHttpHeadersField;
         
         /// <remarks/>
@@ -191,6 +193,17 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlArrayItemAttribute("ContentType", IsNullable=false)]
+        public SoluiNetContentType[] SupportedContentTypes {
+            get {
+                return this.supportedContentTypesField;
+            }
+            set {
+                this.supportedContentTypesField = value;
+            }
+        }
+        
+        /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("HttpHeader", IsNullable=false)]
         public SoluiNetHttpHeaderType[] PreparedHttpHeaders {
             get {
@@ -219,5 +232,28 @@ namespace SoluiNet.DevTools.Core.WebClientDefinition {
         
         /// <remarks/>
         DELETE,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.7.3081.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="SoluiNet.ContentType", Namespace="http://solui.net/WebClientDefinition.xsd")]
+    public enum SoluiNetContentType {
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("application/json")]
+        applicationjson,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("application/xml")]
+        applicationxml,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("text/html")]
+        texthtml,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("text/xml")]
+        textxml,
     }
 }

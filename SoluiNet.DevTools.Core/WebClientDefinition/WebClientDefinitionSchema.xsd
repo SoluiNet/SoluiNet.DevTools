@@ -15,6 +15,15 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="SoluiNet.ContentType" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="application/json" />
+      <xs:enumeration value="application/xml" />
+      <xs:enumeration value="text/html" />
+      <xs:enumeration value="text/xml" />
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:complexType name="SoluiNet.HttpHeaderType">
     <xs:simpleContent>
       <xs:extension base="xs:string">
@@ -33,6 +42,13 @@
         <xs:complexType>
           <xs:sequence>
             <xs:element name="HttpMethod" type="SoluiNet.HttpMethodType" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SupportedContentTypes" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ContentType" type="SoluiNet.ContentType" maxOccurs="unbounded" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
