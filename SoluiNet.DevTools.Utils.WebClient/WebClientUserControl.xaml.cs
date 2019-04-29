@@ -9,7 +9,6 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Resources;
 using System.Xml;
 
 namespace SoluiNet.DevTools.Utils.WebClient
@@ -81,6 +80,19 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 }
 
                 Output.Text = result;
+            }
+            catch (WebException webEx)
+            {
+                var errResp = webEx.Response;
+
+                using (var responseStream = errResp.GetResponseStream())
+                {
+                    var reader = new StreamReader(responseStream);
+
+                    var responseText = reader.ReadToEnd();
+
+                    Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##\r\n\r\n{2}", webEx.Message, webEx.InnerException?.Message, XmlHelper.IsXml(responseText) ? XmlHelper.Format(responseText) : responseText);
+                }
             }
             catch (Exception exception)
             {

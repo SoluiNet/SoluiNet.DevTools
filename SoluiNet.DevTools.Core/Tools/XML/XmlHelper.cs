@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
@@ -118,6 +119,30 @@ namespace SoluiNet.DevTools.Core.Tools.XML
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if overgiven text contains a valid XML root node
+        /// </summary>
+        /// <param name="xmlText">The string which should be checked</param>
+        /// <returns>Returns true if overgiven text contains a valid XML root node</returns>
+        public static bool IsValidXmlRootNode(string xmlText)
+        {
+            var xmlRegex = new Regex("</([A-Za-z0-9:]+?)>$");
+
+            var endNode = xmlRegex.Match(xmlText);
+
+            return endNode.Success && xmlText.Contains(string.Format("<{0}", endNode.Groups[1].Value));
+        }
+
+        /// <summary>
+        /// Returns true if overgiven text is a XML string
+        /// </summary>
+        /// <param name="xmlText">The string which should be checked</param>
+        /// <returns>Returns true if overgiven text is a XML string</returns>
+        public static bool IsXml(string xmlText)
+        {
+            return xmlText.Contains("<?xml") || IsValidXmlRootNode(xmlText);
         }
     }
 }
