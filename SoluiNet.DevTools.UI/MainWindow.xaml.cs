@@ -436,6 +436,12 @@ namespace SoluiNet.DevTools.UI
             {
                 ExecuteSqlCommand();
             }
+            else if(e.Key == Key.Space && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            {
+                e.Handled = true;
+
+                ShowCodeComplete();
+            }
         }
 
         private void ExpandButton_Click(object sender, RoutedEventArgs e)
