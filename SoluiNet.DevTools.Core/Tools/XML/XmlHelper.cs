@@ -128,7 +128,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// <returns>Returns true if overgiven text contains a valid XML root node</returns>
         public static bool IsValidXmlRootNode(string xmlText)
         {
-            var xmlRegex = new Regex("</([A-Za-z0-9:]+?)>$");
+            var xmlRegex = new Regex("</([^>]+?)>$");
 
             var endNode = xmlRegex.Match(xmlText);
 
