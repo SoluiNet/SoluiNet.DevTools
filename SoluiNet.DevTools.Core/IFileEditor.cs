@@ -9,5 +9,9 @@ namespace SoluiNet.DevTools.Core
     public interface IFileEditor : IBasePlugin
     {
         List<string> SupportedFileExtensions { get; }
+        List<string> SupportedTypes { get; }
+
+        void OpenEditor(string content);
+        void OpenFileWithEditor(string filePath);
     }
 }
