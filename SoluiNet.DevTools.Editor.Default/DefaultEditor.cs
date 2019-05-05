@@ -11,12 +11,12 @@ namespace SoluiNet.DevTools.Editor.Default
     {
         public List<string> SupportedFileExtensions
         {
-            get { return new List<string> { "<ALL>" }; }
+            get { return new List<string> { Core.Constants.GeneralConstants.AllElementsPlaceholder }; }
         }
 
         public List<string> SupportedTypes
         {
-            get { return new List<string> { "<ALL>" }; }
+            get { return new List<string> { Core.Constants.GeneralConstants.AllElementsPlaceholder }; }
         }
 
         public string Name
@@ -24,7 +24,7 @@ namespace SoluiNet.DevTools.Editor.Default
             get { return "Default File Editor"; }
         }
 
-        public void OpenEditor(string content)
+        public void OpenEditor(string content, string type = "")
         {
             throw new NotImplementedException();
         }

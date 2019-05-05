@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace SoluiNet.DevTools.Core
 {
-    public interface IFileEditor : IBasePlugin
+    public interface ITransformPlugin : IBasePlugin
     {
         List<string> SupportedFileExtensions { get; }
-        List<string> SupportedTypes { get; }
 
-        void OpenEditor(string content, string type = "");
-        void OpenFileWithEditor(string filePath);
+        List<string> SupportedOutputFormats { get; }
     }
 }

@@ -81,6 +81,7 @@
     <Compile Include="IPluginWithSettings.cs" />
     <Compile Include="ISqlDevPlugin.cs" />
     <Compile Include="IGroupedUtilitiesDevPlugin.cs" />
+    <Compile Include="ITransformPlugin.cs" />
     <Compile Include="IUtilitiesDevPlugin.cs" />
     <Compile Include="IWebClientSupportPlugin.cs" />
     <Compile Include="Models\IDatabaseElement.cs" />
