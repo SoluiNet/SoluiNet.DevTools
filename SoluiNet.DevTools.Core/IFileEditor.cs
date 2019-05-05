@@ -13,5 +13,7 @@ namespace SoluiNet.DevTools.Core
 
         void OpenEditor(string content, string type = "");
         void OpenFileWithEditor(string filePath);
+
+        void FillMenu();
     }
 }

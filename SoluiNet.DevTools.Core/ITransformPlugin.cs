@@ -8,8 +8,11 @@ namespace SoluiNet.DevTools.Core
 {
     public interface ITransformPlugin : IBasePlugin
     {
-        List<string> SupportedFileExtensions { get; }
+        List<string> SupportedInputFormats { get; }
 
         List<string> SupportedOutputFormats { get; }
+
+        object Transform(string inputFile, string preferedOutputFormat);
+        object Transform(string inputStream, string inputFormat, string preferedOutputFormat);
     }
 }

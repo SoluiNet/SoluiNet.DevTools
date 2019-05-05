@@ -9,7 +9,7 @@ namespace SoluiNet.DevTools.Transform.Uml
 {
     public class TransformUmlPlugin : ITransformPlugin
     {
-        public List<string> SupportedFileExtensions
+        public List<string> SupportedInputFormats
         {
             get
             {
@@ -31,6 +31,16 @@ namespace SoluiNet.DevTools.Transform.Uml
             {
                 return "TransformUml";
             }
+        }
+
+        public object Transform(string inputFile, string preferedOutputFormat)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Transform(string inputStream, string inputFormat, string preferedOutputFormat)
+        {
+            throw new NotImplementedException();
         }
     }
 }
