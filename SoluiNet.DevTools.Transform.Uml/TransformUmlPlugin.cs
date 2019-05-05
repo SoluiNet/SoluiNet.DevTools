@@ -1,6 +1,8 @@
 ﻿using SoluiNet.DevTools.Core;
+using SoluiNet.DevTools.Transform.Uml.CSharpTransformation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +37,27 @@ namespace SoluiNet.DevTools.Transform.Uml
 
         public object Transform(string inputFile, string preferedOutputFormat)
         {
-            throw new NotImplementedException();
+            var extension = Path.GetExtension(inputFile);
+
+            object result = null;
+
+            switch (extension.Substring(1))
+            {
+                case "cs":
+                    var cSharpTransform = new CSharpTransform(inputFile);
+
+                    if (preferedOutputFormat.Equals("xml"))
+                    {
+                        result = cSharpTransform.TransformToXml();
+                    }
+
+                    break;
+                default:
+                    result = "#ERR# No valid format #ERR#";
+                    break;
+            }
+
+            return result;
         }
 
         public object Transform(string inputStream, string inputFormat, string preferedOutputFormat)

@@ -267,5 +267,20 @@ namespace SoluiNet.DevTools.Core.Tools
 
             return pluginList;
         }
+
+        public static T GetPluginByName<T> (string name) where T : IBasePlugin
+        {
+            var pluginList = GetPlugins<T>();
+
+            foreach(var plugin in pluginList)
+            {
+                if (plugin.Name.Equals(name))
+                {
+                    return plugin;
+                }
+            }
+
+            return default(T);
+        }
     }
 }

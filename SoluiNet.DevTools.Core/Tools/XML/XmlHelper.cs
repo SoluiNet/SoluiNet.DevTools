@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoluiNet.DevTools.Core.Tools.Stream;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Xml.Xsl;
 
@@ -27,7 +29,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
             return Deserialize<T>(stream);
         }
 
-        public static T Deserialize<T>(Stream stream)
+        public static T Deserialize<T>(System.IO.Stream stream)
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
 
@@ -143,6 +145,15 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         public static bool IsXml(string xmlText)
         {
             return xmlText.Contains("<?xml") || IsValidXmlRootNode(xmlText);
+        }
+
+        public static string Serialize(XDocument xmlDocument)
+        {
+            var stream = new MemoryStream();
+
+            xmlDocument.Save(stream);
+
+            return StreamHelper.StreamToString(stream);
         }
     }
 }

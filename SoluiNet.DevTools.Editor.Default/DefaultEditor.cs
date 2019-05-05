@@ -24,6 +24,11 @@ namespace SoluiNet.DevTools.Editor.Default
             get { return "Default File Editor"; }
         }
 
+        public void FillMenu()
+        {
+            throw new NotImplementedException();
+        }
+
         public void OpenEditor(string content, string type = "")
         {
             throw new NotImplementedException();

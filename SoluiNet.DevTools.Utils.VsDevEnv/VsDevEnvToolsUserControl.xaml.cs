@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SoluiNet.DevTools.Core;
+using SoluiNet.DevTools.Core.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,21 @@ namespace SoluiNet.DevTools.Utils.VsDevEnv
         public VsDevEnvToolsUserControl()
         {
             InitializeComponent();
+        }
+
+        private void TransformCsToUml_Click(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                RestoreDirectory = true,
+                Filter = "All files (*.cs)|*.cs",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                PluginHelper.GetPluginByName<ITransformPlugin>("TransformUml").Transform(fileDialog.FileName, "xml");
+            }
         }
     }
 }

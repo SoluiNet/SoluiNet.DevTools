@@ -100,6 +100,7 @@
     <Compile Include="Tools\File\FileHelper.cs" />
     <Compile Include="Tools\Plugin\PluginHelper.cs" />
     <Compile Include="Tools\Sql\SqlHelper.cs" />
+    <Compile Include="Tools\Stream\StreamHelper.cs" />
     <Compile Include="Tools\String\StringHelper.cs" />
     <Compile Include="Tools\UI\UIHelper.cs" />
     <Compile Include="Tools\XML\XmlHelper.cs" />
