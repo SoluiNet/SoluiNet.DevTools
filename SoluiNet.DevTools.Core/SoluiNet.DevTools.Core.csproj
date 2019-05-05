@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigurationSchema.cs" />
+    <Compile Include="Constants\GeneralConstants.cs" />
     <Compile Include="Enums\WebClientFormatEnum.cs" />
     <Compile Include="Enums\WebClientTypeEnum.cs" />
     <Compile Include="Extensions\GridExtensions.cs" />
