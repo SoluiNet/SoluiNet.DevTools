@@ -23,7 +23,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             _plugins = plugins;
         }
 
-        public delegate void ReturnWebMethodToMainForm(List<string> endpoints, string content, List<string> supportedHttpMethods, List<string> supportedContentTypes = null, Dictionary<string, string> additionalOptions = null, IPluginWithSettings chosenPlugin = null);
+        public delegate void ReturnWebMethodToMainForm(Dictionary<string, string> endpoints, string content, List<string> supportedHttpMethods, List<string> supportedContentTypes = null, Dictionary<string, string> additionalOptions = null, IPluginWithSettings chosenPlugin = null);
 
         public ReturnWebMethodToMainForm ReturnChosenMethod { get; set; }
 
@@ -53,7 +53,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             var plugin = _plugins.FirstOrDefault(x => !string.IsNullOrEmpty(selectedPlugin) && x.Name == selectedPlugin);
 
             ReturnChosenMethod(
-                chosenWebClient.Endpoints.Select(x => x.Url).ToList(),
+                chosenWebClient.Endpoints.ToDictionary(x => x.Name, x => x.Url),
                 chosenMethod.RequestContent,
                 chosenMethod.SupportedHttpMethods.Select(x => Enum.GetName(typeof(SoluiNetHttpMethodType), x)).ToList(),
                 chosenMethod.SupportedContentTypes.Select(x => Enum.GetName(typeof(SoluiNetContentType), x)).ToList(),

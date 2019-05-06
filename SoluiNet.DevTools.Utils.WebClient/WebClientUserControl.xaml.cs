@@ -31,7 +31,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             {
                 var settings = PluginHelper.GetSettings(ChosenPlugin);
 
-                var request = (HttpWebRequest)WebRequest.Create(TargetUrl.Text);
+                var request = (HttpWebRequest)WebRequest.Create((TargetUrl.SelectedItem as ComboBoxItem)?.Tag.ToString());
                 var content = Input.Text.SetEnvironment().InjectCommonValues().InjectSettings(settings);
 
                 //request.Accept = "text/xml";
@@ -138,7 +138,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                         Input.Text = content;
 
                         TargetUrl.Items.Clear();
-                        foreach (var comboBoxItem in endpoints.Select(x => new ComboBoxItem() { Content = x }))
+                        foreach (var comboBoxItem in endpoints.Select(x => new ComboBoxItem() { Content = x.Key, Tag = x.Value }))
                         {
                             TargetUrl.Items.Add(comboBoxItem);
                         }

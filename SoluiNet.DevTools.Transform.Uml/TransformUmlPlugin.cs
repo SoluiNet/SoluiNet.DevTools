@@ -23,7 +23,9 @@ namespace SoluiNet.DevTools.Transform.Uml
         {
             get
             {
-                return new List<string> { "xml", "uml", "jpg" };
+                // for XMI see following page: http://www.omgwiki.org/model-interchange/doku.php?id=start
+
+                return new List<string> { "xml", "uml", "jpg", "xmi" };
             }
         }
 
