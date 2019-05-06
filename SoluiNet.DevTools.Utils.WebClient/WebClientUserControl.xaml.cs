@@ -29,10 +29,13 @@ namespace SoluiNet.DevTools.Utils.WebClient
         {
             try
             {
+                var environment = ((TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)["Environment"];
+                var url = ((TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)["Url"];
+
                 var settings = PluginHelper.GetSettings(ChosenPlugin);
 
-                var request = (HttpWebRequest)WebRequest.Create((TargetUrl.SelectedItem as ComboBoxItem)?.Tag.ToString());
-                var content = Input.Text.SetEnvironment().InjectCommonValues().InjectSettings(settings);
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                var content = Input.Text.SetEnvironment(environment).InjectCommonValues().InjectSettings(settings);
 
                 //request.Accept = "text/xml";
                 request.Method = HttpMethod.Text;
@@ -50,7 +53,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
                     foreach (var element in AdditionalOptions.Options)
                     {
-                        request.Headers.Add(element.Key, element.Value.SetEnvironment().InjectCommonValues().InjectSettings(settings).Inject(injectionDictionary));
+                        request.Headers.Add(element.Key, element.Value.SetEnvironment(environment).InjectCommonValues().InjectSettings(settings).Inject(injectionDictionary));
                     }
 
                     var soapEnvelopeXml = new XmlDocument();
@@ -138,7 +141,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                         Input.Text = content;
 
                         TargetUrl.Items.Clear();
-                        foreach (var comboBoxItem in endpoints.Select(x => new ComboBoxItem() { Content = x.Key, Tag = x.Value }))
+                        foreach (var comboBoxItem in endpoints.Select(x => new ComboBoxItem() { Content = x.Key, Tag = new Dictionary<string, string>() { { "Url", x.Value }, { "Environment", x.Key } } }))
                         {
                             TargetUrl.Items.Add(comboBoxItem);
                         }
