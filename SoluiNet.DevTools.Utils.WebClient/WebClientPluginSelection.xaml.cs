@@ -23,7 +23,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             _plugins = plugins;
         }
 
-        public delegate void ReturnWebMethodToMainForm(List<string> endpoints, string content, List<string> supportedHttpMethods, List<string> supportedContentTypes = null, Dictionary<string, string> additionalOptions = null);
+        public delegate void ReturnWebMethodToMainForm(List<string> endpoints, string content, List<string> supportedHttpMethods, List<string> supportedContentTypes = null, Dictionary<string, string> additionalOptions = null, IPluginWithSettings chosenPlugin = null);
 
         public ReturnWebMethodToMainForm ReturnChosenMethod { get; set; }
 
@@ -49,12 +49,16 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 return;
             }
 
+            var selectedPlugin = (Plugin.SelectedItem as ComboBoxItem)?.Content.ToString();
+            var plugin = _plugins.FirstOrDefault(x => !string.IsNullOrEmpty(selectedPlugin) && x.Name == selectedPlugin);
+
             ReturnChosenMethod(
                 chosenWebClient.Endpoints.Select(x => x.Url).ToList(),
                 chosenMethod.RequestContent,
                 chosenMethod.SupportedHttpMethods.Select(x => Enum.GetName(typeof(SoluiNetHttpMethodType), x)).ToList(),
                 chosenMethod.SupportedContentTypes.Select(x => Enum.GetName(typeof(SoluiNetContentType), x)).ToList(),
-                chosenMethod.PreparedHttpHeaders.ToDictionary(x => x.Name, x => x.Value)
+                chosenMethod.PreparedHttpHeaders.ToDictionary(x => x.Name, x => x.Value),
+                plugin is IPluginWithSettings settings ? settings : null
             );
 
             CloseCurrentWindow();

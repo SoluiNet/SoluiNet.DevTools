@@ -155,5 +155,17 @@ namespace SoluiNet.DevTools.Core.Tools.XML
 
             return StreamHelper.StreamToString(stream);
         }
+
+        public static string Merge(string firstXmlDocument, string secondXmlDocument, string xmlNodeName)
+        {
+            var firstXml = XDocument.Parse(firstXmlDocument);
+            var secondXml = XDocument.Parse(secondXmlDocument);
+
+            //Combine and remove duplicates
+            var combinedXml = firstXml.Descendants(xmlNodeName)
+                .Union(secondXml.Descendants(xmlNodeName));
+
+            return Serialize(combinedXml);
+        }
     }
 }

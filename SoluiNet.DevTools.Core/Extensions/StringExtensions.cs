@@ -52,6 +52,30 @@ namespace SoluiNet.DevTools.Core.Extensions
         {
             return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("alter");
         }
+        public static string SetEnvironment(this string originalString, string environment = "Default")
+        {
+            return originalString.Replace("[Environment]", environment);
+        }
+
+        public static string InjectSettings(this string originalString, Settings.SoluiNetSettingType settings)
+        {
+            if (settings == null)
+            {
+                return originalString;
+            }
+
+            var settingsDictionary = new Dictionary<string, string>();
+
+            foreach (var environment in settings.SoluiNetEnvironment)
+            {
+                foreach (var entry in environment.SoluiNetSettingEntry)
+                {
+                    settingsDictionary.Add(string.Format("Settings.{0}.{1}", environment.name, entry.name), entry.Value);
+                }
+            }
+
+            return originalString.Inject(settingsDictionary);
+        }
 
         public static string Inject(this string originalString, Dictionary<string, string> injectionValues)
         {

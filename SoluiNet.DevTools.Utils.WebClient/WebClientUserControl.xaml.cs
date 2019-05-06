@@ -18,6 +18,8 @@ namespace SoluiNet.DevTools.Utils.WebClient
     /// </summary>
     public partial class WebClientUserControl : UserControl
     {
+        private IPluginWithSettings ChosenPlugin { get; set; }
+
         public WebClientUserControl()
         {
             InitializeComponent();
@@ -27,8 +29,10 @@ namespace SoluiNet.DevTools.Utils.WebClient
         {
             try
             {
+                var settings = PluginHelper.GetSettings(ChosenPlugin);
+
                 var request = (HttpWebRequest)WebRequest.Create(TargetUrl.Text);
-                var content = Input.Text.InjectCommonValues();
+                var content = Input.Text.SetEnvironment().InjectCommonValues().InjectSettings(settings);
 
                 //request.Accept = "text/xml";
                 request.Method = HttpMethod.Text;
@@ -46,7 +50,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
                     foreach (var element in AdditionalOptions.Options)
                     {
-                        request.Headers.Add(element.Key, element.Value.InjectCommonValues().Inject(injectionDictionary));
+                        request.Headers.Add(element.Key, element.Value.SetEnvironment().InjectCommonValues().InjectSettings(settings).Inject(injectionDictionary));
                     }
 
                     var soapEnvelopeXml = new XmlDocument();
@@ -129,7 +133,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 Title = "Select Web Method from plugin list",
                 Content = new WebClientPluginSelection(plugins)
                 {
-                    ReturnChosenMethod = (endpoints, content, methods, contentTypes, options) =>
+                    ReturnChosenMethod = (endpoints, content, methods, contentTypes, options, chosenPlugin) =>
                     {
                         Input.Text = content;
 
@@ -146,6 +150,8 @@ namespace SoluiNet.DevTools.Utils.WebClient
                         {
                             AdditionalOptions.AddOption(option.Key, option.Value);
                         }
+
+                        ChosenPlugin = chosenPlugin;
                     }
                 }
             };

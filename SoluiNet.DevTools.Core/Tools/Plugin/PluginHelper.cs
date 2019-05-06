@@ -1,14 +1,13 @@
-﻿using System;
+﻿using SoluiNet.DevTools.Core.ScriptEngine;
+using SoluiNet.DevTools.Core.Tools.File;
+using SoluiNet.DevTools.Core.Tools.Stream;
+using SoluiNet.DevTools.Core.Tools.XML;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using SoluiNet.DevTools.Core.ScriptEngine;
-using SoluiNet.DevTools.Core.Tools.XML;
 
 namespace SoluiNet.DevTools.Core.Tools
 {
@@ -17,7 +16,9 @@ namespace SoluiNet.DevTools.Core.Tools
         public static IList<System.Type> GetEntityTypes(ISqlDevPlugin plugin)
         {
             if (plugin == null)
+            {
                 return null;
+            }
 
             var pluginNamespace = plugin.GetType().Namespace;
 
@@ -49,7 +50,9 @@ namespace SoluiNet.DevTools.Core.Tools
             var fieldList = new List<string>();
 
             if (plugin == null)
+            {
                 return null;
+            }
 
             var pluginNamespace = plugin.GetType().Namespace;
 
@@ -80,7 +83,9 @@ namespace SoluiNet.DevTools.Core.Tools
             var dataEntity = dataEntities.FirstOrDefault();
 
             if (dataEntity == null)
+            {
                 return fieldList;
+            }
 
             fieldList.AddRange(dataEntity.GetProperties().Select(x => x.Name));
 
@@ -90,7 +95,9 @@ namespace SoluiNet.DevTools.Core.Tools
         public static IList<string> GetEmbeddedResources(IBasePlugin plugin, string type = "Script")
         {
             if (plugin == null)
+            {
                 return null;
+            }
 
             var pluginNamespace = plugin.GetType().Namespace;
 
@@ -106,7 +113,9 @@ namespace SoluiNet.DevTools.Core.Tools
             var scriptList = new List<SqlScript>();
 
             if (plugin == null)
+            {
                 return null;
+            }
 
             var embeddedScripts = GetEmbeddedResources(plugin, "Script");
 
@@ -115,7 +124,9 @@ namespace SoluiNet.DevTools.Core.Tools
                 var scriptsStream = plugin.GetType().Assembly.GetManifestResourceStream(scriptContainer);
 
                 if (scriptsStream == null)
+                {
                     continue;
+                }
 
                 var scripts = XmlHelper.Deserialize<SqlScripts>(scriptsStream);
 
@@ -128,19 +139,25 @@ namespace SoluiNet.DevTools.Core.Tools
         public static WebClientDefinition.SoluiNetWebClientDefinition GetWebClientDefinition(IWebClientSupportPlugin plugin)
         {
             if (plugin == null)
+            {
                 return null;
+            }
 
             var embeddedWebClientDefs = GetEmbeddedResources(plugin, "WebClientDefinition");
 
             var webClientDefContainer = embeddedWebClientDefs.FirstOrDefault();
 
             if (webClientDefContainer == null)
+            {
                 return null;
+            }
 
             var webClientDefStream = plugin.GetType().Assembly.GetManifestResourceStream(webClientDefContainer);
 
             if (webClientDefStream == null)
+            {
                 return null;
+            }
 
             var webClientDef = XmlHelper.Deserialize<WebClientDefinition.SoluiNetWebClientDefinition>(webClientDefStream);
 
@@ -150,21 +167,46 @@ namespace SoluiNet.DevTools.Core.Tools
         public static Settings.SoluiNetSettingType GetSettings(IPluginWithSettings plugin)
         {
             if (plugin == null)
+            {
                 return null;
+            }
 
             var embeddedSettings = GetEmbeddedResources(plugin, "Settings");
 
             var settingsContainer = embeddedSettings.FirstOrDefault();
 
             if (settingsContainer == null)
+            {
                 return null;
+            }
 
             var settingsStream = plugin.GetType().Assembly.GetManifestResourceStream(settingsContainer);
 
             if (settingsStream == null)
+            {
                 return null;
+            }
 
-            var settings = XmlHelper.Deserialize<Settings.SoluiNetSettingType>(settingsStream);
+            var embeddedResourceXml = StreamHelper.StreamToString(settingsStream);
+            var settingsXml = embeddedResourceXml;
+
+            var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                return null;
+            }
+
+            var settingsPathForPlugin = Path.Combine(folderPath, "Plugins", string.Format("Settings.{0}.xml", plugin.Name));
+
+            if (System.IO.File.Exists(settingsPathForPlugin))
+            {
+                var localSavedXml = FileHelper.StringFromFile(settingsPathForPlugin);
+
+                settingsXml = XmlHelper.Merge(embeddedResourceXml, localSavedXml, "SoluiNet.Settings");
+            }
+
+            var settings = XmlHelper.Deserialize<Settings.SoluiNetSettingType>(settingsXml);
 
             return settings;
         }
@@ -187,7 +229,7 @@ namespace SoluiNet.DevTools.Core.Tools
 
             environmentList.AddRange(ConfigurationManager.ConnectionStrings.Cast<ConnectionStringSettings>()
                 .Where(x => x.Name.StartsWith(plugin.DefaultConnectionStringName))
-                .Select(x => x.Name == plugin.DefaultConnectionStringName ? 
+                .Select(x => x.Name == plugin.DefaultConnectionStringName ?
                     "Default" :
                     x.Name.Replace(plugin.DefaultConnectionStringName + ".", string.Empty)));
 
@@ -199,20 +241,28 @@ namespace SoluiNet.DevTools.Core.Tools
             var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             if (string.IsNullOrEmpty(folderPath))
+            {
                 return null;
+            }
 
             var assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
             var assemblyPluginPath = Path.Combine(folderPath, "Plugins", new AssemblyName(args.Name).Name + ".dll");
 
             if (!System.IO.File.Exists(assemblyPath) && !System.IO.File.Exists(assemblyPluginPath))
+            {
                 return null;
+            }
 
             Assembly assembly = null;
 
             if (System.IO.File.Exists(assemblyPath))
+            {
                 assembly = Assembly.LoadFrom(assemblyPath);
+            }
             else if (System.IO.File.Exists(assemblyPluginPath))
+            {
                 assembly = Assembly.LoadFrom(assemblyPluginPath);
+            }
 
             return assembly;
         }
@@ -239,7 +289,7 @@ namespace SoluiNet.DevTools.Core.Tools
             }
 
             Type pluginType = typeof(T);
-            
+
             var pluginList = new List<T>();
 
             foreach (var assembly in assemblies)
@@ -268,11 +318,11 @@ namespace SoluiNet.DevTools.Core.Tools
             return pluginList;
         }
 
-        public static T GetPluginByName<T> (string name) where T : IBasePlugin
+        public static T GetPluginByName<T>(string name) where T : IBasePlugin
         {
             var pluginList = GetPlugins<T>();
 
-            foreach(var plugin in pluginList)
+            foreach (var plugin in pluginList)
             {
                 if (plugin.Name.Equals(name))
                 {
