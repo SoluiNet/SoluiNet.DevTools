@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Button x:Name="PredictResults" Content="Predict Results" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" Height="25" Click="PredictResults_Click"/>
-        <TextBox x:Name="Predictions" HorizontalAlignment="Left" Height="23" Margin="192,310,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="Predictions" Margin="5,310,5,5" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
 
     </Grid>
 </UserControl>

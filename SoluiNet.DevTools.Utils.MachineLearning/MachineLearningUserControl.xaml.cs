@@ -40,7 +40,9 @@ namespace SoluiNet.DevTools.Utils.MachineLearning
                 new SimpleLearningModel<float, float> { ReferenceValue = 3, DependentValue = 4 },
                 new SimpleLearningModel<float, float> { ReferenceValue = 4, DependentValue = 8 },
                 new SimpleLearningModel<float, float> { ReferenceValue = 5, DependentValue = 64 },
-                new SimpleLearningModel<float, float> { ReferenceValue = 6, DependentValue = 128 }
+                new SimpleLearningModel<float, float> { ReferenceValue = 6, DependentValue = 128 },
+                new SimpleLearningModel<float, float> { ReferenceValue = 7, DependentValue = Convert.ToSingle(Math.Pow(128, 2)) },
+                new SimpleLearningModel<float, float> { ReferenceValue = 8, DependentValue = Convert.ToSingle(Math.Pow(128, 2)) * 2 }
             };
 
             var trainingDataView = learningContext.Data.LoadFromEnumerable(trainingData);
@@ -54,8 +56,8 @@ namespace SoluiNet.DevTools.Utils.MachineLearning
 
             var model = pipeline.Fit(trainingDataView);
 
-            var predictionModel = new SimpleLearningModel<float, float> { ReferenceValue = 7 };
-            var calculatedPrediction = learningContext.Model.CreatePredictionEngine<SimpleLearningModel<float, float>, SimpleLearningModel<float, float>>(model).Predict(predictionModel);
+            var predictionModel = new SimpleLearningModel<float, float> { ReferenceValue = 9 };
+            var calculatedPrediction = learningContext.Model.CreatePredictionEngine<SimpleLearningModel<float, float>, SimplePredictionModel<float>>(model).Predict(predictionModel);
 
             Predictions.Text = JsonTools.Serialize(calculatedPrediction);
         }
