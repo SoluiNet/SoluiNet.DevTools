@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using SoluiNet.DevTools.Core;
 using SoluiNet.DevTools.Core.Tools;
+using SoluiNet.DevTools.Core.Tools.Json;
 
 namespace SoluiNet.DevTools.UI
 {
@@ -45,9 +47,16 @@ namespace SoluiNet.DevTools.UI
             ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
             foreach (string dllFile in dllFileNames)
             {
-                var an = AssemblyName.GetAssemblyName(dllFile);
-                var assembly = Assembly.Load(an);
-                assemblies.Add(assembly);
+                try
+                {
+                    var an = AssemblyName.GetAssemblyName(dllFile);
+                    var assembly = Assembly.Load(an);
+                    assemblies.Add(assembly);
+                }
+                catch (BadImageFormatException exception)
+                {
+                    Debug.WriteLine(JsonTools.Serialize(exception));
+                }
             }
 
             Type pluginType = typeof(IBasePlugin);
