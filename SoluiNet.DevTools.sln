@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Transform
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Transform.ErDiagram", "SoluiNet.DevTools.Transform.ErDiagram\SoluiNet.DevTools.Transform.ErDiagram.csproj", "{A1191A59-437E-460F-9F75-B6E302FF20D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Utils.Flyway", "SoluiNet.DevTools.Utils.Flyway\SoluiNet.DevTools.Utils.Flyway.csproj", "{0A454435-5658-473F-B3D6-1E7C971578AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{A1191A59-437E-460F-9F75-B6E302FF20D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1191A59-437E-460F-9F75-B6E302FF20D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1191A59-437E-460F-9F75-B6E302FF20D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A454435-5658-473F-B3D6-1E7C971578AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A454435-5658-473F-B3D6-1E7C971578AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A454435-5658-473F-B3D6-1E7C971578AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A454435-5658-473F-B3D6-1E7C971578AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
