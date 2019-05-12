@@ -1,5 +1,6 @@
 Debug
 Release
+obj
 .v15/**
 .vs/**
 packages/**
@@ -7,3 +8,4 @@ packages/**
 /UpgradeLog2.htm
 /UpgradeLog.htm
 /**/*.ConnectionStrings.config
+*.old

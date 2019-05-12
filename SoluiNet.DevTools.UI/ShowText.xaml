@@ -10,6 +10,6 @@
     <Grid>
         <avalonEdit:TextEditor Name="TextToShow" FontFamily="Consolas" SyntaxHighlighting="SQL" FontSize="10pt" Foreground="GhostWhite" Margin="5,5,5,35" Background="#FF303030" ShowLineNumbers="True" />
         <Button Name="FormatSQL" Content="Format SQL" HorizontalAlignment="Left" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="120" Height="25" Click="FormatSQL_Click"/>
-        <Button Name="Close" Content="Close" HorizontalAlignment="Right" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="75" Height="25" Click="Close_Click"/>
+        <Button Name="CloseWindow" Content="Close" HorizontalAlignment="Right" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="75" Height="25" Click="CloseWindow_Click"/>
     </Grid>
 </Window>

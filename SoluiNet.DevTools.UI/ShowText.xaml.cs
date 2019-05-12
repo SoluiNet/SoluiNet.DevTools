@@ -36,7 +36,7 @@ namespace SoluiNet.DevTools.UI
             TextToShow.SyntaxHighlighting = highlighting;
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

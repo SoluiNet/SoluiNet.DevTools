@@ -49,9 +49,9 @@ namespace SoluiNet.DevTools.Utils.MachineLearning
 
             var pipeline = learningContext.Transforms
                 .Concatenate("Features", new[] { "ReferenceValue" })
-                .Append(learningContext.Regression.Trainers.Sdca(
+                .Append(learningContext.Regression.Trainers.LbfgsPoissonRegression(
                     labelColumnName: "DependentValue",
-                    maximumNumberOfIterations: 1000
+                    historySize: 100
                 ));
 
             var model = pipeline.Fit(trainingDataView);
