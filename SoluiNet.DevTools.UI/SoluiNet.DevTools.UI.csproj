@@ -11,6 +11,7 @@
     <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>
   </PropertyGroup>
   <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <OutputPath>bin\$(TargetFramework)\$(Platform)\$(Configuration)\</OutputPath>
     <NoWin32Manifest>true</NoWin32Manifest>
