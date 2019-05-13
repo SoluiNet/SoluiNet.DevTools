@@ -13,20 +13,29 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
 {
     public static class CodeOnTheFlyTools
     {
-        public static string RunDynamicCode(string code)
+        public static string RunDynamicCode(string code, bool sourceCodeComplete = false, string executingMethod = "main", params object[] methodParameters)
         {
             var compiler = CodeDomProvider.CreateProvider("CSharp");
             var parameters = new CompilerParameters();
-            
+
             parameters.ReferencedAssemblies.Add("System.dll");
-            
-            var generatedCode = string.Format(@"using System; " + 
-                    "namespace DynamicCode {{ " + 
-                    "public class DynamicCodeClass {{ " +
-                    "public object main(params object[] parameters) {{ {0} }} }} }}", code);
-            
+
+            var generatedCode = string.Empty;
+
+            if (!sourceCodeComplete)
+            {
+                generatedCode = string.Format(@"using System; " +
+                        "namespace DynamicCode {{ " +
+                        "public class DynamicCodeClass {{ " +
+                        "public object main(params object[] parameters) {{ {0} }} }} }}", code);
+            }
+            else
+            {
+                generatedCode = code;
+            }
+
             parameters.GenerateInMemory = false;
-            
+
             var compiled = compiler.CompileAssemblyFromSource(parameters, generatedCode);
 
             if (compiled.Errors.HasErrors)
@@ -37,15 +46,26 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
 
                 foreach (CompilerError error in compiled.Errors)
                 {
-                    errorMessage += string.Format("\r\nError on line: {0} - {1}", error.Line, error.ErrorText);
+                    errorMessage += string.Format("\r\nError on line {0}: {1}", error.Line, error.ErrorText);
                 }
 
                 return errorMessage + "\r\n---\r\n" + code.AddLineNumbers();
             }
 
             var assembly = compiled.CompiledAssembly;
-            
-            object compiledClass = assembly.CreateInstance("DynamicCode.DynamicCodeClass");
+
+            object compiledClass = null;
+
+            if (!sourceCodeComplete)
+            {
+                compiledClass = assembly.CreateInstance("DynamicCode.DynamicCodeClass");
+            }
+            else
+            {
+                var firstAssemblyType = assembly.GetTypes().First();
+
+                compiledClass = assembly.CreateInstance(firstAssemblyType.Namespace + "." + firstAssemblyType.Name);
+            }
 
             if (compiledClass == null)
             {
@@ -61,15 +81,31 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
 
             try
             {
-                var result = compiledClass.GetType().InvokeMember("main", BindingFlags.InvokeMethod, null, compiledClass, codeParameters);
+                object result = null;
 
-                if (result.GetType().IsPrimitive)
+                if (!sourceCodeComplete)
                 {
-                    return string.Format("Result ({0}):\r\n{1}", result.GetType().Name, result.ToString());
+                    result = compiledClass.GetType().InvokeMember(executingMethod, BindingFlags.InvokeMethod, null, compiledClass, codeParameters);
                 }
                 else
                 {
-                    return string.Format("Result ({0}):\r\n{1}", result.GetType().Name, JsonConvert.SerializeObject(result));
+                    result = compiledClass.GetType().InvokeMember(executingMethod, BindingFlags.InvokeMethod, null, compiledClass, methodParameters);
+                }
+
+                if (result != null)
+                {
+                    if (result.GetType().IsPrimitive)
+                    {
+                        return string.Format("Result ({0}):\r\n{1}", result.GetType().Name, result.ToString());
+                    }
+                    else
+                    {
+                        return string.Format("Result ({0}):\r\n{1}", result.GetType().Name, JsonConvert.SerializeObject(result));
+                    }
+                }
+                else
+                {
+                    return "No result received";
                 }
             }
             catch (Exception exception)

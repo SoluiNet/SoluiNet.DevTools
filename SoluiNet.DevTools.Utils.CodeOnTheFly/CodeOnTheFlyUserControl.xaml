@@ -12,6 +12,8 @@
             <TabItem x:Name="CodeTab" Header="Code">
                 <Grid>
                     <avalonedit:TextEditor x:Name="Code" Margin="5,5,5,35" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="0" Grid.Row="2" Foreground="#FF303030" Background="LightGray" />
+                    <CheckBox x:Name="IsSourceCodeComplete" Content="Is complete source code?" Margin="5,5" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="25" />
+                    <TextBox x:Name="CallingMethod" Text="Calling Method" Margin="5,5" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="25" Width="120" />
                     <Button x:Name="Execute" Content="Execute Code" Margin="5,5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120" Height="25" Click="Execute_Click" />
                 </Grid>
             </TabItem>
