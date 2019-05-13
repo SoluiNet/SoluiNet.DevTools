@@ -24,5 +24,12 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
         {
             InitializeComponent();
         }
+
+        private void Execute_Click(object sender, RoutedEventArgs e)
+        {
+            CodeTabs.SelectedIndex = 1;
+
+            Result.Text = CodeOnTheFlyTools.RunDynamicCode(Code.Text);
+        }
     }
 }

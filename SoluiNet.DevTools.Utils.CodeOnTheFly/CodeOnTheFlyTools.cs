@@ -1,4 +1,5 @@
 ﻿using Microsoft.CSharp;
+using Newtonsoft.Json;
 using SoluiNet.DevTools.Core.Tools.String;
 using System;
 using System.CodeDom.Compiler;
@@ -62,7 +63,14 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
             {
                 var result = compiledClass.GetType().InvokeMember("main", BindingFlags.InvokeMethod, null, compiledClass, codeParameters);
 
-                return "Method Call Result:\r\n\r\n" + result.ToString();
+                if (result.GetType().IsPrimitive)
+                {
+                    return string.Format("Result ({0}):\r\n{1}", result.GetType().Name, result.ToString());
+                }
+                else
+                {
+                    return string.Format("Result ({0}):\r\n{1}", result.GetType().Name, JsonConvert.SerializeObject(result));
+                }
             }
             catch (Exception exception)
             {
