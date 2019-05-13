@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SoluiNet.DevTools.Core.Tools.String
 {
-    public class StringHelper
+    public static class StringHelper
     {
         public static string ReplaceFirstOccurence(string inputString, string searchPattern, string replacementValue = "")
         {
@@ -28,6 +28,19 @@ namespace SoluiNet.DevTools.Core.Tools.String
             }
 
             return headerLabelString.Replace("_", "__");
+        }
+
+        public static string AddLineNumbers(this string originalString, int numberOfDigits = 2)
+        {
+            var temporaryString = string.Empty;
+            var lineNumber = 1;
+
+            foreach(var line in originalString.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None))
+            {
+                temporaryString += string.Format("{0}: {1}\r\n", lineNumber++.ToString("D" + numberOfDigits.ToString()), line);
+            }
+
+            return temporaryString;
         }
     }
 }
