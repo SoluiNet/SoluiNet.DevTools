@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\TimeTrackingContext.cs" />
+    <Compile Include="Entities\UsageTime.cs" />
     <Compile Include="Job\LogForegroundWindowTask.cs" />
     <Compile Include="TimeTrackingTools.cs" />
     <Compile Include="TimeTrackingToolsPlugin.cs" />
