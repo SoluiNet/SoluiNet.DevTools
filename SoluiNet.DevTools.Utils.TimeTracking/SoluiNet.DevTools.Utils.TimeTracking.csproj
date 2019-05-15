@@ -78,6 +78,8 @@
   <ItemGroup>
     <Compile Include="Entities\TimeTrackingContext.cs" />
     <Compile Include="Entities\UsageTime.cs" />
+    <Compile Include="Entities\VersionHistory.cs" />
+    <Compile Include="Job\SaveForegroundWindowTaskToDb.cs" />
     <Compile Include="Job\LogForegroundWindowTask.cs" />
     <Compile Include="TimeTrackingTools.cs" />
     <Compile Include="TimeTrackingToolsPlugin.cs" />

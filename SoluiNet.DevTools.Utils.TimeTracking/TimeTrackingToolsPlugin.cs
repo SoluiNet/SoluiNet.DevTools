@@ -31,14 +31,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             // get a scheduler
             var scheduler = await factory.GetScheduler();
             await scheduler.Start();
-
-            // define the job and tie it to our HelloJob class
-            var job = JobBuilder.Create<LogForegroundWindowTask>()
+            
+            var logJob = JobBuilder.Create<LogForegroundWindowTask>()
                 .WithIdentity("ForegroundWindowLogger", "TimeTracking")
                 .Build();
-
-            // Trigger the job to run now, and then every 40 seconds
-            var trigger = TriggerBuilder.Create()
+            
+            var logTrigger = TriggerBuilder.Create()
                 .WithIdentity("LogForegroundWindow", "TimeTracking")
                 .StartNow()
                 .WithSimpleSchedule(x => x
@@ -46,7 +44,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     .RepeatForever())
                 .Build();
 
-            await scheduler.ScheduleJob(job, trigger);
+            await scheduler.ScheduleJob(logJob, logTrigger);
+            
+            var dbJob = JobBuilder.Create<SaveForegroundWindowTaskToDb>()
+                .WithIdentity("ForegroundWindowDbPersister", "TimeTracking")
+                .Build();
+            
+            var dbTrigger = TriggerBuilder.Create()
+                .WithIdentity("PersistForegroundWindowToDb", "TimeTracking")
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInSeconds(10)
+                    .RepeatForever())
+                .Build();
+
+            await scheduler.ScheduleJob(dbJob, dbTrigger);
         }
 
         public string MenuItemLabel

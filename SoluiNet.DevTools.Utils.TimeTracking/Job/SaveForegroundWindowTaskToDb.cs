@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using NLog;
 using Quartz;
+using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
 namespace SoluiNet.DevTools.Utils.TimeTracking.Job
 {
-    public class LogForegroundWindowTask : IJob
+    public class SaveForegroundWindowTaskToDb : IJob
     {
         private Logger Logger
         {
@@ -18,20 +19,24 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Job
             }
         }
 
-        private void LogForegroundWindow()
+        private void SaveForegroundWindowToDb()
         {
             var windowName = TimeTrackingTools.GetTitleOfWindowInForeground();
 
-            Logger.Log(LogLevel.Info, windowName);
+            var context = new TimeTrackingContext();
+
+            context.UsageTimes.Add(new UsageTime() { StartTime = DateTime.UtcNow, ApplicationIdentification = windowName, Duration = 0 });
+
+            context.SaveChanges();
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
             try
             {
-                LogForegroundWindow();
+                SaveForegroundWindowToDb();
             }
-            catch (Exception exception)
+            catch(Exception exception)
             {
                 LogManager.GetCurrentClassLogger().Fatal(exception.Message);
             }
