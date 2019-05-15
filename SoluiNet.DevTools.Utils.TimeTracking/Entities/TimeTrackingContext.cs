@@ -14,7 +14,7 @@
         private static bool _created = false;
 
         public TimeTrackingContext(string nameOrConnectionString = "name=TimeTrackingContext")
-            : base(GetConnectionString(nameOrConnectionString))
+            : base(new SQLiteConnection() { ConnectionString = GetConnectionString(nameOrConnectionString) }, true)
         {
             if (!_created)
             {
