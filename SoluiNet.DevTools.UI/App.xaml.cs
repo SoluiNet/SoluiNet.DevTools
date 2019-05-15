@@ -25,6 +25,8 @@ namespace SoluiNet.DevTools.UI
 
         internal ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
 
+        internal ICollection<IPluginWithBackgroundTask> BackgroundTaskPlugins { get; set; }
+
         /// <summary>
         /// Event handling for start up
         /// </summary>
@@ -62,6 +64,7 @@ namespace SoluiNet.DevTools.UI
             Type pluginType = typeof(IBasePlugin);
             Type sqlPluginType = typeof(ISqlDevPlugin);
             Type utilityPluginType = typeof(IUtilitiesDevPlugin);
+            Type backgroundTaskType = typeof(IPluginWithBackgroundTask);
 
             IDictionary<Type, List<string>> pluginTypes = new Dictionary<Type, List<string>>();
 
@@ -115,12 +118,25 @@ namespace SoluiNet.DevTools.UI
                             pluginTypes.Add(type, new List<string>() { "UtilityDev" });
                         }
                     }
+
+                    if (type.GetInterface(backgroundTaskType.FullName) != null)
+                    {
+                        if (pluginTypes.ContainsKey(type))
+                        {
+                            pluginTypes[type].Add("BackgroundTask");
+                        }
+                        else
+                        {
+                            pluginTypes.Add(type, new List<string>() { "BackgroundTask" });
+                        }
+                    }
                 }
             }
 
             Plugins = new List<IBasePlugin>();
             SqlPlugins = new List<ISqlDevPlugin>();
             UtilityPlugins = new List<IUtilitiesDevPlugin>();
+            BackgroundTaskPlugins = new List<IPluginWithBackgroundTask>();
 
             foreach (var type in pluginTypes)
             {
@@ -140,6 +156,17 @@ namespace SoluiNet.DevTools.UI
                 {
                     var plugin = (IUtilitiesDevPlugin)Activator.CreateInstance(type.Key);
                     UtilityPlugins.Add(plugin);
+                }
+
+                if (type.Value.Contains("BackgroundTask"))
+                {
+                    var plugin = (IPluginWithBackgroundTask)Activator.CreateInstance(type.Key);
+                    BackgroundTaskPlugins.Add(plugin);
+
+                    Task.Run(() =>
+                    {
+                        (plugin as IPluginWithBackgroundTask).ExecuteBackgroundTask();
+                    });
                 }
             }
 
