@@ -84,7 +84,7 @@
             {
                 connection.Open();
 
-                var command = new SQLiteCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime ASC LIMIT 1", connection);
+                var command = new SQLiteCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
 
                 var appliedVersion = new Version(command.ExecuteScalar().ToString());
 
@@ -108,11 +108,18 @@
             }
         }
 
-        public virtual DbSet<UsageTime> UsageTimes { get; set; }
-        public virtual DbSet<VersionHistory> VersionHistories { get; set; }
+        public virtual DbSet<UsageTime> UsageTime { get; set; }
+        public virtual DbSet<VersionHistory> VersionHistory { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<UsageTime>()
+                .ToTable(typeof(UsageTime).Name)
+                .HasKey(x => x.UsageTimeId);
+
+            modelBuilder.Entity<VersionHistory>()
+                .ToTable(typeof(VersionHistory).Name)
+                .HasKey(x => x.VersionHistoryId);
         }
     }
 }

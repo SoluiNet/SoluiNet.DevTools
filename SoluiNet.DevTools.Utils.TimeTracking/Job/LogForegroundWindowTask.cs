@@ -33,7 +33,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Job
             }
             catch (Exception exception)
             {
-                LogManager.GetCurrentClassLogger().Fatal(exception.Message);
+                LogManager.GetCurrentClassLogger().Fatal(string.Format("{0}\r\n{1}", exception.Message, exception.InnerException != null ? exception.InnerException.Message : string.Empty));
             }
 
             await Task.CompletedTask;
