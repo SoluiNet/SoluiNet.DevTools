@@ -1,4 +1,5 @@
-﻿using LiveCharts.Wpf;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
 using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 using System;
 using System.Collections.Generic;
@@ -75,8 +76,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             barsChart.Name = "WeightedTargets";
 
-            var seriesCollection = new LiveCharts.SeriesCollection();
-            var dataSource = weightedTimes.Select(x => new ColumnSeries() { Title = x.Target, Values = new LiveCharts.ChartValues<int> { x.Weight } }).ToList();
+            var seriesCollection = new SeriesCollection();
+
+            var preparedDatabaseList = weightedTimes
+                .Select(x => new { Label = x.Target, Weight = new ChartValues<int> { x.Weight } }).ToList();
+
+            var columnSeriesList = preparedDatabaseList
+                .Select(x => new ColumnSeries() { Title = x.Label, Values = x.Weight }).ToList();
+
+            var dataSource = columnSeriesList;
             seriesCollection.AddRange(dataSource);
 
             barsChart.Series = seriesCollection;
@@ -87,7 +95,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var yAxis = new Axis();
             yAxis.Title = "Weights";
-            yAxis.Labels = weightedTimes.Select(x => x.Weight.ToString()).ToList();
+            yAxis.Labels = weightedTimes.Select(x => x.Weight).ToList().Select(x => x.ToString()).ToList();
 
             barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
