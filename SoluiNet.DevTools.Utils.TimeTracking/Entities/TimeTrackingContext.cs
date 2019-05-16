@@ -100,6 +100,27 @@
                     command.ExecuteNonQuery();
 
                     command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.1");
+                }
+
+                if (appliedVersion.CompareTo(new Version("1.0.0.2")) < 0)
+                {
+                    command.CommandText = "CREATE TABLE Category (CategoryId INTEGER PRIMARY KEY, CategoryName TEXT)";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "CREATE TABLE Category_UsageTime (CategoryId INTEGER, UsageTimeId INTEGER, Duration INTEGER, PRIMARY KEY (CategoryId, UsageTimeId))";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                    command.Parameters.AddWithValue("$versionNo", "1.0.0.2");
+                    command.Parameters.AddWithValue("$appliedAt", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff"));
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.2");
                 }
             }
             finally
@@ -110,6 +131,8 @@
 
         public virtual DbSet<UsageTime> UsageTime { get; set; }
         public virtual DbSet<VersionHistory> VersionHistory { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<CategoryUsageTime> CategoryUsageTime { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -120,6 +143,14 @@
             modelBuilder.Entity<VersionHistory>()
                 .ToTable(typeof(VersionHistory).Name)
                 .HasKey(x => x.VersionHistoryId);
+
+            modelBuilder.Entity<Category>()
+                .ToTable(typeof(Category).Name)
+                .HasKey(x => x.CategoryId);
+
+            modelBuilder.Entity<CategoryUsageTime>()
+                .ToTable(typeof(CategoryUsageTime).Name)
+                .HasKey(x => new { x.CategoryId, x.UsageTimeId });
         }
     }
 }

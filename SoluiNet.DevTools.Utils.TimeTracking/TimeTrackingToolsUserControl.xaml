@@ -5,8 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SoluiNet.DevTools.Utils.TimeTracking"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
     <Grid>
-            
+        <TabControl x:Name="TimeTrackingTabs">
+            <TabItem Header="Statistics">
+                <Grid x:Name="TimeTrackingStatistics" Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Assignment">
+                <Grid x:Name="TimeTrackingAssignment" Background="#FFE5E5E5" />
+            </TabItem>
+            <TabItem Header="Source Data">
+                <Grid x:Name="TimeTrackingSourceData" Background="#FFE5E5E5">
+                    <DataGrid x:Name="SourceData" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </UserControl>
