@@ -16,6 +16,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             Editor,
             Excel,
             Git,
+            KeePass,
             NotepadPlusPlus,
             Outlook,
             RemoteDesktopManager,
@@ -84,6 +85,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             get { return "TortoiseGit"; }
         }
 
+        public static string KeePass
+        {
+            // RegEx: "^(.+ -)?\s*KeePass"
+            get { return "KeePass"; }
+        }
+
         public static string ExtractApplicationName(this string windowTitle)
         {
             if (string.IsNullOrEmpty(windowTitle))
@@ -126,6 +133,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             else if (windowTitle.Contains(TortoiseGit))
             {
                 return TortoiseGit;
+            }
+            else if (windowTitle.Contains(KeePass))
+            {
+                return KeePass;
             }
 
             return string.Empty;
@@ -178,6 +189,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             else if (applicationName.Equals(TortoiseGit))
             {
                 return new LinearGradientBrush(Colors.DarkGray, Colors.LightBlue, 0.75);
+            }
+            else if (applicationName.Equals(KeePass))
+            {
+                return new LinearGradientBrush(Colors.DarkBlue, Colors.LightBlue, 0.75);
             }
 
             return new SolidColorBrush(Colors.White);
