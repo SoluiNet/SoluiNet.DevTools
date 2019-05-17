@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace SoluiNet.DevTools.Core
 {
-    public interface IDataExchangePlugin
+    public interface IDataExchangePlugin : IBasePlugin
     {
         List<object> GetData(string whereClause); // use dynamic LINQ?
 
-        object SetData(object identifier, Dictionary<string, object> valueData);
+        List<object> GetData(string entityName, IDictionary<string, object> searchData);
+
+        object SetData(object identifier, IDictionary<string, object> valueData);
     }
 }

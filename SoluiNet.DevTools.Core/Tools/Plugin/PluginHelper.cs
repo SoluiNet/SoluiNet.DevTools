@@ -171,6 +171,24 @@ namespace SoluiNet.DevTools.Core.Tools
                 return null;
             }
 
+            var settingsXml = string.Empty;
+
+            var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                return null;
+            }
+
+            var generalSettings = Path.Combine(folderPath, "Settings.xml");
+
+            if (System.IO.File.Exists(generalSettings))
+            {
+                var generalSettingsXml = FileHelper.StringFromFile(generalSettings);
+
+                settingsXml = generalSettingsXml;
+            }
+
             var embeddedSettings = GetEmbeddedResources(plugin, "Settings");
 
             var settingsContainer = embeddedSettings.FirstOrDefault();
@@ -188,14 +206,7 @@ namespace SoluiNet.DevTools.Core.Tools
             }
 
             var embeddedResourceXml = StreamHelper.StreamToString(settingsStream);
-            var settingsXml = embeddedResourceXml;
-
-            var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            if (string.IsNullOrEmpty(folderPath))
-            {
-                return null;
-            }
+            settingsXml = XmlHelper.Merge(settingsXml, embeddedResourceXml, "SoluiNet.Settings");
 
             var settingsPathForPlugin = Path.Combine(folderPath, "Plugins", string.Format("Settings.{0}.xml", plugin.Name));
 
@@ -209,6 +220,16 @@ namespace SoluiNet.DevTools.Core.Tools
             var settings = XmlHelper.Deserialize<Settings.SoluiNetSettingType>(settingsXml);
 
             return settings;
+        }
+
+        public static IDictionary<string, object> GetSettingsAsDictionary(IPluginWithSettings plugin)
+        {
+            var settings = GetSettings(plugin);
+
+            var preparedSettings = settings.SoluiNetEnvironment
+                .SelectMany(x => x.SoluiNetSettingEntry.Select(y => new { SettingName = string.Format("{0}.{1}", x.name, y.name), SettingValue = y.Value }));
+
+            return preparedSettings.ToDictionary(x => x.SettingName, x => (object)x.SettingValue);
         }
 
         public static string GetEnvironment(ISqlDevPlugin plugin)
