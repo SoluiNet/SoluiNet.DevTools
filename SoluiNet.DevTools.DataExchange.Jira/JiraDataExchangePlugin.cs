@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
 
         public List<object> GetData(string entityName, IDictionary<string, object> searchData)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
             var settings = PluginHelper.GetSettingsAsDictionary(this);
 
@@ -35,6 +35,11 @@ namespace SoluiNet.DevTools.DataExchange.Jira
             //var request = new RestRequest("rest/api/latest/issue/{issueKey}", Method.GET);
             var request = new RestRequest("rest/api/latest/search", Method.GET);
             //request.AddUrlSegment("issueKey", searchData["issueKey"].ToString());
+            
+            foreach(var searchElement in searchData)
+            {
+                request.AddParameter(searchElement.Key, searchElement.Value);
+            }
 
             //request.AddHeader("Authorization", string.Format("Bearer {0}", settings["Default.AccessToken"].ToString()));
             request.AddHeader("Bearer", settings["Default.AccessToken"].ToString());
@@ -42,6 +47,8 @@ namespace SoluiNet.DevTools.DataExchange.Jira
 
             var response = client.Execute(request);
             var content = response.Content;
+
+            return null;
         }
 
         public object SetData(object identifier, IDictionary<string, object> valueData)
