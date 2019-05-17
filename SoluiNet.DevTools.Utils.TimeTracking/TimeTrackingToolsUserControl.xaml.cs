@@ -44,13 +44,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var lowerDayLimit = DateTime.UtcNow.Date;
             var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
 
-            foreach (var timeTarget in context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification))
+            var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
+                .GroupBy(x => x.ApplicationIdentification);
+
+            var highestDuration = timeTargets.Max(x => x.Sum(y => y.Duration));
+
+            foreach (var timeTarget in timeTargets)
             {
                 TimeTrackingAssignment.RowDefinitions.Add(new RowDefinition());
 
                 var timeTargetButton = new Button() { Content = timeTarget.Key };
 
-                timeTargetButton.Width = timeTarget.Sum(x => x.Duration);
+                timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.ActualWidth;
+
+                timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
 
                 TimeTrackingAssignment.Children.Add(timeTargetButton);
 
@@ -82,7 +89,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 .Select(x => new { Label = x.Target, Weight = new ChartValues<int> { x.Weight } }).ToList();
 
             var columnSeriesList = preparedDatabaseList
-                .Select(x => new ColumnSeries() { Title = x.Label, Values = x.Weight }).ToList();
+                .Select(x => new ColumnSeries() { Title = x.Label?.Substring(0, x.Label.Length >= 30 ? 30 : x.Label.Length), Values = x.Weight }).ToList();
 
             var dataSource = columnSeriesList;
             seriesCollection.AddRange(dataSource);
@@ -91,7 +98,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var xAxis = new Axis();
             xAxis.Title = "Targets";
-            xAxis.Labels = weightedTimes.Select(x => x.Target).ToList();
+            xAxis.Labels = weightedTimes.Select(x => x.Target.Substring(0, 30)).ToList();
 
             var yAxis = new Axis();
             yAxis.Title = "Weights";

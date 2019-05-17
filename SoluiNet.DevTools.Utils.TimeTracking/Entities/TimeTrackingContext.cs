@@ -31,7 +31,13 @@
 
             if (nameOrConnectionString.StartsWith("name="))
             {
-                connectionString = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty)].ConnectionString;
+                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty)];
+
+                if(connectionStringSetting == null) {
+                    throw new ArgumentNullException("connectionStringSetting");
+                }
+
+                connectionString = connectionStringSetting.ConnectionString;
             }
 
             return connectionString.ToLower().Replace("%localappdata%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
