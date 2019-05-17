@@ -63,6 +63,10 @@
     </ApplicationDefinition>
     <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />-->
     <Resource Include="favicon.ico" />
+    <Content Include="ConnectionStrings.Default.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -141,5 +145,8 @@
     <Compile Remove="obj\x86\Debug\net461\UserControls\ConnectionString.g.i.cs" />
     <Compile Remove="obj\x86\Debug\net461\UserControls\ManageConnectionStrings.g.cs" />
     <Compile Remove="obj\x86\Debug\net461\UserControls\ManageConnectionStrings.g.i.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="ConnectionStrings.Default.config" />
   </ItemGroup>
 </Project>

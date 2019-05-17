@@ -3,8 +3,9 @@
     <ProjectGuid>{E231954E-F851-4C2C-A00F-A668D4C50182}</ProjectGuid>
     <TargetFramework>net461</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.Tfs</AssemblyTitle>
+    <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Utils.Tfs</Product>
-    <Copyright>Copyright ©  2019</Copyright>
+    <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

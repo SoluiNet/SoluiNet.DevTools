@@ -2,8 +2,9 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.MachineLearning</AssemblyTitle>
+    <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Utils.MachineLearning</Product>
-    <Copyright>Copyright ©  2019</Copyright>
+    <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
