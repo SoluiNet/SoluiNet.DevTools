@@ -1,5 +1,6 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
+using SoluiNet.DevTools.Core.Tools.Number;
 using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 using System;
 using System.Collections.Generic;
@@ -33,17 +34,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         {
             var context = new TimeTrackingContext();
 
+            var lowerDayLimit = DateTime.UtcNow.Date;
+            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
             #region Fill Source Data
             context.UsageTime.Load();
 
             SourceData.AutoGenerateColumns = true;
-            SourceData.ItemsSource = context.UsageTime.Local;
+            SourceData.ItemsSource = context.UsageTime.Local.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit);
             #endregion
 
             #region Prepare Assignment View
-            var lowerDayLimit = DateTime.UtcNow.Date;
-            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
-
             var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
                 .GroupBy(x => x.ApplicationIdentification);
 
@@ -53,7 +54,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 TimeTrackingAssignment.RowDefinitions.Add(new RowDefinition());
 
-                var timeTargetButton = new Button() { Content = timeTarget.Key };
+                var timeTargetButton = new Button() { Content = timeTarget.Key, HorizontalAlignment = HorizontalAlignment.Left };
 
                 timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.ActualWidth;
 
@@ -66,7 +67,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             #endregion
 
             #region Show Statistics
-            var weightedTimes = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
+            var weightedTimes = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).OrderBy(x => x.Key).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
 
             var barsChart = new CartesianChart();
 
@@ -102,7 +103,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var yAxis = new Axis();
             yAxis.Title = "Weights";
-            yAxis.Labels = weightedTimes.Select(x => x.Weight).ToList().Select(x => x.ToString()).ToList();
+            yAxis.Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString()).ToList();
 
             barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
