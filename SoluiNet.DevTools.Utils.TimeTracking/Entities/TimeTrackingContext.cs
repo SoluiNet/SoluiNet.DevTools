@@ -154,21 +154,17 @@
             }
         }
 
-        public virtual DbSet<UsageTime> UsageTime { get; set; }
-        public virtual DbSet<VersionHistory> VersionHistory { get; set; }
+        public virtual DbSet<Application> Application { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<CategoryUsageTime> CategoryUsageTime { get; set; }
-        public virtual DbSet<Application> Application { get; set; }
+        public virtual DbSet<UsageTime> UsageTime { get; set; }
+        public virtual DbSet<VersionHistory> VersionHistory { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UsageTime>()
-                .ToTable(typeof(UsageTime).Name)
-                .HasKey(x => x.UsageTimeId);
-
-            modelBuilder.Entity<VersionHistory>()
-                .ToTable(typeof(VersionHistory).Name)
-                .HasKey(x => x.VersionHistoryId);
+            modelBuilder.Entity<Application>()
+                .ToTable(typeof(Application).Name)
+                .HasKey(x => x.ApplicationId);
 
             modelBuilder.Entity<Category>()
                 .ToTable(typeof(Category).Name)
@@ -178,9 +174,13 @@
                 .ToTable(typeof(CategoryUsageTime).Name)
                 .HasKey(x => new { x.CategoryId, x.UsageTimeId });
 
-            modelBuilder.Entity<Application>()
-                .ToTable(typeof(Application).Name)
-                .HasKey(x => x.ApplicationId);
+            modelBuilder.Entity<UsageTime>()
+                .ToTable(typeof(UsageTime).Name)
+                .HasKey(x => x.UsageTimeId);
+
+            modelBuilder.Entity<VersionHistory>()
+                .ToTable(typeof(VersionHistory).Name)
+                .HasKey(x => x.VersionHistoryId);
         }
     }
 }
