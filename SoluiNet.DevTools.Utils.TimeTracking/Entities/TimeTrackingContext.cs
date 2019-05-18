@@ -128,6 +128,25 @@
 
                     appliedVersion = new Version("1.0.0.2");
                 }
+
+                if (appliedVersion.CompareTo(new Version("1.0.0.3")) < 0)
+                {
+                    command.CommandText = "CREATE TABLE Application (ApplicationId INTEGER PRIMARY KEY, ApplicationName TEXT)";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "ALTER TABLE UsageTime ADD ApplicationId INTEGER";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                    command.Parameters.AddWithValue("$versionNo", "1.0.0.3");
+                    command.Parameters.AddWithValue("$appliedAt", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff"));
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.3");
+                }
             }
             finally
             {
@@ -139,6 +158,7 @@
         public virtual DbSet<VersionHistory> VersionHistory { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<CategoryUsageTime> CategoryUsageTime { get; set; }
+        public virtual DbSet<Application> Application { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -157,6 +177,10 @@
             modelBuilder.Entity<CategoryUsageTime>()
                 .ToTable(typeof(CategoryUsageTime).Name)
                 .HasKey(x => new { x.CategoryId, x.UsageTimeId });
+
+            modelBuilder.Entity<Application>()
+                .ToTable(typeof(Application).Name)
+                .HasKey(x => x.ApplicationId);
         }
     }
 }
