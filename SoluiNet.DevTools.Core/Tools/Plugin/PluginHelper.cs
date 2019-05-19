@@ -193,20 +193,19 @@ namespace SoluiNet.DevTools.Core.Tools
 
             var settingsContainer = embeddedSettings.FirstOrDefault();
 
-            if (settingsContainer == null)
+            if (settingsContainer != null)
             {
-                return null;
+
+                var settingsStream = plugin.GetType().Assembly.GetManifestResourceStream(settingsContainer);
+
+                if (settingsStream == null)
+                {
+                    return null;
+                }
+
+                var embeddedResourceXml = StreamHelper.StreamToString(settingsStream);
+                settingsXml = XmlHelper.Merge(settingsXml, embeddedResourceXml, "SoluiNet.Settings");
             }
-
-            var settingsStream = plugin.GetType().Assembly.GetManifestResourceStream(settingsContainer);
-
-            if (settingsStream == null)
-            {
-                return null;
-            }
-
-            var embeddedResourceXml = StreamHelper.StreamToString(settingsStream);
-            settingsXml = XmlHelper.Merge(settingsXml, embeddedResourceXml, "SoluiNet.Settings");
 
             var settingsPathForPlugin = Path.Combine(folderPath, "Plugins", string.Format("Settings.{0}.xml", plugin.Name));
 
@@ -214,7 +213,7 @@ namespace SoluiNet.DevTools.Core.Tools
             {
                 var localSavedXml = FileHelper.StringFromFile(settingsPathForPlugin);
 
-                settingsXml = XmlHelper.Merge(embeddedResourceXml, localSavedXml, "SoluiNet.Settings");
+                settingsXml = XmlHelper.Merge(settingsXml, localSavedXml, "SoluiNet.Settings");
             }
 
             var settings = XmlHelper.Deserialize<Settings.SoluiNetSettingType>(settingsXml);
@@ -225,6 +224,11 @@ namespace SoluiNet.DevTools.Core.Tools
         public static IDictionary<string, object> GetSettingsAsDictionary(IPluginWithSettings plugin)
         {
             var settings = GetSettings(plugin);
+
+            if (settings == null)
+            {
+                return null;
+            }
 
             var preparedSettings = settings.SoluiNetEnvironment
                 .SelectMany(x => x.SoluiNetSettingEntry.Select(y => new { SettingName = string.Format("{0}.{1}", x.name, y.name), SettingValue = y.Value }));

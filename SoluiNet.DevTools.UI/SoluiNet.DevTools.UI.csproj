@@ -63,6 +63,14 @@
     </ApplicationDefinition>
     <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />-->
     <Resource Include="favicon.ico" />
+    <Content Include="Settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Settings.Default.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="ConnectionStrings.Default.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -148,5 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ConnectionStrings.Default.config" />
+    <None Remove="Settings.Default.xml" />
+    <None Remove="Settings.xml" />
   </ItemGroup>
 </Project>
