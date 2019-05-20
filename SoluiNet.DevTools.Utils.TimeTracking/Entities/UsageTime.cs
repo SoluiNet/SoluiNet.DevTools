@@ -17,5 +17,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         public DateTime StartTime { get; set; }
 
         public int Duration { get; set; }
+
+        public int ApplicationId { get; set; }
+
+        public int ApplicationAreaId { get; set; }
     }
 }

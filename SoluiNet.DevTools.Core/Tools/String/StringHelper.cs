@@ -42,5 +42,17 @@ namespace SoluiNet.DevTools.Core.Tools.String
 
             return temporaryString;
         }
+
+        public static string ToBase64(this string originalString)
+        {
+            var plainTextBytes = Encoding.Unicode.GetBytes(originalString);
+            return Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string FromBase64(this string encodedString)
+        {
+            byte[] data = Convert.FromBase64String(encodedString);
+            return Encoding.Unicode.GetString(data);
+        }
     }
 }

@@ -64,6 +64,8 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
         private void AddAdditionalOption_Click(object sender, RoutedEventArgs e)
         {
+            /*OptionsGrid.RowDefinitions.Add(new RowDefinition());
+
             var newOption = new WebClientAdditionalOptionControl();
 
             newOption.SetValue(Grid.RowProperty, OptionsGrid.RowDefinitions.Count - 1);
@@ -73,7 +75,9 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 OptionsGrid.Children.Remove(newOption);
             };
 
-            OptionsGrid.Children.Add(newOption);
+            OptionsGrid.Children.Add(newOption);*/
+
+            AddOption(string.Empty, string.Empty);
         }
     }
 }

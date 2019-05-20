@@ -147,6 +147,25 @@
 
                     appliedVersion = new Version("1.0.0.3");
                 }
+
+                if (appliedVersion.CompareTo(new Version("1.0.0.4")) < 0)
+                {
+                    command.CommandText = "CREATE TABLE ApplicationArea (ApplicationAreaId INTEGER PRIMARY KEY, ApplicationId INTEGER, AreaName TEXT)";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "ALTER TABLE UsageTime ADD ApplicationAreaId INTEGER";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                    command.Parameters.AddWithValue("$versionNo", "1.0.0.4");
+                    command.Parameters.AddWithValue("$appliedAt", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff"));
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.4");
+                }
             }
             finally
             {

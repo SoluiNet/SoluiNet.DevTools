@@ -10,6 +10,6 @@
         <Button x:Name="ExecuteJql" Content="Get JIRA Tickets per JQL" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="200" Height="25" Click="ExecuteJql_Click"/>
         <TextBox x:Name="JqlStatement" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="JQL" VerticalAlignment="Top" Width="550"/>
         <DataGrid x:Name="JiraResults" Margin="5,70,5,5" Visibility="Hidden"/>
-        <TextBox x:Name="JiraResultText" Margin="5,70,5,5"/>
+        <TextBox x:Name="JiraResultText" Margin="5,70,5,5" AcceptsReturn="True"/>
     </Grid>
 </UserControl>

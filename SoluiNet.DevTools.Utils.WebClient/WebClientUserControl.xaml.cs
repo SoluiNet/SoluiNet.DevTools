@@ -29,8 +29,18 @@ namespace SoluiNet.DevTools.Utils.WebClient
         {
             try
             {
-                var environment = ((TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)["Environment"];
-                var url = ((TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)["Url"];
+                var environment = ((TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)?["Environment"];
+                var url = ((TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)?["Url"];
+
+                if (string.IsNullOrEmpty(environment))
+                {
+                    environment = "Default";
+                }
+
+                if (string.IsNullOrEmpty(url))
+                {
+                    url = TargetUrl.Text;
+                }
 
                 var settings = PluginHelper.GetSettings(ChosenPlugin);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoluiNet.DevTools.Core.Tools.String;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,14 +59,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 
         public static string Base64Encode(string plainText)
         {
-            var plainTextBytes = System.Text.Encoding.Unicode.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
+            return plainText.ToBase64();
         }
 
         public static string Base64Decode(string encodedString)
         {
-            byte[] data = Convert.FromBase64String(encodedString);
-            return Encoding.Unicode.GetString(data);
+            return encodedString.FromBase64();
         }
     }
 }

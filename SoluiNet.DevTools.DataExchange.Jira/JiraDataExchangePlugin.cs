@@ -1,6 +1,9 @@
 ﻿using RestSharp;
+using RestSharp.Authenticators;
 using SoluiNet.DevTools.Core;
 using SoluiNet.DevTools.Core.Tools;
+using SoluiNet.DevTools.Core.Tools.String;
+using SoluiNet.DevTools.DataExchange.Jira.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +22,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
                 return "JiraDataExchange";
             }
         }
-        
+
         public string MenuItemLabel
         {
             get { return "JIRA"; }
@@ -36,12 +39,15 @@ namespace SoluiNet.DevTools.DataExchange.Jira
 
             var settings = PluginHelper.GetSettingsAsDictionary(this);
 
-            if(settings == null)
+            if (settings == null)
             {
                 return new List<object>();
             }
 
             var client = new RestClient(settings["Default.JiraUrl"].ToString());
+
+            // registration needed
+            // https://developer.atlassian.com/cloud/jira/platform/oauth-2-authorization-code-grants-3lo-for-apps/#accesstoken
 
             if (entityName == "ticket")
             {
@@ -51,15 +57,46 @@ namespace SoluiNet.DevTools.DataExchange.Jira
 
                 foreach (var searchElement in searchData)
                 {
-                    request.AddParameter(searchElement.Key, searchElement.Value);
+                    request.AddParameter(searchElement.Key, searchElement.Value.ToString());
                 }
 
                 //request.AddHeader("Authorization", string.Format("Bearer {0}", settings["Default.AccessToken"].ToString()));
-                if (!string.IsNullOrEmpty(settings.ContainsKey("Default.AccessToken") ? settings["Default.AccessToken"]?.ToString() : string.Empty))
+                if (!string.IsNullOrEmpty(settings.ContainsKey("Default.JiraAuthentication") ? settings["Default.JiraAuthentication"]?.ToString() : string.Empty))
                 {
-                    request.AddHeader("Bearer", settings["Default.AccessToken"].ToString());
+                    var authenticationMethod = Enum.Parse(typeof(JiraAuthentication), settings["Default.JiraAuthentication"].ToString());
+
+                    switch (authenticationMethod)
+                    {
+                        case JiraAuthentication.JwtAuthentication:
+                            if (!string.IsNullOrEmpty(settings.ContainsKey("Default.AccessToken") ? settings["Default.AccessToken"]?.ToString() : string.Empty))
+                            {
+                                request.AddHeader("Bearer", settings["Default.AccessToken"].ToString());
+                            }
+                            break;
+                        case JiraAuthentication.BasicAuthentication:
+                            if (string.IsNullOrEmpty(settings.ContainsKey("Default.JiraUser") ? settings["Default.JiraUser"]?.ToString() : string.Empty))
+                            {
+                                throw new Exception("No JIRA user found in settings");
+                            }
+
+                            if (string.IsNullOrEmpty(settings.ContainsKey("Default.JiraApiToken") ? settings["Default.JiraApiToken"]?.ToString() : string.Empty))
+                            {
+                                throw new Exception("No JIRA API token found in settings");
+                            }
+
+                            var jiraUser = settings["Default.JiraUser"]?.ToString();
+                            var jiraApiToken = settings["Default.JiraApiToken"]?.ToString();
+
+                            //var authenticationValue = string.Format("{0}:{1}", jiraUser, jiraApiToken).ToBase64();
+
+                            //request.AddHeader("Authorization", string.Format("Basic {0}", authenticationValue));
+                            client.Authenticator = new HttpBasicAuthenticator(jiraUser, jiraApiToken);
+                            break;
+                    }
                 }
-                request.AddHeader("Accept", "application/json");
+                //request.AddHeader("Accept", "application/json");
+                //request.AddHeader("Content-Type", "application/json");
+
 
                 var response = client.Execute(request);
                 var content = response.Content;
