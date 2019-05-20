@@ -18,8 +18,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
         public int Duration { get; set; }
 
-        public int ApplicationId { get; set; }
+        public int? ApplicationId { get; set; }
 
-        public int ApplicationAreaId { get; set; }
+        public int? ApplicationAreaId { get; set; }
     }
 }
