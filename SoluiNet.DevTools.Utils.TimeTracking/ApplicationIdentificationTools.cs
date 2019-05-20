@@ -33,7 +33,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         public static string Outlook
         {
-            // RegEx: "^(.+ -)?\s*Outlook$"
+            // RegEx: "^(.+ -)?\s*(Outlook|Besprechung|Nachricht \(HTML\))\s*$"
             get { return "Outlook"; }
         }
 

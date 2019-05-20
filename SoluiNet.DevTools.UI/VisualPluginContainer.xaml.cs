@@ -11,13 +11,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SoluiNet.DevTools.Core.UI;
 
 namespace SoluiNet.DevTools.UI
 {
     /// <summary>
     /// Interaktionslogik für VisualPluginContainer.xaml
     /// </summary>
-    public partial class VisualPluginContainer : Window
+    public partial class VisualPluginContainer : SoluiNetWindow
     {
         public VisualPluginContainer()
         {

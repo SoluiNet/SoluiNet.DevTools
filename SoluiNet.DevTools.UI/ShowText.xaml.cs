@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SoluiNet.DevTools.Core.Formatter;
 using SoluiNet.DevTools.Core.Tools.UI;
+using SoluiNet.DevTools.Core.UI;
 
 namespace SoluiNet.DevTools.UI
 {
     /// <summary>
     /// Interaktionslogik für ShowText.xaml
     /// </summary>
-    public partial class ShowText : Window
+    public partial class ShowText : SoluiNetWindow
     {
         public string Text
         {

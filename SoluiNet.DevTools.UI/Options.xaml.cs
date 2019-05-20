@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SoluiNet.DevTools.Core.UI;
 using SoluiNet.DevTools.UI.UserControls;
 
 namespace SoluiNet.DevTools.UI
@@ -18,7 +19,7 @@ namespace SoluiNet.DevTools.UI
     /// <summary>
     /// Interaktionslogik für Options.xaml
     /// </summary>
-    public partial class Options : Window
+    public partial class Options : SoluiNetWindow
     {
         public Options()
         {

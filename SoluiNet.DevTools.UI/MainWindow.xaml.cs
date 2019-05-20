@@ -31,7 +31,7 @@ namespace SoluiNet.DevTools.UI
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : SoluiNetWindow
     {
         private string LoggingPath { get; set; }
 
@@ -84,6 +84,7 @@ namespace SoluiNet.DevTools.UI
                             utilityPlugin.Execute(x =>
                             {
                                 var pluginVisualizeWindow = new VisualPluginContainer();
+                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", string.Format("{0} / {1}" , (utilityPlugin as IGroupedUtilitiesDevPlugin).Group, utilityPlugin.MenuItemLabel) } });
 
                                 pluginVisualizeWindow.ContentGrid.Children.Add(x);
 
@@ -105,6 +106,7 @@ namespace SoluiNet.DevTools.UI
                             utilityPlugin.Execute(x =>
                             {
                                 var pluginVisualizeWindow = new VisualPluginContainer();
+                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", utilityPlugin.MenuItemLabel } });
 
                                 pluginVisualizeWindow.ContentGrid.Children.Add(x);
 

@@ -48,13 +48,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
                 .GroupBy(x => x.ApplicationIdentification);
 
-            var highestDuration = timeTargets.Max(x => x.Sum(y => y.Duration));
+            var highestDuration = timeTargets.Any() ? timeTargets.Max(x => x.Any() ? x.Sum(y => y != null ? y.Duration : 0) : 0)  : 0;
 
             foreach (var timeTarget in timeTargets)
             {
                 TimeTrackingAssignment.RowDefinitions.Add(new RowDefinition());
 
                 var timeTargetButton = new Button() { Content = timeTarget.Key, HorizontalAlignment = HorizontalAlignment.Left };
+                timeTargetButton.ToolTip = timeTarget.Key;
 
                 timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.ActualWidth;
 

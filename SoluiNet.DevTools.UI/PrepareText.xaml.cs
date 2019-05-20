@@ -12,13 +12,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SoluiNet.DevTools.Core.UI;
 
 namespace SoluiNet.DevTools.UI
 {
     /// <summary>
     /// Interaktionslogik für PrepareText.xaml
     /// </summary>
-    public partial class PrepareText : Window
+    public partial class PrepareText : SoluiNetWindow
     {
         public PrepareText()
         {
