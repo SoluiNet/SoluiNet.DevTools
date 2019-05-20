@@ -29,7 +29,7 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
         {
             CodeTabs.SelectedIndex = 1;
 
-            Result.Text = CodeOnTheFlyTools.RunDynamicCode(Code.Text, IsSourceCodeComplete.IsChecked.Value, CallingMethod.Text, null);
+            Result.Text = CodeOnTheFlyTools.RunDynamicCode(Code.Text, IsSourceCodeComplete.IsChecked.Value, CallingMethod.Text, "CSharp", null);
         }
     }
 }

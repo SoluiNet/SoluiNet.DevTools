@@ -13,9 +13,9 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
 {
     public static class CodeOnTheFlyTools
     {
-        public static string RunDynamicCode(string code, bool sourceCodeComplete = false, string executingMethod = "main", params object[] methodParameters)
+        public static string RunDynamicCode(string code, bool sourceCodeComplete = false, string executingMethod = "main", string languageProvider = "CSharp", params object[] methodParameters)
         {
-            var compiler = CodeDomProvider.CreateProvider("CSharp");
+            var compiler = CodeDomProvider.CreateProvider(languageProvider);
             var parameters = new CompilerParameters();
 
             parameters.ReferencedAssemblies.Add("System.dll");
