@@ -1,5 +1,6 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
+using SoluiNet.DevTools.Core.Tools.Json;
 using SoluiNet.DevTools.Core.Tools.Number;
 using SoluiNet.DevTools.Core.UI;
 using SoluiNet.DevTools.Utils.TimeTracking.Entities;
@@ -26,6 +27,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     /// </summary>
     public partial class TimeTrackingToolsUserControl : UserControl
     {
+        private bool _mouseMoving = false;
+
         public TimeTrackingToolsUserControl()
         {
             InitializeComponent();
@@ -57,10 +60,31 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var timeTargetButton = new Button() { Content = timeTarget.Key, HorizontalAlignment = HorizontalAlignment.Left };
                 timeTargetButton.ToolTip = timeTarget.Key;
+                timeTargetButton.Tag = timeTarget;
 
                 timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.ActualWidth;
 
                 timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
+
+                timeTargetButton.PreviewMouseMove += (dragSender, dragEvents) =>
+                {
+                    if (!_mouseMoving)
+                    {
+                        _mouseMoving = true;
+                        if (dragEvents.LeftButton == MouseButtonState.Pressed)
+                        {
+                            var usageTimeObject = (dragSender as Button).Tag as IGrouping<string, UsageTime>;
+
+                            Console.WriteLine("Dragged: " + JsonTools.Serialize(usageTimeObject));
+
+                            var dataObject = new DataObject(typeof(IGrouping<string, UsageTime>), usageTimeObject);
+
+                            DragDrop.DoDragDrop(dragSender as Button, dataObject, DragDropEffects.All);
+                            dragEvents.Handled = true;
+                        }
+                        _mouseMoving = false;
+                    }
+                };
 
                 TimeTrackingAssignmentOverview.Children.Add(timeTargetButton);
 
@@ -69,16 +93,37 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var applications = context.Application;
 
+            DragEventHandler dropDelegate = (dropApplicationSender, dropApplicationEvents) =>
+            {
+                var dataObject = dropApplicationEvents.Data as DataObject;
+                var data = dataObject.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
+                
+                foreach(var usageTime in data)
+                {
+                    usageTime.ApplicationId = ((dropApplicationSender as UI.AssignmentTarget).Tag as Entities.Application).ApplicationId;
+                }
+            };
+
             ApplicationAssignmentGrid.CreateNewElement = () =>
             {
                 var applicationName = Prompt.ShowDialog("Please provide an application name", "Application Assignment");
 
                 if (!context.Application.Any(x => x.ApplicationName == applicationName))
                 {
-                    context.Application.Add(new Entities.Application() { ApplicationName = applicationName });
+                    var application = new Entities.Application() { ApplicationName = applicationName };
+
+                    context.Application.Add(application);
                     context.SaveChanges();
 
-                    return new UI.AssignmentTarget() { Label = applicationName };
+                    var newElement = new UI.AssignmentTarget() { Label = applicationName };
+                    newElement.Target.Background = ApplicationIdentificationTools.GetBackgroundAccent(applicationName);
+
+                    newElement.Tag = application;
+
+                    newElement.AllowDrop = true;
+                    newElement.Drop += dropDelegate;
+
+                    return newElement;
                 }
                 else
                 {
@@ -92,11 +137,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 var applicationTarget = new UI.AssignmentTarget();
 
-                applicationTarget.Target.Content = application.ApplicationName;
-                applicationTarget.Target.HorizontalAlignment = HorizontalAlignment.Left;
-                applicationTarget.Target.ToolTip = application.ApplicationName;
+                applicationTarget.Label = application.ApplicationName;
 
                 applicationTarget.Target.Background = ApplicationIdentificationTools.GetBackgroundAccent(application.ApplicationName);
+
+                applicationTarget.Tag = application;
+
+                applicationTarget.AllowDrop = true;
+                applicationTarget.Drop += dropDelegate;
 
                 ApplicationAssignmentGrid.AddElement(applicationTarget);
             }
