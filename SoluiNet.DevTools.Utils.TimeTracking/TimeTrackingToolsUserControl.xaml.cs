@@ -52,7 +52,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
                 .GroupBy(x => x.ApplicationIdentification);
 
-            var highestDuration = timeTargets.Any() ? timeTargets.Max(x => x.Any() ? x.Sum(y => y != null ? y.Duration : 0) : 0)  : 0;
+            var highestDuration = timeTargets.Any() ? timeTargets.Max(x => x.Any() ? x.Sum(y => y != null ? y.Duration : 0) : 0) : 0;
 
             foreach (var timeTarget in timeTargets)
             {
@@ -93,12 +93,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var applications = context.Application;
 
-            DragEventHandler dropDelegate = (dropApplicationSender, dropApplicationEvents) =>
+            DragEventHandler dropApplicationDelegate = (dropApplicationSender, dropApplicationEvents) =>
             {
                 var dataObject = dropApplicationEvents.Data as DataObject;
                 var data = dataObject.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
-                
-                foreach(var usageTime in data)
+
+                foreach (var usageTime in data)
                 {
                     usageTime.ApplicationId = ((dropApplicationSender as UI.AssignmentTarget).Tag as Entities.Application).ApplicationId;
                 }
@@ -121,7 +121,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     newElement.Tag = application;
 
                     newElement.AllowDrop = true;
-                    newElement.Drop += dropDelegate;
+                    newElement.Drop += dropApplicationDelegate;
 
                     return newElement;
                 }
@@ -133,7 +133,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 }
             };
 
-            foreach(var application in applications)
+            foreach (var application in applications)
             {
                 var applicationTarget = new UI.AssignmentTarget();
 
@@ -144,52 +144,144 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 applicationTarget.Tag = application;
 
                 applicationTarget.AllowDrop = true;
-                applicationTarget.Drop += dropDelegate;
+                applicationTarget.Drop += dropApplicationDelegate;
 
                 ApplicationAssignmentGrid.AddElement(applicationTarget);
+            }
+
+            var categories = context.Category;
+
+            DragEventHandler dropCategoryDelegate = (dropSender, dropEvents) =>
+            {
+                var dataObject = dropEvents.Data as DataObject;
+                var data = dataObject.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
+
+                var distributionDictionary = new Dictionary<string, double>();
+                var sumDuration = data.Sum(x => x.Duration);
+
+                if ((dropSender as UI.AssignmentTarget).Label.Equals("Distribute evenly"))
+                {
+                    foreach (var category in categories)
+                    {
+                        distributionDictionary.Add(category.CategoryName, Convert.ToDouble(sumDuration) / categories.Count());
+                    }
+                }
+                else
+                {
+                    distributionDictionary.Add((dropSender as UI.AssignmentTarget).Label, sumDuration);
+                }
+
+                foreach (var usageTime in data)
+                {
+                    foreach (var categoryDistribution in distributionDictionary)
+                    {
+                        if (categoryDistribution.Value == 0)
+                        {
+                            break;
+                        }
+
+                        if (usageTime.Duration <= categoryDistribution.Value)
+                        {
+                            context.CategoryUsageTime.Add(new CategoryUsageTime()
+                            {
+                                CategoryId = ((dropSender as UI.AssignmentTarget).Tag as Category).CategoryId,
+                                UsageTimeId = usageTime.UsageTimeId,
+                                Duration = usageTime.Duration
+                            });
+
+                            // categoryDistribution.Value -= usageTime.Duration;
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }
+            };
+
+        CategoryAssignmentGrid.CreateNewElement = () =>
+            {
+                var categoryName = Prompt.ShowDialog("Please provide an application name", "Application Assignment");
+
+                if (!context.Category.Any(x => x.CategoryName == categoryName))
+                {
+                    var category = new Category() { CategoryName = categoryName };
+
+        context.Category.Add(category);
+                    context.SaveChanges();
+
+                    var newElement = new UI.AssignmentTarget() { Label = categoryName };
+
+        newElement.Tag = category;
+
+                    newElement.AllowDrop = true;
+                    newElement.Drop += dropCategoryDelegate;
+
+                    return newElement;
+                }
+                else
+                {
+                    MessageBox.Show("Overgiven application name already exists");
+
+                    return null;
+                }
+            };
+
+            foreach (var category in categories)
+            {
+                var categoryTarget = new UI.AssignmentTarget();
+
+categoryTarget.Label = category.CategoryName;
+
+                categoryTarget.Tag = category;
+
+                categoryTarget.AllowDrop = true;
+                categoryTarget.Drop += dropCategoryDelegate;
+
+                CategoryAssignmentGrid.AddElement(categoryTarget);
             }
             #endregion
 
             #region Show Statistics
             var weightedTimes = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).OrderBy(x => x.Key).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
 
-            var barsChart = new CartesianChart();
+var barsChart = new CartesianChart();
 
-            /*var targetBinding = new Binding("Target");
-            targetBinding.Source = weightedTimes;
+/*var targetBinding = new Binding("Target");
+targetBinding.Source = weightedTimes;
 
-            var weightBinding = new Binding("Weight");
-            weightBinding.Source = weightedTimes;
+var weightBinding = new Binding("Weight");
+weightBinding.Source = weightedTimes;
 
-            var generalBinding = new Binding("weightedTimes");
-            weightBinding.Source = weightedTimes;
+var generalBinding = new Binding("weightedTimes");
+weightBinding.Source = weightedTimes;
 
-            BindingOperations.SetBinding(barsChart, CartesianChart.SeriesProperty, generalBinding);*/
+BindingOperations.SetBinding(barsChart, CartesianChart.SeriesProperty, generalBinding);*/
 
-            barsChart.Name = "WeightedTargets";
+barsChart.Name = "WeightedTargets";
 
             var seriesCollection = new SeriesCollection();
 
-            var preparedDatabaseList = weightedTimes
-                .Select(x => new { Label = x.Target, Weight = new ChartValues<int> { x.Weight } }).ToList();
+var preparedDatabaseList = weightedTimes
+    .Select(x => new { Label = x.Target, Weight = new ChartValues<int> { x.Weight } }).ToList();
 
-            var columnSeriesList = preparedDatabaseList
-                .Select(x => new ColumnSeries() { Title = x.Label?.Substring(0, x.Label.Length >= 30 ? 30 : x.Label.Length), Values = x.Weight }).ToList();
+var columnSeriesList = preparedDatabaseList
+    .Select(x => new ColumnSeries() { Title = x.Label?.Substring(0, x.Label.Length >= 30 ? 30 : x.Label.Length), Values = x.Weight }).ToList();
 
-            var dataSource = columnSeriesList;
-            seriesCollection.AddRange(dataSource);
+var dataSource = columnSeriesList;
+seriesCollection.AddRange(dataSource);
 
             barsChart.Series = seriesCollection;
 
             var xAxis = new Axis();
-            xAxis.Title = "Targets";
+xAxis.Title = "Targets";
             xAxis.Labels = weightedTimes.Select(x => x.Target.Substring(0, 30)).ToList();
 
-            var yAxis = new Axis();
-            yAxis.Title = "Weights";
+var yAxis = new Axis();
+yAxis.Title = "Weights";
             yAxis.Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString()).ToList();
 
-            barsChart.AxisX.Add(xAxis);
+barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
 
             TimeTrackingStatistics.Children.Add(barsChart);
