@@ -30,7 +30,14 @@ namespace SoluiNet.DevTools.Core.UI
 
             button.Click += (object sender, RoutedEventArgs e) =>
             {
-                AddElement(CreateNewElement());
+                var newElement = CreateNewElement();
+
+                if(newElement == null)
+                {
+                    return;
+                }
+
+                AddElement(newElement);
             };
 
             this.Children.Add(button);

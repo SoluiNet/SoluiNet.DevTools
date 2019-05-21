@@ -21,9 +21,25 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
     /// </summary>
     public partial class AssignmentTarget : RemovableUserControl
     {
+        private string _label;
+
         public AssignmentTarget()
         {
             InitializeComponent();
+        }
+
+        public string Label
+        {
+            get
+            {
+                return _label;
+            }
+            set
+            {
+                _label = value;
+                Target.ToolTip = value;
+                Target.Content = value;
+            }
         }
     }
 }

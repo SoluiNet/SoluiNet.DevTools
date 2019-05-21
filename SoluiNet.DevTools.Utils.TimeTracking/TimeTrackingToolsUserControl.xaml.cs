@@ -69,6 +69,25 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var applications = context.Application;
 
+            ApplicationAssignmentGrid.CreateNewElement = () =>
+            {
+                var applicationName = Prompt.ShowDialog("Please provide an application name", "Application Assignment");
+
+                if (!context.Application.Any(x => x.ApplicationName == applicationName))
+                {
+                    context.Application.Add(new Entities.Application() { ApplicationName = applicationName });
+                    context.SaveChanges();
+
+                    return new UI.AssignmentTarget() { Label = applicationName };
+                }
+                else
+                {
+                    MessageBox.Show("Overgiven application name already exists");
+
+                    return null;
+                }
+            };
+
             foreach(var application in applications)
             {
                 var applicationTarget = new UI.AssignmentTarget();

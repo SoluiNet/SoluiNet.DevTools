@@ -28,10 +28,10 @@
                                 <localui:ExtendableAssignmentGrid x:Name="ApplicationAssignmentGrid"></localui:ExtendableAssignmentGrid>
                             </TabItem>
                             <TabItem Header="ApplicationArea">
-                                <soluinet:ExtendableGrid x:TypeArguments="local:UI.AssignmentTarget" x:Name="ApplicationAreaAssignmentGrid"></soluinet:ExtendableGrid>
+                                <localui:ExtendableAssignmentGrid x:Name="ApplicationAreaAssignmentGrid"></localui:ExtendableAssignmentGrid>
                             </TabItem>
                             <TabItem Header="Category">
-                                <soluinet:ExtendableGrid x:TypeArguments="local:UI.AssignmentTarget" x:Name="CategoryAssignmentGrid"></soluinet:ExtendableGrid>
+                                <localui:ExtendableAssignmentGrid x:Name="CategoryAssignmentGrid"></localui:ExtendableAssignmentGrid>
                             </TabItem>
                         </TabControl>
                     </Grid>
