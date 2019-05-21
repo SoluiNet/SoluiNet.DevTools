@@ -45,12 +45,19 @@
     <Compile Update="TimeTrackingToolsUserControl.xaml.cs">
       <DependentUpon>TimeTrackingToolsUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Update="UI\AssignmentTarget.xaml.cs">
+      <DependentUpon>UI\AssignmentTarget.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="TimeTrackingToolsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\AssignmentTarget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

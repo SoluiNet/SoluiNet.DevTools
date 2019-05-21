@@ -1,6 +1,7 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
 using SoluiNet.DevTools.Core.Tools.Number;
+using SoluiNet.DevTools.Core.UI;
 using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var timeTarget in timeTargets)
             {
-                TimeTrackingAssignment.RowDefinitions.Add(new RowDefinition());
+                TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
 
                 var timeTargetButton = new Button() { Content = timeTarget.Key, HorizontalAlignment = HorizontalAlignment.Left };
                 timeTargetButton.ToolTip = timeTarget.Key;
@@ -61,9 +62,24 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
 
-                TimeTrackingAssignment.Children.Add(timeTargetButton);
+                TimeTrackingAssignmentOverview.Children.Add(timeTargetButton);
 
-                Grid.SetRow(timeTargetButton, TimeTrackingAssignment.RowDefinitions.Count - 1);
+                Grid.SetRow(timeTargetButton, TimeTrackingAssignmentOverview.RowDefinitions.Count - 1);
+            }
+
+            var applications = context.Application;
+
+            foreach(var application in applications)
+            {
+                var applicationTarget = new UI.AssignmentTarget();
+
+                applicationTarget.Target.Content = application.ApplicationName;
+                applicationTarget.Target.HorizontalAlignment = HorizontalAlignment.Left;
+                applicationTarget.Target.ToolTip = application.ApplicationName;
+
+                applicationTarget.Target.Background = ApplicationIdentificationTools.GetBackgroundAccent(application.ApplicationName);
+
+                ApplicationAssignmentGrid.AddElement(applicationTarget);
             }
             #endregion
 
