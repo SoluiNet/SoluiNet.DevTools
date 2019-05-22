@@ -14,6 +14,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
         public int CategoryId { get; set; }
 
-        public int Duration { get; set; }
+        public double Duration { get; set; }
     }
 }

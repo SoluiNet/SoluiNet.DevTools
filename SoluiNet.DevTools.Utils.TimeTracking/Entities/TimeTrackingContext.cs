@@ -166,6 +166,29 @@
 
                     appliedVersion = new Version("1.0.0.4");
                 }
+
+                if (appliedVersion.CompareTo(new Version("1.0.0.5")) < 0)
+                {
+                    command.CommandText = "ALTER TABLE Category_UsageTime RENAME TO Category_UsageTime_PreV1005";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "CREATE TABLE Category_UsageTime (CategoryId INTEGER, UsageTimeId INTEGER, Duration DOUBLE, PRIMARY KEY (CategoryId, UsageTimeId))";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "INSERT INTO Category_UsageTime (CategoryId, UsageTimeId, Duration) " +
+                        "SELECT CategoryId, UsageTimeId, Duration FROM Category_UsageTime_PreV1005";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                    command.Parameters.AddWithValue("$versionNo", "1.0.0.5");
+                    command.Parameters.AddWithValue("$appliedAt", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff"));
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.5");
+                }
             }
             finally
             {
@@ -190,7 +213,7 @@
                 .HasKey(x => x.CategoryId);
 
             modelBuilder.Entity<CategoryUsageTime>()
-                .ToTable(typeof(CategoryUsageTime).Name)
+                .ToTable("Category_UsageTime")
                 .HasKey(x => new { x.CategoryId, x.UsageTimeId });
 
             modelBuilder.Entity<UsageTime>()

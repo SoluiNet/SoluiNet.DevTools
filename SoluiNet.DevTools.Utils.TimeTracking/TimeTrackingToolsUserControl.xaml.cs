@@ -62,7 +62,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 timeTargetButton.ToolTip = timeTarget.Key;
                 timeTargetButton.Tag = timeTarget;
 
-                timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.ActualWidth;
+                if (highestDuration > 0)
+                {
+                    timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.ActualWidth;
+                }
 
                 timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
 
@@ -171,67 +174,103 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     distributionDictionary.Add((dropSender as UI.AssignmentTarget).Label, sumDuration);
                 }
 
+                var workingDistributionDictionary = new Dictionary<string, double>(distributionDictionary);
+
                 foreach (var usageTime in data)
                 {
+                    var duration = Convert.ToDouble(usageTime.Duration);
+
                     foreach (var categoryDistribution in distributionDictionary)
                     {
-                        if (categoryDistribution.Value == 0)
+                        var categoryDuration = workingDistributionDictionary[categoryDistribution.Key];
+
+                        if (categoryDuration <= 0)
                         {
-                            break;
+                            continue;
                         }
 
-                        if (usageTime.Duration <= categoryDistribution.Value)
+                        var categoryToAssign = context.Category.Where(x => x.CategoryName == categoryDistribution.Key).FirstOrDefault();
+
+                        if(categoryToAssign == null)
+                        {
+                            continue;
+                        }
+
+                        if (duration <= categoryDuration)
                         {
                             context.CategoryUsageTime.Add(new CategoryUsageTime()
                             {
-                                CategoryId = ((dropSender as UI.AssignmentTarget).Tag as Category).CategoryId,
+                                CategoryId = categoryToAssign.CategoryId,
                                 UsageTimeId = usageTime.UsageTimeId,
-                                Duration = usageTime.Duration
+                                Duration = duration
                             });
 
                             // categoryDistribution.Value -= usageTime.Duration;
+                            workingDistributionDictionary[categoryDistribution.Key] -= duration;
+
+                            break;
                         }
                         else
                         {
+                            context.CategoryUsageTime.Add(new CategoryUsageTime()
+                            {
+                                CategoryId = categoryToAssign.CategoryId,
+                                UsageTimeId = usageTime.UsageTimeId,
+                                Duration = categoryDuration
+                            });
 
+                            // categoryDistribution.Value -= usageTime.Duration;
+                            duration -= categoryDuration;
                         }
                     }
                 }
+
+                context.SaveChanges();
             };
 
-        CategoryAssignmentGrid.CreateNewElement = () =>
+            CategoryAssignmentGrid.CreateNewElement = () =>
+                {
+                    var categoryName = Prompt.ShowDialog("Please provide an category name", "Category Assignment");
+
+                    if (!context.Category.Any(x => x.CategoryName == categoryName))
+                    {
+                        var category = new Category() { CategoryName = categoryName };
+
+                        context.Category.Add(category);
+                        context.SaveChanges();
+
+                        var newElement = new UI.AssignmentTarget() { Label = categoryName };
+
+                        newElement.Tag = category;
+
+                        newElement.AllowDrop = true;
+                        newElement.Drop += dropCategoryDelegate;
+
+                        return newElement;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Overgiven category name already exists");
+
+                        return null;
+                    }
+                };
+
+            var distributeEvenlyElement = new UI.AssignmentTarget()
             {
-                var categoryName = Prompt.ShowDialog("Please provide an application name", "Application Assignment");
-
-                if (!context.Category.Any(x => x.CategoryName == categoryName))
-                {
-                    var category = new Category() { CategoryName = categoryName };
-
-        context.Category.Add(category);
-                    context.SaveChanges();
-
-                    var newElement = new UI.AssignmentTarget() { Label = categoryName };
-
-        newElement.Tag = category;
-
-                    newElement.AllowDrop = true;
-                    newElement.Drop += dropCategoryDelegate;
-
-                    return newElement;
-                }
-                else
-                {
-                    MessageBox.Show("Overgiven application name already exists");
-
-                    return null;
-                }
+                AllowDrop = true,
+                Label = "Distribute evenly"
             };
+
+            distributeEvenlyElement.Drop += dropCategoryDelegate;
+
+            CategoryAssignmentGrid.AddElement(distributeEvenlyElement);
 
             foreach (var category in categories)
             {
                 var categoryTarget = new UI.AssignmentTarget();
 
-categoryTarget.Label = category.CategoryName;
+                categoryTarget.Label = category.CategoryName;
 
                 categoryTarget.Tag = category;
 
@@ -245,43 +284,43 @@ categoryTarget.Label = category.CategoryName;
             #region Show Statistics
             var weightedTimes = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).OrderBy(x => x.Key).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
 
-var barsChart = new CartesianChart();
+            var barsChart = new CartesianChart();
 
-/*var targetBinding = new Binding("Target");
-targetBinding.Source = weightedTimes;
+            /*var targetBinding = new Binding("Target");
+            targetBinding.Source = weightedTimes;
 
-var weightBinding = new Binding("Weight");
-weightBinding.Source = weightedTimes;
+            var weightBinding = new Binding("Weight");
+            weightBinding.Source = weightedTimes;
 
-var generalBinding = new Binding("weightedTimes");
-weightBinding.Source = weightedTimes;
+            var generalBinding = new Binding("weightedTimes");
+            weightBinding.Source = weightedTimes;
 
-BindingOperations.SetBinding(barsChart, CartesianChart.SeriesProperty, generalBinding);*/
+            BindingOperations.SetBinding(barsChart, CartesianChart.SeriesProperty, generalBinding);*/
 
-barsChart.Name = "WeightedTargets";
+            barsChart.Name = "WeightedTargets";
 
             var seriesCollection = new SeriesCollection();
 
-var preparedDatabaseList = weightedTimes
-    .Select(x => new { Label = x.Target, Weight = new ChartValues<int> { x.Weight } }).ToList();
+            var preparedDatabaseList = weightedTimes
+                .Select(x => new { Label = x.Target, Weight = new ChartValues<int> { x.Weight } }).ToList();
 
-var columnSeriesList = preparedDatabaseList
-    .Select(x => new ColumnSeries() { Title = x.Label?.Substring(0, x.Label.Length >= 30 ? 30 : x.Label.Length), Values = x.Weight }).ToList();
+            var columnSeriesList = preparedDatabaseList
+                .Select(x => new ColumnSeries() { Title = x.Label?.Substring(0, x.Label.Length >= 30 ? 30 : x.Label.Length), Values = x.Weight }).ToList();
 
-var dataSource = columnSeriesList;
-seriesCollection.AddRange(dataSource);
+            var dataSource = columnSeriesList;
+            seriesCollection.AddRange(dataSource);
 
             barsChart.Series = seriesCollection;
 
             var xAxis = new Axis();
-xAxis.Title = "Targets";
+            xAxis.Title = "Targets";
             xAxis.Labels = weightedTimes.Select(x => x.Target.Substring(0, 30)).ToList();
 
-var yAxis = new Axis();
-yAxis.Title = "Weights";
+            var yAxis = new Axis();
+            yAxis.Title = "Weights";
             yAxis.Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString()).ToList();
 
-barsChart.AxisX.Add(xAxis);
+            barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
 
             TimeTrackingStatistics.Children.Add(barsChart);
