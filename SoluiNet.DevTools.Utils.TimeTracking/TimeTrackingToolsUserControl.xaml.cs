@@ -221,6 +221,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                             // categoryDistribution.Value -= usageTime.Duration;
                             duration -= categoryDuration;
+                            workingDistributionDictionary[categoryDistribution.Key] -= categoryDuration;
                         }
                     }
                 }
