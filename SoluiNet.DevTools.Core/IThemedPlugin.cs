@@ -1,36 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+﻿// <copyright file="IThemedPlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Media;
+
+    /// <summary>
+    /// Provides an interface for a plugin which can be themed with colour variations.
+    /// </summary>
     public interface IThemedPlugin : IBasePlugin
     {
         /// <summary>
-        /// The first colour accent
+        /// Gets the first colour accent.
         /// </summary>
         Color AccentColour1 { get; }
 
         /// <summary>
-        /// The second colour accent
+        /// Gets the second colour accent.
         /// </summary>
         Color AccentColour2 { get; }
 
         /// <summary>
-        /// The foreground colour
+        /// Gets the foreground colour.
         /// </summary>
         Color ForegroundColour { get; }
 
         /// <summary>
-        /// The background colour
+        /// Gets the background colour.
         /// </summary>
         Color BackgroundColour { get; }
 
         /// <summary>
-        /// The background accent colour
+        /// Gets the background accent colour.
         /// </summary>
         Color BackgroundAccentColour { get; }
     }

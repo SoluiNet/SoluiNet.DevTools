@@ -1,30 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Data.SQLite;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using SoluiNet.DevTools.Core.Extensions;
-using SoluiNet.DevTools.Core.Tools.Sql;
+﻿// <copyright file="DbHelper.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.Tools.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Data.SQLite;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Extensions;
+    using SoluiNet.DevTools.Core.Tools.Sql;
+
+    /// <summary>
+    /// Provides a collection of methods to work with databases.
+    /// </summary>
     public static class DbHelper
     {
-        public static DataTable ExecuteSqlCommand<connection, command>(string connectionString, string sqlCommand, string environment = "Default")
-            where connection : IDbConnection
-            where command : IDbCommand
+        /// <summary>
+        /// Execute a SQL command on the database. Only a single script is allowed.
+        /// </summary>
+        /// <typeparam name="TConnection">The connection type which implements the <see cref="IDbConnection"/> interface.</typeparam>
+        /// <typeparam name="TCommand">The command type which implements the <see cref="IDbCommand"/> interface.</typeparam>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
+        /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command.</returns>
+        public static DataTable ExecuteSqlCommand<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
+            where TConnection : IDbConnection
+            where TCommand : IDbCommand
         {
-            var connectionType = typeof(connection);
+            var connectionType = typeof(TConnection);
             ConstructorInfo connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
 
-            var commandType = typeof(command);
+            var commandType = typeof(TCommand);
             ConstructorInfo commandConstructor = commandType.GetConstructor(new[] { typeof(string), connectionType });
 
-            using (connection con = (connection)connectionConstructor.Invoke(new object[] { connectionString }))
+            using (TConnection con = (TConnection)connectionConstructor.Invoke(new object[] { connectionString }))
             {
                 try
                 {
@@ -32,7 +48,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
                     {
                         con.Open();
 
-                        var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
+                        var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
                         if (sqlCommand.IsSqlQuery())
                         {
@@ -95,17 +111,26 @@ namespace SoluiNet.DevTools.Core.Tools.Database
             }
         }
 
-        public static List<DataTable> ExecuteSqlScript<connection, command>(string connectionString, string sqlCommand, string environment = "Default")
-           where connection : IDbConnection
-           where command : IDbCommand
+        /// <summary>
+        /// Execute a SQL command on the database. Multiple scripts are possible.
+        /// </summary>
+        /// <typeparam name="TConnection">The connection type which implements the <see cref="IDbConnection"/> interface.</typeparam>
+        /// <typeparam name="TCommand">The command type which implements the <see cref="IDbCommand"/> interface.</typeparam>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
+        /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command.</returns>
+        public static List<DataTable> ExecuteSqlScript<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
+           where TConnection : IDbConnection
+           where TCommand : IDbCommand
         {
-            var connectionType = typeof(connection);
+            var connectionType = typeof(TConnection);
             ConstructorInfo connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
 
-            var commandType = typeof(command);
+            var commandType = typeof(TCommand);
             ConstructorInfo commandConstructor = commandType.GetConstructor(new[] { typeof(string), connectionType });
 
-            using (connection con = (connection)connectionConstructor.Invoke(new object[] { connectionString }))
+            using (TConnection con = (TConnection)connectionConstructor.Invoke(new object[] { connectionString }))
             {
                 try
                 {
@@ -115,7 +140,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 
                         if (sqlCommand.IsSqlQuery() && !sqlCommand.IsScript())
                         {
-                            var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
+                            var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
                             using (var reader = cmd.ExecuteReader())
                             {
@@ -129,7 +154,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
                         }
                         else if (sqlCommand.IsSqlExecute() && !sqlCommand.IsScript())
                         {
-                            var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
+                            var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
                             using (var reader = cmd.ExecuteReader())
                             {
@@ -147,7 +172,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 
                             foreach (var sqlScriptPart in sqlCommand.GetSingleScripts())
                             {
-                                var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
+                                var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
                                 using (var transaction = con.BeginTransaction())
                                 {
@@ -184,7 +209,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 
                             foreach (var sqlScriptPart in sqlCommand.GetSingleScripts())
                             {
-                                var cmd = (command)commandConstructor.Invoke(new object[] { sqlCommand, con });
+                                var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
 
                                 using (var transaction = con.BeginTransaction())
                                 {
@@ -238,34 +263,73 @@ namespace SoluiNet.DevTools.Core.Tools.Database
             }
         }
 
+        /// <summary>
+        /// Execute a SQL command on a SQL Server database. Only a single script is allowed.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
+        /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command.</returns>
         public static DataTable ExecuteSqlServerCommand(string connectionString, string sqlCommand, string environment = "Default")
         {
             return ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
         }
 
+        /// <summary>
+        /// Execute a SQL command on a SQL Server database. Multiple scripts are possible.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
+        /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command.</returns>
         public static List<DataTable> ExecuteSqlServerScript(string connectionString, string sqlCommand, string environment = "Default")
         {
             return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
         }
 
+        /// <summary>
+        /// Execute a SQL command on a database which can be connected to with the overgiven provider type. Only a single script is allowed.
+        /// </summary>
+        /// <param name="providerType">The provider type.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
+        /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         public static DataTable ExecuteSqlCommand(string providerType, string connectionString, string sqlCommand, string environment = "Default")
         {
             if (providerType == "System.Data.SqlClient")
+            {
                 return ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+            }
 
             if (providerType == "System.Data.SQLite")
+            {
                 return ExecuteSqlCommand<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+            }
 
             return null;
         }
 
+
+        /// <summary>
+        /// Execute a SQL command on a database which can be connected to with the overgiven provider type. Multiple scripts are possible.
+        /// </summary>
+        /// <param name="providerType">The provider type.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
+        /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         public static List<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default")
         {
             if (providerType == "System.Data.SqlClient")
+            {
                 return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+            }
 
             if (providerType == "System.Data.SQLite")
+            {
                 return ExecuteSqlScript<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+            }
 
             return null;
         }
