@@ -57,7 +57,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// <returns>Returns an indented XML string</returns>
         public static string Format(string xmlString)
         {
-            string result = "";
+            string result = string.Empty;
 
             var stream = new MemoryStream();
             var xmlWriter = new XmlTextWriter(stream, Encoding.Unicode);

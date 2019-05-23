@@ -1,18 +1,30 @@
-﻿using SoluiNet.DevTools.Core.ScriptEngine;
-using SoluiNet.DevTools.Core.Tools.File;
-using SoluiNet.DevTools.Core.Tools.Stream;
-using SoluiNet.DevTools.Core.Tools.XML;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿// <copyright file="PluginHelper.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.Tools
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using SoluiNet.DevTools.Core.ScriptEngine;
+    using SoluiNet.DevTools.Core.Tools.File;
+    using SoluiNet.DevTools.Core.Tools.Stream;
+    using SoluiNet.DevTools.Core.Tools.XML;
+
+    /// <summary>
+    /// Provides a collection of methods that will help to work with SoluiNet.DevTools-plugins.
+    /// </summary>
     public static class PluginHelper
     {
+        /// <summary>
+        /// Get all defined entity types for a SQL development plugin.
+        /// </summary>
+        /// <param name="plugin">The SQL development plugin in which the entities are defined.</param>
+        /// <returns>A <see cref="IList{System.Type}"/> which contains all defined entities in the plugin.</returns>
         public static IList<System.Type> GetEntityTypes(ISqlDevPlugin plugin)
         {
             if (plugin == null)
@@ -45,6 +57,12 @@ namespace SoluiNet.DevTools.Core.Tools
             return dataEntities;
         }
 
+        /// <summary>
+        /// Get the fields for the overgiven entity type of a SQL development plugin.
+        /// </summary>
+        /// <param name="plugin">The SQL development plugin in which the entity is defined.</param>
+        /// <param name="entityName">The name of the entity for which the fields should be delivered.</param>
+        /// <returns>A <see cref="IList{string}"/> which contains a list of all the field names for the overgiven entity.</returns>
         public static IList<string> GetEntityFields(ISqlDevPlugin plugin, string entityName)
         {
             var fieldList = new List<string>();
@@ -92,6 +110,12 @@ namespace SoluiNet.DevTools.Core.Tools
             return fieldList;
         }
 
+        /// <summary>
+        /// Get the embedded resource names of a plugin.
+        /// </summary>
+        /// <param name="plugin">The plugin in which the resources are contained.</param>
+        /// <param name="type">The type of the resources. If not provided "Script" will be used.</param>
+        /// <returns>A <see cref="IList{string}"/> which contains a list of all the embedded resource names in the overgiven plugin.</returns>
         public static IList<string> GetEmbeddedResources(IBasePlugin plugin, string type = "Script")
         {
             if (plugin == null)
@@ -108,6 +132,11 @@ namespace SoluiNet.DevTools.Core.Tools
             return embeddedResources;
         }
 
+        /// <summary>
+        /// Get the embedded SQL scripts of a plugin.
+        /// </summary>
+        /// <param name="plugin">The plugin in which the SQL scripts are contained.</param>
+        /// <returns>A <see cref="IList{SqlScript}"/> which contains all SQL scripts that are contained in the overgiven plugin.</returns>
         public static IList<SqlScript> GetSqlScripts(ISqlDevPlugin plugin)
         {
             var scriptList = new List<SqlScript>();
@@ -136,6 +165,11 @@ namespace SoluiNet.DevTools.Core.Tools
             return scriptList;
         }
 
+        /// <summary>
+        /// Get the embedded web client definition of a plugin.
+        /// </summary>
+        /// <param name="plugin">The plugin in which the web client definition is contained.</param>
+        /// <returns>The <see cref="WebClientDefinition.SoluiNetWebClientDefinition"/> for the overgiven plugin.</returns>
         public static WebClientDefinition.SoluiNetWebClientDefinition GetWebClientDefinition(IWebClientSupportPlugin plugin)
         {
             if (plugin == null)
@@ -164,6 +198,11 @@ namespace SoluiNet.DevTools.Core.Tools
             return webClientDef;
         }
 
+        /// <summary>
+        /// Get the effective settings for the overgiven plugin.
+        /// </summary>
+        /// <param name="plugin">The plugin for which the settings should be provided.</param>
+        /// <returns>An instance of <see cref="Settings.SoluiNetSettingType"/> which contains all effective settings for the plugin.</returns>
         public static Settings.SoluiNetSettingType GetSettings(IPluginWithSettings plugin)
         {
             if (plugin == null)
@@ -195,7 +234,6 @@ namespace SoluiNet.DevTools.Core.Tools
 
             if (settingsContainer != null)
             {
-
                 var settingsStream = plugin.GetType().Assembly.GetManifestResourceStream(settingsContainer);
 
                 if (settingsStream == null)
@@ -221,6 +259,11 @@ namespace SoluiNet.DevTools.Core.Tools
             return settings;
         }
 
+        /// <summary>
+        /// Get the effective settings for the overgiven plugin as dictionary.
+        /// </summary>
+        /// <param name="plugin">The plugin for which the settings should be provided.</param>
+        /// <returns>A <see cref="Dictionary{string, object}"/> which contains all effective settings for the plugin.</returns>
         public static IDictionary<string, object> GetSettingsAsDictionary(IPluginWithSettings plugin)
         {
             var settings = GetSettings(plugin);
@@ -236,11 +279,22 @@ namespace SoluiNet.DevTools.Core.Tools
             return preparedSettings.ToDictionary(x => x.SettingName, x => (object)x.SettingValue);
         }
 
+        /// <summary>
+        /// Get the currently active environment for the overgiven plugin.
+        /// </summary>
+        /// <param name="plugin">The plugin.</param>
+        /// <returns>Returns the currently active environment for the overgiven plugin.</returns>
         public static string GetEnvironment(ISqlDevPlugin plugin)
         {
             return plugin.Environment;
         }
 
+        /// <summary>
+        /// Get the connection string for the overgiven default connection string name under the account of the active environment for the plugin.
+        /// </summary>
+        /// <param name="plugin">The plugin for which the connection string should be provided.</param>
+        /// <param name="defaultConnectionStringName">The default connection string name.</param>
+        /// <returns>Returns the connection string which should be used for overgiven name and the environment which has been set up for the plugin.</returns>
         public static string GetConnectionString(ISqlDevPlugin plugin, string defaultConnectionStringName)
         {
             var environment = GetEnvironment(plugin);
@@ -248,6 +302,11 @@ namespace SoluiNet.DevTools.Core.Tools
             return defaultConnectionStringName + (plugin.Environment == "Default" || string.IsNullOrEmpty(plugin.Environment) ? string.Empty : "." + plugin.Environment);
         }
 
+        /// <summary>
+        /// Get a list of all available environments for the overgiven plugin.
+        /// </summary>
+        /// <param name="plugin">The plugin.</param>
+        /// <returns>Returns a <see cref="List{string}"/> of all available environments for the overgiven plugin.</returns>
         public static List<string> GetEnvironments(ISqlDevPlugin plugin)
         {
             var environmentList = new List<string>();
@@ -261,6 +320,12 @@ namespace SoluiNet.DevTools.Core.Tools
             return environmentList;
         }
 
+        /// <summary>
+        /// Provide a default implementation for the assembly resolve event.
+        /// </summary>
+        /// <param name="sender">The sender which triggered the event.</param>
+        /// <param name="args">A <see cref="ResolveEventArgs"/> with additional arguments about the resolve event.</param>
+        /// <returns>Returns an instance of <see cref="Assembly"/> which contains the assembly for which the event was looking for.</returns>
         public static Assembly LoadAssembly(object sender, ResolveEventArgs args)
         {
             var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -292,6 +357,11 @@ namespace SoluiNet.DevTools.Core.Tools
             return assembly;
         }
 
+        /// <summary>
+        /// Get all plugins of the overgiven type.
+        /// </summary>
+        /// <typeparam name="T">The plugin type.</typeparam>
+        /// <returns>Returns a <see cref="List{T}"/> of all available plugins which are castable to the overgiven plugin type.</returns>
         public static List<T> GetPlugins<T>()
         {
             string[] dllFileNames = null;
@@ -343,7 +413,14 @@ namespace SoluiNet.DevTools.Core.Tools
             return pluginList;
         }
 
-        public static T GetPluginByName<T>(string name) where T : IBasePlugin
+        /// <summary>
+        /// Get a plugin with the overgiven name which implements the overgiven type.
+        /// </summary>
+        /// <typeparam name="T">The plugin type.</typeparam>
+        /// <param name="name">The plugin name.</param>
+        /// <returns>Returns the plugin which has the overgiven name and is castable to the overgiven plugin type.</returns>
+        public static T GetPluginByName<T>(string name)
+            where T : IBasePlugin
         {
             var pluginList = GetPlugins<T>();
 
