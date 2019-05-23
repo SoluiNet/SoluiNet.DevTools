@@ -9,7 +9,7 @@
     <Product>SoluiNet.DevTools.UI</Product>
     <Copyright>Copyright © SoluiNet 2018</Copyright>
     <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>
-    <!--<GenerateAssemblyInfo>false</GenerateAssemblyInfo>-->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -28,6 +28,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
     <!--<PackageReference Include="EntityFramework.SqlServer" Version="6.2.0" />-->
     <PackageReference Include="LiveCharts" Version="0.9.7" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />

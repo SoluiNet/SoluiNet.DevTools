@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SoluiNet.DevTools.UI"
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:ui="clr-namespace:SoluiNet.DevTools.Core.UI;assembly=SoluiNet.DevTools.Core"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
         Title="SoluiNet.DevTools" TitleFormatString="({0}) - SoluiNet.DevTools" Height="450" Width="800">
     <Grid x:Name="MainGrid">
@@ -63,5 +64,11 @@
                 </Grid>
             </TabItem>
         </TabControl>
+
+        <tb:TaskbarIcon x:Name="TaskbarNotification"
+                        Visibility="Visible"
+                        ToolTipText="SoluiNet.DevTools"
+                        IconSource="favicon.ico"
+        />
     </Grid>
 </ui:SoluiNetWindow>
