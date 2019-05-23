@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="SqlSyntaxProvider.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.SyntaxHighlighting
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public static class SqlSyntaxProvider
     {
-        static List<string> tags = new List<string>();
-        static List<char> specials = new List<char>();
+        private static List<string> tags = new List<string>();
+        private static List<char> specials = new List<char>();
 
-        static SqlSyntaxProvider()
+        public static SqlSyntaxProvider()
         {
             string[] strs =
             {
@@ -19,7 +23,7 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
                 "Applet",
                 "Area",
                 "Array",
-                "Boolean"
+                "Boolean",
             };
 
             tags = new List<string>(strs);
@@ -37,17 +41,19 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
                 ':',
                 ';',
                 '\n',
-                '\t'
+                '\t',
             };
             specials = new List<char>(chrs);
         }
+
         public static bool IsKnownTag(string tag)
         {
-            return tags.Exists(delegate (string s) { return s.ToLower().Equals(tag.ToLower()); });
+            return tags.Exists(delegate(string s) { return s.ToLower().Equals(tag.ToLower()); });
         }
+
         public static List<string> GetJSProvider(string tag)
         {
-            return tags.FindAll(delegate (string s) { return s.ToLower().StartsWith(tag.ToLower()); });
+            return tags.FindAll(delegate(string s) { return s.ToLower().StartsWith(tag.ToLower()); });
         }
     }
 }

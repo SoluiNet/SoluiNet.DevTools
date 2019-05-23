@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿// <copyright file="Confirm.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.UI
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+
     public static class Confirm
     {
         public static bool ShowDialog(string text, string caption)
@@ -22,7 +26,7 @@ namespace SoluiNet.DevTools.Core.UI
                 TitleFormatString = "Dialog ({0}) - SoluiNet.DevTools",
                 Title = string.Format("Dialog ({0}) - SoluiNet.DevTools", caption),
                 Left = (screenWidth / 2) - 250,
-                Top = (screenHeight / 2) - 75
+                Top = (screenHeight / 2) - 75,
             };
 
             var mainGrid = new Grid();
@@ -30,7 +34,7 @@ namespace SoluiNet.DevTools.Core.UI
             prompt.Content = mainGrid;
 
             var textLabel = new Label() { Margin = new Thickness(50, 20, 0, 0), Content = text, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
-            
+
             var confirmation = new Button() { Content = "Yes", Margin = new Thickness(50, 70, 0, 0), Width = 100, IsDefault = true, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
             var declination = new Button() { Content = "No", Margin = new Thickness(30, 70, 0, 0), Width = 100, IsCancel = true, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
 

@@ -310,7 +310,6 @@ namespace SoluiNet.DevTools.Core.Tools.Database
             return null;
         }
 
-
         /// <summary>
         /// Execute a SQL command on a database which can be connected to with the overgiven provider type. Multiple scripts are possible.
         /// </summary>

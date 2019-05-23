@@ -20,6 +20,11 @@ namespace SoluiNet.DevTools.Core.Formatter
         private char _indentationCharacter = ' ';
         private int _indentationLength = 2;
 
+        public SqlFormatter()
+        {
+            this.CalculateIndentationString();
+        }
+
         public char IndentationCharacter
         {
             get
@@ -71,11 +76,6 @@ namespace SoluiNet.DevTools.Core.Formatter
             }
 
             return indentation;
-        }
-
-        public SqlFormatter()
-        {
-            this.CalculateIndentationString();
         }
 
         public string FormatString(string originalString)

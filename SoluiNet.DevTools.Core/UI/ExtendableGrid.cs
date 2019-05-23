@@ -1,16 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿// <copyright file="ExtendableGrid.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.UI
 {
-    public class ExtendableGrid<T> : Grid where T : UserControl
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+
+    public class ExtendableGrid<T> : Grid
+        where T : UserControl
     {
-        public ExtendableGrid() : base()
+        public ExtendableGrid()
+            : base()
         {
             var gridLengthConverter = new GridLengthConverter();
 
@@ -30,14 +36,14 @@ namespace SoluiNet.DevTools.Core.UI
 
             button.Click += (object sender, RoutedEventArgs e) =>
             {
-                var newElement = CreateNewElement();
+                var newElement = this.CreateNewElement();
 
-                if(newElement == null)
+                if (newElement == null)
                 {
                     return;
                 }
 
-                AddElement(newElement);
+                this.AddElement(newElement);
             };
 
             this.Children.Add(button);

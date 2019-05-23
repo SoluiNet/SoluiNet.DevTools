@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿// <copyright file="Prompt.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.UI
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+
     public static class Prompt
     {
         public static string ShowDialog(string text, string caption)
@@ -22,7 +26,7 @@ namespace SoluiNet.DevTools.Core.UI
                 TitleFormatString = "Dialog ({0}) - SoluiNet.DevTools",
                 Title = string.Format("Dialog ({0}) - SoluiNet.DevTools", caption),
                 Left = (screenWidth / 2) - 250,
-                Top = (screenHeight / 2) - 75
+                Top = (screenHeight / 2) - 75,
             };
 
             var mainGrid = new Grid();

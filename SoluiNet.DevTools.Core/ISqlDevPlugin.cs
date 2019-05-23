@@ -19,12 +19,6 @@ namespace SoluiNet.DevTools.Core
     public interface ISqlDevPlugin : IBasePlugin, IThemedPlugin
     {
         /// <summary>
-        /// Method which should be executed to display the plugin in an WPF application.
-        /// </summary>
-        /// <param name="mainGrid">The grid in which the plugin should be displayed.</param>
-        void DisplayForWpf(Grid mainGrid);
-
-        /// <summary>
         /// Gets or sets the environment in which the plugin should run in.
         /// </summary>
         string Environment { get; set; }
@@ -38,6 +32,12 @@ namespace SoluiNet.DevTools.Core
         /// Gets the default connection string for the plugin.
         /// </summary>
         string DefaultConnectionStringName { get; }
+
+        /// <summary>
+        /// Method which should be executed to display the plugin in an WPF application.
+        /// </summary>
+        /// <param name="mainGrid">The grid in which the plugin should be displayed.</param>
+        void DisplayForWpf(Grid mainGrid);
 
         /// <summary>
         /// Execute a custom SQL command. Working only with single commands.

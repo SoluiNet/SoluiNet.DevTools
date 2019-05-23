@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿// <copyright file="SoluiNetWindow.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.UI
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+
     public class SoluiNetWindow : Window
     {
         public string TitleFormatString { get; set; }
@@ -18,7 +22,7 @@ namespace SoluiNet.DevTools.Core.UI
                 return;
             }
 
-            Title = string.Format(TitleFormatString, titleParts.OrderBy(x => x.Key).Select(x => x.Value).ToArray());
+            this.Title = string.Format(this.TitleFormatString, titleParts.OrderBy(x => x.Key).Select(x => x.Value).ToArray());
         }
     }
 }

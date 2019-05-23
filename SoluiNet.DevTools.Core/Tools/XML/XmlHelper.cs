@@ -1,18 +1,22 @@
-﻿using SoluiNet.DevTools.Core.Tools.Stream;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Xml.Xsl;
+﻿// <copyright file="XmlHelper.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.Tools.XML
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Serialization;
+    using System.Xml.Xsl;
+    using SoluiNet.DevTools.Core.Tools.Stream;
+
     public static class XmlHelper
     {
         public static T Deserialize<T>(string serializedString)
@@ -41,7 +45,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         public static string Serialize<T>(T instance)
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
-            
+
             using (var writer = new StringWriter())
             {
                 xmlSerializer.Serialize(writer, instance);
@@ -51,10 +55,10 @@ namespace SoluiNet.DevTools.Core.Tools.XML
 
         /// <summary>
         /// Format the overgiven XML string
-        /// Taken from: https://stackoverflow.com/questions/1123718/format-xml-string-to-print-friendly-xml-string
+        /// Taken from: https://stackoverflow.com/questions/1123718/format-xml-string-to-print-friendly-xml-string.
         /// </summary>
-        /// <param name="xmlString">The XML string</param>
-        /// <returns>Returns an indented XML string</returns>
+        /// <param name="xmlString">The XML string.</param>
+        /// <returns>Returns an indented XML string.</returns>
         public static string Format(string xmlString)
         {
             string result = string.Empty;
@@ -97,11 +101,11 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         }
 
         /// <summary>
-        /// Transforms a XML String with the overgiven XSL template
+        /// Transforms a XML String with the overgiven XSL template.
         /// </summary>
-        /// <param name="xsl">The XSL template</param>
-        /// <param name="xml">The XML string</param>
-        /// <returns>Returns the transformed XML</returns>
+        /// <param name="xslTemplate">The XSL template.</param>
+        /// <param name="xmlString">The XML string.</param>
+        /// <returns>Returns the transformed XML.</returns>
         public static string Transform(string xslTemplate, string xmlString)
         {
             using (var xslStringReader = new StringReader(xslTemplate))
@@ -124,10 +128,10 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         }
 
         /// <summary>
-        /// Returns true if overgiven text contains a valid XML root node
+        /// Returns true if overgiven text contains a valid XML root node.
         /// </summary>
-        /// <param name="xmlText">The string which should be checked</param>
-        /// <returns>Returns true if overgiven text contains a valid XML root node</returns>
+        /// <param name="xmlText">The string which should be checked.</param>
+        /// <returns>Returns true if overgiven text contains a valid XML root node.</returns>
         public static bool IsValidXmlRootNode(string xmlText)
         {
             var xmlRegex = new Regex("</([^>]+?)>$");
@@ -138,10 +142,10 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         }
 
         /// <summary>
-        /// Returns true if overgiven text is a XML string
+        /// Returns true if overgiven text is a XML string.
         /// </summary>
-        /// <param name="xmlText">The string which should be checked</param>
-        /// <returns>Returns true if overgiven text is a XML string</returns>
+        /// <param name="xmlText">The string which should be checked.</param>
+        /// <returns>Returns true if overgiven text is a XML string.</returns>
         public static bool IsXml(string xmlText)
         {
             return xmlText.Contains("<?xml") || IsValidXmlRootNode(xmlText);
@@ -161,7 +165,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
             var firstXml = XDocument.Parse(firstXmlDocument);
             var secondXml = XDocument.Parse(secondXmlDocument);
 
-            //Combine and remove duplicates
+            // Combine and remove duplicates
             var combinedXml = firstXml.Descendants(xmlNodeName)
                 .Union(secondXml.Descendants(xmlNodeName));
 
