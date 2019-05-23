@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿// <copyright file="SqlFormatter.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Core.Formatter
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// A formatter for SQL texts.
+    /// </summary>
     public class SqlFormatter : IFormatter
     {
         private string _indentationString = string.Empty;
@@ -15,34 +22,42 @@ namespace SoluiNet.DevTools.Core.Formatter
 
         public char IndentationCharacter
         {
-            get { return _indentationCharacter; }
+            get
+            {
+                return this._indentationCharacter;
+            }
+
             set
             {
-                _indentationCharacter = value;
-                CalculateIndentationString();
+                this._indentationCharacter = value;
+                this.CalculateIndentationString();
             }
         }
 
         public int IndentationLength
         {
-            get { return _indentationLength; }
+            get
+            {
+                return this._indentationLength;
+            }
+
             set
             {
-                _indentationLength = value;
-                CalculateIndentationString();
+                this._indentationLength = value;
+                this.CalculateIndentationString();
             }
         }
 
         public string IndentationString
         {
-            get { return _indentationString; }
+            get { return this._indentationString; }
         }
 
         public void CalculateIndentationString()
         {
-            for (var i = 0; i < IndentationLength; i++)
+            for (var i = 0; i < this.IndentationLength; i++)
             {
-                _indentationString += IndentationCharacter;
+                this._indentationString += this.IndentationCharacter;
             }
         }
 
@@ -52,7 +67,7 @@ namespace SoluiNet.DevTools.Core.Formatter
 
             for (var i = 0; i < indentationLevel; i++)
             {
-                indentation += IndentationString;
+                indentation += this.IndentationString;
             }
 
             return indentation;
@@ -60,7 +75,7 @@ namespace SoluiNet.DevTools.Core.Formatter
 
         public SqlFormatter()
         {
-            CalculateIndentationString();
+            this.CalculateIndentationString();
         }
 
         public string FormatString(string originalString)
@@ -69,9 +84,9 @@ namespace SoluiNet.DevTools.Core.Formatter
             {
                 TrailingCommas = true,
                 BreakJoinOnSections = true,
-                IndentString = IndentationString,
+                IndentString = this.IndentationString,
                 UppercaseKeywords = true,
-                SpacesPerTab = 2
+                SpacesPerTab = 2,
             };
 
             var formatter = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatter(formatOptions);
