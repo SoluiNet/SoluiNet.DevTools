@@ -24,7 +24,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// Get all defined entity types for a SQL development plugin.
         /// </summary>
         /// <param name="plugin">The SQL development plugin in which the entities are defined.</param>
-        /// <returns>A <see cref="IList{System.Type}"/> which contains all defined entities in the plugin.</returns>
+        /// <returns>A <see cref="IList{T}"/> which contains all defined entities in the plugin.</returns>
         public static IList<System.Type> GetEntityTypes(ISqlDevPlugin plugin)
         {
             if (plugin == null)
@@ -62,7 +62,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The SQL development plugin in which the entity is defined.</param>
         /// <param name="entityName">The name of the entity for which the fields should be delivered.</param>
-        /// <returns>A <see cref="IList{string}"/> which contains a list of all the field names for the overgiven entity.</returns>
+        /// <returns>A <see cref="IList{T}"/> which contains a list of all the field names for the overgiven entity.</returns>
         public static IList<string> GetEntityFields(ISqlDevPlugin plugin, string entityName)
         {
             var fieldList = new List<string>();
@@ -115,7 +115,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The plugin in which the resources are contained.</param>
         /// <param name="type">The type of the resources. If not provided "Script" will be used.</param>
-        /// <returns>A <see cref="IList{string}"/> which contains a list of all the embedded resource names in the overgiven plugin.</returns>
+        /// <returns>A <see cref="IList{T}"/> which contains a list of all the embedded resource names in the overgiven plugin.</returns>
         public static IList<string> GetEmbeddedResources(IBasePlugin plugin, string type = "Script")
         {
             if (plugin == null)
@@ -263,7 +263,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// Get the effective settings for the overgiven plugin as dictionary.
         /// </summary>
         /// <param name="plugin">The plugin for which the settings should be provided.</param>
-        /// <returns>A <see cref="Dictionary{string, object}"/> which contains all effective settings for the plugin.</returns>
+        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> which contains all effective settings for the plugin.</returns>
         public static IDictionary<string, object> GetSettingsAsDictionary(IPluginWithSettings plugin)
         {
             var settings = GetSettings(plugin);
@@ -306,7 +306,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// Get a list of all available environments for the overgiven plugin.
         /// </summary>
         /// <param name="plugin">The plugin.</param>
-        /// <returns>Returns a <see cref="List{string}"/> of all available environments for the overgiven plugin.</returns>
+        /// <returns>Returns a <see cref="List{T}"/> of all available environments for the overgiven plugin.</returns>
         public static List<string> GetEnvironments(ISqlDevPlugin plugin)
         {
             var environmentList = new List<string>();

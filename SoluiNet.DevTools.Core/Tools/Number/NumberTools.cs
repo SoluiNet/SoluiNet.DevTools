@@ -21,7 +21,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
         /// <param name="start">The start number.</param>
         /// <param name="end">The end number.</param>
         /// <param name="stepSize">The step size. If not provided it will default to 10.</param>
-        /// <returns>Returns a <see cref="List{int}"/> from start number to end number with the chosen step size.</returns>
+        /// <returns>Returns a <see cref="List{T}"/> from start number to end number with the chosen step size.</returns>
         public static IList<int> CountUp(int start, int end, int stepSize = 10)
         {
             var countList = new List<int>();
@@ -40,7 +40,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
         /// <param name="end">The end number.</param>
         /// <param name="start">The start number.</param>
         /// <param name="stepSize">The step size. If not provided it will default to 10.</param>
-        /// <returns>Returns a <see cref="List{int}"/> from start number to the value of this variable with the chosen step size.</returns>
+        /// <returns>Returns a <see cref="List{T}"/> from start number to the value of this variable with the chosen step size.</returns>
         public static IList<int> CountFrom(this int end, int start, int stepSize = 10)
         {
             return CountUp(start, end, stepSize);

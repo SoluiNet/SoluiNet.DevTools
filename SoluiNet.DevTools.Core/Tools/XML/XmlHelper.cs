@@ -27,7 +27,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// </summary>
         /// <typeparam name="T">The type which should be deserialized.</typeparam>
         /// <param name="serializedString">The serialized object as string.</param>
-        /// <returns>Returns a deserialized instance of <paramref name="T"/>.</returns>
+        /// <returns>Returns a deserialized instance of <typeparamref name="T"/>.</returns>
         public static T Deserialize<T>(string serializedString)
         {
             var stream = new MemoryStream();
@@ -47,7 +47,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// </summary>
         /// <typeparam name="T">The type which should be deserialized.</typeparam>
         /// <param name="stream">The serialized object as stream.</param>
-        /// <returns>Returns a deserialized instance of <paramref name="T"/>.</returns>
+        /// <returns>Returns a deserialized instance of <typeparamref name="T"/>.</returns>
         public static T Deserialize<T>(System.IO.Stream stream)
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
@@ -62,7 +62,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// </summary>
         /// <typeparam name="T">The type which should be serialized.</typeparam>
         /// <param name="instance">The instance of the type which should be serialized.</param>
-        /// <returns>Returns a serialized instance of <paramref name="T"/> as string.</returns>
+        /// <returns>Returns a serialized instance of <typeparamref name="T"/> as string.</returns>
         public static string Serialize<T>(T instance)
         {
             var xmlSerializer = new XmlSerializer(typeof(T));

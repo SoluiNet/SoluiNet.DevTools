@@ -142,7 +142,7 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// </summary>
         /// <param name="originalString">The string variable.</param>
         /// <param name="injectionValues">The dictionary with possible variable to inject.</param>
-        /// <returns>Returns a string with injected variables (i.e. &lt;[variableName]&gt;)</returns>
+        /// <returns>Returns a string with injected variables (i.e. &lt;[variableName]&gt;).</returns>
         public static string Inject(this string originalString, Dictionary<string, string> injectionValues)
         {
             var adjustedString = originalString;

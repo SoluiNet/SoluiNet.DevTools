@@ -48,7 +48,7 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
         /// Get a list of all identifiable single SQL scripts.
         /// </summary>
         /// <param name="sqlCommand">The string which may contain multiple scripts.</param>
-        /// <returns>A <see cref="List{string}"/> where each entry represents a single SQL script.</returns>
+        /// <returns>A <see cref="List{T}"/> where each entry represents a single SQL script.</returns>
         public static List<string> GetSingleScripts(this string sqlCommand)
         {
             return sqlCommand.Split(new string[] { EXECUTE_SCRIPT_PART_KEYWORD }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.TrimStart().TrimEnd()).ToList();
