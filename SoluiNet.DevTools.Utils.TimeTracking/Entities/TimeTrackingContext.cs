@@ -1,4 +1,8 @@
-﻿namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
+﻿// <copyright file="TimeTrackingContext.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
+
+namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 {
     using System;
     using System.Configuration;
@@ -9,40 +13,61 @@
     using System.Linq;
     using System.Text.RegularExpressions;
 
+    /// <summary>
+    /// The database context which can be used for time tracking purposes.
+    /// </summary>
     public class TimeTrackingContext : DbContext
     {
-        private static bool _created = false;
+        /// <summary>
+        /// A value which indicates if the database has already been created.
+        /// </summary>
+        private static bool created = false;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
+        /// </summary>
+        /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
         public TimeTrackingContext(string nameOrConnectionString = "name=TimeTrackingContext")
             : base(new SQLiteConnection() { ConnectionString = GetConnectionString(nameOrConnectionString) }, true)
         {
-            if (!_created)
+            if (!created)
             {
-                _created = true;
-                //Database.CreateIfNotExists();
+                created = true;
+                //// Database.CreateIfNotExists();
 
                 CreateIfNotExists();
             }
         }
 
-        private static string GetConnectionString(string nameOrConnectionString)
-        {
-            var connectionString = nameOrConnectionString;
+        /// <summary>
+        /// Gets or sets the Application accessor.
+        /// </summary>
+        public virtual DbSet<Application> Application { get; set; }
 
-            if (nameOrConnectionString.StartsWith("name="))
-            {
-                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty)];
+        /// <summary>
+        /// Gets or sets the Category accessor.
+        /// </summary>
+        public virtual DbSet<Category> Category { get; set; }
 
-                if(connectionStringSetting == null) {
-                    throw new ArgumentNullException("connectionStringSetting");
-                }
+        /// <summary>
+        /// Gets or sets the CategoryUsageTime accessor.
+        /// </summary>
+        public virtual DbSet<CategoryUsageTime> CategoryUsageTime { get; set; }
 
-                connectionString = connectionStringSetting.ConnectionString;
-            }
+        /// <summary>
+        /// Gets or sets the UsageTime accessor.
+        /// </summary>
+        public virtual DbSet<UsageTime> UsageTime { get; set; }
 
-            return connectionString.ToLower().Replace("%localappdata%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
-        }
+        /// <summary>
+        /// Gets or sets the VersionHistory accessor.
+        /// </summary>
+        public virtual DbSet<VersionHistory> VersionHistory { get; set; }
 
+        /// <summary>
+        /// Create the database if it doesn't exist.
+        /// </summary>
+        /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
         public static void CreateIfNotExists(string nameOrConnectionString = "name=TimeTrackingContext")
         {
             var filePath = string.Empty;
@@ -94,7 +119,7 @@
 
                 var appliedVersion = new Version(command.ExecuteScalar().ToString());
 
-                if(appliedVersion.CompareTo(new Version("1.0.0.1")) < 0)
+                if (appliedVersion.CompareTo(new Version("1.0.0.1")) < 0)
                 {
                     command.CommandText = "CREATE TABLE UsageTime (UsageTimeId INTEGER PRIMARY KEY, ApplicationIdentification TEXT, StartTime TEXT, Duration INTEGER)";
                     command.ExecuteNonQuery();
@@ -196,12 +221,10 @@
             }
         }
 
-        public virtual DbSet<Application> Application { get; set; }
-        public virtual DbSet<Category> Category { get; set; }
-        public virtual DbSet<CategoryUsageTime> CategoryUsageTime { get; set; }
-        public virtual DbSet<UsageTime> UsageTime { get; set; }
-        public virtual DbSet<VersionHistory> VersionHistory { get; set; }
-
+        /// <summary>
+        /// The event handler for model creation.
+        /// </summary>
+        /// <param name="modelBuilder">The model builder.</param>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Application>()
@@ -223,6 +246,25 @@
             modelBuilder.Entity<VersionHistory>()
                 .ToTable(typeof(VersionHistory).Name)
                 .HasKey(x => x.VersionHistoryId);
+        }
+
+        private static string GetConnectionString(string nameOrConnectionString)
+        {
+            var connectionString = nameOrConnectionString;
+
+            if (nameOrConnectionString.StartsWith("name="))
+            {
+                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty)];
+
+                if (connectionStringSetting == null)
+                {
+                    throw new ArgumentNullException("connectionStringSetting");
+                }
+
+                connectionString = connectionStringSetting.ConnectionString;
+            }
+
+            return connectionString.ToLower().Replace("%localappdata%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
         }
     }
 }

@@ -20,7 +20,8 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
         /// <summary>
         /// Gets the technical name of the plugin.
         /// </summary>
-        public string Name {
+        public string Name
+        {
             get { return "XmlTransformationPlugin"; }
         }
 

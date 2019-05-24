@@ -1,37 +1,47 @@
-﻿using LiveCharts;
-using LiveCharts.Wpf;
-using SoluiNet.DevTools.Core.Tools.Json;
-using SoluiNet.DevTools.Core.Tools.Number;
-using SoluiNet.DevTools.Core.UI;
-using SoluiNet.DevTools.Utils.TimeTracking.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿// <copyright file="TimeTrackingToolsUserControl.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.TimeTracking
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+    using LiveCharts;
+    using LiveCharts.Wpf;
+    using SoluiNet.DevTools.Core.Tools.Json;
+    using SoluiNet.DevTools.Core.Tools.Number;
+    using SoluiNet.DevTools.Core.UI;
+    using SoluiNet.DevTools.Utils.TimeTracking.Entities;
+
     /// <summary>
-    /// Interaktionslogik für TimeTrackingToolsUserControl.xaml
+    /// Interaction logic for TimeTrackingToolsUserControl.xaml.
     /// </summary>
     public partial class TimeTrackingToolsUserControl : UserControl
     {
-        private bool _mouseMoving = false;
+        /// <summary>
+        /// A value which indicates if a mouse is moving or not.
+        /// </summary>
+        private bool mouseMoving = false;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeTrackingToolsUserControl"/> class.
+        /// </summary>
         public TimeTrackingToolsUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -44,8 +54,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             #region Fill Source Data
             context.UsageTime.Load();
 
-            SourceData.AutoGenerateColumns = true;
-            SourceData.ItemsSource = context.UsageTime.Local.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit);
+            this.SourceData.AutoGenerateColumns = true;
+            this.SourceData.ItemsSource = context.UsageTime.Local.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit);
             #endregion
 
             #region Prepare Assignment View
@@ -56,7 +66,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var timeTarget in timeTargets)
             {
-                TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
+                this.TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
 
                 var timeTargetButton = new Button() { Content = timeTarget.Key, HorizontalAlignment = HorizontalAlignment.Left };
                 timeTargetButton.ToolTip = timeTarget.Key;
@@ -71,9 +81,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 timeTargetButton.PreviewMouseMove += (dragSender, dragEvents) =>
                 {
-                    if (!_mouseMoving)
+                    if (!this.mouseMoving)
                     {
-                        _mouseMoving = true;
+                        this.mouseMoving = true;
                         if (dragEvents.LeftButton == MouseButtonState.Pressed)
                         {
                             var usageTimeObject = (dragSender as Button).Tag as IGrouping<string, UsageTime>;
@@ -85,13 +95,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             DragDrop.DoDragDrop(dragSender as Button, dataObject, DragDropEffects.All);
                             dragEvents.Handled = true;
                         }
-                        _mouseMoving = false;
+
+                        this.mouseMoving = false;
                     }
                 };
 
-                TimeTrackingAssignmentOverview.Children.Add(timeTargetButton);
+                this.TimeTrackingAssignmentOverview.Children.Add(timeTargetButton);
 
-                Grid.SetRow(timeTargetButton, TimeTrackingAssignmentOverview.RowDefinitions.Count - 1);
+                Grid.SetRow(timeTargetButton, this.TimeTrackingAssignmentOverview.RowDefinitions.Count - 1);
             }
 
             var applications = context.Application;
@@ -107,7 +118,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 }
             };
 
-            ApplicationAssignmentGrid.CreateNewElement = () =>
+            this.ApplicationAssignmentGrid.CreateNewElement = () =>
             {
                 var applicationName = Prompt.ShowDialog("Please provide an application name", "Application Assignment");
 
@@ -149,7 +160,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 applicationTarget.AllowDrop = true;
                 applicationTarget.Drop += dropApplicationDelegate;
 
-                ApplicationAssignmentGrid.AddElement(applicationTarget);
+                this.ApplicationAssignmentGrid.AddElement(applicationTarget);
             }
 
             var categories = context.Category;
@@ -191,7 +202,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                         var categoryToAssign = context.Category.Where(x => x.CategoryName == categoryDistribution.Key).FirstOrDefault();
 
-                        if(categoryToAssign == null)
+                        if (categoryToAssign == null)
                         {
                             continue;
                         }
@@ -202,7 +213,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             {
                                 CategoryId = categoryToAssign.CategoryId,
                                 UsageTimeId = usageTime.UsageTimeId,
-                                Duration = duration
+                                Duration = duration,
                             });
 
                             // categoryDistribution.Value -= usageTime.Duration;
@@ -216,7 +227,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             {
                                 CategoryId = categoryToAssign.CategoryId,
                                 UsageTimeId = usageTime.UsageTimeId,
-                                Duration = categoryDuration
+                                Duration = categoryDuration,
                             });
 
                             // categoryDistribution.Value -= usageTime.Duration;
@@ -229,7 +240,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 context.SaveChanges();
             };
 
-            CategoryAssignmentGrid.CreateNewElement = () =>
+            this.CategoryAssignmentGrid.CreateNewElement = () =>
                 {
                     var categoryName = Prompt.ShowDialog("Please provide an category name", "Category Assignment");
 
@@ -260,12 +271,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var distributeEvenlyElement = new UI.AssignmentTarget()
             {
                 AllowDrop = true,
-                Label = "Distribute evenly"
+                Label = "Distribute evenly",
             };
 
             distributeEvenlyElement.Drop += dropCategoryDelegate;
 
-            CategoryAssignmentGrid.AddElement(distributeEvenlyElement);
+            this.CategoryAssignmentGrid.AddElement(distributeEvenlyElement);
 
             foreach (var category in categories)
             {
@@ -278,7 +289,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 categoryTarget.AllowDrop = true;
                 categoryTarget.Drop += dropCategoryDelegate;
 
-                CategoryAssignmentGrid.AddElement(categoryTarget);
+                this.CategoryAssignmentGrid.AddElement(categoryTarget);
             }
             #endregion
 
@@ -324,7 +335,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
 
-            TimeTrackingStatistics.Children.Add(barsChart);
+            this.TimeTrackingStatistics.Children.Add(barsChart);
             #endregion
         }
     }

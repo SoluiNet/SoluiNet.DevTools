@@ -1,4 +1,6 @@
-﻿
+﻿// <copyright file="VsDevEnvToolsUserControl.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.VsDevEnv
 {

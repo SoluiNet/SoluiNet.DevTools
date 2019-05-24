@@ -1,22 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLog;
-using Quartz;
-using SoluiNet.DevTools.Utils.TimeTracking.Entities;
+﻿// <copyright file="SaveForegroundWindowTaskToDb.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.TimeTracking.Job
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using NLog;
+    using Quartz;
+    using SoluiNet.DevTools.Utils.TimeTracking.Entities;
+
+    /// <summary>
+    /// A Job to save the caption of the most foreground window to a database.
+    /// </summary>
     public class SaveForegroundWindowTaskToDb : IJob
     {
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
         private Logger Logger
         {
             get
             {
                 return LogManager.GetLogger("timeTracking");
             }
+        }
+
+        /// <inheritdoc/>
+        public async Task Execute(IJobExecutionContext context)
+        {
+            try
+            {
+                this.SaveForegroundWindowToDb();
+            }
+            catch (Exception exception)
+            {
+                LogManager.GetCurrentClassLogger().Fatal(string.Format("{0}\r\n{1}", exception.Message, exception.InnerException != null ? exception.InnerException.Message : string.Empty));
+            }
+
+            await Task.CompletedTask;
         }
 
         private void SaveForegroundWindowToDb()
@@ -42,20 +67,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Job
 
                 context.SaveChanges();
             }
-        }
-
-        public async Task Execute(IJobExecutionContext context)
-        {
-            try
-            {
-                SaveForegroundWindowToDb();
-            }
-            catch(Exception exception)
-            {
-                LogManager.GetCurrentClassLogger().Fatal(string.Format("{0}\r\n{1}", exception.Message, exception.InnerException != null ? exception.InnerException.Message : string.Empty));
-            }
-
-            await Task.CompletedTask;
         }
     }
 }
