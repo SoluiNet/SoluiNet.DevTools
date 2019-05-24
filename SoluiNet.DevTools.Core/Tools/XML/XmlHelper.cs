@@ -17,8 +17,17 @@ namespace SoluiNet.DevTools.Core.Tools.XML
     using System.Xml.Xsl;
     using SoluiNet.DevTools.Core.Tools.Stream;
 
+    /// <summary>
+    /// Provides a collection of methods to work with XML.
+    /// </summary>
     public static class XmlHelper
     {
+        /// <summary>
+        /// Deserialize a string.
+        /// </summary>
+        /// <typeparam name="T">The type which should be deserialized.</typeparam>
+        /// <param name="serializedString">The serialized object as string.</param>
+        /// <returns>Returns a deserialized instance of <paramref name="T"/>.</returns>
         public static T Deserialize<T>(string serializedString)
         {
             var stream = new MemoryStream();
@@ -33,6 +42,12 @@ namespace SoluiNet.DevTools.Core.Tools.XML
             return Deserialize<T>(stream);
         }
 
+        /// <summary>
+        /// Deserialize a stream.
+        /// </summary>
+        /// <typeparam name="T">The type which should be deserialized.</typeparam>
+        /// <param name="stream">The serialized object as stream.</param>
+        /// <returns>Returns a deserialized instance of <paramref name="T"/>.</returns>
         public static T Deserialize<T>(System.IO.Stream stream)
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
@@ -42,6 +57,12 @@ namespace SoluiNet.DevTools.Core.Tools.XML
             return deserializedElement;
         }
 
+        /// <summary>
+        /// Serialize a instance of an object to a string.
+        /// </summary>
+        /// <typeparam name="T">The type which should be serialized.</typeparam>
+        /// <param name="instance">The instance of the type which should be serialized.</param>
+        /// <returns>Returns a serialized instance of <paramref name="T"/> as string.</returns>
         public static string Serialize<T>(T instance)
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
@@ -128,7 +149,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         }
 
         /// <summary>
-        /// Returns true if overgiven text contains a valid XML root node.
+        /// Checks if overgiven text contains a valid XML root node.
         /// </summary>
         /// <param name="xmlText">The string which should be checked.</param>
         /// <returns>Returns true if overgiven text contains a valid XML root node.</returns>
@@ -142,7 +163,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         }
 
         /// <summary>
-        /// Returns true if overgiven text is a XML string.
+        /// Checks if overgiven text is a XML string.
         /// </summary>
         /// <param name="xmlText">The string which should be checked.</param>
         /// <returns>Returns true if overgiven text is a XML string.</returns>
@@ -151,6 +172,11 @@ namespace SoluiNet.DevTools.Core.Tools.XML
             return xmlText.Contains("<?xml") || IsValidXmlRootNode(xmlText);
         }
 
+        /// <summary>
+        /// Serialize a XML document to a string.
+        /// </summary>
+        /// <param name="xmlDocument">The XML document which should be serialized.</param>
+        /// <returns>Returns a serialized XML document as string.</returns>
         public static string Serialize(XDocument xmlDocument)
         {
             var stream = new MemoryStream();
@@ -160,6 +186,13 @@ namespace SoluiNet.DevTools.Core.Tools.XML
             return StreamHelper.StreamToString(stream);
         }
 
+        /// <summary>
+        /// Merge two XML documents in a single XML document.
+        /// </summary>
+        /// <param name="firstXmlDocument">The first XML document.</param>
+        /// <param name="secondXmlDocument">The second XML document.</param>
+        /// <param name="xmlNodeName">The XML node name which contents should be merged.</param>
+        /// <returns>Returns a merged XML document as string.</returns>
         public static string Merge(string firstXmlDocument, string secondXmlDocument, string xmlNodeName)
         {
             var firstXml = XDocument.Parse(firstXmlDocument);

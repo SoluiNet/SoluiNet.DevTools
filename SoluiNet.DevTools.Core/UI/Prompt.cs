@@ -12,8 +12,17 @@ namespace SoluiNet.DevTools.Core.UI
     using System.Windows;
     using System.Windows.Controls;
 
+    /// <summary>
+    /// Provides methods to display a prompt window.
+    /// </summary>
     public static class Prompt
     {
+        /// <summary>
+        /// Show a prompt dialog.
+        /// </summary>
+        /// <param name="text">The text which should be displayed for the prompt.</param>
+        /// <param name="caption">The window caption.</param>
+        /// <returns>Returns the value which has been provided to the prompt window.</returns>
         public static string ShowDialog(string text, string caption)
         {
             var screenWidth = SystemParameters.PrimaryScreenWidth;

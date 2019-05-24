@@ -11,6 +11,9 @@ namespace SoluiNet.DevTools.Core
     using System.Threading.Tasks;
     using System.Windows.Controls;
 
+    /// <summary>
+    /// Provides an interface for a plugin which provides utility functions and should be grouped.
+    /// </summary>
     public interface IGroupedUtilitiesDevPlugin : IUtilitiesDevPlugin
     {
         /// <summary>

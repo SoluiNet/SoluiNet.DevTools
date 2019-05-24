@@ -12,8 +12,20 @@ namespace SoluiNet.DevTools.Core.UI
     using System.Windows;
     using System.Windows.Controls;
 
+    /// <summary>
+    /// Show a confirm dialog.
+    /// </summary>
+    /// <param name="text">The text which should be displayed for the confirm.</param>
+    /// <param name="caption">The window caption.</param>
+    /// <returns>Returns the value which has been provided to the confirm window.</returns>
     public static class Confirm
     {
+        /// <summary>
+        /// Show a confirm dialog.
+        /// </summary>
+        /// <param name="text">The text which should be displayed for the confirm.</param>
+        /// <param name="caption">The window caption.</param>
+        /// <returns>Returns true if the confirmation button has been clicked in the window, otherwise false.</returns>
         public static bool ShowDialog(string text, string caption)
         {
             var screenWidth = SystemParameters.PrimaryScreenWidth;

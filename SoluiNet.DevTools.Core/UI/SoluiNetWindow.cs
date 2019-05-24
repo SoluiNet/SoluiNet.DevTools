@@ -11,10 +11,20 @@ namespace SoluiNet.DevTools.Core.UI
     using System.Threading.Tasks;
     using System.Windows;
 
+    /// <summary>
+    /// The base window class for SoluiNet.DevTools windows.
+    /// </summary>
     public class SoluiNetWindow : Window
     {
+        /// <summary>
+        /// Gets or sets the title format string.
+        /// </summary>
         public string TitleFormatString { get; set; }
 
+        /// <summary>
+        /// Set the values which can be used for replacing elements in the title.
+        /// </summary>
+        /// <param name="titleParts">The values which should be inserted to the title.</param>
         public void SetTitleParts(IDictionary<string, string> titleParts)
         {
             if (titleParts == null || !titleParts.Any())

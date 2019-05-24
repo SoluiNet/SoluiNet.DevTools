@@ -12,9 +12,17 @@ namespace SoluiNet.DevTools.Core.UI
     using System.Windows;
     using System.Windows.Controls;
 
+    /// <summary>
+    /// The base class for an extendable grid. The grid will create new rows for each new child.
+    /// </summary>
+    /// <typeparam name="T">The type which will be used for each row.</typeparam>
     public class ExtendableGrid<T> : Grid
         where T : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtendableGrid{T}"/> class.
+        /// The extendable grid will provide a "+"-button which will call the CreateNewElement-event and add this element to its' childs.
+        /// </summary>
         public ExtendableGrid()
             : base()
         {
@@ -49,10 +57,21 @@ namespace SoluiNet.DevTools.Core.UI
             this.Children.Add(button);
         }
 
+        /// <summary>
+        /// The delegate for the creation of a new element.
+        /// </summary>
+        /// <returns>Returns the new element.</returns>
         public delegate T NewElementCreation();
 
+        /// <summary>
+        /// Gets or sets the create new element event handler.
+        /// </summary>
         public NewElementCreation CreateNewElement { get; set; }
 
+        /// <summary>
+        /// Add a new element to the extendable grid.
+        /// </summary>
+        /// <param name="newElement">The new element which should be added.</param>
         public void AddElement(T newElement)
         {
             this.RowDefinitions.Add(new RowDefinition());

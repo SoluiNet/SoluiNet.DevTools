@@ -11,6 +11,9 @@ namespace SoluiNet.DevTools.Core.Tools.File
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Provides a collection of methods which help with working with files.
+    /// </summary>
     public class FileHelper
     {
         /// <summary>
@@ -39,17 +42,6 @@ namespace SoluiNet.DevTools.Core.Tools.File
         public static List<string> GetFilesInDirectory(string directoryPath, string filter = "*.*", bool searchRecursively = false)
         {
             var fileList = new List<string>();
-
-            /*foreach (string directory in Directory.GetDirectories(directoryPath))
-            {
-                foreach (string file in Directory.EnumerateFiles(directory, filter, SearchOption.TopDirectoryOnly))
-                {
-                    fileList.Add(file);
-                }
-
-                if (searchRecursively)
-                    fileList.AddRange(GetFilesInDirectory(directoryPath, filter, searchRecursively));
-            }*/
 
             foreach (string file in Directory.EnumerateFiles(directoryPath, filter, searchRecursively ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
             {

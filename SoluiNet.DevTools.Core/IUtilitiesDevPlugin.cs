@@ -11,6 +11,9 @@ namespace SoluiNet.DevTools.Core
     using System.Threading.Tasks;
     using System.Windows.Controls;
 
+    /// <summary>
+    /// Provides an interface for plugins which provides utility functions.
+    /// </summary>
     public interface IUtilitiesDevPlugin : IBasePlugin
     {
         /// <summary>
