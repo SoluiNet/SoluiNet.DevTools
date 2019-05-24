@@ -17,6 +17,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.*" />
     <PackageReference Include="Microsoft.CSharp" Version="4.*" />
     <PackageReference Include="System.Net.Http" Version="4.*" />
@@ -89,6 +93,12 @@
     <Compile Remove="obj\x64\Debug\net461\WebClientAdditionalOptionsControl.g.i.cs" />
     <Compile Remove="obj\x64\Debug\net461\WebClientPluginSelection.g.cs" />
     <Compile Remove="obj\x64\Debug\net461\WebClientPluginSelection.g.i.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <None Update="WebClientAdditionalOptionControl.xaml">

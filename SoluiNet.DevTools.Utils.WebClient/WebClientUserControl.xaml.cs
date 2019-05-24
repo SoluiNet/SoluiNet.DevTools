@@ -1,36 +1,46 @@
-﻿using SoluiNet.DevTools.Core;
-using SoluiNet.DevTools.Core.Extensions;
-using SoluiNet.DevTools.Core.Tools;
-using SoluiNet.DevTools.Core.Tools.XML;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Xml;
+﻿// <copyright file="WebClientUserControl.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.WebClient
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Xml;
+    using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Extensions;
+    using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.XML;
+
     /// <summary>
-    /// Interaktionslogik für WebClientUserControl.xaml
+    /// Interaction logic for WebClientUserControl.xaml.
     /// </summary>
     public partial class WebClientUserControl : UserControl
     {
-        private IPluginWithSettings ChosenPlugin { get; set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebClientUserControl"/> class.
+        /// </summary>
         public WebClientUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
+
+        /// <summary>
+        /// Gets or sets the chosen plugin.
+        /// </summary>
+        private IPluginWithSettings ChosenPlugin { get; set; }
 
         private void Execute_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var environment = ((TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)?["Environment"];
-                var url = ((TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)?["Url"];
+                var environment = ((this.TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)?["Environment"];
+                var url = ((this.TargetUrl.SelectedItem as ComboBoxItem)?.Tag as Dictionary<string, string>)?["Url"];
 
                 if (string.IsNullOrEmpty(environment))
                 {
@@ -39,29 +49,28 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
                 if (string.IsNullOrEmpty(url))
                 {
-                    url = TargetUrl.Text;
+                    url = this.TargetUrl.Text;
                 }
 
-                var settings = PluginHelper.GetSettings(ChosenPlugin);
+                var settings = PluginHelper.GetSettings(this.ChosenPlugin);
 
                 var request = (HttpWebRequest)WebRequest.Create(url);
-                var content = Input.Text.SetEnvironment(environment).InjectCommonValues().InjectSettings(settings);
+                var content = this.Input.Text.SetEnvironment(environment).InjectCommonValues().InjectSettings(settings);
 
-                //request.Accept = "text/xml";
-                request.Method = HttpMethod.Text;
+                request.Method = this.HttpMethod.Text;
 
-                var isSoapRequest = AdditionalOptions.Options.Any(x => x.Key == "SOAPAction");
+                var isSoapRequest = this.AdditionalOptions.Options.Any(x => x.Key == "SOAPAction");
 
                 if (isSoapRequest)
                 {
                     var injectionDictionary = new Dictionary<string, string>()
                     {
-                        { "ContentLength", content.Length.ToString() }
+                        { "ContentLength", content.Length.ToString() },
                     };
 
-                    request.ContentType = ContentType.Text;
+                    request.ContentType = this.ContentType.Text;
 
-                    foreach (var element in AdditionalOptions.Options)
+                    foreach (var element in this.AdditionalOptions.Options)
                     {
                         request.Headers.Add(element.Key, element.Value.SetEnvironment(environment).InjectCommonValues().InjectSettings(settings).Inject(injectionDictionary));
                     }
@@ -96,7 +105,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     }
                 }
 
-                Output.Text = result;
+                this.Output.Text = result;
             }
             catch (WebException webEx)
             {
@@ -108,32 +117,32 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
                     var responseText = reader.ReadToEnd();
 
-                    Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##\r\n\r\n{2}", webEx.Message, webEx.InnerException?.Message, XmlHelper.IsXml(responseText) ? XmlHelper.Format(responseText) : responseText);
+                    this.Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##\r\n\r\n{2}", webEx.Message, webEx.InnerException?.Message, XmlHelper.IsXml(responseText) ? XmlHelper.Format(responseText) : responseText);
                 }
             }
             catch (Exception exception)
             {
-                Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##", exception.Message, exception.InnerException?.Message);
+                this.Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##", exception.Message, exception.InnerException?.Message);
             }
         }
 
         private void AdditionalOptions_Click(object sender, RoutedEventArgs e)
         {
-            var tagInfo = Convert.ToString(ToggleAdditionalOptions.Tag);
+            var tagInfo = Convert.ToString(this.ToggleAdditionalOptions.Tag);
 
             var expanded = Convert.ToBoolean(string.IsNullOrEmpty(tagInfo) ? "false" : tagInfo);
 
             if (!expanded)
             {
-                WebClientMainGrid.RowDefinitions[1].Height = new GridLength(200);
-                ToggleAdditionalOptions.Content = "^";
-                ToggleAdditionalOptions.Tag = true;
+                this.WebClientMainGrid.RowDefinitions[1].Height = new GridLength(200);
+                this.ToggleAdditionalOptions.Content = "^";
+                this.ToggleAdditionalOptions.Tag = true;
             }
             else
             {
-                WebClientMainGrid.RowDefinitions[1].Height = new GridLength(0);
-                ToggleAdditionalOptions.Content = "v";
-                ToggleAdditionalOptions.Tag = false;
+                this.WebClientMainGrid.RowDefinitions[1].Height = new GridLength(0);
+                this.ToggleAdditionalOptions.Content = "v";
+                this.ToggleAdditionalOptions.Tag = false;
             }
         }
 
@@ -148,25 +157,25 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 {
                     ReturnChosenMethod = (endpoints, content, methods, contentTypes, options, chosenPlugin) =>
                     {
-                        Input.Text = content;
+                        this.Input.Text = content;
 
-                        TargetUrl.Items.Clear();
+                        this.TargetUrl.Items.Clear();
                         foreach (var comboBoxItem in endpoints.Select(x => new ComboBoxItem() { Content = x.Key, Tag = new Dictionary<string, string>() { { "Url", x.Value }, { "Environment", x.Key } } }))
                         {
-                            TargetUrl.Items.Add(comboBoxItem);
+                            this.TargetUrl.Items.Add(comboBoxItem);
                         }
 
-                        HttpMethod.SelectedItem = HttpMethod.Items.OfType<ComboBoxItem>().FirstOrDefault(x => x.Content != null && x.Content.ToString() == methods.First());
-                        ContentType.SelectedItem = ContentType.Items.OfType<ComboBoxItem>().FirstOrDefault(x => x.Content != null && x.Content.ToString() == contentTypes.First());
+                        this.HttpMethod.SelectedItem = this.HttpMethod.Items.OfType<ComboBoxItem>().FirstOrDefault(x => x.Content != null && x.Content.ToString() == methods.First());
+                        this.ContentType.SelectedItem = this.ContentType.Items.OfType<ComboBoxItem>().FirstOrDefault(x => x.Content != null && x.Content.ToString() == contentTypes.First());
 
                         foreach (var option in options)
                         {
-                            AdditionalOptions.AddOption(option.Key, option.Value);
+                            this.AdditionalOptions.AddOption(option.Key, option.Value);
                         }
 
-                        ChosenPlugin = chosenPlugin;
-                    }
-                }
+                        this.ChosenPlugin = chosenPlugin;
+                    },
+                },
             };
 
             window.ShowDialog();
