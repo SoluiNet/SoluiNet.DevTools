@@ -116,7 +116,7 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// </summary>
         /// <param name="originalString">The string variable.</param>
         /// <param name="settings">The settings object.</param>
-        /// <returns>Returns a string with injected settings for variables (i. e. <[Settings.Default.abc]>).</returns>
+        /// <returns>Returns a string with injected settings for variables (i. e. &lt;[Settings.Default.abc]&gt;).</returns>
         public static string InjectSettings(this string originalString, Settings.SoluiNetSettingType settings)
         {
             if (settings == null)
@@ -142,7 +142,7 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// </summary>
         /// <param name="originalString">The string variable.</param>
         /// <param name="injectionValues">The dictionary with possible variable to inject.</param>
-        /// <returns>Returns a string with injected variables (i.e. <[variableName]>)</returns>
+        /// <returns>Returns a string with injected variables (i.e. &lt;[variableName]&gt;)</returns>
         public static string Inject(this string originalString, Dictionary<string, string> injectionValues)
         {
             var adjustedString = originalString;

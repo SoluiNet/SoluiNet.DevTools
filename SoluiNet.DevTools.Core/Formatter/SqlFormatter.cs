@@ -16,56 +16,76 @@ namespace SoluiNet.DevTools.Core.Formatter
     /// </summary>
     public class SqlFormatter : IFormatter
     {
-        private string _indentationString = string.Empty;
-        private char _indentationCharacter = ' ';
-        private int _indentationLength = 2;
+        private string indentationString = string.Empty;
+        private char indentationCharacter = ' ';
+        private int indentationLength = 2;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SqlFormatter"/> class.
+        /// </summary>
         public SqlFormatter()
         {
             this.CalculateIndentationString();
         }
 
+        /// <summary>
+        /// Gets or sets the indentation character.
+        /// </summary>
         public char IndentationCharacter
         {
             get
             {
-                return this._indentationCharacter;
+                return this.indentationCharacter;
             }
 
             set
             {
-                this._indentationCharacter = value;
+                this.indentationCharacter = value;
                 this.CalculateIndentationString();
             }
         }
 
+        /// <summary>
+        /// Gets or sets the indentation length.
+        /// </summary>
         public int IndentationLength
         {
             get
             {
-                return this._indentationLength;
+                return this.indentationLength;
             }
 
             set
             {
-                this._indentationLength = value;
+                this.indentationLength = value;
                 this.CalculateIndentationString();
             }
         }
 
+        /// <summary>
+        /// Gets the indentation string.
+        /// </summary>
         public string IndentationString
         {
-            get { return this._indentationString; }
+            get { return this.indentationString; }
         }
 
+        /// <summary>
+        /// Calculates the indentation string from indentation length and indentation character.
+        /// </summary>
         public void CalculateIndentationString()
         {
             for (var i = 0; i < this.IndentationLength; i++)
             {
-                this._indentationString += this.IndentationCharacter;
+                this.indentationString += this.IndentationCharacter;
             }
         }
 
+        /// <summary>
+        /// Get the indentation string by indentation level.
+        /// </summary>
+        /// <param name="indentationLevel">The indentation level.</param>
+        /// <returns>Returns a string which contains the indentation string as often as the overgiven indentation level.</returns>
         public string GetIndentation(int indentationLevel)
         {
             var indentation = string.Empty;
@@ -78,6 +98,11 @@ namespace SoluiNet.DevTools.Core.Formatter
             return indentation;
         }
 
+        /// <summary>
+        /// Format a SQL string.
+        /// </summary>
+        /// <param name="originalString">The original SQL string.</param>
+        /// <returns>Returns a formatted SQL string according to the properties which have been set up for this class.</returns>
         public string FormatString(string originalString)
         {
             var formatOptions = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatterOptions()
