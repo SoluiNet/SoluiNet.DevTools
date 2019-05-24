@@ -1,13 +1,17 @@
-﻿using SoluiNet.DevTools.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿// <copyright file="CodeOnTheFlyToolsPlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.CodeOnTheFly
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Controls;
+    using SoluiNet.DevTools.Core;
+
     public class CodeOnTheFlyToolsPlugin : IUtilitiesDevPlugin
     {
         public string Name

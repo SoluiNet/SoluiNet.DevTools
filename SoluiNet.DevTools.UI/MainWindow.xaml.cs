@@ -1,33 +1,37 @@
-﻿using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.CodeCompletion;
-using ICSharpCode.AvalonEdit.Editing;
-using Microsoft.Win32;
-using NLog;
-using NLog.Internal;
-using SoluiNet.DevTools.Core;
-using SoluiNet.DevTools.Core.Formatter;
-using SoluiNet.DevTools.Core.Models;
-using SoluiNet.DevTools.Core.ScriptEngine;
-using SoluiNet.DevTools.Core.Tools;
-using SoluiNet.DevTools.Core.Tools.Sql;
-using SoluiNet.DevTools.Core.Tools.UI;
-using SoluiNet.DevTools.Core.UI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
+﻿// <copyright file="MainWindow.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.UI
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using ICSharpCode.AvalonEdit;
+    using ICSharpCode.AvalonEdit.CodeCompletion;
+    using ICSharpCode.AvalonEdit.Editing;
+    using Microsoft.Win32;
+    using NLog;
+    using NLog.Internal;
+    using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Formatter;
+    using SoluiNet.DevTools.Core.Models;
+    using SoluiNet.DevTools.Core.ScriptEngine;
+    using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Sql;
+    using SoluiNet.DevTools.Core.Tools.UI;
+    using SoluiNet.DevTools.Core.UI;
+
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
@@ -45,24 +49,24 @@ namespace SoluiNet.DevTools.UI
 
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             var highlighting = UIHelper.LoadHighlightingDefinition(typeof(ShowText), "SQL.xshd");
 
-            SqlCommandText.SyntaxHighlighting = highlighting;
-            SqlCommandText.TextArea.TextEntered += SqlCommandText_TextEntered;
+            this.SqlCommandText.SyntaxHighlighting = highlighting;
+            this.SqlCommandText.TextArea.TextEntered += this.SqlCommandText_TextEntered;
 
             foreach (var plugin in ((App)Application.Current).SqlPlugins)
             {
                 try
                 {
-                    plugin.DisplayForWpf(MainGrid);
+                    plugin.DisplayForWpf(this.MainGrid);
 
-                    Project.Items.Add(plugin.Name);
+                    this.Project.Items.Add(plugin.Name);
                 }
                 catch (Exception exception)
                 {
-                    Logger.Error(exception);
+                    this.Logger.Error(exception);
                 }
             }
 
@@ -72,11 +76,11 @@ namespace SoluiNet.DevTools.UI
                 {
                     if (utilityPlugin is IGroupedUtilitiesDevPlugin)
                     {
-                        var groupPluginMenuItem = UIHelper.GetMenuItemByName(ExtrasMenuItem, (utilityPlugin as IGroupedUtilitiesDevPlugin).Group);
+                        var groupPluginMenuItem = UIHelper.GetMenuItemByName(this.ExtrasMenuItem, (utilityPlugin as IGroupedUtilitiesDevPlugin).Group);
 
                         var utilityPluginMenuItem = new MenuItem()
                         {
-                            Header = utilityPlugin.MenuItemLabel
+                            Header = utilityPlugin.MenuItemLabel,
                         };
 
                         utilityPluginMenuItem.Click += (sender, args) =>
@@ -98,7 +102,7 @@ namespace SoluiNet.DevTools.UI
                     {
                         var utilityPluginMenuItem = new MenuItem()
                         {
-                            Header = utilityPlugin.MenuItemLabel
+                            Header = utilityPlugin.MenuItemLabel,
                         };
 
                         utilityPluginMenuItem.Click += (sender, args) =>
@@ -114,16 +118,16 @@ namespace SoluiNet.DevTools.UI
                             });
                         };
 
-                        ExtrasMenuItem.Items.Add(utilityPluginMenuItem);
+                        this.ExtrasMenuItem.Items.Add(utilityPluginMenuItem);
                     }
                 }
                 catch (Exception exception)
                 {
-                    Logger.Error(exception);
+                    this.Logger.Error(exception);
                 }
             }
 
-            LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
+            this.LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
         }
 
         private static void PopulateGridContextMenu(DataGrid dataGrid)
@@ -138,12 +142,12 @@ namespace SoluiNet.DevTools.UI
             #region Copy to Clipboard
             var copyToClipboardMenuItem = new MenuItem()
             {
-                Header = "Copy to Clipboard"
+                Header = "Copy to Clipboard",
             };
 
             copyToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
 
                 if (containingGrid == null)
                 {
@@ -160,12 +164,12 @@ namespace SoluiNet.DevTools.UI
             #region Copy selected rows to Clipboard
             var copySelectionToClipboardMenuItem = new MenuItem()
             {
-                Header = "Copy selected rows to Clipboard"
+                Header = "Copy selected rows to Clipboard",
             };
 
             copySelectionToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
 
                 if (containingGrid == null)
                 {
@@ -181,12 +185,12 @@ namespace SoluiNet.DevTools.UI
             #region Copy column to Clipboard
             var copyColumnToClipboardMenuItem = new MenuItem()
             {
-                Header = "Copy column to Clipboard"
+                Header = "Copy column to Clipboard",
             };
 
             copyColumnToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
 
                 if (containingGrid == null)
                 {
@@ -202,12 +206,12 @@ namespace SoluiNet.DevTools.UI
             #region Copy selected column to Clipboard
             var copySelectedColumnToClipboardMenuItem = new MenuItem()
             {
-                Header = "Copy selected column to Clipboard"
+                Header = "Copy selected column to Clipboard",
             };
 
             copySelectedColumnToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
 
                 if (containingGrid == null)
                 {
@@ -223,12 +227,12 @@ namespace SoluiNet.DevTools.UI
             #region Copy selected cell to Clipboard
             var copySelectedCellToClipboardMenuItem = new MenuItem()
             {
-                Header = "Copy selected cell to Clipboard"
+                Header = "Copy selected cell to Clipboard",
             };
 
             copySelectedCellToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
 
                 if (containingGrid == null)
                 {
@@ -246,12 +250,12 @@ namespace SoluiNet.DevTools.UI
             #region Save as CSV
             var saveAsCsvMenuItem = new MenuItem()
             {
-                Header = "Save as CSV"
+                Header = "Save as CSV",
             };
 
             saveAsCsvMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
 
                 if (containingGrid == null)
                 {
@@ -262,7 +266,7 @@ namespace SoluiNet.DevTools.UI
                 {
                     DefaultExt = ".csv",
                     Filter = "Comma Seperated Values (*.csv)|*.csv",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 };
 
                 if (saveFileDialog.ShowDialog() == true)
@@ -277,12 +281,12 @@ namespace SoluiNet.DevTools.UI
             #region Save as XML
             var saveAsXmlMenuItem = new MenuItem()
             {
-                Header = "Save as XML"
+                Header = "Save as XML",
             };
 
             saveAsXmlMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
 
                 if (containingGrid == null)
                 {
@@ -293,7 +297,7 @@ namespace SoluiNet.DevTools.UI
                 {
                     DefaultExt = ".xml",
                     Filter = "Extensible Markup Language (*.xml)|*.xml",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 };
 
                 if (saveFileDialog.ShowDialog() == true)
@@ -308,12 +312,12 @@ namespace SoluiNet.DevTools.UI
             #region Save as SQL
             var saveAsSqlMenuItem = new MenuItem()
             {
-                Header = "Save as SQL"
+                Header = "Save as SQL",
             };
 
             saveAsSqlMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = (((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid);
+                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
 
                 if (containingGrid == null)
                 {
@@ -324,12 +328,13 @@ namespace SoluiNet.DevTools.UI
                 {
                     DefaultExt = ".sql",
                     Filter = "Structured Query Language (*.sql)|*.sql",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 };
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    File.WriteAllText(saveFileDialog.FileName, string.Format("/*{0}*/\r\n{1}",
+                    File.WriteAllText(saveFileDialog.FileName, string.Format(
+                        "/*{0}*/\r\n{1}",
                         ((TabItem)containingGrid.Parent).Tag.ToString(),
                         UIHelper.GetDataGridAsSql(containingGrid)), Encoding.UTF8);
                 }
@@ -341,18 +346,18 @@ namespace SoluiNet.DevTools.UI
 
         private void ExecuteSqlCommand()
         {
-            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == Project.Text);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == this.Project.Text);
 
             if (plugin == null)
             {
                 return;
             }
 
-            var sqlCommand = string.IsNullOrEmpty(SqlCommandText.SelectedText)
-                ? SqlCommandText.Text
-                : SqlCommandText.SelectedText;
+            var sqlCommand = string.IsNullOrEmpty(this.SqlCommandText.SelectedText)
+                ? this.SqlCommandText.Text
+                : this.SqlCommandText.SelectedText;
 
-            Logger.Info(string.Format("[{1} ({2})] Executing SQL command: {0}", sqlCommand, Project.Text, plugin.Environment));
+            this.Logger.Info(string.Format("[{1} ({2})] Executing SQL command: {0}", sqlCommand, this.Project.Text, plugin.Environment));
 
             var data = plugin.ExecuteSqlScript(sqlCommand);
 
@@ -360,7 +365,7 @@ namespace SoluiNet.DevTools.UI
             {
                 var dataGridSqlResults = new DataGrid();
                 //dataGridSqlResults.AutoGenerateColumns = true;
-                dataGridSqlResults.BeginningEdit += BeginEditSqlResult;
+                dataGridSqlResults.BeginningEdit += this.BeginEditSqlResult;
 
                 dataGridSqlResults.ContextMenu = new ContextMenu();
 
@@ -378,22 +383,22 @@ namespace SoluiNet.DevTools.UI
 
                 };
 
-                var tabIndexSqlResults = SqlResults.Items.Add(new TabItem()
+                var tabIndexSqlResults = this.SqlResults.Items.Add(new TabItem()
                 {
                     Header = new ContentControl()
                     {
                         Content = string.Format("{0} - {1:yyyy-MM-dd\"T\"HH:mm:ss}", plugin.Name, DateTime.Now)
-                    }
+                    },
                 });
 
-                var tabItem = (TabItem)SqlResults.Items[tabIndexSqlResults];
+                var tabItem = (TabItem)this.SqlResults.Items[tabIndexSqlResults];
 
                 tabItem.Content = dataGridSqlResults;
                 tabItem.Tag = table.ExtendedProperties["SqlCommand"];
 
                 ((ContentControl)tabItem.Header).MouseRightButtonDown += (element, mouseEvent) =>
                 {
-                    SqlResults.Items.Remove((TabItem)((ContentControl)element).Parent);
+                    this.SqlResults.Items.Remove((TabItem)((ContentControl)element).Parent);
                 };
 
                 ((ContentControl)tabItem.Header).MouseDown += (element, mouseEvent) =>
@@ -416,7 +421,7 @@ namespace SoluiNet.DevTools.UI
                     dataGridSqlResults.Items.Add(row);
                 }
 
-                SqlResults.SelectedIndex = tabIndexSqlResults;
+                this.SqlResults.SelectedIndex = tabIndexSqlResults;
             }
         }
 
@@ -429,33 +434,33 @@ namespace SoluiNet.DevTools.UI
 
         private void ExecuteSql_Click(object sender, RoutedEventArgs e)
         {
-            ExecuteSqlCommand();
+            this.ExecuteSqlCommand();
         }
 
         private void SqlCommandText_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F5)
             {
-                ExecuteSqlCommand();
+                this.ExecuteSqlCommand();
             }
             else if(e.Key == Key.Space && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             {
                 e.Handled = true;
 
-                ShowCodeComplete();
+                this.ShowCodeComplete();
             }
         }
 
         private void ExpandButton_Click(object sender, RoutedEventArgs e)
         {
-            if (DatabaseSchema.Visibility == Visibility.Collapsed)
+            if (this.DatabaseSchema.Visibility == Visibility.Collapsed)
             {
-                DatabaseSchema.Visibility = Visibility.Visible;
+                this.DatabaseSchema.Visibility = Visibility.Visible;
                 (sender as Button).Content = "<";
             }
             else
             {
-                DatabaseSchema.Visibility = Visibility.Collapsed;
+                this.DatabaseSchema.Visibility = Visibility.Collapsed;
                 (sender as Button).Content = ">";
             }
         }
@@ -491,8 +496,8 @@ namespace SoluiNet.DevTools.UI
         private void ChangeProjectConnection(string chosenProject, string chosenEnvironment = "Default")
         {
 
-            var dataEntities = GetEntityTypes(chosenProject);
-            var sqlScripts = GetSqlScripts(chosenProject);
+            var dataEntities = this.GetEntityTypes(chosenProject);
+            var sqlScripts = this.GetSqlScripts(chosenProject);
 
             if (dataEntities == null)
             {
@@ -506,16 +511,16 @@ namespace SoluiNet.DevTools.UI
                 return;
             }
 
-            DatabaseSchema.Items.Clear();
+            this.DatabaseSchema.Items.Clear();
 
-            var tablesNodeIndex = DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Tables" });
-            var tablesNode = (TreeViewItem)DatabaseSchema.Items[tablesNodeIndex];
+            var tablesNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Tables" });
+            var tablesNode = (TreeViewItem)this.DatabaseSchema.Items[tablesNodeIndex];
 
             foreach (var entity in dataEntities)
             {
                 var entityNodeIndex = tablesNode.Items.Add(new TreeViewItem() { Header = entity.Name, Tag = entity });
 
-                var fields = GetEntityFields(chosenProject, entity.Name);
+                var fields = this.GetEntityFields(chosenProject, entity.Name);
 
                 foreach (var field in fields)
                 {
@@ -523,8 +528,8 @@ namespace SoluiNet.DevTools.UI
                 }
             }
 
-            var storedProceduresNodeIndex = DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Procedures" });
-            var storedProceduresNode = (TreeViewItem)DatabaseSchema.Items[storedProceduresNodeIndex];
+            var storedProceduresNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Procedures" });
+            var storedProceduresNode = (TreeViewItem)this.DatabaseSchema.Items[storedProceduresNodeIndex];
 
             if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
             {
@@ -547,13 +552,13 @@ namespace SoluiNet.DevTools.UI
                         {
                             Name = record.Row["name"].ToString(),
                             BodyDefinition = record.Row["definition"].ToString()
-                        }
+                        },
                     });
                 }
             }
 
-            var storedFunctionsNodeIndex = DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Functions" });
-            var storedFunctionsNode = (TreeViewItem)DatabaseSchema.Items[storedFunctionsNodeIndex];
+            var storedFunctionsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Functions" });
+            var storedFunctionsNode = (TreeViewItem)this.DatabaseSchema.Items[storedFunctionsNodeIndex];
 
             if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
             {
@@ -579,13 +584,13 @@ namespace SoluiNet.DevTools.UI
                         {
                             Name = record.Row["object_name"].ToString(),
                             BodyDefinition = record.Row["definition"].ToString()
-                        }
+                        },
                     });
                 }
             }
 
-            var viewsNodeIndex = DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Views" });
-            var viewsNode = (TreeViewItem)DatabaseSchema.Items[viewsNodeIndex];
+            var viewsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Views" });
+            var viewsNode = (TreeViewItem)this.DatabaseSchema.Items[viewsNodeIndex];
 
             if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
             {
@@ -607,13 +612,13 @@ namespace SoluiNet.DevTools.UI
                         {
                             Name = record.Row["name"].ToString(),
                             BodyDefinition = record.Row["definition"].ToString()
-                        }
+                        },
                     });
                 }
             }
 
-            var scriptsNodeIndex = DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Scripts" });
-            var scriptsNode = (TreeViewItem)DatabaseSchema.Items[scriptsNodeIndex];
+            var scriptsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Scripts" });
+            var scriptsNode = (TreeViewItem)this.DatabaseSchema.Items[scriptsNodeIndex];
 
             foreach (var sqlScript in sqlScripts)
             {
@@ -624,29 +629,29 @@ namespace SoluiNet.DevTools.UI
         private void Project_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var chosenProject = (sender as ComboBox).SelectedItem as string;
-            var environments = GetEnvironments(chosenProject);
+            var environments = this.GetEnvironments(chosenProject);
 
-            Environments.Items.Clear();
+            this.Environments.Items.Clear();
 
             foreach (var environment in environments)
             {
-                Environments.Items.Add(environment);
+                this.Environments.Items.Add(environment);
             }
 
-            ChangeProjectConnection(chosenProject);
+            this.ChangeProjectConnection(chosenProject);
         }
 
         private void SelectTopThousand_Click(object sender, RoutedEventArgs e)
         {
-            if (!((DatabaseSchema.SelectedItem as TreeViewItem)?.Tag is Type))
+            if (!((this.DatabaseSchema.SelectedItem as TreeViewItem)?.Tag is Type))
             {
                 MessageBox.Show("Selected Item is no table");
 
                 return;
             }
-            var chosenProject = Project.Text;
+            var chosenProject = this.Project.Text;
 
-            GetSqlForTable(chosenProject);
+            this.GetSqlForTable(chosenProject);
         }
 
         private void DatabaseSchema_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -679,16 +684,16 @@ namespace SoluiNet.DevTools.UI
 
         private void GetSqlForTable(string chosenProject)
         {
-            var dataEntities = GetEntityTypes(chosenProject);
+            var dataEntities = this.GetEntityTypes(chosenProject);
 
             if (dataEntities == null)
             {
                 return;
             }
 
-            var tableName = DatabaseSchema.SelectedItem is TreeViewItem item
+            var tableName = this.DatabaseSchema.SelectedItem is TreeViewItem item
                 ? item.Header.ToString()
-                : DatabaseSchema.SelectedItem.ToString();
+                : this.DatabaseSchema.SelectedItem.ToString();
 
             var sqlTableName = tableName;
 
@@ -707,7 +712,7 @@ namespace SoluiNet.DevTools.UI
                 sqlTableName = string.Join(".", sqlTableNameElements.Select(x => string.Format("\"{0}\"", x)));
             }
 
-            SqlCommandText.Text += (string.IsNullOrEmpty(SqlCommandText.Text) ? string.Empty : "\r\n") +
+            this.SqlCommandText.Text += (string.IsNullOrEmpty(this.SqlCommandText.Text) ? string.Empty : "\r\n") +
                                    string.Format("SELECT TOP 1000 * FROM {0}", sqlTableName);
         }
 
@@ -725,7 +730,7 @@ namespace SoluiNet.DevTools.UI
                 return;
             }
 
-            SqlCommandText.Text += string.Format("\r\n--{2}: {0}\r\n{1}", script.Description, script.CommandText, script.Name);
+            this.SqlCommandText.Text += string.Format("\r\n--{2}: {0}\r\n{1}", script.Description, script.CommandText, script.Name);
         }
 
         private void ShowDatabaseElementInfo(string type, TreeViewItem selectedItem, ISqlDevPlugin plugin)
@@ -743,7 +748,7 @@ namespace SoluiNet.DevTools.UI
                 return;
             }
 
-            Logger.Info(string.Format("[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
+            this.Logger.Info(string.Format("[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
 
             var dialog = new ShowText();
             dialog.Text = formatter.FormatString(databaseElement.BodyDefinition);
@@ -753,7 +758,7 @@ namespace SoluiNet.DevTools.UI
 
         private void ExecuteMainAction()
         {
-            var chosenProject = Project.Text;
+            var chosenProject = this.Project.Text;
 
             var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
@@ -762,7 +767,7 @@ namespace SoluiNet.DevTools.UI
                 return;
             }
 
-            var selectedItem = DatabaseSchema.SelectedItem as TreeViewItem;
+            var selectedItem = this.DatabaseSchema.SelectedItem as TreeViewItem;
 
             if (selectedItem == null)
             {
@@ -771,35 +776,35 @@ namespace SoluiNet.DevTools.UI
 
             if (selectedItem.Tag is Type)
             {
-                GetSqlForTable(chosenProject);
+                this.GetSqlForTable(chosenProject);
             }
             else if (selectedItem.Tag is SqlScript)
             {
-                GetSqlForScript(selectedItem);
+                this.GetSqlForScript(selectedItem);
             }
             else if (selectedItem.Tag is StoredProcedure)
             {
-                ShowDatabaseElementInfo("Stored Procedure", selectedItem, plugin);
+                this.ShowDatabaseElementInfo("Stored Procedure", selectedItem, plugin);
             }
             else if (selectedItem.Tag is StoredFunction)
             {
-                ShowDatabaseElementInfo("Stored Function", selectedItem, plugin);
+                this.ShowDatabaseElementInfo("Stored Function", selectedItem, plugin);
             }
             else if (selectedItem.Tag is View)
             {
-                ShowDatabaseElementInfo("View", selectedItem, plugin);
+                this.ShowDatabaseElementInfo("View", selectedItem, plugin);
             }
         }
 
         private void DatabaseSchema_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ExecuteMainAction();
+            this.ExecuteMainAction();
         }
 
         private void Environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var chosenProject = (sender as ComboBox).SelectedItem as string;
-            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == Project.SelectedItem as string);
+            var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == this.Project.SelectedItem as string);
 
             if (plugin == null)
             {
@@ -808,7 +813,7 @@ namespace SoluiNet.DevTools.UI
 
             plugin.Environment = (sender as ComboBox)?.SelectedItem as string;
 
-            ChangeProjectConnection(chosenProject);
+            this.ChangeProjectConnection(chosenProject);
         }
 
         private void FileCloseMenuItem_Click(object sender, RoutedEventArgs e)
@@ -825,28 +830,30 @@ namespace SoluiNet.DevTools.UI
 
         private void ShowCodeComplete(string table = "")
         {
-            var chosenProject = Project.SelectedItem as string;
+            var chosenProject = this.Project.SelectedItem as string;
 
             if (string.IsNullOrEmpty(chosenProject))
+            {
                 return;
+            }
 
             var plugin = ((App)Application.Current).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             // Open code completion after the user has pressed dot:
-            var completionWindow = new CompletionWindow(SqlCommandText.TextArea);
+            var completionWindow = new CompletionWindow(this.SqlCommandText.TextArea);
 
             IList<ICompletionData> completionData = completionWindow.CompletionList.CompletionData;
 
-            foreach (var databaseElement in GetEntityTypes(chosenProject)
+            foreach (var databaseElement in this.GetEntityTypes(chosenProject)
                 .Where(x => x.Name == table || string.IsNullOrEmpty(table))
-                .SelectMany(x => !string.IsNullOrEmpty(table) ? 
+                .SelectMany(x => !string.IsNullOrEmpty(table) ?
                     x.GetProperties().Select(y => y.Name) : new List<string>() { x.Name }))
             {
                 completionData.Add(new CompletionData(databaseElement));
             }
 
             completionWindow.Show();
-            completionWindow.Closed += delegate {
+            completionWindow.Closed += (sender, e) => {
                 completionWindow = null;
             };
         }
@@ -855,11 +862,11 @@ namespace SoluiNet.DevTools.UI
         {
             if (e.Text == ".")
             {
-                var sqlCommand = SqlHelper.GetSqlCommandByPosition(SqlCommandText.Text, SqlCommandText.SelectionStart);
-                var alias = SqlHelper.GetAliasByPosition(SqlCommandText.Text, SqlCommandText.SelectionStart);
+                var sqlCommand = SqlHelper.GetSqlCommandByPosition(this.SqlCommandText.Text, this.SqlCommandText.SelectionStart);
+                var alias = SqlHelper.GetAliasByPosition(this.SqlCommandText.Text, this.SqlCommandText.SelectionStart);
                 var table = SqlHelper.GetTableByAlias(sqlCommand, alias);
 
-                ShowCodeComplete(table);
+                this.ShowCodeComplete(table);
             }
         }
     }

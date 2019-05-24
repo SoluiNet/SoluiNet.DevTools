@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿// <copyright file="ConnectionString.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.UI.UserControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+
     /// <summary>
     /// Interaktionslogik für ConnectionString.xaml
     /// </summary>
@@ -24,28 +28,28 @@ namespace SoluiNet.DevTools.UI.UserControls
     {
         public ConnectionString()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private bool Expanded { get; set; }
 
         public string Value
         {
-            get { return ConnectionStringValue.Text; }
-            set { ConnectionStringValue.Text = value; }
+            get { return this.ConnectionStringValue.Text; }
+            set { this.ConnectionStringValue.Text = value; }
         }
 
         public string NameKey
         {
-            get { return ConnectionStringName.Text; }
-            set { ConnectionStringName.Text = value; }
+            get { return this.ConnectionStringName.Text; }
+            set { this.ConnectionStringName.Text = value; }
         }
 
         public string ProviderName { get; set; }
 
         public string Environment
         {
-            get { return NameKey.Contains(".") ? NameKey.Substring(NameKey.LastIndexOf(".", StringComparison.InvariantCulture) + 1) : "Default"; }
+            get { return this.NameKey.Contains(".") ? this.NameKey.Substring(this.NameKey.LastIndexOf(".", StringComparison.InvariantCulture) + 1) : "Default"; }
         }
 
         private void AdditionalInfo_Click(object sender, RoutedEventArgs e)
@@ -54,7 +58,7 @@ namespace SoluiNet.DevTools.UI.UserControls
             {
                 this.Expanded = true;
 
-                AdditionalInfo.Content = "^";
+                this.AdditionalInfo.Content = "^";
                 this.Height = 200;
 
                 #region provider name
@@ -64,13 +68,13 @@ namespace SoluiNet.DevTools.UI.UserControls
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Name = "ProviderName",
-                    Width = 200
+                    Width = 200,
                 };
 
-                providerNameTextBox.Text = ProviderName;
+                providerNameTextBox.Text = this.ProviderName;
                 providerNameTextBox.TextChanged += (o, args) => { this.ProviderName = ((TextBox)o).Text; };
 
-                ContentGrid.Children.Add(providerNameTextBox);
+                this.ContentGrid.Children.Add(providerNameTextBox);
                 #endregion provider name
 
                 #region environment
@@ -80,12 +84,12 @@ namespace SoluiNet.DevTools.UI.UserControls
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Name = "Environment",
-                    Width = 200
+                    Width = 200,
                 };
 
-                environmentTextBox.Text = Environment;
+                environmentTextBox.Text = this.Environment;
 
-                ContentGrid.Children.Add(environmentTextBox);
+                this.ContentGrid.Children.Add(environmentTextBox);
                 #endregion
 
                 #region server
@@ -95,17 +99,17 @@ namespace SoluiNet.DevTools.UI.UserControls
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Name = "Server",
-                    Width = 200
+                    Width = 200,
                 };
 
                 var dataSourceRegex = new Regex("data source=(.+?);", RegexOptions.IgnoreCase);
 
-                var dataSourceMatch = dataSourceRegex.Match(Value);
+                var dataSourceMatch = dataSourceRegex.Match(this.Value);
 
                 if (dataSourceMatch.Success)
                     serverTextBox.Text = dataSourceMatch.Groups[1].Value;
 
-                ContentGrid.Children.Add(serverTextBox);
+                this.ContentGrid.Children.Add(serverTextBox);
                 #endregion
 
                 #region database
@@ -115,17 +119,17 @@ namespace SoluiNet.DevTools.UI.UserControls
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Name = "Database",
-                    Width = 200
+                    Width = 200,
                 };
 
                 var databaseRegex = new Regex("initial catalog=(.+?);", RegexOptions.IgnoreCase);
 
-                var databaseMatch = databaseRegex.Match(Value);
+                var databaseMatch = databaseRegex.Match(this.Value);
 
                 if (databaseMatch.Success)
                     databaseTextBox.Text = databaseMatch.Groups[1].Value;
 
-                ContentGrid.Children.Add(databaseTextBox);
+                this.ContentGrid.Children.Add(databaseTextBox);
                 #endregion
 
                 #region username
@@ -135,17 +139,17 @@ namespace SoluiNet.DevTools.UI.UserControls
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Name = "Username",
-                    Width = 200
+                    Width = 200,
                 };
 
                 var usernameRegex = new Regex("user id=(.+?);", RegexOptions.IgnoreCase);
 
-                var usernameMatch = usernameRegex.Match(Value);
+                var usernameMatch = usernameRegex.Match(this.Value);
 
                 if (usernameMatch.Success)
                     usernameTextBox.Text = usernameMatch.Groups[1].Value;
 
-                ContentGrid.Children.Add(usernameTextBox);
+                this.ContentGrid.Children.Add(usernameTextBox);
                 #endregion
 
                 #region password
@@ -155,17 +159,17 @@ namespace SoluiNet.DevTools.UI.UserControls
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Name = "Password",
-                    Width = 200
+                    Width = 200,
                 };
 
                 var passwordRegex = new Regex("password=(.+?);", RegexOptions.IgnoreCase);
 
-                var passwordMatch = passwordRegex.Match(Value);
+                var passwordMatch = passwordRegex.Match(this.Value);
 
                 if (passwordMatch.Success)
                     passwordTextBox.Text = passwordMatch.Groups[1].Value;
 
-                ContentGrid.Children.Add(passwordTextBox);
+                this.ContentGrid.Children.Add(passwordTextBox);
                 #endregion
 
                 #region use windows authentication
@@ -175,17 +179,17 @@ namespace SoluiNet.DevTools.UI.UserControls
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Name = "UseWindowsSecurity",
-                    Width = 200
+                    Width = 200,
                 };
 
                 var useWindowsAuthenticationRegex = new Regex("integrated security=(.+?);", RegexOptions.IgnoreCase);
 
-                var useWindowsAuthenticationMatch = useWindowsAuthenticationRegex.Match(Value);
+                var useWindowsAuthenticationMatch = useWindowsAuthenticationRegex.Match(this.Value);
 
                 if (useWindowsAuthenticationMatch.Success)
                     useWindowsAuthenticationTextBox.IsChecked = useWindowsAuthenticationMatch.Groups[1].Value == "SSPI" || Convert.ToBoolean(useWindowsAuthenticationMatch.Groups[1].Value);
 
-                ContentGrid.Children.Add(useWindowsAuthenticationTextBox);
+                this.ContentGrid.Children.Add(useWindowsAuthenticationTextBox);
                 #endregion
 
                 #region calculate connectionstring
@@ -195,41 +199,41 @@ namespace SoluiNet.DevTools.UI.UserControls
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Name = "CalculateConnectionString",
-                    Width = 200
+                    Width = 200,
                 };
 
                 calculateConnectionStringButton.Content = "Calculate ConnectionString";
                 calculateConnectionStringButton.Click += (o, args) =>
                 {
-                    if (ProviderName == "System.Data.SqlClient")
+                    if (this.ProviderName == "System.Data.SqlClient")
                     {
                         var connectionStringBuilder = new SqlConnectionStringBuilder();
 
-                        connectionStringBuilder.DataSource = (ContentGrid.FindName("Server") as TextBox)?.Text ?? string.Empty;
-                        connectionStringBuilder.InitialCatalog = (ContentGrid.FindName("Database") as TextBox)?.Text ?? string.Empty;
-                        connectionStringBuilder.UserID = (ContentGrid.FindName("Username") as TextBox)?.Text ?? string.Empty;
-                        connectionStringBuilder.Password = (ContentGrid.FindName("Password") as TextBox)?.Text ?? string.Empty;
-                        connectionStringBuilder.IntegratedSecurity = (ContentGrid.FindName("UseWindowsSecurity") as CheckBox)?.IsChecked ?? false;
+                        connectionStringBuilder.DataSource = (this.ContentGrid.FindName("Server") as TextBox)?.Text ?? string.Empty;
+                        connectionStringBuilder.InitialCatalog = (this.ContentGrid.FindName("Database") as TextBox)?.Text ?? string.Empty;
+                        connectionStringBuilder.UserID = (this.ContentGrid.FindName("Username") as TextBox)?.Text ?? string.Empty;
+                        connectionStringBuilder.Password = (this.ContentGrid.FindName("Password") as TextBox)?.Text ?? string.Empty;
+                        connectionStringBuilder.IntegratedSecurity = (this.ContentGrid.FindName("UseWindowsSecurity") as CheckBox)?.IsChecked ?? false;
 
                         connectionStringBuilder.ApplicationName = "SoluiNet.DevTools";
 
-                        Value = connectionStringBuilder.ConnectionString;
+                        this.Value = connectionStringBuilder.ConnectionString;
                     }
                 };
 
-                ContentGrid.Children.Add(calculateConnectionStringButton);
+                this.ContentGrid.Children.Add(calculateConnectionStringButton);
                 #endregion
             }
             else
             {
-                AdditionalInfo.Content = "...";
+                this.AdditionalInfo.Content = "...";
                 this.Height = 45;
 
-                var providerNameTextBox = ContentGrid.FindName("ProviderName") as UIElement;
-                ContentGrid.Children.Remove(providerNameTextBox);
+                var providerNameTextBox = this.ContentGrid.FindName("ProviderName") as UIElement;
+                this.ContentGrid.Children.Remove(providerNameTextBox);
 
-                var environmentTextBox = ContentGrid.FindName("Environment") as UIElement;
-                ContentGrid.Children.Remove(environmentTextBox);
+                var environmentTextBox = this.ContentGrid.FindName("Environment") as UIElement;
+                this.ContentGrid.Children.Remove(environmentTextBox);
 
                 this.Expanded = false;
             }

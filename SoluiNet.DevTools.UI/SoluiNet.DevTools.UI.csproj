@@ -163,5 +163,9 @@
     <None Remove="ConnectionStrings.Default.config" />
     <None Remove="Settings.Default.xml" />
     <None Remove="Settings.xml" />
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 </Project>

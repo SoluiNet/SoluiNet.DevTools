@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿// <copyright file="GeneralToolsUserControl.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.General
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+
     /// <summary>
     /// Interaktionslogik für GeneralToolsUserControl.xaml
     /// </summary>
@@ -22,51 +26,54 @@ namespace SoluiNet.DevTools.Utils.General
     {
         public static Dictionary<char, string> ReadableCharacters = new Dictionary<char, string>
         {
-            { '\0', "NUL"},
-            { ((char)1), "SOH"}, // start of heading
-            { ((char)2), "STX"}, // start of text
-            { ((char)3), "ETX"}, // end of text
-            { ((char)4), "EOT"}, // end of transmission
-            { ((char)5), "ENQ"}, // enquiry
-            { ((char)6), "ACK"}, // acknowledge
-            { ((char)7), "BEL (\\a)"}, // bell
-            { ((char)8), "BS (\\b)"}, // backspace
-            { ((char)9), "TAB (\\t)"}, // horizontal tab
-            { ((char)10), "LF (\\n)"}, // line feed, new line
-            { ((char)11), "VT (\\v)"}, // vertical tab
-            { ((char)12), "FF (\\f)"}, // form feed, new page
-            { ((char)13), "CR (\\r)"}, // carriage return
-            { ((char)14), "SO"}, // shift out
-            { ((char)15), "SI"}, // shift in
-            { ((char)16), "DLE"}, // data link escape
-            { ((char)17), "DC1"}, // device control 1
-            { ((char)18), "DC2"}, // device control 2
-            { ((char)19), "DC3"}, // device control 3
-            { ((char)20), "DC4"}, // device control 4
-            { ((char)21), "NAK"}, // negative acknowledge
-            { ((char)22), "SYN"}, // synchronous idle
-            { ((char)23), "ETB"}, // end of transmission block
-            { ((char)24), "CAN"}, // cancel
-            { ((char)25), "EM"}, // end of medium
-            { ((char)26), "SUB"}, // substitute
-            { ((char)27), "ESC (\\e)"}, // escape
-            { ((char)28), "FS"}, // file separator
-            { ((char)29), "GS"}, // group separator
-            { ((char)30), "RS"}, // record separator
-            { ((char)31), "US"}, // unit separator
-            { ((char)32), "SPC"}, // space
-            { ((char)127), "DEL"}, // delete
+            { '\0', "NUL" },
+            { ((char)1), "SOH" }, // start of heading
+            { ((char)2), "STX" }, // start of text
+            { ((char)3), "ETX" }, // end of text
+            { ((char)4), "EOT" }, // end of transmission
+            { ((char)5), "ENQ" }, // enquiry
+            { ((char)6), "ACK" }, // acknowledge
+            { ((char)7), "BEL (\\a)" }, // bell
+            { ((char)8), "BS (\\b)" }, // backspace
+            { ((char)9), "TAB (\\t)" }, // horizontal tab
+            { ((char)10), "LF (\\n)" }, // line feed, new line
+            { ((char)11), "VT (\\v)" }, // vertical tab
+            { ((char)12), "FF (\\f)" }, // form feed, new page
+            { ((char)13), "CR (\\r)" }, // carriage return
+            { ((char)14), "SO" }, // shift out
+            { ((char)15), "SI" }, // shift in
+            { ((char)16), "DLE" }, // data link escape
+            { ((char)17), "DC1" }, // device control 1
+            { ((char)18), "DC2" }, // device control 2
+            { ((char)19), "DC3" }, // device control 3
+            { ((char)20), "DC4" }, // device control 4
+            { ((char)21), "NAK" }, // negative acknowledge
+            { ((char)22), "SYN" }, // synchronous idle
+            { ((char)23), "ETB" }, // end of transmission block
+            { ((char)24), "CAN" }, // cancel
+            { ((char)25), "EM" }, // end of medium
+            { ((char)26), "SUB" }, // substitute
+            { ((char)27), "ESC (\\e)" }, // escape
+            { ((char)28), "FS" }, // file separator
+            { ((char)29), "GS" }, // group separator
+            { ((char)30), "RS" }, // record separator
+            { ((char)31), "US" }, // unit separator
+            { ((char)32), "SPC" }, // space
+            { ((char)127), "DEL" }, // delete
         };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneralToolsUserControl"/> class.
+        /// </summary>
         public GeneralToolsUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void Calculate_Click(object sender, RoutedEventArgs e)
         {
-            var selectedDirection = (Direction.SelectedItem as ComboBoxItem).Content;
-            var selectedBinaryType = (BinaryType.SelectedItem as ComboBoxItem).Content;
+            var selectedDirection = (this.Direction.SelectedItem as ComboBoxItem).Content;
+            var selectedBinaryType = (this.BinaryType.SelectedItem as ComboBoxItem).Content;
 
             if (selectedDirection.ToString() == "To Binary")
             {
@@ -89,20 +96,20 @@ namespace SoluiNet.DevTools.Utils.General
                         break;
                 }
 
-                var decimalValue = Convert.ToInt64(NumberOutput.Text);
+                var decimalValue = Convert.ToInt64(this.NumberOutput.Text);
 
                 var binaryResult = string.Empty;
 
                 var numberArray = GeneralTools.GetNumberArrayByBase(decimalValue, baseForCalculation);
 
-                for(int i = 0; i < numberArray.Length; i++)
+                for (int i = 0; i < numberArray.Length; i++)
                 {
                     binaryResult += baseForCalculation == 16 ? GeneralTools.GetHexadecimalValue(numberArray[i]) : numberArray[i].ToString();
                 }
 
-                BinaryInput.Text = binaryResult;
+                this.BinaryInput.Text = binaryResult;
             }
-            else if(selectedDirection.ToString() == "To Decimal")
+            else if (selectedDirection.ToString() == "To Decimal")
             {
                 int baseForCalculation;
 
@@ -125,15 +132,15 @@ namespace SoluiNet.DevTools.Utils.General
 
                 long decimalValue = 0;
 
-                for(int i = 0; i < BinaryInput.Text.Length; i++)
+                for (int i = 0; i < this.BinaryInput.Text.Length; i++)
                 {
-                    var valence = Convert.ToInt64(Math.Pow(baseForCalculation, BinaryInput.Text.Length - 1 - i));
-                    var quantity = baseForCalculation == 16 ? GeneralTools.GetDecimalValueForHex(BinaryInput.Text[i]) : Convert.ToInt64(BinaryInput.Text[i].ToString());
+                    var valence = Convert.ToInt64(Math.Pow(baseForCalculation, this.BinaryInput.Text.Length - 1 - i));
+                    var quantity = baseForCalculation == 16 ? GeneralTools.GetDecimalValueForHex(this.BinaryInput.Text[i]) : Convert.ToInt64(this.BinaryInput.Text[i].ToString());
 
                     decimalValue += quantity * valence;
                 }
 
-                NumberOutput.Text = decimalValue.ToString();
+                this.NumberOutput.Text = decimalValue.ToString();
             }
         }
 
@@ -153,13 +160,13 @@ namespace SoluiNet.DevTools.Utils.General
                     var tempArray = new string[16];
                     asciiRow.CopyTo(tempArray, 0);
 
-                    AsciiTable.Items.Add(tempArray);
+                    this.AsciiTable.Items.Add(tempArray);
                 }
 
-                asciiRow[i % 16] = MapCharToReadableString((char) i);
+                asciiRow[i % 16] = this.MapCharToReadableString((char)i);
             }
 
-            AsciiTable.Items.Add(asciiRow);
+            this.AsciiTable.Items.Add(asciiRow);
         }
     }
 }

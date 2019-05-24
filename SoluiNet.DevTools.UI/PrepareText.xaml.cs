@@ -1,21 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using SoluiNet.DevTools.Core.UI;
+﻿// <copyright file="PrepareText.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.UI
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Shapes;
+    using SoluiNet.DevTools.Core.UI;
+
     /// <summary>
     /// Interaktionslogik für PrepareText.xaml
     /// </summary>
@@ -23,30 +27,30 @@ namespace SoluiNet.DevTools.UI
     {
         public PrepareText()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void AdjustText_Click(object sender, RoutedEventArgs e)
         {
-            var outputText = Input.Text;
+            var outputText = this.Input.Text;
 
-            if (IsRegex.IsChecked.HasValue && IsRegex.IsChecked.Value)
+            if (this.IsRegex.IsChecked.HasValue && this.IsRegex.IsChecked.Value)
             {
-                var regEx = new Regex(Pattern.Text);
+                var regEx = new Regex(this.Pattern.Text);
 
-                outputText = regEx.Replace(outputText, Replacement.Text);
+                outputText = regEx.Replace(outputText, this.Replacement.Text);
             }
             else
             {
-                outputText = outputText.Replace(Pattern.Text, Replacement.Text);
+                outputText = outputText.Replace(this.Pattern.Text, this.Replacement.Text);
             }
 
-            if (Trim.IsChecked.HasValue && Trim.IsChecked.Value)
+            if (this.Trim.IsChecked.HasValue && this.Trim.IsChecked.Value)
             {
                 outputText = outputText.Trim();
             }
 
-            Output.Text = outputText;
+            this.Output.Text = outputText;
         }
 
         private void CommonReplacements_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -59,21 +63,21 @@ namespace SoluiNet.DevTools.UI
             switch (chosenReplacement.Content)
             {
                 case "Replace CRLF":
-                    Pattern.Text = @"(.+?)(\r?\n)(\s*)";
-                    Replacement.Text = @"$1, ";
-                    IsRegex.IsChecked = true;
+                    this.Pattern.Text = @"(.+?)(\r?\n)(\s*)";
+                    this.Replacement.Text = @"$1, ";
+                    this.IsRegex.IsChecked = true;
                     break;
                 case "Replace CRLF with single apostrophes":
-                    Pattern.Text = @"(.+?)(\r?\n)(\s*)";
-                    Replacement.Text = @"'$1', ";
-                    IsRegex.IsChecked = true;
+                    this.Pattern.Text = @"(.+?)(\r?\n)(\s*)";
+                    this.Replacement.Text = @"'$1', ";
+                    this.IsRegex.IsChecked = true;
                     break;
             }
         }
 
         private void MoveUp_Click(object sender, RoutedEventArgs e)
         {
-            Input.Text = Output.Text;
+            this.Input.Text = this.Output.Text;
         }
     }
 }

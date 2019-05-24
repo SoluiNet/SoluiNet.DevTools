@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
-using SoluiNet.DevTools.Core;
-using SoluiNet.DevTools.Core.Tools;
-using SoluiNet.DevTools.Core.Tools.Json;
+﻿// <copyright file="App.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.UI
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Json;
+
     /// <summary>
     /// Interaktionslogik für "App.xaml"
     /// </summary>
@@ -133,35 +137,35 @@ namespace SoluiNet.DevTools.UI
                 }
             }
 
-            Plugins = new List<IBasePlugin>();
-            SqlPlugins = new List<ISqlDevPlugin>();
-            UtilityPlugins = new List<IUtilitiesDevPlugin>();
-            BackgroundTaskPlugins = new List<IPluginWithBackgroundTask>();
+            this.Plugins = new List<IBasePlugin>();
+            this.SqlPlugins = new List<ISqlDevPlugin>();
+            this.UtilityPlugins = new List<IUtilitiesDevPlugin>();
+            this.BackgroundTaskPlugins = new List<IPluginWithBackgroundTask>();
 
             foreach (var type in pluginTypes)
             {
                 if (type.Value.Contains("PluginDev"))
                 {
                     var plugin = (IBasePlugin)Activator.CreateInstance(type.Key);
-                    Plugins.Add(plugin);
+                    this.Plugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("SqlDev"))
                 {
                     var plugin = (ISqlDevPlugin)Activator.CreateInstance(type.Key);
-                    SqlPlugins.Add(plugin);
+                    this.SqlPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("UtilityDev"))
                 {
                     var plugin = (IUtilitiesDevPlugin)Activator.CreateInstance(type.Key);
-                    UtilityPlugins.Add(plugin);
+                    this.UtilityPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("BackgroundTask"))
                 {
                     var plugin = (IPluginWithBackgroundTask)Activator.CreateInstance(type.Key);
-                    BackgroundTaskPlugins.Add(plugin);
+                    this.BackgroundTaskPlugins.Add(plugin);
 
                     Task.Run(() =>
                     {

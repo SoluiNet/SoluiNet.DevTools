@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿// <copyright file="ManageConnectionStrings.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.UI.UserControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+
     /// <summary>
     /// Interaktionslogik für ManageConnectionStrings.xaml
     /// </summary>
@@ -24,38 +28,38 @@ namespace SoluiNet.DevTools.UI.UserControls
     {
         public ManageConnectionStrings()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void LoadConnectionStrings()
         {
             foreach (ConnectionStringSettings connectionString in ConfigurationManager.ConnectionStrings)
             {
-                MainContent.RowDefinitions.Add(new RowDefinition());
+                this.MainContent.RowDefinitions.Add(new RowDefinition());
 
                 var connectionStringView = new ConnectionString();
                 connectionStringView.Value = connectionString.ConnectionString;
                 connectionStringView.NameKey = connectionString.Name;
                 connectionStringView.ProviderName = connectionString.ProviderName;
 
-                MainContent.Children.Add(connectionStringView);
-                Grid.SetRow(connectionStringView, MainContent.RowDefinitions.Count - 1);
+                this.MainContent.Children.Add(connectionStringView);
+                Grid.SetRow(connectionStringView, this.MainContent.RowDefinitions.Count - 1);
             }
         }
 
         private void UserControl_Initialized(object sender, EventArgs e)
         {
-            LoadConnectionStrings();
+            this.LoadConnectionStrings();
         }
 
         private void ReloadConnectionStrings_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Children.Clear();
-            MainContent.RowDefinitions.Clear();
+            this.MainContent.Children.Clear();
+            this.MainContent.RowDefinitions.Clear();
 
             ConfigurationManager.RefreshSection("connectionStrings");
 
-            LoadConnectionStrings();
+            this.LoadConnectionStrings();
         }
 
         private void SaveConnectionStrings_Click(object sender, RoutedEventArgs e)
@@ -63,7 +67,7 @@ namespace SoluiNet.DevTools.UI.UserControls
             var data = string.Empty;
             data += "<connectionStrings>";
 
-            foreach (var item in MainContent.Children)
+            foreach (var item in this.MainContent.Children)
             {
                 if (!(item is ConnectionString))
                 {
@@ -77,7 +81,8 @@ namespace SoluiNet.DevTools.UI.UserControls
                     continue;
                 }
 
-                data += string.Format(@"<add name=""{0}"" connectionString=""{1}"" providerName=""{2}"" />",
+                data += string.Format(
+                    @"<add name=""{0}"" connectionString=""{1}"" providerName=""{2}"" />",
                     connectionString.NameKey, 
                     connectionString.Value,
                     connectionString.ProviderName);
