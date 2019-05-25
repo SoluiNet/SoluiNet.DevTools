@@ -1,4 +1,8 @@
-﻿namespace SoluiNet.DevTools.SqlPlugin.Example.Entities
+﻿// <copyright file="Customer.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
+
+namespace SoluiNet.DevTools.SqlPlugin.Example.Entities
 {
     using System;
     using System.Collections.Generic;

@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using SoluiNet.DevTools.Core;
-using SoluiNet.DevTools.Core.Enums;
-using SoluiNet.DevTools.Core.Extensions;
-using SoluiNet.DevTools.Core.Tools;
-using SoluiNet.DevTools.Core.Tools.Database;
-using SoluiNet.DevTools.Core.Tools.UI;
+﻿// <copyright file="ExamplePlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.SqlPlugin.Example
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Enums;
+    using SoluiNet.DevTools.Core.Extensions;
+    using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Database;
+    using SoluiNet.DevTools.Core.Tools.UI;
+
     public class ExamplePlugin: ISqlDevPlugin, IWebClientSupportPlugin, IPluginWithSettings, IGroupedUtilitiesDevPlugin
     {
         private Grid MainGrid { get; set; }
