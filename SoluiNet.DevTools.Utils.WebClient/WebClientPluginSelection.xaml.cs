@@ -31,8 +31,20 @@ namespace SoluiNet.DevTools.Utils.WebClient
             this.plugins = plugins;
         }
 
+        /// <summary>
+        /// The delegate for the return of the chosen plugin method.
+        /// </summary>
+        /// <param name="endpoints">The endpoints.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="supportedHttpMethods">The supported HTTP methods.</param>
+        /// <param name="supportedContentTypes">The supported content types.</param>
+        /// <param name="additionalOptions">The additional options.</param>
+        /// <param name="chosenPlugin">The chosen technical plugin name.</param>
         public delegate void ReturnWebMethodToMainForm(Dictionary<string, string> endpoints, string content, List<string> supportedHttpMethods, List<string> supportedContentTypes = null, Dictionary<string, string> additionalOptions = null, IPluginWithSettings chosenPlugin = null);
 
+        /// <summary>
+        /// Gets or sets the event handler for the return of the chosen plugin method.
+        /// </summary>
         public ReturnWebMethodToMainForm ReturnChosenMethod { get; set; }
 
         private void CloseCurrentWindow()

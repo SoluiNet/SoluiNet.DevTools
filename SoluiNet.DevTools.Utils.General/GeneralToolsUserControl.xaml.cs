@@ -70,6 +70,9 @@ namespace SoluiNet.DevTools.Utils.General
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Gets or sets the readable characters.
+        /// </summary>
         public static Dictionary<char, string> ReadableCharacters
         {
             get

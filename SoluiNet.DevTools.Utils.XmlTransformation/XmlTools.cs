@@ -42,6 +42,12 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
             return XmlHelper.Transform(xslTemplate, xmlString);
         }
 
+        /// <summary>
+        /// Validate a XML string against a XML schema definition.
+        /// </summary>
+        /// <param name="xmlSchemaString">The XML schema definition.</param>
+        /// <param name="xmlString">The XML string.</param>
+        /// <returns>Returns the results of the validation into a string.</returns>
         public static string ValidateAgainstSchema(string xmlSchemaString, string xmlString)
         {
             var result = string.Empty;

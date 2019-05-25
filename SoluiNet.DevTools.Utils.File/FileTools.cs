@@ -16,6 +16,12 @@ namespace SoluiNet.DevTools.Utils.File
     /// </summary>
     public class FileTools
     {
+        /// <summary>
+        /// Extract lines which contains the search pattern.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="searchPattern">The search pattern.</param>
+        /// <returns>Returns every line which contains the search pattern.</returns>
         public static List<string> ExtractLinesContainingSearchPattern(string filePath, string searchPattern)
         {
             var result = new List<string>();
@@ -38,6 +44,12 @@ namespace SoluiNet.DevTools.Utils.File
             return result;
         }
 
+        /// <summary>
+        /// Extract lines which match the RegEx.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="regExPattern">The RegEx search pattern.</param>
+        /// <returns>Returns every line which matches the RegEx search pattern.</returns>
         public static List<string> ExtractLinesMatchingRegEx(string filePath, string regExPattern)
         {
             var result = new List<string>();
@@ -54,6 +66,12 @@ namespace SoluiNet.DevTools.Utils.File
             return result;
         }
 
+        /// <summary>
+        /// Calculate the hash of a file.
+        /// </summary>
+        /// <param name="hashType">The hash type which should be used to calculate the hash.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>Returns the hash of a file into a string.</returns>
         public static string CalculateChecksum(string hashType, string filePath)
         {
             //// todo: get hash type from enumeration

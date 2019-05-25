@@ -28,6 +28,9 @@ namespace SoluiNet.DevTools.Utils.MachineLearning
     /// </summary>
     public partial class MachineLearningUserControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MachineLearningUserControl"/> class.
+        /// </summary>
         public MachineLearningUserControl()
         {
             this.InitializeComponent();

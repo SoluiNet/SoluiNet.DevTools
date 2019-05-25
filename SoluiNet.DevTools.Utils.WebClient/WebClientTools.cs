@@ -18,6 +18,11 @@ namespace SoluiNet.DevTools.Utils.WebClient
     /// </summary>
     public static class WebClientTools
     {
+        /// <summary>
+        /// Insert a soap envelope into a web request.
+        /// </summary>
+        /// <param name="soapEnvelope">The soap envelope.</param>
+        /// <param name="webRequest">The web request.</param>
         public static void InsertSoapEnvelope(XmlDocument soapEnvelope, HttpWebRequest webRequest)
         {
             using (var stream = webRequest.GetRequestStream())
