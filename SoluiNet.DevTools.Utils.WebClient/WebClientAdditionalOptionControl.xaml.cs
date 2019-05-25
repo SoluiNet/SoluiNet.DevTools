@@ -24,6 +24,9 @@ namespace SoluiNet.DevTools.Utils.WebClient
     /// </summary>
     public partial class WebClientAdditionalOptionControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebClientAdditionalOptionControl"/> class.
+        /// </summary>
         public WebClientAdditionalOptionControl()
         {
             this.InitializeComponent();

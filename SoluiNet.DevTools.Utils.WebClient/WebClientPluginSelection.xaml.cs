@@ -19,12 +19,16 @@ namespace SoluiNet.DevTools.Utils.WebClient
     /// </summary>
     public partial class WebClientPluginSelection : UserControl
     {
-        private readonly List<IWebClientSupportPlugin> _plugins;
+        private readonly List<IWebClientSupportPlugin> plugins;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebClientPluginSelection"/> class.
+        /// </summary>
+        /// <param name="plugins">The plugins which support web client execution.</param>
         public WebClientPluginSelection(List<IWebClientSupportPlugin> plugins)
         {
             this.InitializeComponent();
-            this._plugins = plugins;
+            this.plugins = plugins;
         }
 
         public delegate void ReturnWebMethodToMainForm(Dictionary<string, string> endpoints, string content, List<string> supportedHttpMethods, List<string> supportedContentTypes = null, Dictionary<string, string> additionalOptions = null, IPluginWithSettings chosenPlugin = null);
@@ -54,7 +58,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             }
 
             var selectedPlugin = (this.Plugin.SelectedItem as ComboBoxItem)?.Content.ToString();
-            var plugin = this._plugins.FirstOrDefault(x => !string.IsNullOrEmpty(selectedPlugin) && x.Name == selectedPlugin);
+            var plugin = this.plugins.FirstOrDefault(x => !string.IsNullOrEmpty(selectedPlugin) && x.Name == selectedPlugin);
 
             this.ReturnChosenMethod(
                 chosenWebClient.Endpoints.ToDictionary(x => x.Name, x => x.Url),
@@ -62,8 +66,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 chosenMethod.SupportedHttpMethods.Select(x => Enum.GetName(typeof(SoluiNetHttpMethodType), x)).ToList(),
                 chosenMethod.SupportedContentTypes.Select(x => Enum.GetName(typeof(SoluiNetContentType), x)).ToList(),
                 chosenMethod.PreparedHttpHeaders.ToDictionary(x => x.Name, x => x.Value),
-                plugin is IPluginWithSettings settings ? settings : null
-            );
+                plugin is IPluginWithSettings settings ? settings : null);
 
             this.CloseCurrentWindow();
         }
@@ -73,7 +76,9 @@ namespace SoluiNet.DevTools.Utils.WebClient
             var webClientConfiguration = (this.Plugin.SelectedItem as ComboBoxItem)?.Tag as SoluiNetWebClientDefinition;
 
             if (webClientConfiguration?.Methods == null)
+            {
                 return;
+            }
 
             this.Method.Items.Clear();
 
@@ -85,7 +90,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (var plugin in this._plugins)
+            foreach (var plugin in this.plugins)
             {
                 var webClientConfiguration = PluginHelper.GetWebClientDefinition(plugin);
 

@@ -24,7 +24,7 @@ namespace SoluiNet.DevTools.Utils.General
     /// </summary>
     public partial class GeneralToolsUserControl : UserControl
     {
-        public static Dictionary<char, string> ReadableCharacters = new Dictionary<char, string>
+        private static Dictionary<char, string> readableCharacters = new Dictionary<char, string>
         {
             { '\0', "NUL" },
             { ((char)1), "SOH" }, // start of heading
@@ -68,6 +68,19 @@ namespace SoluiNet.DevTools.Utils.General
         public GeneralToolsUserControl()
         {
             this.InitializeComponent();
+        }
+
+        public static Dictionary<char, string> ReadableCharacters
+        {
+            get
+            {
+                return readableCharacters;
+            }
+
+            set
+            {
+                readableCharacters = value;
+            }
         }
 
         private void Calculate_Click(object sender, RoutedEventArgs e)
