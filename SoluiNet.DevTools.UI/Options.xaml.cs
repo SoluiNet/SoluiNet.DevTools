@@ -21,10 +21,13 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.UI.UserControls;
 
     /// <summary>
-    /// Interaktionslogik für Options.xaml
+    /// Interaction logic for Options.xaml.
     /// </summary>
     public partial class Options : SoluiNetWindow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Options"/> class.
+        /// </summary>
         public Options()
         {
             this.InitializeComponent();

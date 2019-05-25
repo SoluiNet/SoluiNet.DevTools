@@ -20,10 +20,13 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.UI;
 
     /// <summary>
-    /// Interaktionslogik für VisualPluginContainer.xaml
+    /// Interaction logic for VisualPluginContainer.xaml.
     /// </summary>
     public partial class VisualPluginContainer : SoluiNetWindow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VisualPluginContainer"/> class.
+        /// </summary>
         public VisualPluginContainer()
         {
             this.InitializeComponent();
