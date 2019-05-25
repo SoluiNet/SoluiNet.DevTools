@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     {
         public ExampleUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

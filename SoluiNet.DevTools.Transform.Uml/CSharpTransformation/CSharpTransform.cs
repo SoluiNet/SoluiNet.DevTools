@@ -2,38 +2,38 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using SoluiNet.DevTools.Core.Tools.File;
-using SoluiNet.DevTools.Core.Tools.XML;
-
 namespace SoluiNet.DevTools.Transform.Uml.CSharpTransformation
 {
+    using System.Text.RegularExpressions;
+    using System.Xml.Linq;
+    using SoluiNet.DevTools.Core.Tools.File;
+    using SoluiNet.DevTools.Core.Tools.XML;
+
     public class CSharpTransform
     {
-        private string _sourceFile;
+        private string sourceFile;
+
+        public CSharpTransform(string sourceFile)
+        {
+            this.sourceFile = sourceFile;
+        }
 
         public string CSharpSourceFile
         {
             get
             {
-                return _sourceFile;
+                return this.sourceFile;
             }
-        }
-
-        public CSharpTransform(string sourceFile)
-        {
-            _sourceFile = sourceFile;
         }
 
         public string TransformToXml()
         {
-            if (string.IsNullOrEmpty(_sourceFile))
+            if (string.IsNullOrEmpty(this.sourceFile))
             {
                 return string.Empty;
             }
 
-            var fileContents = FileHelper.StringFromFile(_sourceFile);
+            var fileContents = FileHelper.StringFromFile(this.sourceFile);
 
             if (string.IsNullOrEmpty(fileContents))
             {

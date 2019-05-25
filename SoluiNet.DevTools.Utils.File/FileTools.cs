@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿// <copyright file="FileTools.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.File
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+
     public class FileTools
     {
         public static List<string> ExtractLinesContainingSearchPattern(string filePath, string searchPattern)
@@ -18,10 +22,12 @@ namespace SoluiNet.DevTools.Utils.File
                 foreach (var line in System.IO.File.ReadAllLines(filePath))
                 {
                     if (line.Contains(searchPattern))
+                    {
                         result.Add(line);
+                    }
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 result.Add(string.Format("##ERROR## Couldn't extract lines from file {0} - {1} ##ERROR##", filePath, exception.Message));
             }
@@ -37,7 +43,9 @@ namespace SoluiNet.DevTools.Utils.File
             foreach (var line in System.IO.File.ReadAllLines(filePath))
             {
                 if (regEx.IsMatch(line))
+                {
                     result.Add(line);
+                }
             }
 
             return result;

@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿// <copyright file="CryptoToolsUserControl.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.Crypto
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+
     /// <summary>
     /// Interaktionslogik für UserControl1.xaml
     /// </summary>
@@ -22,7 +26,7 @@ namespace SoluiNet.DevTools.Utils.Crypto
     {
         public CryptToolsUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private string GetEncryptionMethod()
@@ -32,12 +36,15 @@ namespace SoluiNet.DevTools.Utils.Crypto
                 // RSA
                 case 0:
                     return "RSA";
+
                 // AES
                 case 1:
                     return "AES";
+
                 // Base64
                 case 2:
                     return "Hashing";
+
                 // Base64
                 case 3:
                     return "Base64";
@@ -50,55 +57,55 @@ namespace SoluiNet.DevTools.Utils.Crypto
         {
             var options = new Dictionary<string, object>()
             {
-                {"Method", GetEncryptionMethod()},
-                {"DecodeFromBase64", Base64Encoded.IsChecked ?? false},
-                {"EncodeToBase64", EncodeWithBase64.IsChecked ?? false}
+                { "Method", this.GetEncryptionMethod() },
+                { "DecodeFromBase64", this.Base64Encoded.IsChecked ?? false },
+                { "EncodeToBase64", this.EncodeWithBase64.IsChecked ?? false },
             };
 
-            if (GetEncryptionMethod() == "RSA")
+            if (this.GetEncryptionMethod() == "RSA")
             {
-                options.Add("PublicKeyPath", PublicKeyPath.Text);
+                options.Add("PublicKeyPath", this.PublicKeyPath.Text);
             }
-            else if (GetEncryptionMethod() == "AES")
+            else if (this.GetEncryptionMethod() == "AES")
             {
-                options.Add("key", AesKey.Text);
-                options.Add("iniValue", AesIniValue.Text);
+                options.Add("key", this.AesKey.Text);
+                options.Add("iniValue", this.AesIniValue.Text);
             }
-            else if (GetEncryptionMethod() == "Hashing")
+            else if (this.GetEncryptionMethod() == "Hashing")
             {
-                options.Add("hashMethod", HashMethod.Text);
+                options.Add("hashMethod", this.HashMethod.Text);
             }
 
-            EncryptedText.Text = CryptoTools.Encrypt(DecryptedText.Text, options);
+            this.EncryptedText.Text = CryptoTools.Encrypt(this.DecryptedText.Text, options);
         }
 
         private void Decrypt_Click(object sender, RoutedEventArgs e)
         {
             var options = new Dictionary<string, object>()
             {
-                {"Method", GetEncryptionMethod()},
-                {"DecodeFromBase64", Base64Encoded.IsChecked ?? false},
-                {"EncodeToBase64", EncodeWithBase64.IsChecked ?? false}
+                { "Method", this.GetEncryptionMethod() },
+                { "DecodeFromBase64", this.Base64Encoded.IsChecked ?? false },
+                { "EncodeToBase64", this.EncodeWithBase64.IsChecked ?? false },
             };
 
-            if (GetEncryptionMethod() == "RSA")
+            if (this.GetEncryptionMethod() == "RSA")
             {
-                options.Add("PrivateKeyPath", PrivateKeyPath.Text);
+                options.Add("PrivateKeyPath", this.PrivateKeyPath.Text);
             }
-            else if (GetEncryptionMethod() == "AES")
+            else if (this.GetEncryptionMethod() == "AES")
             {
-                options.Add("key", AesKey.Text);
-                options.Add("iniValue", AesIniValue.Text);
+                options.Add("key", this.AesKey.Text);
+                options.Add("iniValue", this.AesIniValue.Text);
             }
 
-            DecryptedText.Text = CryptoTools.Decrypt(EncryptedText.Text, options);
+            this.DecryptedText.Text = CryptoTools.Decrypt(this.EncryptedText.Text, options);
         }
 
         private void EncryptionMethodTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
             {
-                Decrypt.IsEnabled = !HashTab.IsSelected;
+                this.Decrypt.IsEnabled = !this.HashTab.IsSelected;
             }
         }
     }

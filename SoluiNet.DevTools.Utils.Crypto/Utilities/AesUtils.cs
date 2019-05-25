@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="AesUtils.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 {
-    public class AesUtils: ICryptoUtil
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    public class AesUtils : ICryptoUtil
     {
         public static string Encrypt(string plainText, string key, string initializationValue)
         {
@@ -19,13 +23,15 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             {
                 using (var aesProvider = new AesCryptoServiceProvider())
                 {
-                    using (var cryptoStream = new CryptoStream(mstream,
-                        aesProvider.CreateEncryptor(Encoding.ASCII.GetBytes(key), Encoding.ASCII.GetBytes(initializationValue)), CryptoStreamMode.Write))
+                    using (var cryptoStream = new CryptoStream(
+                        mstream,
+                        aesProvider.CreateEncryptor(Encoding.ASCII.GetBytes(key), Encoding.ASCII.GetBytes(initializationValue)),
+                        CryptoStreamMode.Write))
                     {
                         cryptoStream.Write(bytesToEncrypt, 0, bytesToEncrypt.Length);
                     }
-
                 }
+
                 encryptedArray = mstream.ToArray();
             }
 
@@ -43,13 +49,15 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             {
                 using (var aesProvider = new AesCryptoServiceProvider())
                 {
-                    using (var cryptoStream = new CryptoStream(mstream,
-                        aesProvider.CreateEncryptor(Encoding.ASCII.GetBytes(key), Encoding.ASCII.GetBytes(initializationValue)), CryptoStreamMode.Write))
+                    using (var cryptoStream = new CryptoStream(
+                        mstream,
+                        aesProvider.CreateEncryptor(Encoding.ASCII.GetBytes(key), Encoding.ASCII.GetBytes(initializationValue)),
+                        CryptoStreamMode.Write))
                     {
                         cryptoStream.Write(bytesToEncrypt, 0, bytesToEncrypt.Length);
                     }
-
                 }
+
                 encryptedArray = mstream.ToArray();
             }
 

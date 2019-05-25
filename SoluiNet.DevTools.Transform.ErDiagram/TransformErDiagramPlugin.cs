@@ -1,12 +1,16 @@
-﻿using SoluiNet.DevTools.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="TransformErDiagramPlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Transform.ErDiagram
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core;
+
     public class TransformErDiagramPlugin : ITransformPlugin
     {
         public List<string> SupportedInputFormats

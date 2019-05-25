@@ -1,14 +1,18 @@
-﻿using SoluiNet.DevTools.Core.Tools.String;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="GeneralUtils.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Tools.String;
+
     public class GeneralUtils
     {
         public delegate byte[] GetProcessedByteArray(byte[] originalByteArray);
@@ -53,7 +57,10 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         {
             StringBuilder hex = new StringBuilder(ba.Length * 2);
             foreach (byte b in ba)
+            {
                 hex.AppendFormat("{0:x2}", b);
+            }
+
             return hex.ToString();
         }
 

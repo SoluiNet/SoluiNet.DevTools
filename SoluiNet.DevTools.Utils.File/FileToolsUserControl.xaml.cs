@@ -1,24 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
-using SoluiNet.DevTools.Core.Tools.File;
+﻿// <copyright file="FileToolsUserControl.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.File
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Forms;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+    using Microsoft.Win32;
+    using SoluiNet.DevTools.Core.Tools.File;
+
     /// <summary>
     /// Interaktionslogik für UserControl1.xaml
     /// </summary>
@@ -26,7 +30,7 @@ namespace SoluiNet.DevTools.Utils.File
     {
         public FileToolsUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private delegate string FormatSearchResultLine(string line);
@@ -37,12 +41,12 @@ namespace SoluiNet.DevTools.Utils.File
             {
                 RestoreDirectory = true,
                 Filter = "All files (*.*)|*.*",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             };
 
             if (fileDialog.ShowDialog() == true)
             {
-                FilePath.Text = fileDialog.FileName;
+                this.FilePath.Text = fileDialog.FileName;
             }
         }
 
@@ -50,7 +54,7 @@ namespace SoluiNet.DevTools.Utils.File
         {
             List<string> extractedLines;
 
-            if (IsRegEx.IsChecked ?? false)
+            if (this.IsRegEx.IsChecked ?? false)
             {
                 extractedLines = FileTools.ExtractLinesMatchingRegEx(filePath, searchPattern);
             }
@@ -61,54 +65,57 @@ namespace SoluiNet.DevTools.Utils.File
 
             foreach (var line in extractedLines)
             {
-                Output.Text += string.Format("{0}{1}\r\n", 
-                    prefix + (string.IsNullOrEmpty(prefix) ? string.Empty : " - "), 
+                this.Output.Text += string.Format(
+                    "{0}{1}\r\n",
+                    prefix + (string.IsNullOrEmpty(prefix) ? string.Empty : " - "),
                     formatLine != null ? formatLine(line) : line);
             }
         }
 
         private void SearchLines_Click(object sender, RoutedEventArgs e)
         {
-            var isFileSet = !(string.IsNullOrEmpty(FilePath.Text) || FilePath.Text == "File");
-            var isFolderSet = !(string.IsNullOrEmpty(FolderPath.Text) || FolderPath.Text == "Folder");
+            var isFileSet = !(string.IsNullOrEmpty(this.FilePath.Text) || this.FilePath.Text == "File");
+            var isFolderSet = !(string.IsNullOrEmpty(this.FolderPath.Text) || this.FolderPath.Text == "Folder");
 
-            Output.Text = string.Empty;
+            this.Output.Text = string.Empty;
 
             if (isFolderSet)
             {
-                var foundFiles = FileHelper.GetFilesInDirectory(FolderPath.Text, Filter.Text, true);
+                var foundFiles = FileHelper.GetFilesInDirectory(this.FolderPath.Text, this.Filter.Text, true);
 
                 foreach (var item in foundFiles.AsParallel())
                 {
-                    SetContentForFile(item, 
-                        SearchPattern.Text, 
-                        (line) => {
+                    this.SetContentForFile(
+                        item,
+                        this.SearchPattern.Text,
+                        (line) =>
+                        {
                             return line.Trim();
-                        }, 
+                        },
                         item);
                 }
             }
             else if (isFileSet)
             {
-                SetContentForFile(FilePath.Text, SearchPattern.Text);
+                this.SetContentForFile(this.FilePath.Text, this.SearchPattern.Text);
             }
         }
 
         private void CalculateChecksum_Click(object sender, RoutedEventArgs e)
         {
-            Output.Text = FileTools.CalculateChecksum(ChecksumType.Text, FilePath.Text);
+            this.Output.Text = FileTools.CalculateChecksum(this.ChecksumType.Text, this.FilePath.Text);
         }
 
         private void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
             var folderDialog = new FolderBrowserDialog()
             {
-                RootFolder = Environment.SpecialFolder.MyComputer
+                RootFolder = Environment.SpecialFolder.MyComputer,
             };
 
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
-                FolderPath.Text = folderDialog.SelectedPath;
+                this.FolderPath.Text = folderDialog.SelectedPath;
             }
         }
     }

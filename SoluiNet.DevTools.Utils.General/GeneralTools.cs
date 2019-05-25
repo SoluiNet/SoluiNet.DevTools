@@ -37,7 +37,9 @@ namespace SoluiNet.DevTools.Utils.General
         public static string GetHexadecimalValue(long number)
         {
             if (number < 10)
+            {
                 return number.ToString();
+            }
 
             switch (number)
             {

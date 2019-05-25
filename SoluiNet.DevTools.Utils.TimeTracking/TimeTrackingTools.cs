@@ -13,12 +13,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
     public static class TimeTrackingTools
     {
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
         public static string GetTitleOfWindowInForeground()
         {
             const int countOfCharacters = 256;
@@ -27,5 +21,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             return GetWindowText(windowInForeground, buffer, countOfCharacters) > 0 ? buffer.ToString() : null;
         }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
     }
 }

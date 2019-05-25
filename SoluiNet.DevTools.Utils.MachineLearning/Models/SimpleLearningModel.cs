@@ -10,9 +10,10 @@ namespace SoluiNet.DevTools.Utils.MachineLearning.Models
     using System.Text;
     using System.Threading.Tasks;
 
-    public class SimpleLearningModel<T, O>
+    public class SimpleLearningModel<TReference, TDependence>
     {
-        public T ReferenceValue { get; set; }
-        public O DependentValue { get; set; }
+        public TReference ReferenceValue { get; set; }
+
+        public TDependence DependentValue { get; set; }
     }
 }

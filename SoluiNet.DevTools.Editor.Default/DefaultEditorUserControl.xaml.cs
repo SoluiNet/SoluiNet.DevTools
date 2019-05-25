@@ -20,13 +20,17 @@ namespace SoluiNet.DevTools.Editor.Default
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für DefaultEditorUserControl.xaml
+    /// Interaction logic for
+    /// DefaultEditorUserControl.xaml.
     /// </summary>
     public partial class DefaultEditorUserControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultEditorUserControl"/> class.
+        /// </summary>
         public DefaultEditorUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

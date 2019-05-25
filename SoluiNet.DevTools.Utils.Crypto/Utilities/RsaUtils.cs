@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Encodings;
-using Org.BouncyCastle.Crypto.Engines;
-using Org.BouncyCastle.OpenSsl;
+﻿// <copyright file="RsaUtils.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 {
-    public class RsaUtils: ICryptoUtil
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Org.BouncyCastle.Crypto;
+    using Org.BouncyCastle.Crypto.Encodings;
+    using Org.BouncyCastle.Crypto.Engines;
+    using Org.BouncyCastle.OpenSsl;
+
+    public class RsaUtils : ICryptoUtil
     {
         public static string Encrypt(string plainText, string publicKeyPath)
         {
@@ -25,7 +29,7 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 
                 encryptEngine.Init(true, publicKey);
             }
-            
+
             var encrypted = GeneralUtils.Encode(bytesToEncrypt, x => encryptEngine.ProcessBlock(x, 0, x.Length), "Unicode");
 
             return encrypted;
@@ -152,4 +156,5 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 
             return Base64DecodeAndDecrypt(encryptedText, privateKeyPath);
         }
-    }}
+    }
+}
