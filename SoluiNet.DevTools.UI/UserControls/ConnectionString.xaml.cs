@@ -22,35 +22,50 @@ namespace SoluiNet.DevTools.UI.UserControls
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für ConnectionString.xaml
+    /// Interaction logic for ConnectionString.xaml.
     /// </summary>
     public partial class ConnectionString : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionString"/> class.
+        /// </summary>
         public ConnectionString()
         {
             this.InitializeComponent();
         }
 
-        private bool Expanded { get; set; }
-
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
         public string Value
         {
             get { return this.ConnectionStringValue.Text; }
             set { this.ConnectionStringValue.Text = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the connection string name.
+        /// </summary>
         public string NameKey
         {
             get { return this.ConnectionStringName.Text; }
             set { this.ConnectionStringName.Text = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the provider name.
+        /// </summary>
         public string ProviderName { get; set; }
 
+        /// <summary>
+        /// Gets the environment.
+        /// </summary>
         public string Environment
         {
             get { return this.NameKey.Contains(".") ? this.NameKey.Substring(this.NameKey.LastIndexOf(".", StringComparison.InvariantCulture) + 1) : "Default"; }
         }
+
+        private bool Expanded { get; set; }
 
         private void AdditionalInfo_Click(object sender, RoutedEventArgs e)
         {
@@ -107,7 +122,9 @@ namespace SoluiNet.DevTools.UI.UserControls
                 var dataSourceMatch = dataSourceRegex.Match(this.Value);
 
                 if (dataSourceMatch.Success)
+                {
                     serverTextBox.Text = dataSourceMatch.Groups[1].Value;
+                }
 
                 this.ContentGrid.Children.Add(serverTextBox);
                 #endregion
@@ -127,7 +144,9 @@ namespace SoluiNet.DevTools.UI.UserControls
                 var databaseMatch = databaseRegex.Match(this.Value);
 
                 if (databaseMatch.Success)
+                {
                     databaseTextBox.Text = databaseMatch.Groups[1].Value;
+                }
 
                 this.ContentGrid.Children.Add(databaseTextBox);
                 #endregion
@@ -147,7 +166,9 @@ namespace SoluiNet.DevTools.UI.UserControls
                 var usernameMatch = usernameRegex.Match(this.Value);
 
                 if (usernameMatch.Success)
+                {
                     usernameTextBox.Text = usernameMatch.Groups[1].Value;
+                }
 
                 this.ContentGrid.Children.Add(usernameTextBox);
                 #endregion
@@ -167,7 +188,9 @@ namespace SoluiNet.DevTools.UI.UserControls
                 var passwordMatch = passwordRegex.Match(this.Value);
 
                 if (passwordMatch.Success)
+                {
                     passwordTextBox.Text = passwordMatch.Groups[1].Value;
+                }
 
                 this.ContentGrid.Children.Add(passwordTextBox);
                 #endregion
@@ -187,7 +210,9 @@ namespace SoluiNet.DevTools.UI.UserControls
                 var useWindowsAuthenticationMatch = useWindowsAuthenticationRegex.Match(this.Value);
 
                 if (useWindowsAuthenticationMatch.Success)
+                {
                     useWindowsAuthenticationTextBox.IsChecked = useWindowsAuthenticationMatch.Groups[1].Value == "SSPI" || Convert.ToBoolean(useWindowsAuthenticationMatch.Groups[1].Value);
+                }
 
                 this.ContentGrid.Children.Add(useWindowsAuthenticationTextBox);
                 #endregion

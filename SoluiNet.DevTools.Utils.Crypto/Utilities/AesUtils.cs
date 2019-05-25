@@ -12,8 +12,18 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Provides a collection of methods to work with AES encryption.
+    /// </summary>
     public class AesUtils : ICryptoUtil
     {
+        /// <summary>
+        /// Encrypt a plain text with AES.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="initializationValue">The initialization value.</param>
+        /// <returns>Returns an encrypted text.</returns>
         public static string Encrypt(string plainText, string key, string initializationValue)
         {
             var bytesToEncrypt = Encoding.UTF8.GetBytes(plainText);
@@ -40,6 +50,13 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return encrypted;
         }
 
+        /// <summary>
+        /// Encrypt a plain text with AES and base64 encode it.
+        /// </summary>
+        /// <param name="clearText">The plain text.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="initializationValue">The initialization value.</param>
+        /// <returns>Returns an encrypted and base64 encoded text.</returns>
         public static string EncryptAndBase64Encode(string clearText, string key, string initializationValue)
         {
             var bytesToEncrypt = Encoding.UTF8.GetBytes(clearText);
@@ -65,6 +82,13 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return encrypted;
         }
 
+        /// <summary>
+        /// Decrypt a base64 encoded and encrypted text with AES.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="initializationValue">The initialization value.</param>
+        /// <returns>Returns a base64 decoded and decrypted text.</returns>
         public static string Base64DecodeAndDecrypt(string encryptedText, string key, string initializationValue)
         {
             using (MemoryStream ms = new MemoryStream(System.Convert.FromBase64String(encryptedText)))
@@ -79,6 +103,14 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             }
         }
 
+        /// <summary>
+        /// Decrypt an encrypted text with AES.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="initializationValue">The initialization value.</param>
+        /// <param name="chosenEncoding">The chosen encoding for the plain text.</param>
+        /// <returns>Returns a decrypted text.</returns>
         public static string Decrypt(string encryptedText, string key, string initializationValue, string chosenEncoding = "UTF8")
         {
             using (MemoryStream ms = new MemoryStream(Encoding.GetEncoding(chosenEncoding).GetBytes(encryptedText)))
@@ -93,6 +125,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             }
         }
 
+        /// <summary>
+        /// Encrypt a plain text with AES.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns an encrypted text.</returns>
         public string Encrypt(string plainText, IDictionary<string, object> options)
         {
             var key = options["key"].ToString();
@@ -101,6 +139,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return Encrypt(plainText, key, initializationValue);
         }
 
+        /// <summary>
+        /// Encrypt a plain text with AES and base64 encode it.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns an encrypted and base64 encoded text.</returns>
         public string EncryptAndBase64Encode(string plainText, IDictionary<string, object> options)
         {
             var key = options["key"].ToString();
@@ -109,6 +153,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return EncryptAndBase64Encode(plainText, key, initializationValue);
         }
 
+        /// <summary>
+        /// Decrypt an encrypted text with AES.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns a decrypted text.</returns>
         public string Decrypt(string encryptedText, IDictionary<string, object> options)
         {
             var key = options["key"].ToString();
@@ -117,6 +167,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return Decrypt(encryptedText, key, initializationValue);
         }
 
+        /// <summary>
+        /// Decrypt a base64 encoded and encrypted text with AES.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns a base64 decoded and decrypted text.</returns>
         public string Base64DecodeAndDecrypt(string encryptedText, IDictionary<string, object> options)
         {
             var key = options["key"].ToString();

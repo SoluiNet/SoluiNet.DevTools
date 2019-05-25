@@ -20,10 +20,13 @@ namespace SoluiNet.DevTools.Utils.Svn
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für SvnUserControl.xaml
+    /// Interaction logic for SvnUserControl.xaml.
     /// </summary>
     public partial class SvnUserControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SvnUserControl"/> class.
+        /// </summary>
         public SvnUserControl()
         {
             this.InitializeComponent();

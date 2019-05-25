@@ -15,14 +15,17 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
     using System.Xml.Xsl;
     using SoluiNet.DevTools.Core.Tools.XML;
 
+    /// <summary>
+    /// Provides a collection of methods for XML.
+    /// </summary>
     public class XmlTools
     {
         /// <summary>
         /// Format the overgiven XML string
-        /// Taken from: https://stackoverflow.com/questions/1123718/format-xml-string-to-print-friendly-xml-string
+        /// Taken from: https://stackoverflow.com/questions/1123718/format-xml-string-to-print-friendly-xml-string.
         /// </summary>
-        /// <param name="xmlString">The XML string</param>
-        /// <returns>Returns an indented XML string</returns>
+        /// <param name="xmlString">The XML string.</param>
+        /// <returns>Returns an indented XML string.</returns>
         public static string Format(string xmlString)
         {
             return XmlHelper.Format(xmlString);

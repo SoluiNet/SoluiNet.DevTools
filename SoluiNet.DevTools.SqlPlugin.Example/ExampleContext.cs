@@ -27,8 +27,15 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         {
         }
 
+        /// <summary>
+        /// Gets or sets the customer accessor.
+        /// </summary>
         public virtual DbSet<Entities.Customer> Customer { get; set; }
 
+        /// <summary>
+        /// Event handler for model creation.
+        /// </summary>
+        /// <param name="modelBuilder">The model builder.</param>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Entities.Customer>()

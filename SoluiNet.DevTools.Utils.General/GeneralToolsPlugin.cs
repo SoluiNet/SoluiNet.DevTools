@@ -12,18 +12,31 @@ namespace SoluiNet.DevTools.Utils.General
     using System.Windows.Controls;
     using SoluiNet.DevTools.Core;
 
+    /// <summary>
+    /// A plugin which provides utility functions for general tasks that await a developer.
+    /// </summary>
     public class GeneralToolsPlugin : IUtilitiesDevPlugin
     {
+        /// <summary>
+        /// Gets the technical name of the plugin.
+        /// </summary>
         public string Name
         {
             get { return "GeneralToolsPlugin"; }
         }
 
+        /// <summary>
+        /// Gets the label for the menu.
+        /// </summary>
         public string MenuItemLabel
         {
             get { return "General Tools"; }
         }
 
+        /// <summary>
+        /// Call this method if the plugin should be displayed.
+        /// </summary>
+        /// <param name="displayInPluginContainer">The delegate which should be called for displaying the plugin.</param>
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
             displayInPluginContainer(new GeneralToolsUserControl());

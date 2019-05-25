@@ -10,8 +10,12 @@ namespace SoluiNet.DevTools.Transform.Uml
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Transform.Uml.CSharpTransformation;
 
+    /// <summary>
+    /// A plugin which provides transform methods for UML.
+    /// </summary>
     public class TransformUmlPlugin : ITransformPlugin
     {
+        /// <inheritdoc/>
         public List<string> SupportedInputFormats
         {
             get
@@ -20,6 +24,7 @@ namespace SoluiNet.DevTools.Transform.Uml
             }
         }
 
+        /// <inheritdoc/>
         public List<string> SupportedOutputFormats
         {
             get
@@ -29,6 +34,9 @@ namespace SoluiNet.DevTools.Transform.Uml
             }
         }
 
+        /// <summary>
+        /// Gets the technical name of the plugin.
+        /// </summary>
         public string Name
         {
             get
@@ -37,6 +45,7 @@ namespace SoluiNet.DevTools.Transform.Uml
             }
         }
 
+        /// <inheritdoc/>
         public object Transform(string inputFile, string preferedOutputFormat)
         {
             var extension = Path.GetExtension(inputFile);
@@ -62,6 +71,7 @@ namespace SoluiNet.DevTools.Transform.Uml
             return result;
         }
 
+        /// <inheritdoc/>
         public object Transform(string inputStream, string inputFormat, string preferedOutputFormat)
         {
             throw new NotImplementedException();

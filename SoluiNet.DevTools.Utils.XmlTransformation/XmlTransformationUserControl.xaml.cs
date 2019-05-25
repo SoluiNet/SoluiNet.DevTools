@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
     using SoluiNet.DevTools.Core.Tools.File;
 
     /// <summary>
-    /// Interaktionslogik für XmlTransformationUserControl.xaml
+    /// Interaction logic for XmlTransformationUserControl.xaml.
     /// </summary>
     public partial class XmlTransformationUserControl : UserControl
     {

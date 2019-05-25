@@ -17,8 +17,14 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.DataExchange.Jira.Enums;
 
+    /// <summary>
+    /// A plugin which provides data exchange methods for Atlassian JIRA.
+    /// </summary>
     public class JiraDataExchangePlugin : IDataExchangePlugin, IPluginWithSettings, IUtilitiesDevPlugin
     {
+        /// <summary>
+        /// Gets the technical name of the plugin.
+        /// </summary>
         public string Name
         {
             get
@@ -27,16 +33,29 @@ namespace SoluiNet.DevTools.DataExchange.Jira
             }
         }
 
+        /// <summary>
+        /// Gets the label for the menu.
+        /// </summary>
         public string MenuItemLabel
         {
             get { return "JIRA"; }
         }
 
+        /// <summary>
+        /// Call this method if the plugin should be displayed.
+        /// </summary>
+        /// <param name="displayInPluginContainer">The delegate which should be called for displaying the plugin.</param>
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
             displayInPluginContainer(new JiraUserControl());
         }
 
+        /// <summary>
+        /// Get data from JIRA.
+        /// </summary>
+        /// <param name="entityName">The type of the issue (bug, feature, ...)</param>
+        /// <param name="searchData">The search parameters in a dictionary. All parameters will be combined via AND.</param>
+        /// <returns>Returns a list of issues that are matching the overgiven parameters.</returns>
         public List<object> GetData(string entityName, IDictionary<string, object> searchData)
         {
             // throw new NotImplementedException();
@@ -109,11 +128,22 @@ namespace SoluiNet.DevTools.DataExchange.Jira
             return null;
         }
 
+        /// <summary>
+        /// Get data from JIRA.
+        /// </summary>
+        /// <param name="whereClause">The JQL-statement.</param>
+        /// <returns>Returns a list of issues that are matching the overgiven parameters.</returns>
         public List<object> GetData(string whereClause)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Set data in JIRA.
+        /// </summary>
+        /// <param name="identifier">The identifier of the issue.</param>
+        /// <param name="valueData">The properties which should be changed.</param>
+        /// <returns>Returns the changed issue.</returns>
         public object SetData(object identifier, IDictionary<string, object> valueData)
         {
             throw new NotImplementedException();

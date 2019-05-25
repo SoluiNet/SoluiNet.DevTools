@@ -22,10 +22,13 @@ namespace SoluiNet.DevTools.UI.UserControls
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für ManageConnectionStrings.xaml
+    /// Interaction logic for ManageConnectionStrings.xaml.
     /// </summary>
     public partial class ManageConnectionStrings : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManageConnectionStrings"/> class.
+        /// </summary>
         public ManageConnectionStrings()
         {
             this.InitializeComponent();
@@ -74,7 +77,7 @@ namespace SoluiNet.DevTools.UI.UserControls
                     continue;
                 }
 
-                var connectionString = (ConnectionString) item;
+                var connectionString = (ConnectionString)item;
 
                 if (connectionString.ConnectionStringName.Text == "LocalSqlServer")
                 {
@@ -83,7 +86,7 @@ namespace SoluiNet.DevTools.UI.UserControls
 
                 data += string.Format(
                     @"<add name=""{0}"" connectionString=""{1}"" providerName=""{2}"" />",
-                    connectionString.NameKey, 
+                    connectionString.NameKey,
                     connectionString.Value,
                     connectionString.ProviderName);
             }

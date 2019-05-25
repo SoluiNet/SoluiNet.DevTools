@@ -20,11 +20,14 @@ namespace SoluiNet.DevTools.Utils.Crypto
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für UserControl1.xaml
+    /// Interaction logic for CryptoToolsUserControl.xaml.
     /// </summary>
-    public partial class CryptToolsUserControl : UserControl
+    public partial class CryptoToolsUserControl : UserControl
     {
-        public CryptToolsUserControl()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CryptoToolsUserControl"/> class.
+        /// </summary>
+        public CryptoToolsUserControl()
         {
             this.InitializeComponent();
         }

@@ -11,6 +11,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.UI;
 
+    /// <summary>
+    /// An extendable grid which handles assignment targets.
+    /// </summary>
     public class ExtendableAssignmentGrid : ExtendableGrid<AssignmentTarget>
     {
     }

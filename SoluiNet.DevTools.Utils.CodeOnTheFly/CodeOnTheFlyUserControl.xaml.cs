@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für CodeOnTheFlyUserControl.xaml
+    /// Interaction logic for CodeOnTheFlyUserControl.xaml.
     /// </summary>
     public partial class CodeOnTheFlyUserControl : UserControl
     {

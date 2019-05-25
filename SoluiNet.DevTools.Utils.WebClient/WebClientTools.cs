@@ -13,6 +13,9 @@ namespace SoluiNet.DevTools.Utils.WebClient
     using System.Threading.Tasks;
     using System.Xml;
 
+    /// <summary>
+    /// Provides a collection of methods for web clients.
+    /// </summary>
     public static class WebClientTools
     {
         public static void InsertSoapEnvelope(XmlDocument soapEnvelope, HttpWebRequest webRequest)

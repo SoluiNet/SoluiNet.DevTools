@@ -13,10 +13,25 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.Tools.String;
 
+    /// <summary>
+    /// Provides a collection of methods for general purposes.
+    /// </summary>
     public class GeneralUtils
     {
+        /// <summary>
+        /// A delegate to get a processed byte array.
+        /// </summary>
+        /// <param name="originalByteArray">The original byte array.</param>
+        /// <returns>Returns a processed byte array.</returns>
         public delegate byte[] GetProcessedByteArray(byte[] originalByteArray);
 
+        /// <summary>
+        /// Encode a string.
+        /// </summary>
+        /// <param name="originalByteArray">The original byte array.</param>
+        /// <param name="getProcessedByteArrayDelegate">The delegate to process the array.</param>
+        /// <param name="chosenEncoding">The encoding which should be used.</param>
+        /// <returns>Returns an encoded string.</returns>
         public static string Encode(byte[] originalByteArray, GetProcessedByteArray getProcessedByteArrayDelegate, string chosenEncoding = "UTF8")
         {
             string result;
@@ -53,10 +68,15 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return result;
         }
 
-        public static string ByteArrayToString(byte[] ba)
+        /// <summary>
+        /// Convert a byte array to a string.
+        /// </summary>
+        /// <param name="byteArray">The byte array.</param>
+        /// <returns>The string which represents the byte array.</returns>
+        public static string ByteArrayToString(byte[] byteArray)
         {
-            StringBuilder hex = new StringBuilder(ba.Length * 2);
-            foreach (byte b in ba)
+            StringBuilder hex = new StringBuilder(byteArray.Length * 2);
+            foreach (byte b in byteArray)
             {
                 hex.AppendFormat("{0:x2}", b);
             }
@@ -64,11 +84,21 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return hex.ToString();
         }
 
+        /// <summary>
+        /// Encode a string with base64.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <returns>Returns the base64 encoded string.</returns>
         public static string Base64Encode(string plainText)
         {
             return plainText.ToBase64();
         }
 
+        /// <summary>
+        /// Decode a string with base64.
+        /// </summary>
+        /// <param name="encodedString">The encoded string.</param>
+        /// <returns>Returns the base64 decoded string.</returns>
         public static string Base64Decode(string encodedString)
         {
             return encodedString.FromBase64();

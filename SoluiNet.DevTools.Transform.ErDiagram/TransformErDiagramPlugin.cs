@@ -11,8 +11,12 @@ namespace SoluiNet.DevTools.Transform.ErDiagram
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core;
 
+    /// <summary>
+    /// A plugin which provides transform methods for entity relationship diagrams.
+    /// </summary>
     public class TransformErDiagramPlugin : ITransformPlugin
     {
+        /// <inheritdoc/>
         public List<string> SupportedInputFormats
         {
             get
@@ -21,6 +25,7 @@ namespace SoluiNet.DevTools.Transform.ErDiagram
             }
         }
 
+        /// <inheritdoc/>
         public List<string> SupportedOutputFormats
         {
             get
@@ -29,6 +34,9 @@ namespace SoluiNet.DevTools.Transform.ErDiagram
             }
         }
 
+        /// <summary>
+        /// Gets the technical name of the plugin.
+        /// </summary>
         public string Name
         {
             get
@@ -37,11 +45,13 @@ namespace SoluiNet.DevTools.Transform.ErDiagram
             }
         }
 
+        /// <inheritdoc/>
         public object Transform(string inputFile, string preferedOutputFormat)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public object Transform(string inputStream, string inputFormat, string preferedOutputFormat)
         {
             throw new NotImplementedException();

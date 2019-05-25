@@ -10,9 +10,19 @@ namespace SoluiNet.DevTools.DataExchange.Jira.Enums
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// An enumeration about possible JIRA authentication methods.
+    /// </summary>
     public enum JiraAuthentication
     {
+        /// <summary>
+        /// Basic authentication
+        /// </summary>
         BasicAuthentication,
+
+        /// <summary>
+        /// JWT authentication
+        /// </summary>
         JwtAuthentication,
     }
 }

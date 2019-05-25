@@ -15,7 +15,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
     using SoluiNet.DevTools.Core.WebClientDefinition;
 
     /// <summary>
-    /// Interaktionslogik für WebClientPluginSelection.xaml
+    /// Interaction logic for WebClientPluginSelection.xaml.
     /// </summary>
     public partial class WebClientPluginSelection : UserControl
     {

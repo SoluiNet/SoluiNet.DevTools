@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für WebClientAdditionalOptionControl.xaml
+    /// Interaction logic for WebClientAdditionalOptionControl.xaml.
     /// </summary>
     public partial class WebClientAdditionalOptionControl : UserControl
     {

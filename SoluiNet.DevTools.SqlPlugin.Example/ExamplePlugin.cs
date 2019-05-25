@@ -21,65 +21,85 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using SoluiNet.DevTools.Core.Tools.Database;
     using SoluiNet.DevTools.Core.Tools.UI;
 
+    /// <summary>
+    /// A plugin which provides methods to work with the example project.
+    /// </summary>
     public class ExamplePlugin : ISqlDevPlugin, IWebClientSupportPlugin, IPluginWithSettings, IGroupedUtilitiesDevPlugin
     {
+        /// <inheritdoc/>
         public string Group
         {
             get { return "Example"; }
         }
 
+        /// <summary>
+        /// Gets the technical name of the plugin.
+        /// </summary>
         public string Name
         {
             get { return "Example"; }
         }
 
+        /// <inheritdoc/>
         public Color AccentColour1
         {
             get { return Color.FromRgb(128, 128, 128); }
         }
 
+        /// <inheritdoc/>
         public Color AccentColour2
         {
             get { return Color.FromRgb(200, 200, 200); }
         }
 
+        /// <inheritdoc/>
         public Color ForegroundColour
         {
             get { return Colors.Black; }
         }
 
+        /// <inheritdoc/>
         public Color BackgroundColour
         {
             get { return Color.FromRgb(200, 200, 200); }
         }
 
+        /// <inheritdoc/>
         public Color BackgroundAccentColour
         {
             get { return Color.FromRgb(128, 128, 128); }
         }
 
+        /// <inheritdoc/>
         public string Environment { get; set; }
 
+        /// <inheritdoc/>
         public string ConnectionStringName
         {
             get { return PluginHelper.GetConnectionString(this, this.DefaultConnectionStringName); }
         }
 
+        /// <inheritdoc/>
         public string DefaultConnectionStringName
         {
             get { return "ExampleConnection"; }
         }
 
+        /// <inheritdoc/>
         public WebClientFormatEnum Format
         {
             get { return WebClientFormatEnum.Xml; }
         }
 
+        /// <inheritdoc/>
         public WebClientTypeEnum Type
         {
             get { return WebClientTypeEnum.Soap; }
         }
 
+        /// <summary>
+        /// Gets the label for the menu.
+        /// </summary>
         public string MenuItemLabel
         {
             get { return "Utility Example"; }
@@ -87,16 +107,19 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
         private Grid MainGrid { get; set; }
 
+        /// <inheritdoc/>
         public DataTable ExecuteSql(string sqlCommand)
         {
             return DbHelper.ExecuteSqlCommand(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName, ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, sqlCommand);
         }
 
+        /// <inheritdoc/>
         public List<DataTable> ExecuteSqlScript(string sqlCommand)
         {
             return DbHelper.ExecuteSqlScript(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName, ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, sqlCommand);
         }
 
+        /// <inheritdoc/>
         public void DisplayForWpf(Grid mainGrid)
         {
             this.MainGrid = mainGrid;
@@ -162,6 +185,10 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
             }
         }
 
+        /// <summary>
+        /// Call this method if the plugin should be displayed.
+        /// </summary>
+        /// <param name="displayInPluginContainer">The delegate which should be called for displaying the plugin.</param>
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
             displayInPluginContainer(new ExampleUserControl());

@@ -11,6 +11,9 @@ namespace SoluiNet.DevTools.Utils.File
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Provides a collection of methods for files.
+    /// </summary>
     public class FileTools
     {
         public static List<string> ExtractLinesContainingSearchPattern(string filePath, string searchPattern)

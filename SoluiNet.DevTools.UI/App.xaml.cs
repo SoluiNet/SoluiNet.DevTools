@@ -19,22 +19,34 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.Tools.Json;
 
     /// <summary>
-    /// Interaktionslogik für "App.xaml"
+    /// Interaction logic for "App.xaml".
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Gets or sets all available plugins.
+        /// </summary>
         internal ICollection<IBasePlugin> Plugins { get; set; }
 
+        /// <summary>
+        /// Gets or sets all available plugins that provide database connectivity functions.
+        /// </summary>
         internal ICollection<ISqlDevPlugin> SqlPlugins { get; set; }
 
+        /// <summary>
+        /// Gets or sets all available plugins that provide utility functions.
+        /// </summary>
         internal ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
 
+        /// <summary>
+        /// Gets or sets all available plugins that will run in the background.
+        /// </summary>
         internal ICollection<IPluginWithBackgroundTask> BackgroundTaskPlugins { get; set; }
 
         /// <summary>
-        /// Event handling for start up
+        /// Event handling for start up.
         /// </summary>
-        /// <param name="e">The start up event</param>
+        /// <param name="e">The start up event.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -95,7 +107,7 @@ namespace SoluiNet.DevTools.UI
                         }
                         else
                         {
-                            pluginTypes.Add(type, new List<string> () { "PluginDev" });
+                            pluginTypes.Add(type, new List<string>() { "PluginDev" });
                         }
                     }
 

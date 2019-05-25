@@ -15,8 +15,20 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
     using Newtonsoft.Json;
     using SoluiNet.DevTools.Core.Tools.String;
 
+    /// <summary>
+    /// Provides a collection of methods for code handling.
+    /// </summary>
     public static class CodeOnTheFlyTools
     {
+        /// <summary>
+        /// Run code dynamically.
+        /// </summary>
+        /// <param name="code">The source code in a string.</param>
+        /// <param name="sourceCodeComplete">A value which indicates if the source code is complete or if only a part has been delivered.</param>
+        /// <param name="executingMethod">The method which should be executed.</param>
+        /// <param name="languageProvider">The programming language in which the source code has been delivered.</param>
+        /// <param name="methodParameters">A list of parameters which should be overgiven to the executing method.</param>
+        /// <returns>Returns the returned value from the executing method (casted to string, will be converted to JSON if returned value isn't a primitive one).</returns>
         public static string RunDynamicCode(string code, bool sourceCodeComplete = false, string executingMethod = "main", string languageProvider = "CSharp", params object[] methodParameters)
         {
             var compiler = CodeDomProvider.CreateProvider(languageProvider);

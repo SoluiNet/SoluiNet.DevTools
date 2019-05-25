@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Utils.Tfs
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für TfsUserControl.xaml
+    /// Interaction logic for TfsUserControl.xaml.
     /// </summary>
     public partial class TfsUserControl : UserControl
     {

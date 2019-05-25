@@ -20,10 +20,13 @@ namespace SoluiNet.DevTools.Utils.Flyway
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für FlywayUserControl.xaml
+    /// Interaction logic for FlywayUserControl.xaml.
     /// </summary>
     public partial class FlywayUserControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FlywayUserControl"/> class.
+        /// </summary>
         public FlywayUserControl()
         {
             this.InitializeComponent();

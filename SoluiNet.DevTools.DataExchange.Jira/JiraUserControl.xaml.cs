@@ -22,7 +22,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     using SoluiNet.DevTools.Core.Tools;
 
     /// <summary>
-    /// Interaktionslogik für JiraUserControl.xaml
+    /// Interaction logic for JiraUserControl.xaml.
     /// </summary>
     public partial class JiraUserControl : UserControl
     {

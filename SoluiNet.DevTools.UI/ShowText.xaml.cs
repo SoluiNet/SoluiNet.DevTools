@@ -22,16 +22,13 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.UI;
 
     /// <summary>
-    /// Interaktionslogik für ShowText.xaml
+    /// Interaction logic for ShowText.xaml.
     /// </summary>
     public partial class ShowText : SoluiNetWindow
     {
-        public string Text
-        {
-            get { return this.TextToShow.Text; }
-            set { this.TextToShow.Text = value; }
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShowText"/> class.
+        /// </summary>
         public ShowText()
         {
             this.InitializeComponent();
@@ -39,6 +36,15 @@ namespace SoluiNet.DevTools.UI
             var highlighting = UIHelper.LoadHighlightingDefinition(typeof(ShowText), "SQL.xshd");
 
             this.TextToShow.SyntaxHighlighting = highlighting;
+        }
+
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        public string Text
+        {
+            get { return this.TextToShow.Text; }
+            set { this.TextToShow.Text = value; }
         }
 
         private void CloseWindow_Click(object sender, RoutedEventArgs e)

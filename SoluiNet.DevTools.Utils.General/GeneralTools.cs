@@ -10,6 +10,9 @@ namespace SoluiNet.DevTools.Utils.General
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Provides a collection of methods for general purposes.
+    /// </summary>
     public class GeneralTools
     {
         public static long[] GetNumberArrayByBase(long originalNumber, long baseNumber)

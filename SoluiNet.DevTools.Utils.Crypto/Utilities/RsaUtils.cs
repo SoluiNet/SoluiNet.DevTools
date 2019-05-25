@@ -15,8 +15,17 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
     using Org.BouncyCastle.Crypto.Engines;
     using Org.BouncyCastle.OpenSsl;
 
+    /// <summary>
+    /// Provides a collection of methods to work with RSA encryption.
+    /// </summary>
     public class RsaUtils : ICryptoUtil
     {
+        /// <summary>
+        /// Encrypt a plain text with RSA.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="publicKeyPath">The public key path.</param>
+        /// <returns>Returns an encrypted text.</returns>
         public static string Encrypt(string plainText, string publicKeyPath)
         {
             var bytesToEncrypt = Encoding.UTF8.GetBytes(plainText);
@@ -35,6 +44,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return encrypted;
         }
 
+        /// <summary>
+        /// Encrypt a plain text with RSA and base64 encode it.
+        /// </summary>
+        /// <param name="clearText">The plain text.</param>
+        /// <param name="publicKeyPath">The public key path.</param>
+        /// <returns>Returns an encrypted and base64 encoded text.</returns>
         public static string EncryptAndBase64Encode(string clearText, string publicKeyPath)
         {
             var bytesToEncrypt = Encoding.UTF8.GetBytes(clearText);
@@ -53,6 +68,13 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return encrypted;
         }
 
+        /// <summary>
+        /// Decrypt an encrypted text with RSA.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        /// <param name="privateKeyPath">The private key path.</param>
+        /// <param name="chosenEncoding">The chosen encoding.</param>
+        /// <returns>Returns a decrypted text.</returns>
         public static string Decrypt(string encryptedText, string privateKeyPath, string chosenEncoding = "UTF8")
         {
             var bytesToDecrypt = Encoding.Unicode.GetBytes(encryptedText);
@@ -71,6 +93,13 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return decrypted;
         }
 
+        /// <summary>
+        /// Decrypt a base64 encoded and encrypted text with RSA.
+        /// </summary>
+        /// <param name="base64Input">The encrypted text.</param>
+        /// <param name="privateKeyPath">The private key path.</param>
+        /// <param name="chosenEncoding">The chosen encoding.</param>
+        /// <returns>Returns a base64 decoded and decrypted text.</returns>
         public static string Base64DecodeAndDecrypt(string base64Input, string privateKeyPath, string chosenEncoding = "UTF8")
         {
             var bytesToDecrypt = Convert.FromBase64String(base64Input);
@@ -89,6 +118,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return decrypted;
         }
 
+        /// <summary>
+        /// Encrypt a plain text with RSA.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns an encrypted text.</returns>
         public string Encrypt(string plainText, IDictionary<string, object> options)
         {
             var publicKeyPath = options["PublicKeyPath"].ToString();
@@ -106,6 +141,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return Encrypt(plainText, publicKeyPath);
         }
 
+        /// <summary>
+        /// Encrypt a plain text with RSA and base64 encode it.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns an encrypted and base64 encoded text.</returns>
         public string EncryptAndBase64Encode(string plainText, IDictionary<string, object> options)
         {
             var publicKeyPath = options["PublicKeyPath"].ToString();
@@ -123,6 +164,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return EncryptAndBase64Encode(plainText, publicKeyPath);
         }
 
+        /// <summary>
+        /// Decrypt an encrypted text with RSA.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns a decrypted text.</returns>
         public string Decrypt(string encryptedText, IDictionary<string, object> options)
         {
             var privateKeyPath = options["PrivateKeyPath"].ToString();
@@ -140,6 +187,12 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
             return Decrypt(encryptedText, privateKeyPath);
         }
 
+        /// <summary>
+        /// Decrypt a base64 encoded and encrypted text with RSA.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns a base64 decoded and decrypted text.</returns>
         public string Base64DecodeAndDecrypt(string encryptedText, IDictionary<string, object> options)
         {
             var privateKeyPath = options["PrivateKeyPath"].ToString();

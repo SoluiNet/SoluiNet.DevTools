@@ -24,10 +24,13 @@ namespace SoluiNet.DevTools.Utils.File
     using SoluiNet.DevTools.Core.Tools.File;
 
     /// <summary>
-    /// Interaktionslogik für UserControl1.xaml
+    /// Interaction logic for FileToolsUserControl.xaml.
     /// </summary>
     public partial class FileToolsUserControl : System.Windows.Controls.UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileToolsUserControl"/> class.
+        /// </summary>
         public FileToolsUserControl()
         {
             this.InitializeComponent();

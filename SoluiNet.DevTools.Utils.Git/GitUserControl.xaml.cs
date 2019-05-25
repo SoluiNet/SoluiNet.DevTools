@@ -20,10 +20,13 @@ namespace SoluiNet.DevTools.Utils.Git
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für GitUserControl.xaml
+    /// Interaction logic for GitUserControl.xaml.
     /// </summary>
     public partial class GitUserControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GitUserControl"/> class.
+        /// </summary>
         public GitUserControl()
         {
             this.InitializeComponent();

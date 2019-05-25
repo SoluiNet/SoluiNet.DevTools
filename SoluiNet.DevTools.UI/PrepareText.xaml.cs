@@ -21,10 +21,13 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.UI;
 
     /// <summary>
-    /// Interaktionslogik für PrepareText.xaml
+    /// Interaction logic for PrepareText.xaml.
     /// </summary>
     public partial class PrepareText : SoluiNetWindow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrepareText"/> class.
+        /// </summary>
         public PrepareText()
         {
             this.InitializeComponent();
@@ -58,7 +61,9 @@ namespace SoluiNet.DevTools.UI
             var chosenReplacement = (sender as ComboBox).SelectedItem as ComboBoxItem;
 
             if (chosenReplacement == null)
+            {
                 return;
+            }
 
             switch (chosenReplacement.Content)
             {

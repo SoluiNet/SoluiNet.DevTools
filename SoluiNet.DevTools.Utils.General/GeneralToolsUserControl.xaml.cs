@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Utils.General
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für GeneralToolsUserControl.xaml
+    /// Interaction logic for GeneralToolsUserControl.xaml.
     /// </summary>
     public partial class GeneralToolsUserControl : UserControl
     {

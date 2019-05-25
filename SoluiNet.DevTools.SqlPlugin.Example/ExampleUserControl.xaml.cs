@@ -20,10 +20,13 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using System.Windows.Shapes;
 
     /// <summary>
-    /// Interaktionslogik für ExampleUserControl.xaml
+    /// Interaction logic for ExampleUserControl.xaml.
     /// </summary>
     public partial class ExampleUserControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExampleUserControl"/> class.
+        /// </summary>
         public ExampleUserControl()
         {
             this.InitializeComponent();

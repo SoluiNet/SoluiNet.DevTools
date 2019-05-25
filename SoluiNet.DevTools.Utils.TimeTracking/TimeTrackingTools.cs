@@ -11,8 +11,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Provides a collection of methods for time tracking.
+    /// </summary>
     public static class TimeTrackingTools
     {
+        /// <summary>
+        /// Get the title of the most foreground window.
+        /// </summary>
+        /// <returns>Returns the title of the most foreground window.</returns>
         public static string GetTitleOfWindowInForeground()
         {
             const int countOfCharacters = 256;

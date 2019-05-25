@@ -12,8 +12,17 @@ namespace SoluiNet.DevTools.Utils.Crypto
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Utils.Crypto.Utilities;
 
+    /// <summary>
+    /// Provides a collection of methods for cryptography and hashing.
+    /// </summary>
     public class CryptoTools
     {
+        /// <summary>
+        /// Encrypt a plain text.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="options">The encryption options.</param>
+        /// <returns>Returns the encrypted text.</returns>
         public static string Encrypt(string plainText, IDictionary<string, object> options)
         {
             var toEncrypt = plainText;
@@ -105,6 +114,12 @@ namespace SoluiNet.DevTools.Utils.Crypto
             return encryptedText;
         }
 
+        /// <summary>
+        /// Decrypt an encrypted text.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        /// <param name="options">The decryption options.</param>
+        /// <returns>Returns a decrypted text.</returns>
         public static string Decrypt(string encryptedText, IDictionary<string, object> options)
         {
             var toDecrypt = encryptedText;
