@@ -37,16 +37,9 @@ namespace SoluiNet.DevTools.UI
     /// </summary>
     public partial class MainWindow : SoluiNetWindow
     {
-        private string LoggingPath { get; set; }
-
-        private Logger Logger
-        {
-            get
-            {
-                return LogManager.GetCurrentClassLogger();
-            }
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
             this.InitializeComponent();
@@ -88,7 +81,7 @@ namespace SoluiNet.DevTools.UI
                             utilityPlugin.Execute(x =>
                             {
                                 var pluginVisualizeWindow = new VisualPluginContainer();
-                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", string.Format("{0} / {1}" , (utilityPlugin as IGroupedUtilitiesDevPlugin).Group, utilityPlugin.MenuItemLabel) } });
+                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", string.Format("{0} / {1}", (utilityPlugin as IGroupedUtilitiesDevPlugin).Group, utilityPlugin.MenuItemLabel) } });
 
                                 pluginVisualizeWindow.ContentGrid.Children.Add(x);
 
@@ -130,6 +123,26 @@ namespace SoluiNet.DevTools.UI
             this.LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
         }
 
+        private string LoggingPath { get; set; }
+
+        private Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
+
+        private static TreeViewItem VisualUpwardSearch(DependencyObject source)
+        {
+            while (source != null && !(source is TreeViewItem))
+            {
+                source = VisualTreeHelper.GetParent(source);
+            }
+
+            return source as TreeViewItem;
+        }
+
         private static void PopulateGridContextMenu(DataGrid dataGrid)
         {
             var contextMenu = dataGrid.ContextMenu;
@@ -154,7 +167,7 @@ namespace SoluiNet.DevTools.UI
                     return;
                 }
 
-                //Clipboard.SetData(DataFormats.StringFormat, UIHelper.GetDataGridData(containingGrid));
+                // Clipboard.SetData(DataFormats.StringFormat, UIHelper.GetDataGridData(containingGrid));
                 Clipboard.SetText(UIHelper.GetDataGridAsText(containingGrid));
             };
 
@@ -333,10 +346,13 @@ namespace SoluiNet.DevTools.UI
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    File.WriteAllText(saveFileDialog.FileName, string.Format(
-                        "/*{0}*/\r\n{1}",
-                        ((TabItem)containingGrid.Parent).Tag.ToString(),
-                        UIHelper.GetDataGridAsSql(containingGrid)), Encoding.UTF8);
+                    File.WriteAllText(
+                        saveFileDialog.FileName,
+                        string.Format(
+                            "/*{0}*/\r\n{1}",
+                            ((TabItem)containingGrid.Parent).Tag.ToString(),
+                            UIHelper.GetDataGridAsSql(containingGrid)),
+                        encoding: Encoding.UTF8);
                 }
             };
 
@@ -364,7 +380,8 @@ namespace SoluiNet.DevTools.UI
             foreach (var table in data)
             {
                 var dataGridSqlResults = new DataGrid();
-                //dataGridSqlResults.AutoGenerateColumns = true;
+
+                // dataGridSqlResults.AutoGenerateColumns = true;
                 dataGridSqlResults.BeginningEdit += this.BeginEditSqlResult;
 
                 dataGridSqlResults.ContextMenu = new ContextMenu();
@@ -380,14 +397,13 @@ namespace SoluiNet.DevTools.UI
                 {
                     args.ClipboardRowContent.Clear();
                     args.ClipboardRowContent.Add(new DataGridClipboardCellContent(args.Item, (sender as DataGrid).Columns[0], UIHelper.GetSelectedCellAsText(sender as DataGrid)));
-
                 };
 
                 var tabIndexSqlResults = this.SqlResults.Items.Add(new TabItem()
                 {
                     Header = new ContentControl()
                     {
-                        Content = string.Format("{0} - {1:yyyy-MM-dd\"T\"HH:mm:ss}", plugin.Name, DateTime.Now)
+                        Content = string.Format("{0} - {1:yyyy-MM-dd\"T\"HH:mm:ss}", plugin.Name, DateTime.Now),
                     },
                 });
 
@@ -414,8 +430,7 @@ namespace SoluiNet.DevTools.UI
                     dataGridSqlResults.Columns.Add(new DataGridTextColumn() { Header = column.ColumnName, Binding = new Binding(column.ColumnName) });
                 }
 
-                //dataGridSqlResults.DataContext = data.DefaultView;
-
+                // dataGridSqlResults.DataContext = data.DefaultView;
                 foreach (var row in table.DefaultView)
                 {
                     dataGridSqlResults.Items.Add(row);
@@ -427,8 +442,7 @@ namespace SoluiNet.DevTools.UI
 
         private void BeginEditSqlResult(object sender, DataGridBeginningEditEventArgs e)
         {
-            //throw new NotImplementedException();
-
+            // throw new NotImplementedException();
             e.Cancel = true;
         }
 
@@ -443,7 +457,7 @@ namespace SoluiNet.DevTools.UI
             {
                 this.ExecuteSqlCommand();
             }
-            else if(e.Key == Key.Space && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            else if (e.Key == Key.Space && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             {
                 e.Handled = true;
 
@@ -495,7 +509,6 @@ namespace SoluiNet.DevTools.UI
 
         private void ChangeProjectConnection(string chosenProject, string chosenEnvironment = "Default")
         {
-
             var dataEntities = this.GetEntityTypes(chosenProject);
             var sqlScripts = this.GetSqlScripts(chosenProject);
 
@@ -534,7 +547,6 @@ namespace SoluiNet.DevTools.UI
             if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
             {
                 // this works only for Microsoft SQL Server
-
                 var sqlCommand = "SELECT OBJECT_NAME(OBJECT_ID) AS name, " +
                                  "definition " +
                                  "FROM sys.sql_modules " +
@@ -551,7 +563,7 @@ namespace SoluiNet.DevTools.UI
                         Tag = new StoredProcedure
                         {
                             Name = record.Row["name"].ToString(),
-                            BodyDefinition = record.Row["definition"].ToString()
+                            BodyDefinition = record.Row["definition"].ToString(),
                         },
                     });
                 }
@@ -563,7 +575,6 @@ namespace SoluiNet.DevTools.UI
             if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
             {
                 // this works only for Microsoft SQL Server
-
                 var sqlCommand = "SELECT DISTINCT " +
                     "s.name + '.' + o.name AS object_name, " +
                     "o.type_desc, " +
@@ -583,7 +594,7 @@ namespace SoluiNet.DevTools.UI
                         Tag = new StoredFunction
                         {
                             Name = record.Row["object_name"].ToString(),
-                            BodyDefinition = record.Row["definition"].ToString()
+                            BodyDefinition = record.Row["definition"].ToString(),
                         },
                     });
                 }
@@ -595,7 +606,6 @@ namespace SoluiNet.DevTools.UI
             if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
             {
                 // this works only for Microsoft SQL Server
-
                 var sqlCommand = "SELECT name, definition " +
                                  "FROM sys.objects obj " +
                                  "JOIN sys.sql_modules mod ON mod.object_id = obj.object_id " +
@@ -611,7 +621,7 @@ namespace SoluiNet.DevTools.UI
                         Tag = new View
                         {
                             Name = record.Row["name"].ToString(),
-                            BodyDefinition = record.Row["definition"].ToString()
+                            BodyDefinition = record.Row["definition"].ToString(),
                         },
                     });
                 }
@@ -649,6 +659,7 @@ namespace SoluiNet.DevTools.UI
 
                 return;
             }
+
             var chosenProject = this.Project.Text;
 
             this.GetSqlForTable(chosenProject);
@@ -663,16 +674,6 @@ namespace SoluiNet.DevTools.UI
                 treeViewItem.Focus();
                 e.Handled = true;
             }
-        }
-
-        private static TreeViewItem VisualUpwardSearch(DependencyObject source)
-        {
-            while (source != null && !(source is TreeViewItem))
-            {
-                source = VisualTreeHelper.GetParent(source);
-            }
-
-            return source as TreeViewItem;
         }
 
         private void PrepareText_Click(object sender, RoutedEventArgs e)
@@ -853,7 +854,8 @@ namespace SoluiNet.DevTools.UI
             }
 
             completionWindow.Show();
-            completionWindow.Closed += (sender, e) => {
+            completionWindow.Closed += (sender, e) =>
+            {
                 completionWindow = null;
             };
         }

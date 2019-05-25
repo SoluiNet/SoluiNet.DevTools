@@ -79,7 +79,7 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
 
             var codeParameters = new object[5];
             codeParameters[0] = "SampleString 123";
-            codeParameters[1] = (float)1.23; // sample float
+            codeParameters[1] = 1.23F; // sample float
             codeParameters[2] = 1234; // sample int
             codeParameters[3] = (double)1.23; // sample double
             codeParameters[4] = DateTime.UtcNow; // sample DateTime

@@ -1,16 +1,20 @@
-﻿using SoluiNet.DevTools.Core.Tools.XML;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Xsl;
+﻿// <copyright file="XmlTools.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.XmlTransformation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Xml;
+    using System.Xml.Schema;
+    using System.Xml.Xsl;
+    using SoluiNet.DevTools.Core.Tools.XML;
+
     public class XmlTools
     {
         /// <summary>
@@ -25,11 +29,11 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
         }
 
         /// <summary>
-        /// Transforms a XML String with the overgiven XSL template
+        /// Transforms a XML String with the overgiven XSL template.
         /// </summary>
-        /// <param name="xsl">The XSL template</param>
-        /// <param name="xml">The XML string</param>
-        /// <returns>Returns the transformed XML</returns>
+        /// <param name="xslTemplate">The XSL template.</param>
+        /// <param name="xmlString">The XML string.</param>
+        /// <returns>Returns the transformed XML.</returns>
         public static string Transform(string xslTemplate, string xmlString)
         {
             return XmlHelper.Transform(xslTemplate, xmlString);
@@ -45,9 +49,13 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
                 xmlSchema = XmlSchema.Read(xsdReader, (validationSender, eventArg) =>
                 {
                     if (eventArg.Severity == XmlSeverityType.Warning)
+                    {
                         result += "XSD - WARNING: ";
+                    }
                     else if (eventArg.Severity == XmlSeverityType.Error)
+                    {
                         result += "XSD - ERROR: ";
+                    }
 
                     result += eventArg.Message + "\r\n";
                 });
@@ -65,9 +73,13 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
             settings.ValidationEventHandler += (validationSender, eventArg) =>
             {
                 if (eventArg.Severity == XmlSeverityType.Warning)
+                {
                     result += "XML -WARNING: ";
+                }
                 else if (eventArg.Severity == XmlSeverityType.Error)
+                {
                     result += "XML -ERROR: ";
+                }
 
                 result += eventArg.Message + "\r\n";
             };
@@ -81,7 +93,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
                     }
                 }
             }
-            catch(XmlException xmlException)
+            catch (XmlException xmlException)
             {
                 result += string.Format("XML-Exception: {0}", xmlException.Message + "\r\n" + xmlException.InnerException?.Message);
             }

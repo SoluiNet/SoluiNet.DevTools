@@ -1,14 +1,15 @@
-﻿using SoluiNet.DevTools.Core;
-using SoluiNet.DevTools.Transform.Uml.CSharpTransformation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="TransformUmlPlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Transform.Uml
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Transform.Uml.CSharpTransformation;
+
     public class TransformUmlPlugin : ITransformPlugin
     {
         public List<string> SupportedInputFormats
@@ -24,7 +25,6 @@ namespace SoluiNet.DevTools.Transform.Uml
             get
             {
                 // for XMI see following page: http://www.omgwiki.org/model-interchange/doku.php?id=start
-
                 return new List<string> { "xml", "uml", "jpg", "xmi" };
             }
         }

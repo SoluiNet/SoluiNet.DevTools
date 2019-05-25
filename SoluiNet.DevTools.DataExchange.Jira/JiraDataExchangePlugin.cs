@@ -1,18 +1,22 @@
-﻿using RestSharp;
-using RestSharp.Authenticators;
-using SoluiNet.DevTools.Core;
-using SoluiNet.DevTools.Core.Tools;
-using SoluiNet.DevTools.Core.Tools.String;
-using SoluiNet.DevTools.DataExchange.Jira.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿// <copyright file="JiraDataExchangePlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.DataExchange.Jira
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Controls;
+    using RestSharp;
+    using RestSharp.Authenticators;
+    using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.String;
+    using SoluiNet.DevTools.DataExchange.Jira.Enums;
+
     public class JiraDataExchangePlugin : IDataExchangePlugin, IPluginWithSettings, IUtilitiesDevPlugin
     {
         public string Name
@@ -35,8 +39,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
 
         public List<object> GetData(string entityName, IDictionary<string, object> searchData)
         {
-            //throw new NotImplementedException();
-
+            // throw new NotImplementedException();
             var settings = PluginHelper.GetSettingsAsDictionary(this);
 
             if (settings == null)
@@ -48,19 +51,18 @@ namespace SoluiNet.DevTools.DataExchange.Jira
 
             // registration needed
             // https://developer.atlassian.com/cloud/jira/platform/oauth-2-authorization-code-grants-3lo-for-apps/#accesstoken
-
             if (entityName == "ticket")
             {
-                //var request = new RestRequest("rest/api/latest/issue/{issueKey}", Method.GET);
+                // var request = new RestRequest("rest/api/latest/issue/{issueKey}", Method.GET);
                 var request = new RestRequest("rest/api/latest/search", Method.GET);
-                //request.AddUrlSegment("issueKey", searchData["issueKey"].ToString());
 
+                // request.AddUrlSegment("issueKey", searchData["issueKey"].ToString());
                 foreach (var searchElement in searchData)
                 {
                     request.AddParameter(searchElement.Key, searchElement.Value.ToString());
                 }
 
-                //request.AddHeader("Authorization", string.Format("Bearer {0}", settings["Default.AccessToken"].ToString()));
+                // request.AddHeader("Authorization", string.Format("Bearer {0}", settings["Default.AccessToken"].ToString()));
                 if (!string.IsNullOrEmpty(settings.ContainsKey("Default.JiraAuthentication") ? settings["Default.JiraAuthentication"]?.ToString() : string.Empty))
                 {
                     var authenticationMethod = Enum.Parse(typeof(JiraAuthentication), settings["Default.JiraAuthentication"].ToString());
@@ -72,6 +74,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
                             {
                                 request.AddHeader("Bearer", settings["Default.AccessToken"].ToString());
                             }
+
                             break;
                         case JiraAuthentication.BasicAuthentication:
                             if (string.IsNullOrEmpty(settings.ContainsKey("Default.JiraUser") ? settings["Default.JiraUser"]?.ToString() : string.Empty))
@@ -87,17 +90,16 @@ namespace SoluiNet.DevTools.DataExchange.Jira
                             var jiraUser = settings["Default.JiraUser"]?.ToString();
                             var jiraApiToken = settings["Default.JiraApiToken"]?.ToString();
 
-                            //var authenticationValue = string.Format("{0}:{1}", jiraUser, jiraApiToken).ToBase64();
+                            // var authenticationValue = string.Format("{0}:{1}", jiraUser, jiraApiToken).ToBase64();
 
-                            //request.AddHeader("Authorization", string.Format("Basic {0}", authenticationValue));
+                            // request.AddHeader("Authorization", string.Format("Basic {0}", authenticationValue));
                             client.Authenticator = new HttpBasicAuthenticator(jiraUser, jiraApiToken);
                             break;
                     }
                 }
-                //request.AddHeader("Accept", "application/json");
-                //request.AddHeader("Content-Type", "application/json");
 
-
+                // request.AddHeader("Accept", "application/json");
+                // request.AddHeader("Content-Type", "application/json");
                 var response = client.Execute(request);
                 var content = response.Content;
 

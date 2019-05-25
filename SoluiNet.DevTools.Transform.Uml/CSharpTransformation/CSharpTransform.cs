@@ -1,12 +1,11 @@
-﻿using SoluiNet.DevTools.Core.Tools.File;
-using SoluiNet.DevTools.Core.Tools.XML;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="CSharpTransform.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
+
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Linq;
+using SoluiNet.DevTools.Core.Tools.File;
+using SoluiNet.DevTools.Core.Tools.XML;
 
 namespace SoluiNet.DevTools.Transform.Uml.CSharpTransformation
 {

@@ -1,5 +1,7 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿// <copyright file="AssemblyInfo.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
+
 using System.Runtime.InteropServices;
 
 // Durch Festlegen von ComVisible auf FALSE werden die Typen in dieser Assembly
