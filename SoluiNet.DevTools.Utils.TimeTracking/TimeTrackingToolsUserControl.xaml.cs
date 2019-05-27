@@ -42,6 +42,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         public TimeTrackingToolsUserControl()
         {
             this.InitializeComponent();
+
+            this.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            this.Arrange(new Rect(0, 0, this.DesiredSize.Width, this.DesiredSize.Height));
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -63,6 +66,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 .GroupBy(x => x.ApplicationIdentification);
 
             var highestDuration = timeTargets.Any() ? timeTargets.Max(x => x.Any() ? x.Sum(y => y != null ? y.Duration : 0) : 0) : 0;
+            this.TimeTrackingAssignmentOverview.Tag = highestDuration;
 
             foreach (var timeTarget in timeTargets)
             {
@@ -337,6 +341,31 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             this.TimeTrackingStatistics.Children.Add(barsChart);
             #endregion
+        }
+
+        private void TimeTrackingTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as TabControl).SelectedIndex != 1)
+            {
+                return;
+            }
+
+            var highestDuration = Convert.ToDouble(this.TimeTrackingAssignmentOverview.Tag);
+
+            foreach (var element in this.TimeTrackingAssignmentOverview.Children)
+            {
+                if (!(element is Button))
+                {
+                    continue;
+                }
+
+                var timeTarget = (element as Button).Tag as IGrouping<string, UsageTime>;
+
+                if (highestDuration > 0)
+                {
+                    (element as Button).Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.TimeTrackingAssignmentOverview.ActualWidth;
+                }
+            }
         }
     }
 }

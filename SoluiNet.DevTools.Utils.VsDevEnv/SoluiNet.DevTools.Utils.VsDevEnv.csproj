@@ -66,6 +66,7 @@
     <Compile Remove="obj\x86\Debug\net461\VsDevEnvToolsUserControl.g.i.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="SoluiNet.DevTools.Utils.VsDevEnv.csproj~RF2f158d0b.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>

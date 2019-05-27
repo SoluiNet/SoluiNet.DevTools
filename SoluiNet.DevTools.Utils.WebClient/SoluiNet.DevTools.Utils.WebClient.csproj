@@ -97,6 +97,7 @@
     <Compile Remove="obj\x64\Debug\net461\WebClientPluginSelection.g.i.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="SoluiNet.DevTools.Utils.WebClient.csproj~RF2f13113e.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>

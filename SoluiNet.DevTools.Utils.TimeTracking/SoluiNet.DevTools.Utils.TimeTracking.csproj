@@ -11,7 +11,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\SoluiNet.DevTools.UI\bin\$(TargetFramework)\$(Platform)\$(Configuration)\Plugins\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-    <NoWarn>$(NoWarn),1123</NoWarn>
+    <NoWarn>$(NoWarn),SA1123</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="stylecop.json" />

@@ -64,6 +64,7 @@
     <Compile Remove="obj\x64\Debug\net461\XmlTransformationUserControl.g.i.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="SoluiNet.DevTools.Utils.XmlTransformation.csproj~RF2f141262.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>

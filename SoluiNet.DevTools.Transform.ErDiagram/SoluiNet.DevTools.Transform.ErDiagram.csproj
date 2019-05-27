@@ -36,6 +36,7 @@
     <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="SoluiNet.DevTools.Transform.ErDiagram.csproj~RF2f0e2b46.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>

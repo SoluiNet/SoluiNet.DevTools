@@ -14,6 +14,7 @@
     <NoWarn>$(NoWarn)</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="SoluiNet.DevTools.Utils.Tfs.csproj~RF2f15b96b.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
