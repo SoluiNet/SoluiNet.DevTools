@@ -40,7 +40,27 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
 
         private void Transform_Click(object sender, RoutedEventArgs e)
         {
-            this.Output.Text = XmlTools.Transform(this.XslInput.Text, this.XmlInput.Text);
+            try
+            {
+                this.Output.Text = XmlTools.Transform(this.XslInput.Text, this.XmlInput.Text);
+            }
+            catch (Exception exception)
+            {
+                if (exception is XsltException)
+                {
+                    this.Output.Text = string.Format(
+                        "Error while transforming:\r\n  {0}\r\n  {1}",
+                        exception.Message,
+                        exception.InnerException != null ? exception.InnerException.Message : string.Empty);
+                }
+                else
+                {
+                    this.Output.Text = string.Format(
+                        "Error while transforming:\r\n  {0}\r\n  {1}",
+                        exception.Message,
+                        exception.InnerException != null ? exception.InnerException.Message : string.Empty);
+                }
+            }
 
             if (!string.IsNullOrEmpty(this.Output.Text))
             {
