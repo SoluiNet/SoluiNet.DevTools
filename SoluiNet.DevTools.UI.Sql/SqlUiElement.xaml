@@ -7,8 +7,7 @@
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:ui="clr-namespace:SoluiNet.DevTools.Core.UI;assembly=SoluiNet.DevTools.Core"
         xmlns:tb="http://www.hardcodet.net/taskbar"
-        mc:Ignorable="d"
-        Height="450" Width="800">
+        mc:Ignorable="d">
 	<Grid x:Name="SqlUiGrid">
 		<TabControl Margin="0,0,0,0" x:Name="MainTabs">
 			<TabItem x:Name="SqlTab" Header="Custom SQL">
