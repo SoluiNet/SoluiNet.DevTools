@@ -8,12 +8,16 @@ namespace SoluiNet.DevTools.Core.Tools.UI
     using System.Collections;
     using System.Collections.Generic;
     using System.Data;
+    using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
+    using System.Windows.Media;
     using System.Xml;
     using ICSharpCode.AvalonEdit.Highlighting;
     using ICSharpCode.AvalonEdit.Highlighting.Xshd;
@@ -347,6 +351,58 @@ namespace SoluiNet.DevTools.Core.Tools.UI
             }
 
             return menuItem;
+        }
+
+        /// <summary>
+        /// Find an element which is a <see cref="TreeViewItem" /> and is a parent for the <paramref name="source"/> item.
+        /// </summary>
+        /// <param name="source">The source item.</param>
+        /// <returns>Returns the <see cref="TreeViewItem" /> parent of <paramref name="source"/>.</returns>
+        public static TreeViewItem VisualUpwardSearch(DependencyObject source)
+        {
+            while (source != null && !(source is TreeViewItem))
+            {
+                source = VisualTreeHelper.GetParent(source);
+            }
+
+            return source as TreeViewItem;
+        }
+
+        /// <summary>
+        /// Provide a default implementation for the assembly resolve event.
+        /// </summary>
+        /// <param name="sender">The sender which triggered the event.</param>
+        /// <param name="args">A <see cref="ResolveEventArgs"/> with additional arguments about the resolve event.</param>
+        /// <returns>Returns an instance of <see cref="Assembly"/> which contains the assembly for which the event was looking for.</returns>
+        public static Assembly LoadUiElementAssembly(object sender, ResolveEventArgs args)
+        {
+            var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                return null;
+            }
+
+            var assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
+            var assemblyUiPath = Path.Combine(folderPath, "UI", new AssemblyName(args.Name).Name + ".dll");
+
+            if (!System.IO.File.Exists(assemblyPath) && !System.IO.File.Exists(assemblyUiPath))
+            {
+                return null;
+            }
+
+            Assembly assembly = null;
+
+            if (System.IO.File.Exists(assemblyPath))
+            {
+                assembly = Assembly.LoadFrom(assemblyPath);
+            }
+            else if (System.IO.File.Exists(assemblyUiPath))
+            {
+                assembly = Assembly.LoadFrom(assemblyUiPath);
+            }
+
+            return assembly;
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core
+namespace SoluiNet.DevTools.Core.UI
 {
     using System;
     using System.Collections.Generic;
@@ -15,5 +15,14 @@ namespace SoluiNet.DevTools.Core
     /// </summary>
     public interface ISoluiNetUIElement
     {
+        /// <summary>
+        /// Gets the label.
+        /// </summary>
+        string Label { get; }
+
+        /// <summary>
+        /// Gets the technical name.
+        /// </summary>
+        string TechnicalName { get; }
     }
 }

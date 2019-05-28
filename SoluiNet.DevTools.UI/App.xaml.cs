@@ -17,31 +17,36 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
+    using SoluiNet.DevTools.Core.Tools.UI;
+    using SoluiNet.DevTools.Core.UI;
 
     /// <summary>
     /// Interaction logic for "App.xaml".
     /// </summary>
-    public partial class App : Application
+    public partial class App : Application, ISoluiNetApp
     {
         /// <summary>
         /// Gets or sets all available plugins.
         /// </summary>
-        internal ICollection<IBasePlugin> Plugins { get; set; }
+        public ICollection<IBasePlugin> Plugins { get; set; }
 
         /// <summary>
         /// Gets or sets all available plugins that provide database connectivity functions.
         /// </summary>
-        internal ICollection<ISqlDevPlugin> SqlPlugins { get; set; }
+        public ICollection<ISqlDevPlugin> SqlPlugins { get; set; }
 
         /// <summary>
         /// Gets or sets all available plugins that provide utility functions.
         /// </summary>
-        internal ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
+        public ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
 
         /// <summary>
         /// Gets or sets all available plugins that will run in the background.
         /// </summary>
-        internal ICollection<IPluginWithBackgroundTask> BackgroundTaskPlugins { get; set; }
+        public ICollection<IPluginWithBackgroundTask> BackgroundTaskPlugins { get; set; }
+
+        /// <inheritdoc/>
+        public ICollection<ISoluiNetUIElement> UiElements { get; set; }
 
         /// <summary>
         /// Event handling for start up.
@@ -51,6 +56,12 @@ namespace SoluiNet.DevTools.UI
         {
             base.OnStartup(e);
 
+            this.LoadPlugins();
+            this.LoadUiElements();
+        }
+
+        private void LoadPlugins()
+        {
             string[] dllFileNames = null;
             if (Directory.Exists("Plugins"))
             {
@@ -188,6 +199,82 @@ namespace SoluiNet.DevTools.UI
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += new ResolveEventHandler(PluginHelper.LoadAssembly);
+        }
+
+        private void LoadUiElements()
+        {
+            string[] dllFileNames = null;
+            if (Directory.Exists("UI"))
+            {
+                dllFileNames = Directory.GetFiles("UI", "*.dll");
+            }
+
+            if (dllFileNames == null)
+            {
+                return;
+            }
+
+            ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
+            foreach (string dllFile in dllFileNames)
+            {
+                try
+                {
+                    var an = AssemblyName.GetAssemblyName(dllFile);
+                    var assembly = Assembly.Load(an);
+                    assemblies.Add(assembly);
+                }
+                catch (BadImageFormatException exception)
+                {
+                    Debug.WriteLine(JsonTools.Serialize(exception));
+                }
+            }
+
+            Type uiElementType = typeof(ISoluiNetUIElement);
+
+            IDictionary<Type, List<string>> uiElementTypes = new Dictionary<Type, List<string>>();
+
+            foreach (var assembly in assemblies)
+            {
+                if (assembly == null)
+                {
+                    continue;
+                }
+
+                var types = assembly.GetTypes();
+                foreach (var type in types)
+                {
+                    if (type.IsInterface || type.IsAbstract)
+                    {
+                        continue;
+                    }
+
+                    if (type.GetInterface(uiElementType.FullName) != null)
+                    {
+                        if (uiElementTypes.ContainsKey(type))
+                        {
+                            uiElementTypes[type].Add("UiElement");
+                        }
+                        else
+                        {
+                            uiElementTypes.Add(type, new List<string>() { "UiElement" });
+                        }
+                    }
+                }
+            }
+
+            this.UiElements = new List<ISoluiNetUIElement>();
+
+            foreach (var type in uiElementTypes)
+            {
+                if (type.Value.Contains("UiElement"))
+                {
+                    var uiElement = (ISoluiNetUIElement)Activator.CreateInstance(type.Key);
+                    this.UiElements.Add(uiElement);
+                }
+            }
+
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.AssemblyResolve += new ResolveEventHandler(UIHelper.LoadUiElementAssembly);
         }
     }
 }
