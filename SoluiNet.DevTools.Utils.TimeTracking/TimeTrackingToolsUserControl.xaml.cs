@@ -72,7 +72,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 this.TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
 
-                var timeTargetButton = new Button() { Content = timeTarget.Key, HorizontalAlignment = HorizontalAlignment.Left };
+                var timeTargetButton = new Button() { Content = string.Format("{0} ({1})", timeTarget.Key, timeTarget.Sum(x => x.Duration).ToDurationString()), HorizontalAlignment = HorizontalAlignment.Left };
                 timeTargetButton.ToolTip = timeTarget.Key;
                 timeTargetButton.Tag = timeTarget;
 
