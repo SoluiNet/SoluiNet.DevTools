@@ -26,5 +26,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Gets or sets the ApplicationName.
         /// </summary>
         public string ApplicationName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the usage times.
+        /// </summary>
+        public ICollection<UsageTime> UsageTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application areas.
+        /// </summary>
+        public ICollection<ApplicationArea> ApplicationArea { get; set; }
     }
 }

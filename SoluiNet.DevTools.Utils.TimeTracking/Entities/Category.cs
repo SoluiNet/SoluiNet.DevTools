@@ -26,5 +26,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Gets or sets the CategoryName.
         /// </summary>
         public string CategoryName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the category usage time links.
+        /// </summary>
+        public ICollection<CategoryUsageTime> CategoryUsageTime { get; set; }
     }
 }

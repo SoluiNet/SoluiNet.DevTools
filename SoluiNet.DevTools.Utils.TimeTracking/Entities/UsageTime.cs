@@ -46,5 +46,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Gets or sets the ApplicationAreaId.
         /// </summary>
         public int? ApplicationAreaId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application.
+        /// </summary>
+        public Application Application { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application area.
+        /// </summary>
+        public ApplicationArea ApplicationArea { get; set; }
+
+        /// <summary>
+        /// Gets or sets the category usage time links.
+        /// </summary>
+        public ICollection<CategoryUsageTime> CategoryUsageTime { get; set; }
     }
 }

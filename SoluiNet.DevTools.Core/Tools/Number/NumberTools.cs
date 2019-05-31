@@ -51,6 +51,48 @@ namespace SoluiNet.DevTools.Core.Tools.Number
         /// </summary>
         /// <param name="seconds">The duration in seconds.</param>
         /// <returns>Returns a string that describes the duration in known time segements.</returns>
+        public static string ToDurationString(this double seconds)
+        {
+            var formatString = "{1}m {0}s";
+
+            var remnantSeconds = seconds % 60;
+            var minutes = Convert.ToInt32(seconds) / 60;
+            var hours = 0;
+            var days = 0;
+            var weeks = 0;
+
+            if (minutes >= 60)
+            {
+                hours = minutes / 60;
+                minutes = minutes % 60;
+
+                formatString = "{2}h {1}m {0}s";
+            }
+
+            if (hours >= 24)
+            {
+                days = hours / 24;
+                hours = hours % 24;
+
+                formatString = "{3}d {2}h {1}m {0}s";
+            }
+
+            if (days >= 7)
+            {
+                weeks = days / 7;
+                days = days % 7;
+
+                formatString = "{4}w {3}d {2}h {1}m {0}s";
+            }
+
+            return string.Format(formatString, remnantSeconds, minutes, hours, days, weeks);
+        }
+
+        /// <summary>
+        /// Get the duration in seconds as string.
+        /// </summary>
+        /// <param name="seconds">The duration in seconds.</param>
+        /// <returns>Returns a string that describes the duration in known time segements.</returns>
         public static string ToDurationString(this int seconds)
         {
             var formatString = "{1}m {0}s";

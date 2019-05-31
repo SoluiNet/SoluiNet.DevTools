@@ -231,6 +231,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .ToTable(typeof(Application).Name)
                 .HasKey(x => x.ApplicationId);
 
+            modelBuilder.Entity<ApplicationArea>()
+                .ToTable(typeof(ApplicationArea).Name)
+                .HasKey(x => x.ApplicationAreaId);
+
+            modelBuilder.Entity<ApplicationArea>()
+                .HasRequired<Application>(x => x.Application)
+                .WithMany(x => x.ApplicationArea)
+                .HasForeignKey(x => x.ApplicationId);
+
             modelBuilder.Entity<Category>()
                 .ToTable(typeof(Category).Name)
                 .HasKey(x => x.CategoryId);
@@ -239,9 +248,29 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .ToTable("Category_UsageTime")
                 .HasKey(x => new { x.CategoryId, x.UsageTimeId });
 
+            modelBuilder.Entity<CategoryUsageTime>()
+                .HasRequired<UsageTime>(x => x.UsageTime)
+                .WithMany(x => x.CategoryUsageTime)
+                .HasForeignKey(x => x.UsageTimeId);
+
+            modelBuilder.Entity<CategoryUsageTime>()
+                .HasRequired<Category>(x => x.Category)
+                .WithMany(x => x.CategoryUsageTime)
+                .HasForeignKey(x => x.CategoryId);
+
             modelBuilder.Entity<UsageTime>()
                 .ToTable(typeof(UsageTime).Name)
                 .HasKey(x => x.UsageTimeId);
+
+            modelBuilder.Entity<UsageTime>()
+                .HasOptional<Application>(x => x.Application)
+                .WithMany(x => x.UsageTime)
+                .HasForeignKey(x => x.ApplicationId);
+
+            modelBuilder.Entity<UsageTime>()
+                .HasOptional<ApplicationArea>(x => x.ApplicationArea)
+                .WithMany(x => x.UsageTime)
+                .HasForeignKey(x => x.ApplicationAreaId);
 
             modelBuilder.Entity<VersionHistory>()
                 .ToTable(typeof(VersionHistory).Name)

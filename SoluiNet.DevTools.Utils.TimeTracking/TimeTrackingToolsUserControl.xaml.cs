@@ -73,7 +73,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 this.TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
 
-                var label = string.Format("{0} ({1})", timeTarget.Key, timeTarget.Sum(x => x.Duration).ToDurationString());
+                var label = string.Format("{0} ({1})", timeTarget.Key, (Convert.ToDouble(timeTarget.Sum(x => x.Duration)) - timeTarget.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0)).ToDurationString());
 
                 var timeTargetButton = new Button() { Content = label, HorizontalAlignment = HorizontalAlignment.Left };
                 timeTargetButton.ToolTip = label;
@@ -178,7 +178,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 var data = dataObject.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
 
                 var distributionDictionary = new Dictionary<string, double>();
-                var sumDuration = data.Sum(x => x.Duration);
+                var sumDuration = Convert.ToDouble(data.Sum(x => x.Duration));
+                sumDuration -= data.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0);
 
                 if (dropEvents.KeyStates.HasFlag(DragDropKeyStates.ShiftKey))
                 {

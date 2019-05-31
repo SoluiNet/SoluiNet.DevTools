@@ -31,5 +31,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Gets or sets the Duration.
         /// </summary>
         public double Duration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the category.
+        /// </summary>
+        public Category Category { get; set; }
+
+        /// <summary>
+        /// Gets or sets the usage time.
+        /// </summary>
+        public UsageTime UsageTime { get; set; }
     }
 }
