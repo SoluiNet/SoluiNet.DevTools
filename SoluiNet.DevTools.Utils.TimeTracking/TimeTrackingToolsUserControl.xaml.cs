@@ -23,6 +23,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using LiveCharts.Wpf;
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.Number;
+    using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
@@ -72,8 +73,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 this.TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
 
-                var timeTargetButton = new Button() { Content = string.Format("{0} ({1})", timeTarget.Key, timeTarget.Sum(x => x.Duration).ToDurationString()), HorizontalAlignment = HorizontalAlignment.Left };
-                timeTargetButton.ToolTip = timeTarget.Key;
+                var label = string.Format("{0} ({1})", timeTarget.Key, timeTarget.Sum(x => x.Duration).ToDurationString());
+
+                var timeTargetButton = new Button() { Content = label, HorizontalAlignment = HorizontalAlignment.Left };
+                timeTargetButton.ToolTip = label;
                 timeTargetButton.Tag = timeTarget;
 
                 if (highestDuration > 0)
@@ -176,6 +179,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var distributionDictionary = new Dictionary<string, double>();
                 var sumDuration = data.Sum(x => x.Duration);
+
+                if (dropEvents.KeyStates.HasFlag(DragDropKeyStates.ShiftKey))
+                {
+                    var assignableDuration = Prompt.ShowDialog(string.Format("Which time frame should be assigned? (max. {0})", sumDuration.ToDurationString()), "Select time frame");
+
+                    if (assignableDuration.GetSecondsFromDurationString() <= sumDuration)
+                    {
+                        sumDuration = Convert.ToInt32(assignableDuration.GetSecondsFromDurationString());
+                    }
+                }
 
                 if ((dropSender as UI.AssignmentTarget).Label.Equals("Distribute evenly"))
                 {

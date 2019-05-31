@@ -90,5 +90,49 @@ namespace SoluiNet.DevTools.Core.Tools.String
             byte[] data = Convert.FromBase64String(encodedString);
             return Encoding.Unicode.GetString(data);
         }
+
+        /// <summary>
+        /// Get the number of seconds which are represented by the duration string.
+        /// </summary>
+        /// <param name="durationString">The duration string.</param>
+        /// <returns>Returns the number of seconds which the duration string represents.</returns>
+        public static long GetSecondsFromDurationString(this string durationString)
+        {
+            long duration = 0;
+
+            var durationRegEx = new Regex(@"((\d+)w)?\s*((\d+)d)?\s*((\d+)h)?\s*((\d+)m)?\s*((\d+)s?)");
+
+            var match = durationRegEx.Match(durationString);
+
+            if (match.Success)
+            {
+                if (match.Groups[2].Success)
+                {
+                    duration += Convert.ToInt32(match.Groups[2].Value) * 7 * 24 * 60 * 60;
+                }
+
+                if (match.Groups[4].Success)
+                {
+                    duration += Convert.ToInt32(match.Groups[4].Value) * 24 * 60 * 60;
+                }
+
+                if (match.Groups[6].Success)
+                {
+                    duration += Convert.ToInt32(match.Groups[6].Value) * 60 * 60;
+                }
+
+                if (match.Groups[8].Success)
+                {
+                    duration += Convert.ToInt32(match.Groups[8].Value) * 60;
+                }
+
+                if (match.Groups[10].Success)
+                {
+                    duration += Convert.ToInt32(match.Groups[10].Value);
+                }
+            }
+
+            return duration;
+        }
     }
 }
