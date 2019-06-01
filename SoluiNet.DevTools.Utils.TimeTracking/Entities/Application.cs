@@ -18,6 +18,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     public class Application
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Application"/> class.
+        /// </summary>
+        public Application()
+        {
+            this.UsageTime = new HashSet<UsageTime>();
+            this.ApplicationArea = new HashSet<ApplicationArea>();
+        }
+
+        /// <summary>
         /// Gets or sets the ApplicationId.
         /// </summary>
         public int ApplicationId { get; set; }

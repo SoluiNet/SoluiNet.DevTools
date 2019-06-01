@@ -18,6 +18,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     public class UsageTime
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="UsageTime"/> class.
+        /// </summary>
+        public UsageTime()
+        {
+            this.CategoryUsageTime = new HashSet<CategoryUsageTime>();
+        }
+
+        /// <summary>
         /// Gets or sets the UsageTimeId.
         /// </summary>
         public int UsageTimeId { get; set; }

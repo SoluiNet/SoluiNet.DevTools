@@ -18,6 +18,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     public class CategoryUsageTime
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="CategoryUsageTime"/> class.
+        /// </summary>
+        public CategoryUsageTime()
+        {
+        }
+
+        /// <summary>
         /// Gets or sets the UsageTimeId.
         /// </summary>
         public int UsageTimeId { get; set; }
