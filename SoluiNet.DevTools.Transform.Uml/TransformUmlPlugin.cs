@@ -8,6 +8,7 @@ namespace SoluiNet.DevTools.Transform.Uml
     using System.Collections.Generic;
     using System.IO;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Transform.Uml.CSharpTransformation;
 
     /// <summary>

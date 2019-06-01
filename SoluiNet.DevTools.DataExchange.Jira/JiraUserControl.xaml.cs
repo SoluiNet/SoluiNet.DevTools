@@ -19,6 +19,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     using System.Windows.Navigation;
     using System.Windows.Shapes;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
 
     /// <summary>

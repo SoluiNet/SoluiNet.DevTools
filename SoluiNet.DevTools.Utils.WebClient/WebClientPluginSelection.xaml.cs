@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
     using System.Windows;
     using System.Windows.Controls;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.XML;
     using SoluiNet.DevTools.Core.WebClientDefinition;

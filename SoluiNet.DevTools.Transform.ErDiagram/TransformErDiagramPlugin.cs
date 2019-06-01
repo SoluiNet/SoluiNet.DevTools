@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Transform.ErDiagram
     using System.Text;
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
 
     /// <summary>
     /// A plugin which provides transform methods for entity relationship diagrams.

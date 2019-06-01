@@ -14,6 +14,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using Quartz;
     using Quartz.Impl;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Utils.TimeTracking.Job;
 
     /// <summary>

@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Editor.Default
     using System.Text;
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
 
     /// <summary>
     /// A plugin which provides an editor for general purposes.

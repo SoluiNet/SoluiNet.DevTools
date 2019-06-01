@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Core.Tools
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.ScriptEngine;
     using SoluiNet.DevTools.Core.Tools.File;
     using SoluiNet.DevTools.Core.Tools.Stream;

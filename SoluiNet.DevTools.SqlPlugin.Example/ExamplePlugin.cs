@@ -17,6 +17,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Enums;
     using SoluiNet.DevTools.Core.Extensions;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Database;
     using SoluiNet.DevTools.Core.Tools.UI;

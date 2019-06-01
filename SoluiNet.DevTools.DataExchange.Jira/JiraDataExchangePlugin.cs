@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     using RestSharp;
     using RestSharp.Authenticators;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.DataExchange.Jira.Enums;

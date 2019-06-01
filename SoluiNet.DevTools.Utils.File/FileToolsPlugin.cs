@@ -11,6 +11,7 @@ namespace SoluiNet.DevTools.Utils.File
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
 
     /// <summary>
     /// A plugin which provides utility functions for working with files.

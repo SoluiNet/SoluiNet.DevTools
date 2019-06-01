@@ -15,6 +15,7 @@ namespace SoluiNet.DevTools.UI
     using System.Threading.Tasks;
     using System.Windows;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.UI;

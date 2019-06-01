@@ -24,8 +24,10 @@ namespace SoluiNet.DevTools.UI
     using NLog;
     using NLog.Internal;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Formatter;
     using SoluiNet.DevTools.Core.Models;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.ScriptEngine;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Sql;

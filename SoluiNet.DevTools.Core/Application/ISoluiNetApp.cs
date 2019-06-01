@@ -2,13 +2,14 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core
+namespace SoluiNet.DevTools.Core.Application
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;
 

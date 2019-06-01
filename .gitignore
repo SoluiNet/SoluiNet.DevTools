@@ -9,3 +9,4 @@ packages/**
 /UpgradeLog.htm
 /**/*.ConnectionStrings.config
 *.old
+*.TMP
