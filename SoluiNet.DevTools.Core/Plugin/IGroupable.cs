@@ -1,4 +1,4 @@
-﻿// <copyright file="IGroupedUtilitiesDevPlugin.cs" company="SoluiNet">
+﻿// <copyright file="IGroupable.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -12,9 +12,9 @@ namespace SoluiNet.DevTools.Core.Plugin
     using System.Windows.Controls;
 
     /// <summary>
-    /// Provides an interface for a plugin which provides utility functions and should be grouped.
+    /// Provides an interface for a plugin which should be grouped.
     /// </summary>
-    public interface IGroupedUtilitiesDevPlugin : IUtilitiesDevPlugin
+    public interface IGroupable : IBasePlugin
     {
         /// <summary>
         /// Gets the label which should be used for group.

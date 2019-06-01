@@ -21,7 +21,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     /// <summary>
     /// A plugin which provides data exchange methods for Atlassian JIRA.
     /// </summary>
-    public class JiraDataExchangePlugin : IDataExchangePlugin, IPluginWithSettings, IUtilitiesDevPlugin
+    public class JiraDataExchangePlugin : IAllowsDataExchange, IContainsSettings, IUtilitiesDevPlugin
     {
         /// <summary>
         /// Gets the technical name of the plugin.

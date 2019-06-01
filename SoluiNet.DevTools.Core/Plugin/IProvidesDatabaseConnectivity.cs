@@ -1,4 +1,4 @@
-﻿// <copyright file="ISqlDevPlugin.cs" company="SoluiNet">
+﻿// <copyright file="IProvidesDatabaseConnectivity.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -16,7 +16,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides the interface for a plugin which will be working with SQL databases.
     /// </summary>
-    public interface ISqlDevPlugin : IBasePlugin, IThemedPlugin
+    public interface IProvidesDatabaseConnectivity : IBasePlugin, IThemable
     {
         /// <summary>
         /// Gets or sets the environment in which the plugin should run in.

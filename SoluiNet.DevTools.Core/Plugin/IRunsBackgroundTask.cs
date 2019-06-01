@@ -1,4 +1,4 @@
-﻿// <copyright file="IPluginWithBackgroundTask.cs" company="SoluiNet">
+﻿// <copyright file="IRunsBackgroundTask.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides an interface for plugins with background tasks.
     /// </summary>
-    public interface IPluginWithBackgroundTask : IBasePlugin
+    public interface IRunsBackgroundTask : IBasePlugin
     {
         /// <summary>
         /// Execute the background task.

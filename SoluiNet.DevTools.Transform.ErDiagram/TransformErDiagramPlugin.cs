@@ -15,7 +15,7 @@ namespace SoluiNet.DevTools.Transform.ErDiagram
     /// <summary>
     /// A plugin which provides transform methods for entity relationship diagrams.
     /// </summary>
-    public class TransformErDiagramPlugin : ITransformPlugin
+    public class TransformErDiagramPlugin : ITransformsData
     {
         /// <inheritdoc/>
         public List<string> SupportedInputFormats

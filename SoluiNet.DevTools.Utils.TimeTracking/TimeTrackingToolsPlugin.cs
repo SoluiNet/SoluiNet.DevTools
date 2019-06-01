@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     /// <summary>
     /// A plugin which provides utility functions for time tracking.
     /// </summary>
-    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IPluginWithBackgroundTask
+    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask
     {
         /// <summary>
         /// Gets the technical name of the plugin.

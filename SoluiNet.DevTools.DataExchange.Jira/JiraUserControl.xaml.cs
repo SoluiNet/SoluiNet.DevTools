@@ -37,7 +37,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
 
         private void ExecuteJql_Click(object sender, RoutedEventArgs e)
         {
-            var plugin = PluginHelper.GetPluginByName<IDataExchangePlugin>("JiraDataExchange");
+            var plugin = PluginHelper.GetPluginByName<IAllowsDataExchange>("JiraDataExchange");
 
             var result = plugin.GetData("ticket", new Dictionary<string, object> { { "jql", this.JqlStatement.Text } });
 

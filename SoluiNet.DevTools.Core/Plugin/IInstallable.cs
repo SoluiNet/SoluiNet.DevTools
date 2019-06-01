@@ -1,4 +1,4 @@
-﻿// <copyright file="IInstallablePlugin.cs" company="SoluiNet">
+﻿// <copyright file="IInstallable.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides the interface for an installable plugin.
     /// </summary>
-    public interface IInstallablePlugin : IBasePlugin
+    public interface IInstallable : IBasePlugin
     {
         /// <summary>
         /// Install the plugin via calling this method.

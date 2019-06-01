@@ -1,4 +1,4 @@
-﻿// <copyright file="ICredentialProvider.cs" company="SoluiNet">
+﻿// <copyright file="IProvidesCredentials.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// An interface which allows to work with credentials.
     /// </summary>
-    public interface ICredentialProvider : IBasePlugin
+    public interface IProvidesCredentials : IBasePlugin
     {
         /// <summary>
         /// Get credentials for overgiven plugin.

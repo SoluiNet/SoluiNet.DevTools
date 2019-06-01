@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The SQL development plugin in which the entities are defined.</param>
         /// <returns>A <see cref="IList{T}"/> which contains all defined entities in the plugin.</returns>
-        public static IList<System.Type> GetEntityTypes(ISqlDevPlugin plugin)
+        public static IList<System.Type> GetEntityTypes(IProvidesDatabaseConnectivity plugin)
         {
             if (plugin == null)
             {
@@ -64,7 +64,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// <param name="plugin">The SQL development plugin in which the entity is defined.</param>
         /// <param name="entityName">The name of the entity for which the fields should be delivered.</param>
         /// <returns>A <see cref="IList{T}"/> which contains a list of all the field names for the overgiven entity.</returns>
-        public static IList<string> GetEntityFields(ISqlDevPlugin plugin, string entityName)
+        public static IList<string> GetEntityFields(IProvidesDatabaseConnectivity plugin, string entityName)
         {
             var fieldList = new List<string>();
 
@@ -138,7 +138,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The plugin in which the SQL scripts are contained.</param>
         /// <returns>A <see cref="IList{SqlScript}"/> which contains all SQL scripts that are contained in the overgiven plugin.</returns>
-        public static IList<SqlScript> GetSqlScripts(ISqlDevPlugin plugin)
+        public static IList<SqlScript> GetSqlScripts(IProvidesDatabaseConnectivity plugin)
         {
             var scriptList = new List<SqlScript>();
 
@@ -171,7 +171,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The plugin in which the web client definition is contained.</param>
         /// <returns>The <see cref="WebClientDefinition.SoluiNetWebClientDefinition"/> for the overgiven plugin.</returns>
-        public static WebClientDefinition.SoluiNetWebClientDefinition GetWebClientDefinition(IWebClientSupportPlugin plugin)
+        public static WebClientDefinition.SoluiNetWebClientDefinition GetWebClientDefinition(ISupportsWebClient plugin)
         {
             if (plugin == null)
             {
@@ -204,7 +204,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The plugin for which the settings should be provided.</param>
         /// <returns>An instance of <see cref="Settings.SoluiNetSettingType"/> which contains all effective settings for the plugin.</returns>
-        public static Settings.SoluiNetSettingType GetSettings(IPluginWithSettings plugin)
+        public static Settings.SoluiNetSettingType GetSettings(IContainsSettings plugin)
         {
             if (plugin == null)
             {
@@ -265,7 +265,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The plugin for which the settings should be provided.</param>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> which contains all effective settings for the plugin.</returns>
-        public static IDictionary<string, object> GetSettingsAsDictionary(IPluginWithSettings plugin)
+        public static IDictionary<string, object> GetSettingsAsDictionary(IContainsSettings plugin)
         {
             var settings = GetSettings(plugin);
 
@@ -285,7 +285,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The plugin.</param>
         /// <returns>Returns the currently active environment for the overgiven plugin.</returns>
-        public static string GetEnvironment(ISqlDevPlugin plugin)
+        public static string GetEnvironment(IProvidesDatabaseConnectivity plugin)
         {
             return plugin.Environment;
         }
@@ -296,7 +296,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// <param name="plugin">The plugin for which the connection string should be provided.</param>
         /// <param name="defaultConnectionStringName">The default connection string name.</param>
         /// <returns>Returns the connection string which should be used for overgiven name and the environment which has been set up for the plugin.</returns>
-        public static string GetConnectionString(ISqlDevPlugin plugin, string defaultConnectionStringName)
+        public static string GetConnectionString(IProvidesDatabaseConnectivity plugin, string defaultConnectionStringName)
         {
             var environment = GetEnvironment(plugin);
 
@@ -308,7 +308,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The plugin.</param>
         /// <returns>Returns a <see cref="List{T}"/> of all available environments for the overgiven plugin.</returns>
-        public static List<string> GetEnvironments(ISqlDevPlugin plugin)
+        public static List<string> GetEnvironments(IProvidesDatabaseConnectivity plugin)
         {
             var environmentList = new List<string>();
 

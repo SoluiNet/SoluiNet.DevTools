@@ -20,13 +20,13 @@ namespace SoluiNet.DevTools.Utils.WebClient
     /// </summary>
     public partial class WebClientPluginSelection : UserControl
     {
-        private readonly List<IWebClientSupportPlugin> plugins;
+        private readonly List<ISupportsWebClient> plugins;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebClientPluginSelection"/> class.
         /// </summary>
         /// <param name="plugins">The plugins which support web client execution.</param>
-        public WebClientPluginSelection(List<IWebClientSupportPlugin> plugins)
+        public WebClientPluginSelection(List<ISupportsWebClient> plugins)
         {
             this.InitializeComponent();
             this.plugins = plugins;
@@ -41,7 +41,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
         /// <param name="supportedContentTypes">The supported content types.</param>
         /// <param name="additionalOptions">The additional options.</param>
         /// <param name="chosenPlugin">The chosen technical plugin name.</param>
-        public delegate void ReturnWebMethodToMainForm(Dictionary<string, string> endpoints, string content, List<string> supportedHttpMethods, List<string> supportedContentTypes = null, Dictionary<string, string> additionalOptions = null, IPluginWithSettings chosenPlugin = null);
+        public delegate void ReturnWebMethodToMainForm(Dictionary<string, string> endpoints, string content, List<string> supportedHttpMethods, List<string> supportedContentTypes = null, Dictionary<string, string> additionalOptions = null, IContainsSettings chosenPlugin = null);
 
         /// <summary>
         /// Gets or sets the event handler for the return of the chosen plugin method.
@@ -79,7 +79,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 chosenMethod.SupportedHttpMethods.Select(x => Enum.GetName(typeof(SoluiNetHttpMethodType), x)).ToList(),
                 chosenMethod.SupportedContentTypes.Select(x => Enum.GetName(typeof(SoluiNetContentType), x)).ToList(),
                 chosenMethod.PreparedHttpHeaders.ToDictionary(x => x.Name, x => x.Value),
-                plugin is IPluginWithSettings settings ? settings : null);
+                plugin is IContainsSettings settings ? settings : null);
 
             this.CloseCurrentWindow();
         }

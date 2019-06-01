@@ -1,4 +1,4 @@
-﻿// <copyright file="IDataExchangePlugin.cs" company="SoluiNet">
+﻿// <copyright file="IAllowsDataExchange.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides an interface for a plugin which allows a data exchange.
     /// </summary>
-    public interface IDataExchangePlugin : IBasePlugin
+    public interface IAllowsDataExchange : IBasePlugin
     {
         /// <summary>
         /// Get data via a predefined filter string.

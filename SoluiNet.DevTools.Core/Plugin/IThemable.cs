@@ -1,4 +1,4 @@
-﻿// <copyright file="IThemedPlugin.cs" company="SoluiNet">
+﻿// <copyright file="IThemable.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides an interface for a plugin which can be themed with colour variations.
     /// </summary>
-    public interface IThemedPlugin : IBasePlugin
+    public interface IThemable : IBasePlugin
     {
         /// <summary>
         /// Gets the first colour accent.

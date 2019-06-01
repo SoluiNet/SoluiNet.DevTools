@@ -689,7 +689,7 @@ namespace SoluiNet.DevTools.UI.Sql
             this.SqlCommandText.Text += string.Format("\r\n--{2}: {0}\r\n{1}", script.Description, script.CommandText, script.Name);
         }
 
-        private void ShowDatabaseElementInfo(string type, TreeViewItem selectedItem, ISqlDevPlugin plugin)
+        private void ShowDatabaseElementInfo(string type, TreeViewItem selectedItem, IProvidesDatabaseConnectivity plugin)
         {
             if (selectedItem == null)
             {

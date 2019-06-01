@@ -25,7 +25,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     /// <summary>
     /// A plugin which provides methods to work with the example project.
     /// </summary>
-    public class ExamplePlugin : ISqlDevPlugin, IWebClientSupportPlugin, IPluginWithSettings, IGroupedUtilitiesDevPlugin
+    public class ExamplePlugin : IProvidesDatabaseConnectivity, ISupportsWebClient, IContainsSettings, IGroupable, IUtilitiesDevPlugin
     {
         /// <inheritdoc/>
         public string Group

@@ -1,4 +1,4 @@
-﻿// <copyright file="IWebClientSupportPlugin.cs" company="SoluiNet">
+﻿// <copyright file="ISupportsWebClient.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides an interface for a plugin which provides information for web client usage.
     /// </summary>
-    public interface IWebClientSupportPlugin : IBasePlugin
+    public interface ISupportsWebClient : IBasePlugin
     {
         /// <summary>
         /// Gets the web client format.

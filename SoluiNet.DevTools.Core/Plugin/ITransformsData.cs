@@ -1,4 +1,4 @@
-﻿// <copyright file="ITransformPlugin.cs" company="SoluiNet">
+﻿// <copyright file="ITransformsData.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides the interface for a plugin which can transform input data to a specific output format.
     /// </summary>
-    public interface ITransformPlugin : IBasePlugin
+    public interface ITransformsData : IBasePlugin
     {
         /// <summary>
         /// Gets a list of all supported input formats.

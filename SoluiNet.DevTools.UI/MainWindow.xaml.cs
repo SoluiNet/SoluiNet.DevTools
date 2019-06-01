@@ -51,9 +51,9 @@ namespace SoluiNet.DevTools.UI
             {
                 try
                 {
-                    if (utilityPlugin is IGroupedUtilitiesDevPlugin)
+                    if (utilityPlugin is IGroupable)
                     {
-                        var groupPluginMenuItem = UIHelper.GetMenuItemByName(this.ExtrasMenuItem, (utilityPlugin as IGroupedUtilitiesDevPlugin).Group);
+                        var groupPluginMenuItem = UIHelper.GetMenuItemByName(this.ExtrasMenuItem, (utilityPlugin as IGroupable).Group);
 
                         var utilityPluginMenuItem = new MenuItem()
                         {
@@ -65,7 +65,7 @@ namespace SoluiNet.DevTools.UI
                             utilityPlugin.Execute(x =>
                             {
                                 var pluginVisualizeWindow = new VisualPluginContainer();
-                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", string.Format("{0} / {1}", (utilityPlugin as IGroupedUtilitiesDevPlugin).Group, utilityPlugin.MenuItemLabel) } });
+                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", string.Format("{0} / {1}", (utilityPlugin as IGroupable).Group, utilityPlugin.MenuItemLabel) } });
 
                                 pluginVisualizeWindow.ContentGrid.Children.Add(x);
 

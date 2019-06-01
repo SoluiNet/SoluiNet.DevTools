@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Transform.Uml
     /// <summary>
     /// A plugin which provides transform methods for UML.
     /// </summary>
-    public class TransformUmlPlugin : ITransformPlugin
+    public class TransformUmlPlugin : ITransformsData
     {
         /// <inheritdoc/>
         public List<string> SupportedInputFormats

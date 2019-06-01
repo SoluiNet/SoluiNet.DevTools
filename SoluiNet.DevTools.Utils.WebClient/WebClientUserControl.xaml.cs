@@ -34,7 +34,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
         /// <summary>
         /// Gets or sets the chosen plugin.
         /// </summary>
-        private IPluginWithSettings ChosenPlugin { get; set; }
+        private IContainsSettings ChosenPlugin { get; set; }
 
         private void Execute_Click(object sender, RoutedEventArgs e)
         {
@@ -149,7 +149,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
         private void ReadFromPlugin_Click(object sender, RoutedEventArgs e)
         {
-            var plugins = PluginHelper.GetPlugins<IWebClientSupportPlugin>();
+            var plugins = PluginHelper.GetPlugins<ISupportsWebClient>();
 
             var window = new Window
             {

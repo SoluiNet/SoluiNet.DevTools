@@ -1,4 +1,4 @@
-﻿// <copyright file="IPluginWithSettings.cs" company="SoluiNet">
+﻿// <copyright file="IContainsSettings.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides the interface for a plugin which can work with settings.
     /// </summary>
-    public interface IPluginWithSettings : IBasePlugin
+    public interface IContainsSettings : IBasePlugin
     {
     }
 }

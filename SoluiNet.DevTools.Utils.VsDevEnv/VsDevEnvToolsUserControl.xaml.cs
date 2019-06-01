@@ -51,7 +51,7 @@ namespace SoluiNet.DevTools.Utils.VsDevEnv
 
             if (fileDialog.ShowDialog() == true)
             {
-                PluginHelper.GetPluginByName<ITransformPlugin>("TransformUml").Transform(fileDialog.FileName, "xml");
+                PluginHelper.GetPluginByName<ITransformsData>("TransformUml").Transform(fileDialog.FileName, "xml");
             }
         }
     }

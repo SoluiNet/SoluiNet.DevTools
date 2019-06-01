@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.Core.Application
         /// <summary>
         /// Gets or sets all available plugins that provide database connectivity functions.
         /// </summary>
-        ICollection<ISqlDevPlugin> SqlPlugins { get; set; }
+        ICollection<IProvidesDatabaseConnectivity> SqlPlugins { get; set; }
 
         /// <summary>
         /// Gets or sets all available plugins that provide utility functions.
@@ -36,7 +36,7 @@ namespace SoluiNet.DevTools.Core.Application
         /// <summary>
         /// Gets or sets all available plugins that will run in the background.
         /// </summary>
-        ICollection<IPluginWithBackgroundTask> BackgroundTaskPlugins { get; set; }
+        ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; set; }
 
         /// <summary>
         /// Gets or sets all available UI elements.
