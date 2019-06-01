@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.UI
+namespace SoluiNet.DevTools.Core.UI.UIElement
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace SoluiNet.DevTools.Core.UI
     /// The base class for an extendable grid. The grid will create new rows for each new child.
     /// </summary>
     /// <typeparam name="T">The type which will be used for each row.</typeparam>
-    public class ExtendableGrid<T> : Grid
+    public class ExtendableGrid<T> : Grid, ISoluiNetUIElement
         where T : UserControl
     {
         /// <summary>
@@ -67,6 +67,24 @@ namespace SoluiNet.DevTools.Core.UI
         /// Gets or sets the create new element event handler.
         /// </summary>
         public NewElementCreation CreateNewElement { get; set; }
+
+        /// <inheritdoc/>
+        public string Label
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        /// <inheritdoc/>
+        public string TechnicalName
+        {
+            get
+            {
+                return "ExtendableGrid";
+            }
+        }
 
         /// <summary>
         /// Add a new element to the extendable grid.

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoluiNet.DevTools.UI"
-        xmlns:ui="clr-namespace:SoluiNet.DevTools.Core.UI;assembly=SoluiNet.DevTools.Core"
+        xmlns:ui="clr-namespace:SoluiNet.DevTools.Core.UI.Window;assembly=SoluiNet.DevTools.Core"
         mc:Ignorable="d"
         Title="Plugin - SoluiNet.DevTools" TitleFormatString="Plugin ({0}) - SoluiNet.DevTools" Height="450" Width="800">
     <Grid x:Name="ContentGrid">

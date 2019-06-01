@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
     using System.Text;
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.UI;
+    using SoluiNet.DevTools.Core.UI.UIElement;
 
     /// <summary>
     /// An extendable grid which handles assignment targets.

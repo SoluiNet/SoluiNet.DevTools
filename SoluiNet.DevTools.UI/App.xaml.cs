@@ -19,6 +19,7 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
+    using SoluiNet.DevTools.Core.UI.UIElement;
 
     /// <summary>
     /// Interaction logic for "App.xaml".

@@ -19,6 +19,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
     using SoluiNet.DevTools.Core.UI;
+    using SoluiNet.DevTools.Core.UI.Window;
 
     /// <summary>
     /// Interaction logic for PrepareText.xaml.

@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Core
     using System.Text;
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.UI;
+    using SoluiNet.DevTools.Core.UI.UIElement;
 
     /// <summary>
     /// Provides an interface for the SoluiNet.DevTools application.

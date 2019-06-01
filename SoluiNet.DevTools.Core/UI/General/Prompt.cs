@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.UI
+namespace SoluiNet.DevTools.Core.UI.General
 {
     using System;
     using System.Collections.Generic;
@@ -11,6 +11,7 @@ namespace SoluiNet.DevTools.Core.UI
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
+    using SoluiNet.DevTools.Core.UI.Window;
 
     /// <summary>
     /// Provides methods to display a prompt window.
