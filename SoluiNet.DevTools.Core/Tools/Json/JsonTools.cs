@@ -23,7 +23,13 @@ namespace SoluiNet.DevTools.Core.Tools.Json
         /// <returns>Returns a string which represents the overgiven object in JSON format.</returns>
         public static string Serialize(object serializableObject)
         {
-            return JsonConvert.SerializeObject(serializableObject);
+            return JsonConvert.SerializeObject(
+                serializableObject,
+                Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                });
         }
     }
 }

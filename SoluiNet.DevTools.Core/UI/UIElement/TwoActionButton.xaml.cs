@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -19,12 +20,15 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+    using SoluiNet.DevTools.Core.Tools.Json;
 
     /// <summary>
     /// Interaction logic for TwoActionButton.xaml.
     /// </summary>
     public partial class TwoActionButton : UserControl
     {
+        private bool hasEnteredUserControl = false;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TwoActionButton"/> class.
         /// </summary>
@@ -125,24 +129,61 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
             storyboard.Begin();
         }
 
-        private void TwoActionButtonGrid_DragEnter(object sender, DragEventArgs e)
-        {
-            this.ShowSecondColumn();
-        }
-
-        private void TwoActionButtonGrid_DragLeave(object sender, DragEventArgs e)
-        {
-            this.HideSecondColumn();
-        }
-
         private void TwoActionButtonGrid_PreviewDragEnter(object sender, DragEventArgs e)
         {
-            this.ShowSecondColumn();
+#if DEBUG
+            Debug.WriteLine(
+                "{2} TwoActionButtonGrid.PreviewDragEnter\r\n  hasEnteredUserControl: {0}\r\n  UserControl: {1}",
+                this.hasEnteredUserControl,
+                (sender as Grid).Name,
+                DateTime.Now);
+
+            if (Mouse.DirectlyOver != null)
+            {
+                Debug.WriteLine("  Mouse.DirectlyOver: {0}", Mouse.DirectlyOver.ToString());
+            }
+
+            var visualHit = VisualTreeHelper.HitTest(sender as Visual, e.GetPosition((UIElement)sender));
+
+            if (visualHit != null)
+            {
+                Debug.WriteLine("  VisualTreeHelper.HitTest: {0}", JsonTools.Serialize(visualHit.VisualHit));
+            }
+#endif
+
+            if (!this.hasEnteredUserControl)
+            {
+                this.ShowSecondColumn();
+            }
+
+            this.hasEnteredUserControl = true;
         }
 
         private void TwoActionButtonGrid_PreviewDragLeave(object sender, DragEventArgs e)
         {
+#if DEBUG
+            Debug.WriteLine(
+                "{2} TwoActionButtonGrid.PreviewDragEnter\r\n  hasEnteredUserControl: {0}\r\n  UserControl: {1}",
+                this.hasEnteredUserControl,
+                (sender as Grid).Name,
+                DateTime.Now);
+
+            if (Mouse.DirectlyOver != null)
+            {
+                Debug.WriteLine("  Mouse.DirectlyOver: {0}", Mouse.DirectlyOver.ToString());
+            }
+
+            var visualHit = VisualTreeHelper.HitTest(sender as Visual, e.GetPosition((UIElement)sender));
+
+            if (visualHit != null)
+            {
+                Debug.WriteLine("  VisualTreeHelper.HitTest: {0}", JsonTools.Serialize(visualHit.VisualHit));
+            }
+#endif
+
             this.HideSecondColumn();
+
+            this.hasEnteredUserControl = false;
         }
     }
 }

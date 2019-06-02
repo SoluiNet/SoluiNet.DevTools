@@ -27,26 +27,26 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// <summary>
         /// Gets or sets the UsageTimeId.
         /// </summary>
-        public int UsageTimeId { get; set; }
+        public virtual int UsageTimeId { get; set; }
 
         /// <summary>
         /// Gets or sets the CategoryId.
         /// </summary>
-        public int CategoryId { get; set; }
+        public virtual int CategoryId { get; set; }
 
         /// <summary>
         /// Gets or sets the Duration.
         /// </summary>
-        public double Duration { get; set; }
+        public virtual double Duration { get; set; }
 
         /// <summary>
         /// Gets or sets the category.
         /// </summary>
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
         /// <summary>
         /// Gets or sets the usage time.
         /// </summary>
-        public UsageTime UsageTime { get; set; }
+        public virtual UsageTime UsageTime { get; set; }
     }
 }

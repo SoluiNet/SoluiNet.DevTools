@@ -22,28 +22,26 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// </summary>
         public Application()
         {
-            this.UsageTime = new HashSet<UsageTime>();
-            this.ApplicationArea = new HashSet<ApplicationArea>();
         }
 
         /// <summary>
         /// Gets or sets the ApplicationId.
         /// </summary>
-        public int ApplicationId { get; set; }
+        public virtual int ApplicationId { get; set; }
 
         /// <summary>
         /// Gets or sets the ApplicationName.
         /// </summary>
-        public string ApplicationName { get; set; }
+        public virtual string ApplicationName { get; set; }
 
         /// <summary>
         /// Gets or sets the usage times.
         /// </summary>
-        public ICollection<UsageTime> UsageTime { get; set; }
+        public virtual ICollection<UsageTime> UsageTime { get; set; }
 
         /// <summary>
         /// Gets or sets the application areas.
         /// </summary>
-        public ICollection<ApplicationArea> ApplicationArea { get; set; }
+        public virtual ICollection<ApplicationArea> ApplicationArea { get; set; }
     }
 }

@@ -22,52 +22,51 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// </summary>
         public UsageTime()
         {
-            this.CategoryUsageTime = new HashSet<CategoryUsageTime>();
         }
 
         /// <summary>
         /// Gets or sets the UsageTimeId.
         /// </summary>
-        public int UsageTimeId { get; set; }
+        public virtual int UsageTimeId { get; set; }
 
         /// <summary>
         /// Gets or sets the ApplicationIdentification.
         /// </summary>
-        public string ApplicationIdentification { get; set; }
+        public virtual string ApplicationIdentification { get; set; }
 
         /// <summary>
         /// Gets or sets the StartTime.
         /// </summary>
-        public DateTime StartTime { get; set; }
+        public virtual DateTime StartTime { get; set; }
 
         /// <summary>
         /// Gets or sets the Duration.
         /// </summary>
-        public int Duration { get; set; }
+        public virtual int Duration { get; set; }
 
         /// <summary>
         /// Gets or sets the ApplicationId.
         /// </summary>
-        public int? ApplicationId { get; set; }
+        public virtual int? ApplicationId { get; set; }
 
         /// <summary>
         /// Gets or sets the ApplicationAreaId.
         /// </summary>
-        public int? ApplicationAreaId { get; set; }
+        public virtual int? ApplicationAreaId { get; set; }
 
         /// <summary>
         /// Gets or sets the application.
         /// </summary>
-        public Application Application { get; set; }
+        public virtual Application Application { get; set; }
 
         /// <summary>
         /// Gets or sets the application area.
         /// </summary>
-        public ApplicationArea ApplicationArea { get; set; }
+        public virtual ApplicationArea ApplicationArea { get; set; }
 
         /// <summary>
         /// Gets or sets the category usage time links.
         /// </summary>
-        public ICollection<CategoryUsageTime> CategoryUsageTime { get; set; }
+        public virtual ICollection<CategoryUsageTime> CategoryUsageTime { get; set; }
     }
 }

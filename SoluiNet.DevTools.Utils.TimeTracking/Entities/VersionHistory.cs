@@ -20,16 +20,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// <summary>
         /// Gets or sets the VersionHistoryId.
         /// </summary>
-        public int VersionHistoryId { get; set; }
+        public virtual int VersionHistoryId { get; set; }
 
         /// <summary>
         /// Gets or sets the VersionNumber.
         /// </summary>
-        public string VersionNumber { get; set; }
+        public virtual string VersionNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the AppliedDateTime.
         /// </summary>
-        public DateTime AppliedDateTime { get; set; }
+        public virtual DateTime AppliedDateTime { get; set; }
     }
 }
