@@ -46,11 +46,15 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Settings\SettingSchema.cs">
       <DependentUpon>SettingSchema.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="UI\UIElement\TwoActionButton.xaml.cs">
+      <DependentUpon>UI\UIElement\TwoActionButton.xaml</DependentUpon>
     </Compile>
     <Compile Update="WebClientDefinition\WebClientDefinitionSchema.cs">
       <DependentUpon>WebClientDefinitionSchema.xsd</DependentUpon>
@@ -85,5 +89,11 @@
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\UIElement\TwoActionButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

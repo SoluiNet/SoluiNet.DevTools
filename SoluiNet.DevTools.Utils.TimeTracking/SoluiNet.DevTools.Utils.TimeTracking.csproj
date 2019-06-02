@@ -15,6 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="stylecop.json" />
+    <None Remove="UI\AssignmentTargetExtended.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
@@ -57,6 +58,9 @@
     <Compile Update="TimeTrackingToolsUserControl.xaml.cs">
       <DependentUpon>TimeTrackingToolsUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Update="UI\AssignmentTargetExtended.xaml.cs">
+      <DependentUpon>UI\AssignmentTargetExtended.xaml</DependentUpon>
+    </Compile>
     <Compile Update="UI\AssignmentTarget.xaml.cs">
       <DependentUpon>UI\AssignmentTarget.xaml</DependentUpon>
     </Compile>
@@ -66,6 +70,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="TimeTrackingToolsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\AssignmentTargetExtended.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

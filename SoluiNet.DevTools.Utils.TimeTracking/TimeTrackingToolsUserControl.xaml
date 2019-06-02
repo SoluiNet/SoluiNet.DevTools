@@ -31,7 +31,7 @@
                                 <localui:ExtendableAssignmentGrid x:Name="ApplicationAreaAssignmentGrid"></localui:ExtendableAssignmentGrid>
                             </TabItem>
                             <TabItem Header="Category">
-                                <localui:ExtendableAssignmentGrid x:Name="CategoryAssignmentGrid"></localui:ExtendableAssignmentGrid>
+                                <localui:ExtendableAssignmentGridExtended x:Name="CategoryAssignmentGrid"></localui:ExtendableAssignmentGridExtended>
                             </TabItem>
                         </TabControl>
                     </Grid>

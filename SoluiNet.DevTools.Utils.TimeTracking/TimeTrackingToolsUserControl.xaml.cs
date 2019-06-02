@@ -270,7 +270,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         context.Category.Add(category);
                         context.SaveChanges();
 
-                        var newElement = new UI.AssignmentTarget() { Label = categoryName };
+                        var newElement = new UI.AssignmentTargetExtended() { Label = categoryName };
 
                         newElement.Tag = category;
 
@@ -287,7 +287,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     }
                 };
 
-            var distributeEvenlyElement = new UI.AssignmentTarget()
+            var distributeEvenlyElement = new UI.AssignmentTargetExtended()
             {
                 AllowDrop = true,
                 Label = "Distribute evenly",
@@ -299,7 +299,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var category in categories)
             {
-                var categoryTarget = new UI.AssignmentTarget();
+                var categoryTarget = new UI.AssignmentTargetExtended();
 
                 categoryTarget.Label = category.CategoryName;
 

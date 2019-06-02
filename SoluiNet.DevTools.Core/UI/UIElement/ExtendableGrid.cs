@@ -16,7 +16,7 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
     /// The base class for an extendable grid. The grid will create new rows for each new child.
     /// </summary>
     /// <typeparam name="T">The type which will be used for each row.</typeparam>
-    public class ExtendableGrid<T> : Grid, ISoluiNetUIElement
+    public class ExtendableGrid<T> : Grid
         where T : UserControl
     {
         /// <summary>
@@ -67,24 +67,6 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
         /// Gets or sets the create new element event handler.
         /// </summary>
         public NewElementCreation CreateNewElement { get; set; }
-
-        /// <inheritdoc/>
-        public string Label
-        {
-            get
-            {
-                return string.Empty;
-            }
-        }
-
-        /// <inheritdoc/>
-        public string TechnicalName
-        {
-            get
-            {
-                return "ExtendableGrid";
-            }
-        }
 
         /// <summary>
         /// Add a new element to the extendable grid.
