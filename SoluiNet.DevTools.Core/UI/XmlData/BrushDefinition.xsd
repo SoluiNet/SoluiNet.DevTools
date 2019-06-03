@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ConfigurationSchema"
+    targetNamespace="http://solui.net/BrushDefinition.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://solui.net/BrushDefinition.xsd"
+    xmlns:mstns="http://solui.net/BrushDefinition.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:simpleType name="SoluiNet.BrushType" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SimpleLinearGradient" />
+      <xs:enumeration value="LinearGradient" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SoluiNet.PointType">
+    <xs:attribute type="xs:double" name="xAxis"/>
+    <xs:attribute type="xs:double" name="yAxis"/>
+  </xs:complexType>
+  <xs:complexType name="SoluiNet.GradientStopType">
+    <xs:attribute type="xs:string" name="colour"/>
+    <xs:attribute type="xs:string" name="offset"/>
+  </xs:complexType>
+  <xs:complexType name="SoluiNet.BrushDefinitionType">
+    <xs:sequence>
+      <xs:element type="SoluiNet.PointType" name="SoluiNet.StartPoint" minOccurs="0" maxOccurs="1" />
+      <xs:element type="SoluiNet.PointType" name="SoluiNet.EndPoint" minOccurs="0" maxOccurs="1" />
+      <xs:element type="SoluiNet.GradientStopType" name="SoluiNet.GradientStop" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="SoluiNet.BrushType" name="type"/>
+    <xs:attribute type="xs:string" name="startColour" use="optional"/>
+    <xs:attribute type="xs:string" name="endColour" use="optional"/>
+    <xs:attribute type="xs:double" name="angle" use="optional"/>
+  </xs:complexType>
+
+  <xs:element name="SoluiNet.BrushDefinition" type="SoluiNet.BrushDefinitionType"/>
+</xs:schema>
