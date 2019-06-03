@@ -147,7 +147,7 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
 
             if (visualHit != null)
             {
-                Debug.WriteLine("  VisualTreeHelper.HitTest: {0}", JsonTools.Serialize(visualHit.VisualHit));
+                Debug.WriteLine("  VisualTreeHelper.HitTest: {0}", visualHit.VisualHit.ToString());
             }
 #endif
 
@@ -163,7 +163,7 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
         {
 #if DEBUG
             Debug.WriteLine(
-                "{2} TwoActionButtonGrid.PreviewDragEnter\r\n  hasEnteredUserControl: {0}\r\n  UserControl: {1}",
+                "{2} TwoActionButtonGrid.PreviewDragLeave\r\n  hasEnteredUserControl: {0}\r\n  UserControl: {1}",
                 this.hasEnteredUserControl,
                 (sender as Grid).Name,
                 DateTime.Now);
@@ -177,7 +177,7 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
 
             if (visualHit != null)
             {
-                Debug.WriteLine("  VisualTreeHelper.HitTest: {0}", JsonTools.Serialize(visualHit.VisualHit));
+                Debug.WriteLine("  VisualTreeHelper.HitTest: {0}", visualHit.VisualHit.ToString());
             }
 #endif
 
