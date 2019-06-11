@@ -24,6 +24,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.Number;
     using SoluiNet.DevTools.Core.Tools.String;
+    using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.General;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
@@ -207,51 +208,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
                 .GroupBy(x => x.ApplicationIdentification);
 
-            var highestDuration = timeTargets.Any() ? timeTargets.Max(x => x.Any() ? x.Sum(y => y != null ? y.Duration : 0) : 0) : 0;
-            this.TimeTrackingAssignmentOverview.Tag = highestDuration;
-
-            foreach (var timeTarget in timeTargets)
-            {
-                this.TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
-
-                var label = string.Format("{0} ({1})", timeTarget.Key, (Convert.ToDouble(timeTarget.Sum(x => x.Duration)) - timeTarget.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0)).ToDurationString());
-
-                var timeTargetButton = new Button() { Content = label, HorizontalAlignment = HorizontalAlignment.Left };
-                timeTargetButton.ToolTip = label;
-                timeTargetButton.Tag = timeTarget;
-
-                if (highestDuration > 0)
-                {
-                    timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.TimeTrackingAssignmentOverview.ActualWidth;
-                }
-
-                timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
-
-                timeTargetButton.PreviewMouseMove += (dragSender, dragEvents) =>
-                {
-                    if (!this.mouseMoving)
-                    {
-                        this.mouseMoving = true;
-                        if (dragEvents.LeftButton == MouseButtonState.Pressed)
-                        {
-                            var usageTimeObject = (dragSender as Button).Tag as IGrouping<string, UsageTime>;
-
-                            Console.WriteLine("Dragged: " + JsonTools.Serialize(usageTimeObject));
-
-                            var dataObject = new DataObject(typeof(IGrouping<string, UsageTime>), usageTimeObject);
-
-                            DragDrop.DoDragDrop(dragSender as Button, dataObject, DragDropEffects.All);
-                            dragEvents.Handled = true;
-                        }
-
-                        this.mouseMoving = false;
-                    }
-                };
-
-                this.TimeTrackingAssignmentOverview.Children.Add(timeTargetButton);
-
-                Grid.SetRow(timeTargetButton, this.TimeTrackingAssignmentOverview.RowDefinitions.Count - 1);
-            }
+            this.FillTimeTrackingOverview(timeTargets);
 
             var applications = context.Application;
 
@@ -389,6 +346,86 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 {
                     (element as Button).Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.TimeTrackingAssignmentOverview.ActualWidth;
                 }
+            }
+        }
+
+        private void FillTimeTrackingOverview(IQueryable<IGrouping<string, UsageTime>> timeTargets)
+        {
+            this.TimeTrackingAssignmentOverview.Children.Clear();
+            this.TimeTrackingAssignmentOverview.RowDefinitions.Clear();
+
+            var highestDuration = timeTargets.Any() ? timeTargets.Max(x => x.Any() ? x.Sum(y => y != null ? y.Duration : 0) : 0) : 0;
+            this.TimeTrackingAssignmentOverview.Tag = highestDuration;
+
+            foreach (var timeTarget in timeTargets)
+            {
+                this.TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
+
+                var label = string.Format(
+                    "{0} ({1})",
+                    timeTarget.Key,
+                    (Convert.ToDouble(timeTarget.Sum(x => x.Duration)) - timeTarget.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0)).ToDurationString());
+
+                var timeTargetButton = new Button() { Content = label, HorizontalAlignment = HorizontalAlignment.Left };
+                timeTargetButton.ToolTip = label;
+                timeTargetButton.Tag = timeTarget;
+
+                if (highestDuration > 0)
+                {
+                    timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.TimeTrackingAssignmentOverview.ActualWidth;
+                }
+
+                timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
+
+                timeTargetButton.PreviewMouseMove += (dragSender, dragEvents) =>
+                {
+                    if (!this.mouseMoving)
+                    {
+                        this.mouseMoving = true;
+                        if (dragEvents.LeftButton == MouseButtonState.Pressed)
+                        {
+                            var usageTimeObject = (dragSender as Button).Tag as IGrouping<string, UsageTime>;
+
+                            Console.WriteLine("Dragged: " + JsonTools.Serialize(usageTimeObject));
+
+                            var dataObject = new DataObject(typeof(IGrouping<string, UsageTime>), usageTimeObject);
+
+                            DragDrop.DoDragDrop(dragSender as Button, dataObject, DragDropEffects.All);
+                            dragEvents.Handled = true;
+                        }
+
+                        this.mouseMoving = false;
+                    }
+                };
+
+                this.TimeTrackingAssignmentOverview.Children.Add(timeTargetButton);
+
+                Grid.SetRow(timeTargetButton, this.TimeTrackingAssignmentOverview.RowDefinitions.Count - 1);
+            }
+        }
+
+        private void TimeTrackingAssignmentTargetTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var lowerDayLimit = DateTime.UtcNow.Date;
+            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+            if ((sender as TabControl).SelectedItem != null && ((sender as TabControl).SelectedItem as TabItem).Header.ToString() == "Application")
+            {
+                this.ShowAll.RemoveEvent("Click");
+                this.ShowAll.Click += (showAllButton, eventArgs) =>
+                {
+                    var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification);
+
+                    this.FillTimeTrackingOverview(timeTargets);
+                };
+
+                this.ShowOnlyUnassigned.RemoveEvent("Click");
+                this.ShowOnlyUnassigned.Click += (showAllButton, eventArgs) =>
+                {
+                    var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && x.ApplicationId == null).GroupBy(x => x.ApplicationIdentification);
+
+                    this.FillTimeTrackingOverview(timeTargets);
+                };
             }
         }
     }

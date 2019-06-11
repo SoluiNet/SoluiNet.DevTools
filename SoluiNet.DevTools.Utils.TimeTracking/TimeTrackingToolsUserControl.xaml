@@ -21,9 +21,17 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Grid x:Name="TimeTrackingAssignmentOverview" Grid.Column="0" />
-                    <Grid x:Name="TimeTrackingAssignmentTargets" Grid.Column="1">
-                        <TabControl x:Name="TimeTrackingAssignmentTargetTabs" TabStripPlacement="Bottom">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="TimeTrackingAssignmentFilters" Grid.Column="0" Grid.Row="0">
+                        <Button x:Name="ShowOnlyUnassigned" Content="Show only unassigned" Height="25" Width="125" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" />
+                        <Button x:Name="ShowAll" Content="Show all" Height="25" Width="125" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="140, 5, 0, 0" />
+                    </Grid>
+                    <Grid x:Name="TimeTrackingAssignmentOverview" Grid.Column="0" Grid.Row="1" />
+                    <Grid x:Name="TimeTrackingAssignmentTargets" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+                        <TabControl x:Name="TimeTrackingAssignmentTargetTabs" TabStripPlacement="Bottom" SelectionChanged="TimeTrackingAssignmentTargetTabs_SelectionChanged">
                             <TabItem Header="Application">
                                 <localui:ExtendableAssignmentGrid x:Name="ApplicationAssignmentGrid"></localui:ExtendableAssignmentGrid>
                             </TabItem>

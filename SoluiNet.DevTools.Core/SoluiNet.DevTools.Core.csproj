@@ -64,7 +64,6 @@
     <None Include="Configuration\ConfigurationSchema.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Configuration\generate_xsd_classes.bat" />
     <None Include="Settings\SettingSchema.xsd">
       <SubType>Designer</SubType>
     </None>

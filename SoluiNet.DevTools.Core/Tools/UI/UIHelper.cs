@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.Tools.UI
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Data;
     using System.IO;
     using System.Linq;
@@ -16,6 +17,7 @@ namespace SoluiNet.DevTools.Core.Tools.UI
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Media;
     using System.Xml;
@@ -403,6 +405,58 @@ namespace SoluiNet.DevTools.Core.Tools.UI
             }
 
             return assembly;
+        }
+
+        /// <summary>
+        /// Gets the list of routed event handlers subscribed to the specified routed event.
+        /// Taken from: https://stackoverflow.com/questions/9434817/how-to-remove-all-click-event-handlers
+        /// </summary>
+        /// <param name="element">The UI element on which the event is defined.</param>
+        /// <param name="routedEvent">The routed event for which to retrieve the event handlers.</param>
+        /// <returns>The list of subscribed routed event handlers.</returns>
+        public static RoutedEventHandlerInfo[] GetRoutedEventHandlers(UIElement element, RoutedEvent routedEvent)
+        {
+            // Get the EventHandlersStore instance which holds event handlers for the specified element.
+            // The EventHandlersStore class is declared as internal.
+            var eventHandlersStoreProperty = typeof(UIElement).GetProperty(
+                "EventHandlersStore", BindingFlags.Instance | BindingFlags.NonPublic);
+            object eventHandlersStore = eventHandlersStoreProperty.GetValue(element, null);
+
+            // Invoke the GetRoutedEventHandlers method on the EventHandlersStore instance 
+            // for getting an array of the subscribed event handlers.
+            var getRoutedEventHandlers = eventHandlersStore.GetType().GetMethod(
+                "GetRoutedEventHandlers", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var routedEventHandlers = (RoutedEventHandlerInfo[])getRoutedEventHandlers.Invoke(
+                eventHandlersStore, new object[] { routedEvent });
+
+            return routedEventHandlers;
+        }
+
+        /// <summary>
+        /// Remove event from UI element.
+        /// </summary>
+        /// <param name="uiElement">The UI element.</param>
+        /// <param name="eventName">The event name.</param>
+        public static void RemoveEvent(this Control uiElement, string eventName = "Click")
+        {
+            /* FieldInfo fieldInfo = typeof(Control).GetField(string.Format("Event{0}", eventName), BindingFlags.Static | BindingFlags.NonPublic);
+            object eventClick = fieldInfo.GetValue(uiElement);
+
+            PropertyInfo property = uiElement.GetType().GetProperty("Events", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            EventHandlerList list = (EventHandlerList)property.GetValue(uiElement, null);
+
+            list.RemoveHandler(eventClick, list[eventClick]); */
+
+            var routedEventHandlers = GetRoutedEventHandlers(uiElement, ButtonBase.ClickEvent);
+
+            foreach (var routedEventHandler in routedEventHandlers)
+            {
+                if (uiElement is Button)
+                {
+                    (uiElement as Button).Click -= (RoutedEventHandler)routedEventHandler.Handler;
+                }
+            }
         }
 
         /// <summary>
