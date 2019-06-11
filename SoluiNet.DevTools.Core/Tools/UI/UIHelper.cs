@@ -409,7 +409,7 @@ namespace SoluiNet.DevTools.Core.Tools.UI
 
         /// <summary>
         /// Gets the list of routed event handlers subscribed to the specified routed event.
-        /// Taken from: https://stackoverflow.com/questions/9434817/how-to-remove-all-click-event-handlers
+        /// Taken from: https://stackoverflow.com/questions/9434817/how-to-remove-all-click-event-handlers.
         /// </summary>
         /// <param name="element">The UI element on which the event is defined.</param>
         /// <param name="routedEvent">The routed event for which to retrieve the event handlers.</param>
@@ -422,7 +422,12 @@ namespace SoluiNet.DevTools.Core.Tools.UI
                 "EventHandlersStore", BindingFlags.Instance | BindingFlags.NonPublic);
             object eventHandlersStore = eventHandlersStoreProperty.GetValue(element, null);
 
-            // Invoke the GetRoutedEventHandlers method on the EventHandlersStore instance 
+            if (eventHandlersStore == null)
+            {
+                return null;
+            }
+
+            // Invoke the GetRoutedEventHandlers method on the EventHandlersStore instance
             // for getting an array of the subscribed event handlers.
             var getRoutedEventHandlers = eventHandlersStore.GetType().GetMethod(
                 "GetRoutedEventHandlers", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -449,6 +454,11 @@ namespace SoluiNet.DevTools.Core.Tools.UI
             list.RemoveHandler(eventClick, list[eventClick]); */
 
             var routedEventHandlers = GetRoutedEventHandlers(uiElement, ButtonBase.ClickEvent);
+
+            if (routedEventHandlers == null)
+            {
+                return;
+            }
 
             foreach (var routedEventHandler in routedEventHandlers)
             {
