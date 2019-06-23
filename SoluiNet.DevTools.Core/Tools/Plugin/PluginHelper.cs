@@ -408,6 +408,40 @@ namespace SoluiNet.DevTools.Core.Tools
                         var plugin = (T)Activator.CreateInstance(type);
                         pluginList.Add(plugin);
                     }
+
+                    if (pluginType.IsInterface && pluginType.IsGenericType)
+                    {
+                        var typeInterfaces = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition().FullName == pluginType.GetGenericTypeDefinition().FullName);
+
+                        if (typeInterfaces == null || typeInterfaces.Count() == 0)
+                        {
+                            continue;
+                        }
+
+                        foreach (var typeInterface in typeInterfaces)
+                        {
+                            var pluginGenericArguments = pluginType.GetGenericArguments();
+                            var typeGenericArguments = typeInterface.GetGenericArguments();
+
+                            if (pluginGenericArguments.Count() != typeGenericArguments.Count())
+                            {
+                                continue;
+                            }
+
+                            for (int i = 0; i < pluginGenericArguments.Count(); i++)
+                            {
+                                var genericArgument = pluginGenericArguments[i];
+
+                                if (genericArgument.GetType() != typeGenericArguments[i].GetType())
+                                {
+                                    continue;
+                                }
+                            }
+
+                            var plugin = (T)Activator.CreateInstance(type);
+                            pluginList.Add(plugin);
+                        }
+                    }
                 }
             }
 

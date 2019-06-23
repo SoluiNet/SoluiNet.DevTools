@@ -15,13 +15,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using Quartz.Impl;
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Utils.TimeTracking.Job;
 
     /// <summary>
     /// A plugin which provides utility functions for time tracking.
     /// </summary>
-    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask
+    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask, IHandlesEvent<IStartupEvent>, IHandlesEvent<IShutdownEvent>
     {
+        private static System.Threading.Mutex mutex = null;
+
         /// <summary>
         /// Gets the technical name of the plugin.
         /// </summary>
@@ -88,6 +91,36 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
             displayInPluginContainer(new TimeTrackingToolsUserControl());
+        }
+
+        /// <summary>
+        /// Handle the event.
+        /// </summary>
+        /// <param name="eventArgs">The event arguments.</param>
+        /// <typeparam name="T">The event type.</typeparam>
+        public void HandleEvent<T>(Dictionary<string, object> eventArgs)
+            where T : IEventType
+        {
+            if (typeof(T).IsAssignableFrom(typeof(IShutdownEvent)))
+            {
+                mutex.ReleaseMutex();
+            }
+            else if (typeof(T).IsAssignableFrom(typeof(IStartupEvent)))
+            {
+                // taken from: https://stackoverflow.com/questions/2186747/how-can-i-create-a-system-mutex-in-c-sharp
+                try
+                {
+                    mutex = System.Threading.Mutex.OpenExisting("soluinet.devtools_TimeTracking");
+
+                    // we got mutex and can try to obtain a lock by waitone
+                    mutex.WaitOne();
+                }
+                catch
+                {
+                    // the specified mutex doesn't exist, we should create it
+                    mutex = new System.Threading.Mutex(true, "soluinet.devtools_TimeTracking"); // these names need to match.
+                }
+            }
         }
     }
 }

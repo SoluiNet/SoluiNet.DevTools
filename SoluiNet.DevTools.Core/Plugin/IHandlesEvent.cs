@@ -18,5 +18,12 @@ namespace SoluiNet.DevTools.Core.Plugin
     public interface IHandlesEvent<T>
         where T : IEventType
     {
+        /// <summary>
+        /// Handle the event.
+        /// </summary>
+        /// <param name="eventArgs">The event arguments.</param>
+        /// <typeparam name="TEventType">The event type.</typeparam>
+        void HandleEvent<TEventType>(Dictionary<string, object> eventArgs)
+            where TEventType : IEventType;
     }
 }

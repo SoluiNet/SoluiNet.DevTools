@@ -15,10 +15,5 @@ namespace SoluiNet.DevTools.Core.Plugin.Events
     /// </summary>
     public interface IEventType
     {
-        /// <summary>
-        /// Handle the event.
-        /// </summary>
-        /// <param name="eventArgs">The event arguments.</param>
-        void HandleEvent(Dictionary<string, object> eventArgs);
     }
 }

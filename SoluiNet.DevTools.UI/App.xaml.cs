@@ -17,6 +17,7 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.UI;
@@ -61,6 +62,19 @@ namespace SoluiNet.DevTools.UI
 
             this.LoadPlugins();
             this.LoadUiElements();
+
+            this.CallStartupEvent();
+        }
+
+        /// <summary>
+        /// Event handling for exit.
+        /// </summary>
+        /// <param name="e">The exit event.</param>
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            this.CallShutdownEvent();
         }
 
         private void LoadPlugins()
@@ -278,6 +292,22 @@ namespace SoluiNet.DevTools.UI
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += new ResolveEventHandler(UIHelper.LoadUiElementAssembly);
+        }
+
+        private void CallStartupEvent()
+        {
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IStartupEvent>>())
+            {
+                (plugin as IHandlesEvent<IStartupEvent>).HandleEvent<IStartupEvent>(new Dictionary<string, object>());
+            }
+        }
+
+        private void CallShutdownEvent()
+        {
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IShutdownEvent>>())
+            {
+                (plugin as IHandlesEvent<IShutdownEvent>).HandleEvent<IShutdownEvent>(new Dictionary<string, object>());
+            }
         }
     }
 }

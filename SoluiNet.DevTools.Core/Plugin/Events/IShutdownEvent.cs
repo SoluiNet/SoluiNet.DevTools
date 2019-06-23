@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Events
     /// <summary>
     /// Handles the shutdown event.
     /// </summary>
-    public interface IShutdownEvent
+    public interface IShutdownEvent : IEventType
     {
     }
 }
