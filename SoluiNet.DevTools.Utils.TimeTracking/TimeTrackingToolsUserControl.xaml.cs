@@ -62,6 +62,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var lowerDayLimit = DateTime.UtcNow.Date;
             var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
 
+            if (this.AssignmentDate.SelectedDate.HasValue)
+            {
+                lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
+                upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
+            }
+
             this.PrepareSourceDataView(lowerDayLimit, upperDayLimit, this.context);
 
             this.PrepareAssignmentView(lowerDayLimit, upperDayLimit, this.context);
@@ -203,7 +209,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.context.SaveChanges();
         }
 
-        private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context)
+        private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context, bool showOnlyUnassigned = false)
         {
             var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
                 .GroupBy(x => x.ApplicationIdentification);
@@ -406,14 +412,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void TimeTrackingAssignmentTargetTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var lowerDayLimit = DateTime.UtcNow.Date;
-            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
-
             if ((sender as TabControl).SelectedItem != null && ((sender as TabControl).SelectedItem as TabItem).Header.ToString() == "Application")
             {
                 this.ShowAll.RemoveEvent("Click");
                 this.ShowAll.Click += (showAllButton, eventArgs) =>
                 {
+                    var lowerDayLimit = DateTime.UtcNow.Date;
+                    var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+                    if (this.AssignmentDate.SelectedDate.HasValue)
+                    {
+                        lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
+                        upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
+                    }
+
                     var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification);
 
                     this.FillTimeTrackingOverview(timeTargets);
@@ -422,11 +434,54 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 this.ShowOnlyUnassigned.RemoveEvent("Click");
                 this.ShowOnlyUnassigned.Click += (showAllButton, eventArgs) =>
                 {
+                    var lowerDayLimit = DateTime.UtcNow.Date;
+                    var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+                    if (this.AssignmentDate.SelectedDate.HasValue)
+                    {
+                        lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
+                        upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
+                    }
+
                     var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && x.ApplicationId == null).GroupBy(x => x.ApplicationIdentification);
 
                     this.FillTimeTrackingOverview(timeTargets);
                 };
             }
+        }
+
+        private void FillQueryResults(List<UsageTime> queryResults)
+        {
+            this.QueryData.Items.Clear();
+
+            if (this.QueryData.Columns.Count == 0)
+            {
+                this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "ApplicationIdentification", Binding = new Binding("ApplicationIdentification") });
+                this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "StartTime", Binding = new Binding("StartTime") });
+                this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "EndTime", Binding = new Binding("EndTime") });
+                this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") });
+            }
+
+            foreach (var item in queryResults)
+            {
+                this.QueryData.Items.Add(item);
+            }
+        }
+
+        private void StartQuery_Click(object sender, RoutedEventArgs e)
+        {
+            var lowerDayLimit = DateTime.UtcNow.Date;
+            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+            if (this.QueryDateBegin.SelectedDate.HasValue && this.QueryDateEnd.SelectedDate.HasValue)
+            {
+                lowerDayLimit = this.QueryDateBegin.SelectedDate.Value.Date;
+                upperDayLimit = this.QueryDateBegin.SelectedDate.Value.AddDays(1).Date;
+            }
+
+            var queryResults = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
+
+            this.FillQueryResults(queryResults);
         }
     }
 }

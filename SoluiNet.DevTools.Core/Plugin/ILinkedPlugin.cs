@@ -15,5 +15,13 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// </summary>
     public interface ILinkedPlugin
     {
+        /// <summary>
+        /// Execute a linked function.
+        /// </summary>
+        /// <param name="callingPlugin">The plugin which calls this method.</param>
+        /// <param name="parameters">The parameter list as <see cref="Dictionary{TKey, TValue}"/>.</param>
+        /// <param name="returnType">The return type.</param>
+        /// <returns>Returns the result for a linked function. The type of this result can be found in <paramref name="returnType"/>.</returns>
+        object ExecuteLinkedFunction(string callingPlugin, Dictionary<string, object> parameters, out string returnType);
     }
 }
