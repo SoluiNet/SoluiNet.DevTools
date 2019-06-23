@@ -82,4 +82,5 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties stylecop_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 </Project>
