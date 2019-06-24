@@ -476,7 +476,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             if (this.QueryDateBegin.SelectedDate.HasValue && this.QueryDateEnd.SelectedDate.HasValue)
             {
                 lowerDayLimit = this.QueryDateBegin.SelectedDate.Value.Date;
-                upperDayLimit = this.QueryDateBegin.SelectedDate.Value.AddDays(1).Date;
+                upperDayLimit = this.QueryDateEnd.SelectedDate.Value.AddDays(1).Date;
             }
 
             var queryResults = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
