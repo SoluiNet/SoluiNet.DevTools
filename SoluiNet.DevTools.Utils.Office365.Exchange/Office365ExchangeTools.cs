@@ -10,9 +10,17 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
     using System.Linq;
     using System.Text;
     using Microsoft.Exchange.WebServices.Data;
+    using SoluiNet.DevTools.Core.Tools;
 
+    /// <summary>
+    /// Provides methods to work with Office365 Exchange.
+    /// </summary>
     public static class Office365ExchangeTools
     {
+        /// <summary>
+        /// Get mails from exchange server.
+        /// </summary>
+        /// <returns>Returns a list of mails.</returns>
         public static List<string> GetMails()
         {
             var service = Connect();
@@ -41,6 +49,8 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
 
         private static ExchangeService Connect()
         {
+            var settings = PluginHelper.GetSettingsAsDictionary(PluginHelper.GetPluginByName<Office365ExchangePlugin>("Office365ExchangePlugin"));
+
             ExchangeService service;
 
             try
@@ -49,7 +59,7 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
 
                 service = new ExchangeService
                 {
-                    Credentials = new WebCredentials("yourmailbox@email.com", "*******"),
+                    Credentials = new WebCredentials(settings["ExchangeUser"].ToString(), settings["ExchangePassword"].ToString()),
                 };
             }
             catch

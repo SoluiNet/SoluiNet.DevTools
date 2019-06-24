@@ -15,7 +15,7 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
     /// <summary>
     /// A plugin which allows to connect with exchange in an office 365 environment.
     /// </summary>
-    public class Office365ExchangePlugin : IUtilitiesDevPlugin
+    public class Office365ExchangePlugin : IUtilitiesDevPlugin, IContainsSettings
     {
         /// <summary>
         /// Gets the technical name of the plugin.
