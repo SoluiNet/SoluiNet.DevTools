@@ -460,6 +460,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "StartTime", Binding = new Binding("StartTime") });
                 this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "EndTime", Binding = new Binding("EndTime") });
                 this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") { Converter = new SoluiNet.DevTools.Core.UI.Converter.DurationConverter() } });
+                this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "Application", Binding = new Binding("Application.ApplicationName") });
+                this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "ApplicationArea", Binding = new Binding("ApplicationArea.ApplicationName") });
             }
 
             foreach (var item in queryResults)
