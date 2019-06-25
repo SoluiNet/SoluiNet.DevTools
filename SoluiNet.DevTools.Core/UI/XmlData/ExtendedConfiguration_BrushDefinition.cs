@@ -24,16 +24,16 @@ namespace SoluiNet.DevTools.Core.UI.XmlData {
     [System.Xml.Serialization.XmlRootAttribute("SoluiNet.ExtendedConfiguration", Namespace="http://solui.net/ExtendedConfiguration.xsd", IsNullable=false)]
     public partial class SoluiNetExtendedConfigurationType {
         
-        private SoluiNetBrushDefinitionType soluiNetBrushdefinitionField;
+        private SoluiNetBrushDefinitionType soluiNetBrushDefinitionField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SoluiNet.Brushdefinition")]
-        public SoluiNetBrushDefinitionType SoluiNetBrushdefinition {
+        [System.Xml.Serialization.XmlElementAttribute("SoluiNet.BrushDefinition")]
+        public SoluiNetBrushDefinitionType SoluiNetBrushDefinition {
             get {
-                return this.soluiNetBrushdefinitionField;
+                return this.soluiNetBrushDefinitionField;
             }
             set {
-                this.soluiNetBrushdefinitionField = value;
+                this.soluiNetBrushDefinitionField = value;
             }
         }
     }
@@ -236,7 +236,9 @@ namespace SoluiNet.DevTools.Core.UI.XmlData {
         
         private string colourField;
         
-        private string offsetField;
+        private double offsetField;
+        
+        private bool offsetFieldSpecified;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -251,12 +253,23 @@ namespace SoluiNet.DevTools.Core.UI.XmlData {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string offset {
+        public double offset {
             get {
                 return this.offsetField;
             }
             set {
                 this.offsetField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool offsetSpecified {
+            get {
+                return this.offsetFieldSpecified;
+            }
+            set {
+                this.offsetFieldSpecified = value;
             }
         }
     }

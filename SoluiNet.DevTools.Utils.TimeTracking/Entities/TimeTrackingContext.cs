@@ -12,6 +12,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Windows.Media;
+    using NLog;
+    using SoluiNet.DevTools.Core.Tools.UI;
+    using SoluiNet.DevTools.Core.Tools.XML;
+    using SoluiNet.DevTools.Core.UI.XmlData;
 
     /// <summary>
     /// The database context which can be used for time tracking purposes.
@@ -63,6 +68,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Gets or sets the VersionHistory accessor.
         /// </summary>
         public virtual DbSet<VersionHistory> VersionHistory { get; set; }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        private static Logger Logger
+        {
+            get
+            {
+                return LogManager.GetLogger("timeTracking");
+            }
+        }
 
         /// <summary>
         /// Create the database if it doesn't exist.
@@ -214,6 +230,228 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     appliedVersion = new Version("1.0.0.5");
                 }
+
+                if (appliedVersion.CompareTo(new Version("1.0.0.6")) < 0)
+                {
+                    command.CommandText = "ALTER TABLE Application ADD ExtendedConfiguration TEXT";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName";
+                    command.Parameters.AddWithValue("$extendedConfiguration", XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.BlueViolet.ToHexValue(),
+                            endColour = Color.FromRgb(50, 50, 50).ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    }));
+                    command.Parameters.AddWithValue("$applicationName", "Microsoft Visual Studio");
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+                    command.CommandText = "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                    command.Parameters.AddWithValue("$versionNo", "1.0.0.6");
+                    command.Parameters.AddWithValue("$appliedAt", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff"));
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.6");
+                }
+
+                if (appliedVersion.CompareTo(new Version("1.0.0.7")) < 0)
+                {
+                    command.CommandText = "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName";
+                    command.Parameters.AddWithValue("$extendedConfiguration", XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.DodgerBlue.ToHexValue(),
+                            endColour = Colors.WhiteSmoke.ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    }));
+                    command.Parameters.AddWithValue("$applicationName", "Outlook");
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters["$extendedConfiguration"].Value = XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.DarkViolet.ToHexValue(),
+                            endColour = Colors.WhiteSmoke.ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    });
+                    command.Parameters["$applicationName"].Value = "Microsoft Teams";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters["$extendedConfiguration"].Value = XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.WhiteSmoke.ToHexValue(),
+                            endColour = Colors.DeepSkyBlue.ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    });
+                    command.Parameters["$applicationName"].Value = "Remote Desktop Manager";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters["$extendedConfiguration"].Value = XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.DarkGreen.ToHexValue(),
+                            endColour = Colors.WhiteSmoke.ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    });
+                    command.Parameters["$applicationName"].Value = "Excel";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters["$extendedConfiguration"].Value = XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.Lime.ToHexValue(),
+                            endColour = Colors.WhiteSmoke.ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    });
+                    command.Parameters["$applicationName"].Value = "Notepad++";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters["$extendedConfiguration"].Value = XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.LightBlue.ToHexValue(),
+                            endColour = Colors.WhiteSmoke.ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    });
+                    command.Parameters["$applicationName"].Value = "Editor";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters["$extendedConfiguration"].Value = XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.DarkGray.ToHexValue(),
+                            endColour = Colors.LightBlue.ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    });
+                    command.Parameters["$applicationName"].Value = "TortoiseGit";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters["$extendedConfiguration"].Value = XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            angle = 0.75,
+                            angleSpecified = true,
+                            startColour = Colors.DarkBlue.ToHexValue(),
+                            endColour = Colors.LightBlue.ToHexValue(),
+                            type = SoluiNetBrushType.SimpleLinearGradient,
+                            typeSpecified = true,
+                        },
+                    });
+                    command.Parameters["$applicationName"].Value = "KeePass";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters["$extendedConfiguration"].Value = XmlHelper.Serialize(new SoluiNetExtendedConfigurationType()
+                    {
+                        SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                        {
+                            type = SoluiNetBrushType.LinearGradient,
+                            typeSpecified = true,
+                            SoluiNetStartPoint = new SoluiNetPointType()
+                            {
+                                xAxis = 0,
+                                xAxisSpecified = true,
+                                yAxis = 0,
+                                yAxisSpecified = true,
+                            },
+                            SoluiNetEndPoint = new SoluiNetPointType()
+                            {
+                                xAxis = 1,
+                                xAxisSpecified = true,
+                                yAxis = 0.2,
+                                yAxisSpecified = true,
+                            },
+                            SoluiNetGradientStop = new SoluiNetGradientStopType[]
+                            {
+                                new SoluiNetGradientStopType()
+                                {
+                                    colour = Colors.OrangeRed.ToHexValue(),
+                                    offset = 0.2,
+                                },
+                                new SoluiNetGradientStopType()
+                                {
+                                    colour = Colors.Yellow.ToHexValue(),
+                                    offset = 0.4,
+                                },
+                                new SoluiNetGradientStopType()
+                                {
+                                    colour = Colors.Green.ToHexValue(),
+                                    offset = 0.6,
+                                },
+                                new SoluiNetGradientStopType()
+                                {
+                                    colour = Colors.DeepSkyBlue.ToHexValue(),
+                                    offset = 0.8,
+                                },
+                            },
+                        },
+                    });
+                    command.Parameters["$applicationName"].Value = "Google Chrome";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+                    command.CommandText = "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                    command.Parameters.AddWithValue("$versionNo", "1.0.0.7");
+                    command.Parameters.AddWithValue("$appliedAt", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff"));
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.7");
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "Couldn't update TimeTracking database.");
             }
             finally
             {

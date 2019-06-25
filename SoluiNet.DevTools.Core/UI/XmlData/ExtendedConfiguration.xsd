@@ -11,9 +11,9 @@
 
   <xs:complexType name="SoluiNet.ExtendedConfigurationType">
     <xs:sequence>
-      <xs:element name="SoluiNet.Brushdefinition" type="bd:SoluiNet.BrushDefinitionType" />
+      <xs:element name="SoluiNet.BrushDefinition" type="bd:SoluiNet.BrushDefinitionType" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
 
-  <xs:element name="SoluiNet.ExtendedConfiguration" type="SoluiNet.ExtendedConfigurationType"/>
+  <xs:element name="SoluiNet.ExtendedConfiguration" type="SoluiNet.ExtendedConfigurationType" />
 </xs:schema>

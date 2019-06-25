@@ -470,6 +470,26 @@ namespace SoluiNet.DevTools.Core.Tools.UI
         }
 
         /// <summary>
+        /// Convert a colour to its hex value.
+        /// </summary>
+        /// <param name="colour">The colour.</param>
+        /// <returns>Returns a hex string representation of the colour.</returns>
+        public static string ToHexValue(this Color colour)
+        {
+            return string.Format("#{0:X2}{1:X2}{2:X2}", colour.R, colour.G, colour.B);
+        }
+
+        /// <summary>
+        /// Convert a colour to its rgb value.
+        /// </summary>
+        /// <param name="colour">The colour.</param>
+        /// <returns>Returns a rgb string representation of the colour.</returns>
+        public static string ToRGBValue(this Color colour)
+        {
+            return string.Format("RGB({0},{1},{2})", colour.R, colour.G, colour.B);
+        }
+
+        /// <summary>
         /// Get the data from a data table as string.
         /// </summary>
         /// <param name="dataTable">The data table which should be exported.</param>
