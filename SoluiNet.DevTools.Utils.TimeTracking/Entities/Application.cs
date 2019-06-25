@@ -35,6 +35,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         public virtual string ApplicationName { get; set; }
 
         /// <summary>
+        /// Gets or sets the extended configuration.
+        /// </summary>
+        public virtual string ExtendedConfiguration { get; set; }
+
+        /// <summary>
         /// Gets or sets the usage times.
         /// </summary>
         public virtual ICollection<UsageTime> UsageTime { get; set; }

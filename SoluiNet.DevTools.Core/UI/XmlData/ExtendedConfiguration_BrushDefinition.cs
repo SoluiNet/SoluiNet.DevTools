@@ -20,6 +20,29 @@ namespace SoluiNet.DevTools.Core.UI.XmlData {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="SoluiNet.ExtendedConfigurationType", Namespace="http://solui.net/ExtendedConfiguration.xsd")]
+    [System.Xml.Serialization.XmlRootAttribute("SoluiNet.ExtendedConfiguration", Namespace="http://solui.net/ExtendedConfiguration.xsd", IsNullable=false)]
+    public partial class SoluiNetExtendedConfigurationType {
+        
+        private SoluiNetBrushDefinitionType soluiNetBrushdefinitionField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("SoluiNet.Brushdefinition")]
+        public SoluiNetBrushDefinitionType SoluiNetBrushdefinition {
+            get {
+                return this.soluiNetBrushdefinitionField;
+            }
+            set {
+                this.soluiNetBrushdefinitionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(TypeName="SoluiNet.BrushDefinitionType", Namespace="http://solui.net/BrushDefinition.xsd")]
     [System.Xml.Serialization.XmlRootAttribute("SoluiNet.BrushDefinition", Namespace="http://solui.net/BrushDefinition.xsd", IsNullable=false)]
     public partial class SoluiNetBrushDefinitionType {

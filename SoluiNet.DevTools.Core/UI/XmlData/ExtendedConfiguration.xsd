@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ExtendedConfiguration"
+    targetNamespace="http://solui.net/ExtendedConfiguration.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://solui.net/ExtendedConfiguration.xsd"
+    xmlns:mstns="http://solui.net/ExtendedConfiguration.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:bd="http://solui.net/BrushDefinition.xsd"
+>
+  <xs:import namespace="http://solui.net/BrushDefinition.xsd" schemaLocation="BrushDefinition.xsd" />
+
+  <xs:complexType name="SoluiNet.ExtendedConfigurationType">
+    <xs:sequence>
+      <xs:element name="SoluiNet.Brushdefinition" type="bd:SoluiNet.BrushDefinitionType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="SoluiNet.ExtendedConfiguration" type="SoluiNet.ExtendedConfigurationType"/>
+</xs:schema>
