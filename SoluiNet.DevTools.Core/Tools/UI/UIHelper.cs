@@ -480,6 +480,16 @@ namespace SoluiNet.DevTools.Core.Tools.UI
         }
 
         /// <summary>
+        /// Convert a hex value to its colour.
+        /// </summary>
+        /// <param name="colour">The colour hex value.</param>
+        /// <returns>Returns a colour for the hex string.</returns>
+        public static Color ColourFromHexValue(this string colour)
+        {
+            return (Color)ColorConverter.ConvertFromString(colour);
+        }
+
+        /// <summary>
         /// Convert a colour to its rgb value.
         /// </summary>
         /// <param name="colour">The colour.</param>
@@ -487,6 +497,31 @@ namespace SoluiNet.DevTools.Core.Tools.UI
         public static string ToRGBValue(this Color colour)
         {
             return string.Format("RGB({0},{1},{2})", colour.R, colour.G, colour.B);
+        }
+
+        /// <summary>
+        /// Convert a rgb value to its colour.
+        /// </summary>
+        /// <param name="colour">The colour rgb value.</param>
+        /// <returns>Returns a colour for the rgb string.</returns>
+        public static Color ColourFromRgbValue(this string colour)
+        {
+            var colorRegex = new Regex(@"rgb\(\s*(\d+),\s*(\d+),\s*(\d+)\s*\)", RegexOptions.IgnoreCase);
+
+            if (colorRegex.IsMatch(colour))
+            {
+                var match = colorRegex.Match(colour);
+
+                var redParts = Convert.ToByte(match.Groups[1].Value);
+                var greenParts = Convert.ToByte(match.Groups[2].Value);
+                var blueParts = Convert.ToByte(match.Groups[3].Value);
+
+                return Color.FromRgb(redParts, greenParts, blueParts);
+            }
+            else
+            {
+                return Colors.Black;
+            }
         }
 
         /// <summary>
