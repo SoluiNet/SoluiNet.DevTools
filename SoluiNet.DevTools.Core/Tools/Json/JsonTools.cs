@@ -16,6 +16,8 @@ namespace SoluiNet.DevTools.Core.Tools.Json
     /// </summary>
     public static class JsonTools
     {
+        private const string JsonErrorFormat = @"{ ""error"": ""{0}"", ""exception"": ""{1}"", ""inner_exception"": ""{2}"" }";
+
         /// <summary>
         /// Serialize an object to a JSON string.
         /// </summary>
@@ -23,13 +25,24 @@ namespace SoluiNet.DevTools.Core.Tools.Json
         /// <returns>Returns a string which represents the overgiven object in JSON format.</returns>
         public static string Serialize(object serializableObject)
         {
-            return JsonConvert.SerializeObject(
-                serializableObject,
-                Formatting.Indented,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                });
+            try
+            {
+                return JsonConvert.SerializeObject(
+                    serializableObject,
+                    Formatting.Indented,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    });
+            }
+            catch (Exception exception)
+            {
+                return string.Format(
+                    JsonErrorFormat,
+                    "not serializable",
+                    exception.Message,
+                    exception.InnerException != null ? exception.InnerException.Message : string.Empty);
+                }
         }
     }
 }

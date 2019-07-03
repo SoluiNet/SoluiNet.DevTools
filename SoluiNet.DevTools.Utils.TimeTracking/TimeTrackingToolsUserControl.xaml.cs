@@ -40,6 +40,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         private bool mouseMoving = false;
 
         /// <summary>
+        /// A value which indicates if the overview has already been loaded.
+        /// </summary>
+        private bool overviewLoaded = false;
+
+        /// <summary>
         /// The database context where time tracking will be stored.
         /// </summary>
         private TimeTrackingContext context;
@@ -330,13 +335,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.SourceData.ItemsSource = context.UsageTime.Local.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit);
         }
 
-        private void TimeTrackingTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void RearangeWidths()
         {
-            if ((sender as TabControl).SelectedIndex != 1)
-            {
-                return;
-            }
-
             var highestDuration = Convert.ToDouble(this.TimeTrackingAssignmentOverview.Tag);
 
             foreach (var element in this.TimeTrackingAssignmentOverview.Children)
@@ -352,6 +352,27 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 {
                     (element as Button).Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.TimeTrackingAssignmentOverview.ActualWidth;
                 }
+            }
+        }
+
+        private void TimeTrackingTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as TabControl).SelectedIndex != 1)
+            {
+                return;
+            }
+
+            // this.TimeTrackingAssignmentOverview.RemoveEvent("Loaded");
+            this.TimeTrackingAssignmentOverview.Loaded += (overviewSender, eventArgs) =>
+            {
+                this.RearangeWidths();
+
+                this.overviewLoaded = true;
+            };
+
+            if (this.overviewLoaded)
+            {
+                this.RearangeWidths();
             }
         }
 
@@ -412,25 +433,32 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void TimeTrackingAssignmentTargetTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((sender as TabControl).SelectedItem != null && ((sender as TabControl).SelectedItem as TabItem).Header.ToString() == "Application")
+            if ((sender as TabControl).SelectedItem != null)
             {
-                this.ShowAll.RemoveEvent("Click");
-                this.ShowAll.Click += (showAllButton, eventArgs) =>
+                return;
+            }
+
+            var header = ((sender as TabControl).SelectedItem as TabItem).Header.ToString();
+
+            this.ShowAll.RemoveEvent("Click");
+            this.ShowAll.Click += (showAllButton, eventArgs) =>
+            {
+                var lowerDayLimit = DateTime.UtcNow.Date;
+                var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+                if (this.AssignmentDate.SelectedDate.HasValue)
                 {
-                    var lowerDayLimit = DateTime.UtcNow.Date;
-                    var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+                    lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
+                    upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
+                }
 
-                    if (this.AssignmentDate.SelectedDate.HasValue)
-                    {
-                        lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
-                        upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
-                    }
+                var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification);
 
-                    var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification);
+                this.FillTimeTrackingOverview(timeTargets);
+            };
 
-                    this.FillTimeTrackingOverview(timeTargets);
-                };
-
+            if (header == "Application")
+            {
                 this.ShowOnlyUnassigned.RemoveEvent("Click");
                 this.ShowOnlyUnassigned.Click += (showAllButton, eventArgs) =>
                 {
@@ -444,6 +472,25 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     }
 
                     var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && x.ApplicationId == null).GroupBy(x => x.ApplicationIdentification);
+
+                    this.FillTimeTrackingOverview(timeTargets);
+                };
+            }
+            else if (header == "Category")
+            {
+                this.ShowOnlyUnassigned.RemoveEvent("Click");
+                this.ShowOnlyUnassigned.Click += (showAllButton, eventArgs) =>
+                {
+                    var lowerDayLimit = DateTime.UtcNow.Date;
+                    var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+                    if (this.AssignmentDate.SelectedDate.HasValue)
+                    {
+                        lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
+                        upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
+                    }
+
+                    var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && !x.CategoryUsageTime.Any()).GroupBy(x => x.ApplicationIdentification);
 
                     this.FillTimeTrackingOverview(timeTargets);
                 };

@@ -45,6 +45,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         public virtual int Duration { get; set; }
 
         /// <summary>
+        /// Gets or sets additional information.
+        /// </summary>
+        public virtual string AdditionalInformation { get; set; }
+
+        /// <summary>
         /// Gets or sets the ApplicationId.
         /// </summary>
         public virtual int? ApplicationId { get; set; }
