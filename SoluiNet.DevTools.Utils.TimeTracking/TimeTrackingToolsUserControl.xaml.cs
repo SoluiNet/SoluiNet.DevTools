@@ -124,6 +124,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 usageTime.ApplicationId = ((dropApplicationSender as UI.AssignmentTarget).Tag as Entities.Application).ApplicationId;
             }
+
+            this.context.SaveChanges();
         }
 
         private void DropOnCategoryElement(object dropSender, DragEventArgs dropEvents)
@@ -433,7 +435,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void TimeTrackingAssignmentTargetTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((sender as TabControl).SelectedItem != null)
+            if ((sender as TabControl).SelectedItem == null)
             {
                 return;
             }
