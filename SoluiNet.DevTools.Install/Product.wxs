@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="SoluiNet.DevTools" Language="1033" Version="1.0.0.0" Manufacturer="SoluiNet" UpgradeCode="10d05f41-6490-4b91-b841-0f766486bfe3">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of SoluiNet.DevTools is already installed." />
+    <MediaTemplate />
+    <Feature Id="ProductFeature" Title="SoluiNet.DevTools" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+    <UI />
+  </Product>
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="SoluiNet.DevTools">
+          <Component Id="CONNECTIONSTRINGS.DEFAULT.CONFIG" DiskId="1" Guid="8ACB3707-18BC-41BD-A902-42205CBF93D8">
+            <File Id="CONNECTIONSTRINGS.DEFAULT.CONFIG" Name="ConnectionStrings.Default.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\ConnectionStrings.Default.config" />
+          </Component>
+          <Component Id="ENTITYFRAMEWORK.DLL" DiskId="1" Guid="92459575-FD1B-4260-9687-D620820B5106">
+            <File Id="ENTITYFRAMEWORK.DLL" Name="EntityFramework.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\EntityFramework.dll" />
+          </Component>
+          <Component Id="ENTITYFRAMEWORK.SQLSERVER.DLL" DiskId="1" Guid="95022E52-94C5-4DBA-B853-CFC461813AE6">
+            <File Id="ENTITYFRAMEWORK.SQLSERVER.DLL" Name="EntityFramework.SqlServer.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\EntityFramework.SqlServer.dll" />
+          </Component>
+          <Component Id="HARDCODET.WPF.TASKBARNOTIFICATION.DLL" DiskId="1" Guid="99ED1CF7-87D5-425C-9744-459413FBB451">
+            <File Id="HARDCODET.WPF.TASKBARNOTIFICATION.DLL" Name="Hardcodet.Wpf.TaskbarNotification.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Hardcodet.Wpf.TaskbarNotification.dll" />
+          </Component>
+          <Component Id="ICSHARPCODE.AVALONEDIT.DLL" DiskId="1" Guid="24893E44-7CBE-4A3B-B6C2-5FD4BCE6B540">
+            <File Id="ICSHARPCODE.AVALONEDIT.DLL" Name="ICSharpCode.AvalonEdit.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\ICSharpCode.AvalonEdit.dll" />
+          </Component>
+          <Component Id="LIVECHARTS.DLL" DiskId="1" Guid="35AFDAF3-DCB6-49D4-BC12-D37A0A9ED5FF">
+            <File Id="LIVECHARTS.DLL" Name="LiveCharts.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\LiveCharts.dll" />
+          </Component>
+          <Component Id="LIVECHARTS.WPF.DLL" DiskId="1" Guid="37F70B1C-8261-41E2-A5E6-A2EE173EC95E">
+            <File Id="LIVECHARTS.WPF.DLL" Name="LiveCharts.Wpf.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\LiveCharts.Wpf.dll" />
+          </Component>
+          <Component Id="NEWTONSOFT.JSON.DLL" DiskId="1" Guid="C6181129-9086-42FC-8216-89D308DA5766">
+            <File Id="NEWTONSOFT.JSON.DLL" Name="Newtonsoft.Json.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Newtonsoft.Json.dll" />
+          </Component>
+          <Component Id="NLOG.CONFIG" DiskId="1" Guid="DC4696D1-C360-4000-AFE7-9F89B98E025B">
+            <File Id="NLOG.CONFIG" Name="NLog.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\NLog.config" />
+          </Component>
+          <Component Id="NLOG.DLL" DiskId="1" Guid="9CEC88C0-7CDF-4B7A-A843-99FAD6CB43F3">
+            <File Id="NLOG.DLL" Name="NLog.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\NLog.dll" />
+          </Component>
+          <Component Id="POORMANSTSQLFORMATTERLIB35.DLL" DiskId="1" Guid="33163B8A-F817-454D-88E5-1DE3F9B97284">
+            <File Id="POORMANSTSQLFORMATTERLIB35.DLL" Name="PoorMansTSqlFormatterLib35.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\PoorMansTSqlFormatterLib35.dll" />
+          </Component>
+          <Component Id="SETTINGS.DEFAULT.XML" DiskId="1" Guid="6F80752D-D791-4A49-9472-79DCB6998E62">
+            <File Id="SETTINGS.DEFAULT.XML" Name="Settings.Default.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Settings.Default.xml" />
+          </Component>
+          <Component Id="SETTINGS.XML" DiskId="1" Guid="4A52B471-6414-4DA9-91EE-513C99095E7D">
+            <File Id="SETTINGS.XML" Name="Settings.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Settings.xml" />
+          </Component>
+          <Component Id="SOLUINET.DEVTOOLS.CORE.DLL" DiskId="1" Guid="3656223B-0173-45CF-ACBF-A03133801F86">
+            <File Id="SOLUINET.DEVTOOLS.CORE.DLL" Name="SoluiNet.DevTools.Core.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\SoluiNet.DevTools.Core.dll" />
+          </Component>
+          <Component Id="SOLUINET.DEVTOOLS.CORE.DLL.CONFIG" DiskId="1" Guid="CDA1BBED-B01B-4F10-91AC-A884153B321A">
+            <File Id="SOLUINET.DEVTOOLS.CORE.DLL.CONFIG" Name="SoluiNet.DevTools.Core.dll.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\SoluiNet.DevTools.Core.dll.config" />
+          </Component>
+          <Component Id="SOLUINET.DEVTOOLS.CORE.PDB" DiskId="1" Guid="29578050-5FED-4EEF-8E95-D7D4B6ABEC58">
+            <File Id="SOLUINET.DEVTOOLS.CORE.PDB" Name="SoluiNet.DevTools.Core.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\SoluiNet.DevTools.Core.pdb" />
+          </Component>
+          <Component Id="SOLUINET.DEVTOOLS.CORE.XML" DiskId="1" Guid="9FCC7E08-4E22-4464-88C4-1FEC3A17327E">
+            <File Id="SOLUINET.DEVTOOLS.CORE.XML" Name="SoluiNet.DevTools.Core.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\SoluiNet.DevTools.Core.xml" />
+          </Component>
+          <Component Id="SOLUINET.DEVTOOLS.UI.EXE" DiskId="1" Guid="815A0A14-5D82-424F-A249-A44C082D3CF4">
+            <File Id="SOLUINET.DEVTOOLS.UI.EXE" Name="SoluiNet.DevTools.UI.exe" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\SoluiNet.DevTools.UI.exe" />
+          </Component>
+          <Component Id="SOLUINET.DEVTOOLS.UI.EXE.CONFIG" DiskId="1" Guid="188AE28B-0E30-4AEC-BA5E-0C80250389C1">
+            <File Id="SOLUINET.DEVTOOLS.UI.EXE.CONFIG" Name="SoluiNet.DevTools.UI.exe.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\SoluiNet.DevTools.UI.exe.config" />
+          </Component>
+          <Component Id="SOLUINET.DEVTOOLS.UI.PDB" DiskId="1" Guid="65421552-F2CE-4F21-B757-0C0595FE9C23">
+            <File Id="SOLUINET.DEVTOOLS.UI.PDB" Name="SoluiNet.DevTools.UI.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\SoluiNet.DevTools.UI.pdb" />
+          </Component>
+          <Component Id="SOLUINET.DEVTOOLS.UI.XML" DiskId="1" Guid="5324867D-5CD4-41DE-95F8-0D69213D845B">
+            <File Id="SOLUINET.DEVTOOLS.UI.XML" Name="SoluiNet.DevTools.UI.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\SoluiNet.DevTools.UI.xml" />
+          </Component>
+          <Component Id="SYSTEM.DATA.SQLITE.DLL" DiskId="1" Guid="34121C05-FBE8-410D-BDAF-AE69D87E6785">
+            <File Id="SYSTEM.DATA.SQLITE.DLL" Name="System.Data.SQLite.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.Data.SQLite.dll" />
+          </Component>
+          <Component Id="SYSTEM.DATA.SQLITE.EF6.DLL" DiskId="1" Guid="0AB1BF3D-F78D-4589-97EF-2FEE961E0470">
+            <File Id="SYSTEM.DATA.SQLITE.EF6.DLL" Name="System.Data.SQLite.EF6.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.Data.SQLite.EF6.dll" />
+          </Component>
+          <Component Id="SYSTEM.DATA.SQLITE.LINQ.DLL" DiskId="1" Guid="340C0367-29B2-4726-BFFB-572873CFFE21">
+            <File Id="SYSTEM.DATA.SQLITE.LINQ.DLL" Name="System.Data.SQLite.Linq.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.Data.SQLite.Linq.dll" />
+          </Component>
+          <Component Id="SYSTEM.IO.COMPRESSION.DLL" DiskId="1" Guid="38F3BCFF-71C8-4B40-9FA3-2F68346C2FC4">
+            <File Id="SYSTEM.IO.COMPRESSION.DLL" Name="System.IO.Compression.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.IO.Compression.dll" />
+          </Component>
+          <Component Id="SYSTEM.NET.HTTP.DLL" DiskId="1" Guid="7AC9CB98-5CEC-4FA9-A9F1-3FB68DBA0528">
+            <File Id="SYSTEM.NET.HTTP.DLL" Name="System.Net.Http.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.Net.Http.dll" />
+          </Component>
+          <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ALGORITHMS.DLL" DiskId="1" Guid="7CF58842-A21F-4909-9251-E64A8B34DBA3">
+            <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ALGORITHMS.DLL" Name="System.Security.Cryptography.Algorithms.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.Security.Cryptography.Algorithms.dll" />
+          </Component>
+          <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ENCODING.DLL" DiskId="1" Guid="4FCF2F07-2564-4BED-8FE0-204695B154D1">
+            <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ENCODING.DLL" Name="System.Security.Cryptography.Encoding.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.Security.Cryptography.Encoding.dll" />
+          </Component>
+          <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.PRIMITIVES.DLL" DiskId="1" Guid="A6B44BBB-66B0-4EE7-839D-AA2191CDD323">
+            <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.PRIMITIVES.DLL" Name="System.Security.Cryptography.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.Security.Cryptography.Primitives.dll" />
+          </Component>
+          <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.X509CERTIFICATES.DLL" DiskId="1" Guid="2FA894D0-5C98-4BF5-8D1D-41C51207451A">
+            <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.X509CERTIFICATES.DLL" Name="System.Security.Cryptography.X509Certificates.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\System.Security.Cryptography.X509Certificates.dll" />
+          </Component>
+          <Directory Id="PLUGINS" Name="Plugins">
+            <Component Id="BOUNCYCASTLE.CRYPTO.DLL" DiskId="1" Guid="73FB53E1-7A11-4D3C-830E-9699E55856FB">
+              <File Id="BOUNCYCASTLE.CRYPTO.DLL" Name="BouncyCastle.Crypto.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\BouncyCastle.Crypto.dll" />
+            </Component>
+            <Component Id="ENTITYFRAMEWORK.DLL_1" DiskId="1" Guid="EC4200A9-1F26-4515-887B-2BD88E61037C">
+              <File Id="ENTITYFRAMEWORK.DLL_1" Name="EntityFramework.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\EntityFramework.dll" />
+            </Component>
+            <Component Id="ENTITYFRAMEWORK.SQLSERVER.DLL_1" DiskId="1" Guid="DECB47FA-606B-4067-9190-9647CACA5410">
+              <File Id="ENTITYFRAMEWORK.SQLSERVER.DLL_1" Name="EntityFramework.SqlServer.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\EntityFramework.SqlServer.dll" />
+            </Component>
+            <Component Id="ICSHARPCODE.AVALONEDIT.DLL_1" DiskId="1" Guid="068941AA-43DC-4C29-AEAD-C9A81B7F8366">
+              <File Id="ICSHARPCODE.AVALONEDIT.DLL_1" Name="ICSharpCode.AvalonEdit.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\ICSharpCode.AvalonEdit.dll" />
+            </Component>
+            <Component Id="LIVECHARTS.DLL_1" DiskId="1" Guid="DF6CFE9E-E64E-4BB5-8787-25407552891F">
+              <File Id="LIVECHARTS.DLL_1" Name="LiveCharts.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\LiveCharts.dll" />
+            </Component>
+            <Component Id="LIVECHARTS.WPF.DLL_1" DiskId="1" Guid="A250DD31-1B40-46B0-AC48-6CD15DF25473">
+              <File Id="LIVECHARTS.WPF.DLL_1" Name="LiveCharts.Wpf.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\LiveCharts.Wpf.dll" />
+            </Component>
+            <Component Id="MICROSOFT.ML.CORE.DLL" DiskId="1" Guid="70FB86F0-5A74-4EFC-8346-B7186579CCCF">
+              <File Id="MICROSOFT.ML.CORE.DLL" Name="Microsoft.ML.Core.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.ML.Core.dll" />
+            </Component>
+            <Component Id="MICROSOFT.ML.CPUMATH.DLL" DiskId="1" Guid="9CE4DAFB-E8A6-4B7C-9795-BCED7A25D453">
+              <File Id="MICROSOFT.ML.CPUMATH.DLL" Name="Microsoft.ML.CpuMath.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.ML.CpuMath.dll" />
+            </Component>
+            <Component Id="MICROSOFT.ML.DATA.DLL" DiskId="1" Guid="DCF6A969-2503-49E9-B7BC-D2132756C83D">
+              <File Id="MICROSOFT.ML.DATA.DLL" Name="Microsoft.ML.Data.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.ML.Data.dll" />
+            </Component>
+            <Component Id="MICROSOFT.ML.DATAVIEW.DLL" DiskId="1" Guid="B19EDCD4-4FBD-4C52-837B-6C7D1B9B7ECF">
+              <File Id="MICROSOFT.ML.DATAVIEW.DLL" Name="Microsoft.ML.DataView.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.ML.DataView.dll" />
+            </Component>
+            <Component Id="MICROSOFT.ML.KMEANSCLUSTERING.DLL" DiskId="1" Guid="9BAEBAA7-8BDE-446C-8CBB-69365B604703">
+              <File Id="MICROSOFT.ML.KMEANSCLUSTERING.DLL" Name="Microsoft.ML.KMeansClustering.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.ML.KMeansClustering.dll" />
+            </Component>
+            <Component Id="MICROSOFT.ML.PCA.DLL" DiskId="1" Guid="F52C2706-B098-4FA5-88E7-ED08C94B586F">
+              <File Id="MICROSOFT.ML.PCA.DLL" Name="Microsoft.ML.PCA.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.ML.PCA.dll" />
+            </Component>
+            <Component Id="MICROSOFT.ML.STANDARDTRAINERS.DLL" DiskId="1" Guid="F65951F1-65B0-444B-A5C7-ABEA6CE69DAA">
+              <File Id="MICROSOFT.ML.STANDARDTRAINERS.DLL" Name="Microsoft.ML.StandardTrainers.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.ML.StandardTrainers.dll" />
+            </Component>
+            <Component Id="MICROSOFT.ML.TRANSFORMS.DLL" DiskId="1" Guid="CD657966-EAB8-42E6-9226-63838E7A2EEE">
+              <File Id="MICROSOFT.ML.TRANSFORMS.DLL" Name="Microsoft.ML.Transforms.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.ML.Transforms.dll" />
+            </Component>
+            <Component Id="MICROSOFT.WIN32.PRIMITIVES.DLL" DiskId="1" Guid="DF0EBE88-0439-4CB7-8220-0821B16DFDEC">
+              <File Id="MICROSOFT.WIN32.PRIMITIVES.DLL" Name="Microsoft.Win32.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Microsoft.Win32.Primitives.dll" />
+            </Component>
+            <Component Id="NETSTANDARD.DLL" DiskId="1" Guid="38DC5692-775C-49DA-AFD6-AA2E799434AB">
+              <File Id="NETSTANDARD.DLL" Name="netstandard.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\netstandard.dll" />
+            </Component>
+            <Component Id="NEWTONSOFT.JSON.DLL_1" DiskId="1" Guid="EE611D15-BFD7-4717-B114-DCFF16AC16AF">
+              <File Id="NEWTONSOFT.JSON.DLL_1" Name="Newtonsoft.Json.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Newtonsoft.Json.dll" />
+            </Component>
+            <Component Id="NLOG.DLL_1" DiskId="1" Guid="30C10AFF-FE0C-4963-B09C-4C2A81973CCA">
+              <File Id="NLOG.DLL_1" Name="NLog.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\NLog.dll" />
+            </Component>
+            <Component Id="POORMANSTSQLFORMATTERLIB35.DLL_1" DiskId="1" Guid="8780DADC-0527-4E0E-9994-4C442679B173">
+              <File Id="POORMANSTSQLFORMATTERLIB35.DLL_1" Name="PoorMansTSqlFormatterLib35.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\PoorMansTSqlFormatterLib35.dll" />
+            </Component>
+            <Component Id="QUARTZ.DLL" DiskId="1" Guid="DED02163-1F01-403F-9E1A-E360199F2909">
+              <File Id="QUARTZ.DLL" Name="Quartz.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\Quartz.dll" />
+            </Component>
+            <Component Id="RESTSHARP.DLL" DiskId="1" Guid="30552F89-24DD-4318-903B-67E331B0C4A6">
+              <File Id="RESTSHARP.DLL" Name="RestSharp.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\RestSharp.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.CORE.DLL_1" DiskId="1" Guid="A2E20054-10E5-465D-B91D-CD55D4BDE004">
+              <File Id="SOLUINET.DEVTOOLS.CORE.DLL_1" Name="SoluiNet.DevTools.Core.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Core.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.CORE.DLL.CONFIG_1" DiskId="1" Guid="715E19C9-3721-4809-A63E-A71F1A29C722">
+              <File Id="SOLUINET.DEVTOOLS.CORE.DLL.CONFIG_1" Name="SoluiNet.DevTools.Core.dll.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Core.dll.config" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.CORE.PDB_1" DiskId="1" Guid="F741EFC1-6C48-403A-993F-C8737ECA8705">
+              <File Id="SOLUINET.DEVTOOLS.CORE.PDB_1" Name="SoluiNet.DevTools.Core.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Core.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.CORE.XML_1" DiskId="1" Guid="18A3D040-9531-4641-8C1C-EB5E6303E1DB">
+              <File Id="SOLUINET.DEVTOOLS.CORE.XML_1" Name="SoluiNet.DevTools.Core.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Core.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.DATAEXCHANGE.JIRA.DLL" DiskId="1" Guid="E89B72C5-60E5-4449-B3E4-398DEEB00B83">
+              <File Id="SOLUINET.DEVTOOLS.DATAEXCHANGE.JIRA.DLL" Name="SoluiNet.DevTools.DataExchange.Jira.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.DataExchange.Jira.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.DATAEXCHANGE.JIRA.PDB" DiskId="1" Guid="12FB346C-7FDD-40B0-8038-D368722B0595">
+              <File Id="SOLUINET.DEVTOOLS.DATAEXCHANGE.JIRA.PDB" Name="SoluiNet.DevTools.DataExchange.Jira.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.DataExchange.Jira.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.DATAEXCHANGE.JIRA.XML" DiskId="1" Guid="AAB7FFD1-A38E-4BE0-96BC-D23FF37F1DE3">
+              <File Id="SOLUINET.DEVTOOLS.DATAEXCHANGE.JIRA.XML" Name="SoluiNet.DevTools.DataExchange.Jira.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.DataExchange.Jira.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.EDITOR.DEFAULT.DLL" DiskId="1" Guid="1965B167-211D-40C3-8371-02B4EC55C918">
+              <File Id="SOLUINET.DEVTOOLS.EDITOR.DEFAULT.DLL" Name="SoluiNet.DevTools.Editor.Default.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Editor.Default.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.EDITOR.DEFAULT.PDB" DiskId="1" Guid="423A09D8-6FB8-4BC1-AD25-0317FA2D3D05">
+              <File Id="SOLUINET.DEVTOOLS.EDITOR.DEFAULT.PDB" Name="SoluiNet.DevTools.Editor.Default.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Editor.Default.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.EDITOR.DEFAULT.XML" DiskId="1" Guid="D11DA619-50DF-4370-9A87-1F8BDFCE5610">
+              <File Id="SOLUINET.DEVTOOLS.EDITOR.DEFAULT.XML" Name="SoluiNet.DevTools.Editor.Default.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Editor.Default.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.SQLPLUGIN.EXAMPLE.DLL" DiskId="1" Guid="3B673F5D-844C-4800-A8AD-07AF33417B9B">
+              <File Id="SOLUINET.DEVTOOLS.SQLPLUGIN.EXAMPLE.DLL" Name="SoluiNet.DevTools.SqlPlugin.Example.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.SqlPlugin.Example.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.SQLPLUGIN.EXAMPLE.DLL.CONFIG" DiskId="1" Guid="9C08FBB9-6AA3-4456-B460-E94CA5D841AE">
+              <File Id="SOLUINET.DEVTOOLS.SQLPLUGIN.EXAMPLE.DLL.CONFIG" Name="SoluiNet.DevTools.SqlPlugin.Example.dll.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.SqlPlugin.Example.dll.config" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.SQLPLUGIN.EXAMPLE.PDB" DiskId="1" Guid="717B4505-B995-4832-9E63-6EAC465FD8DF">
+              <File Id="SOLUINET.DEVTOOLS.SQLPLUGIN.EXAMPLE.PDB" Name="SoluiNet.DevTools.SqlPlugin.Example.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.SqlPlugin.Example.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.SQLPLUGIN.EXAMPLE.XML" DiskId="1" Guid="8CE1A902-F41B-4947-B3E7-502683D80839">
+              <File Id="SOLUINET.DEVTOOLS.SQLPLUGIN.EXAMPLE.XML" Name="SoluiNet.DevTools.SqlPlugin.Example.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.SqlPlugin.Example.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.TRANSFORM.ERDIAGRAM.DLL" DiskId="1" Guid="C0DE2999-1B46-4B51-B208-05AD41EC8792">
+              <File Id="SOLUINET.DEVTOOLS.TRANSFORM.ERDIAGRAM.DLL" Name="SoluiNet.DevTools.Transform.ErDiagram.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Transform.ErDiagram.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.TRANSFORM.ERDIAGRAM.PDB" DiskId="1" Guid="42B30B13-292E-4692-B2FF-27BBD369C27D">
+              <File Id="SOLUINET.DEVTOOLS.TRANSFORM.ERDIAGRAM.PDB" Name="SoluiNet.DevTools.Transform.ErDiagram.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Transform.ErDiagram.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.TRANSFORM.ERDIAGRAM.XML" DiskId="1" Guid="B5AA5AFB-1604-45EA-9F6D-FACD36149D2B">
+              <File Id="SOLUINET.DEVTOOLS.TRANSFORM.ERDIAGRAM.XML" Name="SoluiNet.DevTools.Transform.ErDiagram.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Transform.ErDiagram.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.TRANSFORM.UML.DLL" DiskId="1" Guid="9E57B32D-CE40-4471-AF65-BF3C46D87251">
+              <File Id="SOLUINET.DEVTOOLS.TRANSFORM.UML.DLL" Name="SoluiNet.DevTools.Transform.Uml.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Transform.Uml.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.TRANSFORM.UML.PDB" DiskId="1" Guid="DBFD90B5-E1F0-4A9D-8771-22A7D73C021F">
+              <File Id="SOLUINET.DEVTOOLS.TRANSFORM.UML.PDB" Name="SoluiNet.DevTools.Transform.Uml.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Transform.Uml.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.TRANSFORM.UML.XML" DiskId="1" Guid="5743B5BF-928A-404C-B000-E964C1AD9C9B">
+              <File Id="SOLUINET.DEVTOOLS.TRANSFORM.UML.XML" Name="SoluiNet.DevTools.Transform.Uml.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Transform.Uml.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.CODEONTHEFLY.DLL" DiskId="1" Guid="77FC8EE2-942A-4F82-88A0-0236C3329249">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.CODEONTHEFLY.DLL" Name="SoluiNet.DevTools.Utils.CodeOnTheFly.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.CodeOnTheFly.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.CODEONTHEFLY.PDB" DiskId="1" Guid="07CBBDDD-1B0D-470B-9933-A95A8D387EF1">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.CODEONTHEFLY.PDB" Name="SoluiNet.DevTools.Utils.CodeOnTheFly.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.CodeOnTheFly.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.CODEONTHEFLY.XML" DiskId="1" Guid="67574907-E794-472B-87BF-3294A91D0D61">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.CODEONTHEFLY.XML" Name="SoluiNet.DevTools.Utils.CodeOnTheFly.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.CodeOnTheFly.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.CRYPTO.DLL" DiskId="1" Guid="7590658D-E857-4BAB-B905-16D56D4FB83E">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.CRYPTO.DLL" Name="SoluiNet.DevTools.Utils.Crypto.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Crypto.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.CRYPTO.PDB" DiskId="1" Guid="2B98FED3-81BF-4C45-9EDE-2172E7FBD1F5">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.CRYPTO.PDB" Name="SoluiNet.DevTools.Utils.Crypto.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Crypto.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.CRYPTO.XML" DiskId="1" Guid="5CB69851-9080-4B1D-901E-BB56A339ECD5">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.CRYPTO.XML" Name="SoluiNet.DevTools.Utils.Crypto.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Crypto.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.FILE.DLL" DiskId="1" Guid="35B2A700-B6FA-4AE2-91CB-DABB438ED5A1">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.FILE.DLL" Name="SoluiNet.DevTools.Utils.File.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.File.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.FILE.PDB" DiskId="1" Guid="9B4BEA05-9DB0-4B84-AA6B-6F12B8273872">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.FILE.PDB" Name="SoluiNet.DevTools.Utils.File.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.File.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.FILE.XML" DiskId="1" Guid="C979D0B0-793B-46D6-A417-7BC91B054AB2">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.FILE.XML" Name="SoluiNet.DevTools.Utils.File.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.File.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.FLYWAY.DLL" DiskId="1" Guid="ACDD59C4-D917-4F6D-A877-11D3DDDEAB61">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.FLYWAY.DLL" Name="SoluiNet.DevTools.Utils.Flyway.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Flyway.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.FLYWAY.PDB" DiskId="1" Guid="82C85761-049C-49FF-96C6-F04141AFD273">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.FLYWAY.PDB" Name="SoluiNet.DevTools.Utils.Flyway.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Flyway.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.FLYWAY.XML" DiskId="1" Guid="ED731481-341F-4588-9EEB-608D6C3D3922">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.FLYWAY.XML" Name="SoluiNet.DevTools.Utils.Flyway.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Flyway.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.GENERAL.DLL" DiskId="1" Guid="DA4F4D86-1035-4FBE-942B-0AE898DAB04E">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.GENERAL.DLL" Name="SoluiNet.DevTools.Utils.General.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.General.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.GENERAL.PDB" DiskId="1" Guid="CB98B97B-3BB4-4908-B307-512AC08C3D48">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.GENERAL.PDB" Name="SoluiNet.DevTools.Utils.General.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.General.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.GENERAL.XML" DiskId="1" Guid="039A0582-8B3B-4954-B936-BFB8464D2DE1">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.GENERAL.XML" Name="SoluiNet.DevTools.Utils.General.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.General.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.GIT.DLL" DiskId="1" Guid="9F235367-01D0-42F9-8384-265ED34E46C1">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.GIT.DLL" Name="SoluiNet.DevTools.Utils.Git.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Git.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.GIT.PDB" DiskId="1" Guid="3F8A0F4C-B2B7-4CB2-988E-4053068B04F2">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.GIT.PDB" Name="SoluiNet.DevTools.Utils.Git.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Git.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.GIT.XML" DiskId="1" Guid="9DB77F9E-9630-4151-B1FC-8268D25B816C">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.GIT.XML" Name="SoluiNet.DevTools.Utils.Git.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Git.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.MACHINELEARNING.DLL" DiskId="1" Guid="1D2FA774-9DEA-4012-A03C-86AF0C405A3A">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.MACHINELEARNING.DLL" Name="SoluiNet.DevTools.Utils.MachineLearning.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.MachineLearning.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.MACHINELEARNING.DLL.CONFIG" DiskId="1" Guid="E93137A4-A4C0-4579-A2CB-53373B3F51BA">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.MACHINELEARNING.DLL.CONFIG" Name="SoluiNet.DevTools.Utils.MachineLearning.dll.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.MachineLearning.dll.config" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.MACHINELEARNING.PDB" DiskId="1" Guid="1593660F-654C-42C3-95D1-6992DB98FBA7">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.MACHINELEARNING.PDB" Name="SoluiNet.DevTools.Utils.MachineLearning.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.MachineLearning.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.MACHINELEARNING.XML" DiskId="1" Guid="E68B75B5-FFAE-45A5-B085-5F313CDABFAB">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.MACHINELEARNING.XML" Name="SoluiNet.DevTools.Utils.MachineLearning.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.MachineLearning.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.SVN.DLL" DiskId="1" Guid="ED850947-4126-4DAC-9C08-85DAF92544DA">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.SVN.DLL" Name="SoluiNet.DevTools.Utils.Svn.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Svn.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.SVN.PDB" DiskId="1" Guid="CE03078F-B191-4F4A-B830-C06EC06830CF">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.SVN.PDB" Name="SoluiNet.DevTools.Utils.Svn.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Svn.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.SVN.XML" DiskId="1" Guid="71075AE4-BCAF-4A70-83A4-CF6D894EEEFA">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.SVN.XML" Name="SoluiNet.DevTools.Utils.Svn.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Svn.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.TFS.DLL" DiskId="1" Guid="5F805806-4344-4E87-B215-08229C9180CA">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.TFS.DLL" Name="SoluiNet.DevTools.Utils.Tfs.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Tfs.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.TFS.PDB" DiskId="1" Guid="06709F35-4AA1-46DC-B0AB-7D2ACF26BA78">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.TFS.PDB" Name="SoluiNet.DevTools.Utils.Tfs.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Tfs.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.TFS.XML" DiskId="1" Guid="B9F3D5FD-CE81-4155-9BE0-2B1197D9FBBB">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.TFS.XML" Name="SoluiNet.DevTools.Utils.Tfs.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.Tfs.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.TIMETRACKING.DLL" DiskId="1" Guid="1102537F-B7CA-41E0-AD6F-0524F589B2B2">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.TIMETRACKING.DLL" Name="SoluiNet.DevTools.Utils.TimeTracking.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.TimeTracking.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.TIMETRACKING.DLL.CONFIG" DiskId="1" Guid="AC4A4E00-F0D6-4E20-9E90-C3FF39B065F3">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.TIMETRACKING.DLL.CONFIG" Name="SoluiNet.DevTools.Utils.TimeTracking.dll.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.TimeTracking.dll.config" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.TIMETRACKING.PDB" DiskId="1" Guid="A1CCD360-3554-4291-B4E6-E4004C2EE77E">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.TIMETRACKING.PDB" Name="SoluiNet.DevTools.Utils.TimeTracking.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.TimeTracking.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.TIMETRACKING.XML" DiskId="1" Guid="8B191574-3002-4B97-8574-1525C1A806F7">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.TIMETRACKING.XML" Name="SoluiNet.DevTools.Utils.TimeTracking.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.TimeTracking.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.VSDEVENV.DLL" DiskId="1" Guid="9E2490D5-8658-4158-ACB1-CC38C1C72CDB">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.VSDEVENV.DLL" Name="SoluiNet.DevTools.Utils.VsDevEnv.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.VsDevEnv.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.VSDEVENV.PDB" DiskId="1" Guid="F6BAC317-F1FA-44BA-96F5-6F04EA9061F1">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.VSDEVENV.PDB" Name="SoluiNet.DevTools.Utils.VsDevEnv.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.VsDevEnv.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.VSDEVENV.XML" DiskId="1" Guid="AA8D2526-2D6C-4152-9725-F55E3FAFCF4A">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.VSDEVENV.XML" Name="SoluiNet.DevTools.Utils.VsDevEnv.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.VsDevEnv.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.WEBCLIENT.DLL" DiskId="1" Guid="F434CAFA-B3CC-44E1-B9BC-3564D4B6A73D">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.WEBCLIENT.DLL" Name="SoluiNet.DevTools.Utils.WebClient.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.WebClient.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.WEBCLIENT.PDB" DiskId="1" Guid="63EB21D8-5818-413E-8E28-8C49195AC419">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.WEBCLIENT.PDB" Name="SoluiNet.DevTools.Utils.WebClient.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.WebClient.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.WEBCLIENT.XML" DiskId="1" Guid="F086AB0E-BFD8-4ECE-A288-7F59328C169F">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.WEBCLIENT.XML" Name="SoluiNet.DevTools.Utils.WebClient.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.WebClient.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.XMLTRANSFORMATION.DLL" DiskId="1" Guid="6BBB477F-ED81-43C4-A7FA-976DFC2F2380">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.XMLTRANSFORMATION.DLL" Name="SoluiNet.DevTools.Utils.XmlTransformation.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.XmlTransformation.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.XMLTRANSFORMATION.PDB" DiskId="1" Guid="3104D9C2-0EF5-4DDE-85DB-78264158FD52">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.XMLTRANSFORMATION.PDB" Name="SoluiNet.DevTools.Utils.XmlTransformation.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.XmlTransformation.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UTILS.XMLTRANSFORMATION.XML" DiskId="1" Guid="849D3CB0-4846-4339-BF7B-DB1AF234AAAB">
+              <File Id="SOLUINET.DEVTOOLS.UTILS.XMLTRANSFORMATION.XML" Name="SoluiNet.DevTools.Utils.XmlTransformation.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\SoluiNet.DevTools.Utils.XmlTransformation.xml" />
+            </Component>
+            <Component Id="SYSTEM.APPCONTEXT.DLL" DiskId="1" Guid="C118532F-7B2D-4EE5-9873-AA35CDA0ACB2">
+              <File Id="SYSTEM.APPCONTEXT.DLL" Name="System.AppContext.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.AppContext.dll" />
+            </Component>
+            <Component Id="SYSTEM.BUFFERS.DLL" DiskId="1" Guid="3F3AC290-1A54-43FC-B8E9-3A3872DB000F">
+              <File Id="SYSTEM.BUFFERS.DLL" Name="System.Buffers.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Buffers.dll" />
+            </Component>
+            <Component Id="SYSTEM.BUFFERS.XML" DiskId="1" Guid="870914AF-AA14-424E-BC89-3A6C53736BB2">
+              <File Id="SYSTEM.BUFFERS.XML" Name="System.Buffers.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Buffers.xml" />
+            </Component>
+            <Component Id="SYSTEM.CODEDOM.DLL" DiskId="1" Guid="EF589448-1010-4069-8C0C-09E69D33CDC7">
+              <File Id="SYSTEM.CODEDOM.DLL" Name="System.CodeDom.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.CodeDom.dll" />
+            </Component>
+            <Component Id="SYSTEM.COLLECTIONS.CONCURRENT.DLL" DiskId="1" Guid="9B6B0A71-93D3-4B93-BBDD-3D6134BE1D9F">
+              <File Id="SYSTEM.COLLECTIONS.CONCURRENT.DLL" Name="System.Collections.Concurrent.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Collections.Concurrent.dll" />
+            </Component>
+            <Component Id="SYSTEM.COLLECTIONS.DLL" DiskId="1" Guid="7C8B8904-A695-440E-B051-62423A73F360">
+              <File Id="SYSTEM.COLLECTIONS.DLL" Name="System.Collections.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Collections.dll" />
+            </Component>
+            <Component Id="SYSTEM.COLLECTIONS.IMMUTABLE.DLL" DiskId="1" Guid="DA181735-C1CC-4542-B2FF-776A8B97C2E6">
+              <File Id="SYSTEM.COLLECTIONS.IMMUTABLE.DLL" Name="System.Collections.Immutable.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Collections.Immutable.dll" />
+            </Component>
+            <Component Id="SYSTEM.COLLECTIONS.NONGENERIC.DLL" DiskId="1" Guid="96DC2408-6967-414A-AF66-C502DED97C96">
+              <File Id="SYSTEM.COLLECTIONS.NONGENERIC.DLL" Name="System.Collections.NonGeneric.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Collections.NonGeneric.dll" />
+            </Component>
+            <Component Id="SYSTEM.COLLECTIONS.SPECIALIZED.DLL" DiskId="1" Guid="95B09FDA-BA5D-4AD0-B663-39902FDBEA79">
+              <File Id="SYSTEM.COLLECTIONS.SPECIALIZED.DLL" Name="System.Collections.Specialized.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Collections.Specialized.dll" />
+            </Component>
+            <Component Id="SYSTEM.COMPONENTMODEL.DLL" DiskId="1" Guid="FF21E83E-6B35-4B0D-9FC9-EC29FDEEB6C6">
+              <File Id="SYSTEM.COMPONENTMODEL.DLL" Name="System.ComponentModel.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.ComponentModel.dll" />
+            </Component>
+            <Component Id="SYSTEM.COMPONENTMODEL.EVENTBASEDASYNC.DLL" DiskId="1" Guid="32F2D279-DD4C-4ADB-B9D7-2CC2480FD724">
+              <File Id="SYSTEM.COMPONENTMODEL.EVENTBASEDASYNC.DLL" Name="System.ComponentModel.EventBasedAsync.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.ComponentModel.EventBasedAsync.dll" />
+            </Component>
+            <Component Id="SYSTEM.COMPONENTMODEL.PRIMITIVES.DLL" DiskId="1" Guid="6BAF45FB-AB26-4D61-A4A1-C080C5A51EE8">
+              <File Id="SYSTEM.COMPONENTMODEL.PRIMITIVES.DLL" Name="System.ComponentModel.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.ComponentModel.Primitives.dll" />
+            </Component>
+            <Component Id="SYSTEM.COMPONENTMODEL.TYPECONVERTER.DLL" DiskId="1" Guid="696DED1E-9EF5-4055-AE5E-9DF93F69A583">
+              <File Id="SYSTEM.COMPONENTMODEL.TYPECONVERTER.DLL" Name="System.ComponentModel.TypeConverter.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.ComponentModel.TypeConverter.dll" />
+            </Component>
+            <Component Id="SYSTEM.CONSOLE.DLL" DiskId="1" Guid="0AFE2FE5-FEBF-4D3F-842D-FA770AEA354C">
+              <File Id="SYSTEM.CONSOLE.DLL" Name="System.Console.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Console.dll" />
+            </Component>
+            <Component Id="SYSTEM.DATA.COMMON.DLL" DiskId="1" Guid="28289A33-5DCC-428D-88A4-7F3311BA3AF4">
+              <File Id="SYSTEM.DATA.COMMON.DLL" Name="System.Data.Common.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Data.Common.dll" />
+            </Component>
+            <Component Id="SYSTEM.DATA.SQLITE.DLL_1" DiskId="1" Guid="A3A3A4F9-520D-4885-AE08-D7FAA5E5F3B8">
+              <File Id="SYSTEM.DATA.SQLITE.DLL_1" Name="System.Data.SQLite.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Data.SQLite.dll" />
+            </Component>
+            <Component Id="SYSTEM.DATA.SQLITE.EF6.DLL_1" DiskId="1" Guid="39F61988-7523-4589-B02C-B0A993303070">
+              <File Id="SYSTEM.DATA.SQLITE.EF6.DLL_1" Name="System.Data.SQLite.EF6.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Data.SQLite.EF6.dll" />
+            </Component>
+            <Component Id="SYSTEM.DATA.SQLITE.LINQ.DLL_1" DiskId="1" Guid="AC84D4A8-B646-49D8-B3F3-E420658A359D">
+              <File Id="SYSTEM.DATA.SQLITE.LINQ.DLL_1" Name="System.Data.SQLite.Linq.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Data.SQLite.Linq.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.CONTRACTS.DLL" DiskId="1" Guid="789BAC66-1E0B-48D7-A4A1-5B8630FB1A3D">
+              <File Id="SYSTEM.DIAGNOSTICS.CONTRACTS.DLL" Name="System.Diagnostics.Contracts.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.Contracts.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.DEBUG.DLL" DiskId="1" Guid="B670DD8A-97B9-4453-BA0A-99AC5F4FF0A1">
+              <File Id="SYSTEM.DIAGNOSTICS.DEBUG.DLL" Name="System.Diagnostics.Debug.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.Debug.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.FILEVERSIONINFO.DLL" DiskId="1" Guid="F4FD469E-F7E5-40EC-B243-F02BF08E9FD9">
+              <File Id="SYSTEM.DIAGNOSTICS.FILEVERSIONINFO.DLL" Name="System.Diagnostics.FileVersionInfo.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.FileVersionInfo.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.PROCESS.DLL" DiskId="1" Guid="CB2196FA-3BC6-47F1-9B0A-01492F753714">
+              <File Id="SYSTEM.DIAGNOSTICS.PROCESS.DLL" Name="System.Diagnostics.Process.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.Process.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.STACKTRACE.DLL" DiskId="1" Guid="8A558B08-03F5-44DF-B065-A00E6ED9C93D">
+              <File Id="SYSTEM.DIAGNOSTICS.STACKTRACE.DLL" Name="System.Diagnostics.StackTrace.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.StackTrace.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.TEXTWRITERTRACELISTENER.DLL" DiskId="1" Guid="A70876AD-6FFA-44A0-9129-5FC02347E294">
+              <File Id="SYSTEM.DIAGNOSTICS.TEXTWRITERTRACELISTENER.DLL" Name="System.Diagnostics.TextWriterTraceListener.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.TextWriterTraceListener.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.TOOLS.DLL" DiskId="1" Guid="DED5CC1F-F199-419F-AAB0-B6C2214597F1">
+              <File Id="SYSTEM.DIAGNOSTICS.TOOLS.DLL" Name="System.Diagnostics.Tools.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.Tools.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.TRACESOURCE.DLL" DiskId="1" Guid="BCB6E7B1-E64C-4858-8799-72F29162BDDB">
+              <File Id="SYSTEM.DIAGNOSTICS.TRACESOURCE.DLL" Name="System.Diagnostics.TraceSource.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.TraceSource.dll" />
+            </Component>
+            <Component Id="SYSTEM.DIAGNOSTICS.TRACING.DLL" DiskId="1" Guid="7F852DA8-3341-4B19-BA63-1A2071AD3911">
+              <File Id="SYSTEM.DIAGNOSTICS.TRACING.DLL" Name="System.Diagnostics.Tracing.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Diagnostics.Tracing.dll" />
+            </Component>
+            <Component Id="SYSTEM.DRAWING.PRIMITIVES.DLL" DiskId="1" Guid="2A7CC10D-A89B-42AB-8C99-FCADF5C40B9A">
+              <File Id="SYSTEM.DRAWING.PRIMITIVES.DLL" Name="System.Drawing.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Drawing.Primitives.dll" />
+            </Component>
+            <Component Id="SYSTEM.DYNAMIC.RUNTIME.DLL" DiskId="1" Guid="22F5D20D-02AB-47FB-93B5-24EC2D588838">
+              <File Id="SYSTEM.DYNAMIC.RUNTIME.DLL" Name="System.Dynamic.Runtime.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Dynamic.Runtime.dll" />
+            </Component>
+            <Component Id="SYSTEM.GLOBALIZATION.CALENDARS.DLL" DiskId="1" Guid="0104547F-C1F8-49B3-AC29-60EF82732660">
+              <File Id="SYSTEM.GLOBALIZATION.CALENDARS.DLL" Name="System.Globalization.Calendars.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Globalization.Calendars.dll" />
+            </Component>
+            <Component Id="SYSTEM.GLOBALIZATION.DLL" DiskId="1" Guid="D42E2FD6-342D-461A-8DD2-F7072BCEB854">
+              <File Id="SYSTEM.GLOBALIZATION.DLL" Name="System.Globalization.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Globalization.dll" />
+            </Component>
+            <Component Id="SYSTEM.GLOBALIZATION.EXTENSIONS.DLL" DiskId="1" Guid="6EFF0D15-EE21-4FBD-AA42-83F7EC591A33">
+              <File Id="SYSTEM.GLOBALIZATION.EXTENSIONS.DLL" Name="System.Globalization.Extensions.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Globalization.Extensions.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.COMPRESSION.DLL_1" DiskId="1" Guid="B1DCF1C6-CEB7-410A-B4F1-F243D7F937C1">
+              <File Id="SYSTEM.IO.COMPRESSION.DLL_1" Name="System.IO.Compression.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.Compression.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.COMPRESSION.ZIPFILE.DLL" DiskId="1" Guid="96605A03-C201-4015-B7C9-3D05059504E6">
+              <File Id="SYSTEM.IO.COMPRESSION.ZIPFILE.DLL" Name="System.IO.Compression.ZipFile.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.Compression.ZipFile.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.DLL" DiskId="1" Guid="BE5CADDF-362E-467D-A746-6CFB693FC874">
+              <File Id="SYSTEM.IO.DLL" Name="System.IO.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.FILESYSTEM.DLL" DiskId="1" Guid="20248A98-7199-4EB9-952A-D2EA3E2618AD">
+              <File Id="SYSTEM.IO.FILESYSTEM.DLL" Name="System.IO.FileSystem.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.FileSystem.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.FILESYSTEM.DRIVEINFO.DLL" DiskId="1" Guid="2B7E4D0E-14E0-4098-B7B6-BFEACA9E58AE">
+              <File Id="SYSTEM.IO.FILESYSTEM.DRIVEINFO.DLL" Name="System.IO.FileSystem.DriveInfo.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.FileSystem.DriveInfo.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.FILESYSTEM.PRIMITIVES.DLL" DiskId="1" Guid="E79CAB98-DD7F-41F9-B0F0-4A4319F8623E">
+              <File Id="SYSTEM.IO.FILESYSTEM.PRIMITIVES.DLL" Name="System.IO.FileSystem.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.FileSystem.Primitives.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.FILESYSTEM.WATCHER.DLL" DiskId="1" Guid="9F4FA7AF-7426-4C11-83A1-DAC623550BCF">
+              <File Id="SYSTEM.IO.FILESYSTEM.WATCHER.DLL" Name="System.IO.FileSystem.Watcher.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.FileSystem.Watcher.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.ISOLATEDSTORAGE.DLL" DiskId="1" Guid="6BF8B41A-2CD6-4181-81DD-EE6BC9C971EF">
+              <File Id="SYSTEM.IO.ISOLATEDSTORAGE.DLL" Name="System.IO.IsolatedStorage.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.IsolatedStorage.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.MEMORYMAPPEDFILES.DLL" DiskId="1" Guid="93122C0C-CA78-4211-B862-83B6664DCF04">
+              <File Id="SYSTEM.IO.MEMORYMAPPEDFILES.DLL" Name="System.IO.MemoryMappedFiles.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.MemoryMappedFiles.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.PIPES.DLL" DiskId="1" Guid="F9D327E9-F3BA-400F-9254-7A5D34D0A258">
+              <File Id="SYSTEM.IO.PIPES.DLL" Name="System.IO.Pipes.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.Pipes.dll" />
+            </Component>
+            <Component Id="SYSTEM.IO.UNMANAGEDMEMORYSTREAM.DLL" DiskId="1" Guid="710C205B-C089-4A5F-9197-86C9476EA518">
+              <File Id="SYSTEM.IO.UNMANAGEDMEMORYSTREAM.DLL" Name="System.IO.UnmanagedMemoryStream.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.IO.UnmanagedMemoryStream.dll" />
+            </Component>
+            <Component Id="SYSTEM.LINQ.DLL" DiskId="1" Guid="B92EAB16-6F18-445A-B64B-49A7A59369C3">
+              <File Id="SYSTEM.LINQ.DLL" Name="System.Linq.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Linq.dll" />
+            </Component>
+            <Component Id="SYSTEM.LINQ.EXPRESSIONS.DLL" DiskId="1" Guid="D5EA1234-FB2A-4FB2-B82B-8D4793B7FBBE">
+              <File Id="SYSTEM.LINQ.EXPRESSIONS.DLL" Name="System.Linq.Expressions.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Linq.Expressions.dll" />
+            </Component>
+            <Component Id="SYSTEM.LINQ.PARALLEL.DLL" DiskId="1" Guid="29234D36-082C-4561-9742-CCF185A8DF08">
+              <File Id="SYSTEM.LINQ.PARALLEL.DLL" Name="System.Linq.Parallel.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Linq.Parallel.dll" />
+            </Component>
+            <Component Id="SYSTEM.LINQ.QUERYABLE.DLL" DiskId="1" Guid="624D2543-33E2-4656-8C9A-65A67CFFB749">
+              <File Id="SYSTEM.LINQ.QUERYABLE.DLL" Name="System.Linq.Queryable.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Linq.Queryable.dll" />
+            </Component>
+            <Component Id="SYSTEM.MEMORY.DLL" DiskId="1" Guid="67DC5AEA-79D6-4CFA-8AF7-C50112299BC3">
+              <File Id="SYSTEM.MEMORY.DLL" Name="System.Memory.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Memory.dll" />
+            </Component>
+            <Component Id="SYSTEM.MEMORY.XML" DiskId="1" Guid="3A11C9E7-2946-4036-9166-6A9CD137866E">
+              <File Id="SYSTEM.MEMORY.XML" Name="System.Memory.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Memory.xml" />
+            </Component>
+            <Component Id="SYSTEM.NET.HTTP.DLL_1" DiskId="1" Guid="D0172514-73E1-4F71-8F3E-4CEDFC30ABFA">
+              <File Id="SYSTEM.NET.HTTP.DLL_1" Name="System.Net.Http.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.Http.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.NAMERESOLUTION.DLL" DiskId="1" Guid="E0346C19-6855-4361-9D88-1C1B92D1D3BB">
+              <File Id="SYSTEM.NET.NAMERESOLUTION.DLL" Name="System.Net.NameResolution.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.NameResolution.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.NETWORKINFORMATION.DLL" DiskId="1" Guid="7176B460-DC37-4607-A1F9-1B5FD51157C7">
+              <File Id="SYSTEM.NET.NETWORKINFORMATION.DLL" Name="System.Net.NetworkInformation.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.NetworkInformation.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.PING.DLL" DiskId="1" Guid="851F23E1-447C-4EE2-90ED-870A666C6B58">
+              <File Id="SYSTEM.NET.PING.DLL" Name="System.Net.Ping.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.Ping.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.PRIMITIVES.DLL" DiskId="1" Guid="5C04E558-6DF8-452B-A1C0-908B722A6041">
+              <File Id="SYSTEM.NET.PRIMITIVES.DLL" Name="System.Net.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.Primitives.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.REQUESTS.DLL" DiskId="1" Guid="32ED0704-FCD9-4662-86A8-562200BAEF4F">
+              <File Id="SYSTEM.NET.REQUESTS.DLL" Name="System.Net.Requests.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.Requests.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.SECURITY.DLL" DiskId="1" Guid="3A6156F5-57C8-4687-BD8F-882DAFAC44C6">
+              <File Id="SYSTEM.NET.SECURITY.DLL" Name="System.Net.Security.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.Security.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.SOCKETS.DLL" DiskId="1" Guid="0842262A-2E65-43F9-9A3B-BBF3B002A92C">
+              <File Id="SYSTEM.NET.SOCKETS.DLL" Name="System.Net.Sockets.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.Sockets.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.WEBHEADERCOLLECTION.DLL" DiskId="1" Guid="8A96272D-E372-44FE-9728-419272978E15">
+              <File Id="SYSTEM.NET.WEBHEADERCOLLECTION.DLL" Name="System.Net.WebHeaderCollection.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.WebHeaderCollection.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.WEBSOCKETS.CLIENT.DLL" DiskId="1" Guid="0D908F3E-92E0-4B5D-9927-5EF8935F4CAF">
+              <File Id="SYSTEM.NET.WEBSOCKETS.CLIENT.DLL" Name="System.Net.WebSockets.Client.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.WebSockets.Client.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.WEBSOCKETS.DLL" DiskId="1" Guid="40276E4B-2E3B-4CCE-9B73-A7034CEA3BA3">
+              <File Id="SYSTEM.NET.WEBSOCKETS.DLL" Name="System.Net.WebSockets.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Net.WebSockets.dll" />
+            </Component>
+            <Component Id="SYSTEM.NUMERICS.VECTORS.DLL" DiskId="1" Guid="1E9CEEB1-C109-4BF0-B6E0-195D7E84C15C">
+              <File Id="SYSTEM.NUMERICS.VECTORS.DLL" Name="System.Numerics.Vectors.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Numerics.Vectors.dll" />
+            </Component>
+            <Component Id="SYSTEM.NUMERICS.VECTORS.XML" DiskId="1" Guid="D9D1210D-AE78-4D06-9175-88E6F040A6E3">
+              <File Id="SYSTEM.NUMERICS.VECTORS.XML" Name="System.Numerics.Vectors.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Numerics.Vectors.xml" />
+            </Component>
+            <Component Id="SYSTEM.OBJECTMODEL.DLL" DiskId="1" Guid="DE2BC007-A5A8-4299-AB79-ECF1170CFD19">
+              <File Id="SYSTEM.OBJECTMODEL.DLL" Name="System.ObjectModel.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.ObjectModel.dll" />
+            </Component>
+            <Component Id="SYSTEM.REFLECTION.DLL" DiskId="1" Guid="0879526C-F2E1-4218-9CC7-7F9B978C54AF">
+              <File Id="SYSTEM.REFLECTION.DLL" Name="System.Reflection.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Reflection.dll" />
+            </Component>
+            <Component Id="SYSTEM.REFLECTION.EXTENSIONS.DLL" DiskId="1" Guid="F5D9C1F0-0AA5-46CA-88FB-5B5CF009A301">
+              <File Id="SYSTEM.REFLECTION.EXTENSIONS.DLL" Name="System.Reflection.Extensions.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Reflection.Extensions.dll" />
+            </Component>
+            <Component Id="SYSTEM.REFLECTION.PRIMITIVES.DLL" DiskId="1" Guid="D02AE9EC-6D48-463A-9E91-1A428C612424">
+              <File Id="SYSTEM.REFLECTION.PRIMITIVES.DLL" Name="System.Reflection.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Reflection.Primitives.dll" />
+            </Component>
+            <Component Id="SYSTEM.RESOURCES.READER.DLL" DiskId="1" Guid="25A0C17A-82CB-4BD0-A9AA-EC0D12F29F01">
+              <File Id="SYSTEM.RESOURCES.READER.DLL" Name="System.Resources.Reader.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Resources.Reader.dll" />
+            </Component>
+            <Component Id="SYSTEM.RESOURCES.RESOURCEMANAGER.DLL" DiskId="1" Guid="3F904F4A-D272-4688-9AFA-EDFDE00C0556">
+              <File Id="SYSTEM.RESOURCES.RESOURCEMANAGER.DLL" Name="System.Resources.ResourceManager.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Resources.ResourceManager.dll" />
+            </Component>
+            <Component Id="SYSTEM.RESOURCES.WRITER.DLL" DiskId="1" Guid="10F205AE-0AA7-4BF2-B0CA-FD7E547D7061">
+              <File Id="SYSTEM.RESOURCES.WRITER.DLL" Name="System.Resources.Writer.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Resources.Writer.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.COMPILERSERVICES.UNSAFE.DLL" DiskId="1" Guid="382A9297-5D30-4A60-B89A-2C30F63DF27B">
+              <File Id="SYSTEM.RUNTIME.COMPILERSERVICES.UNSAFE.DLL" Name="System.Runtime.CompilerServices.Unsafe.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.CompilerServices.Unsafe.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.COMPILERSERVICES.UNSAFE.XML" DiskId="1" Guid="E904DD94-00B7-46C2-9E85-2627928D14DB">
+              <File Id="SYSTEM.RUNTIME.COMPILERSERVICES.UNSAFE.XML" Name="System.Runtime.CompilerServices.Unsafe.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.CompilerServices.Unsafe.xml" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.COMPILERSERVICES.VISUALC.DLL" DiskId="1" Guid="BCAFB08D-3725-4B86-B28A-6C09612F8CB8">
+              <File Id="SYSTEM.RUNTIME.COMPILERSERVICES.VISUALC.DLL" Name="System.Runtime.CompilerServices.VisualC.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.CompilerServices.VisualC.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.DLL" DiskId="1" Guid="2E2C956B-067C-4EEC-BE22-AD5363ACB919">
+              <File Id="SYSTEM.RUNTIME.DLL" Name="System.Runtime.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.EXTENSIONS.DLL" DiskId="1" Guid="F5A1454B-CD4C-475C-9626-4C59FE820ED1">
+              <File Id="SYSTEM.RUNTIME.EXTENSIONS.DLL" Name="System.Runtime.Extensions.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.Extensions.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.HANDLES.DLL" DiskId="1" Guid="9AD19D25-D5D6-4F39-9AB9-4F156602A3F3">
+              <File Id="SYSTEM.RUNTIME.HANDLES.DLL" Name="System.Runtime.Handles.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.Handles.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.INTEROPSERVICES.DLL" DiskId="1" Guid="46708C3D-FF99-49FB-9325-41ACEBD6B35D">
+              <File Id="SYSTEM.RUNTIME.INTEROPSERVICES.DLL" Name="System.Runtime.InteropServices.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.InteropServices.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.INTEROPSERVICES.RUNTIMEINFORMATION.DLL" DiskId="1" Guid="F5803A18-39D1-414D-AC11-661382DF51D9">
+              <File Id="SYSTEM.RUNTIME.INTEROPSERVICES.RUNTIMEINFORMATION.DLL" Name="System.Runtime.InteropServices.RuntimeInformation.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.InteropServices.RuntimeInformation.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.NUMERICS.DLL" DiskId="1" Guid="300AE029-6E4C-4A66-BB0E-76EB029AC1B4">
+              <File Id="SYSTEM.RUNTIME.NUMERICS.DLL" Name="System.Runtime.Numerics.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.Numerics.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.SERIALIZATION.FORMATTERS.DLL" DiskId="1" Guid="0BFF7246-F104-4DB4-B471-443AE0F58B83">
+              <File Id="SYSTEM.RUNTIME.SERIALIZATION.FORMATTERS.DLL" Name="System.Runtime.Serialization.Formatters.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.Serialization.Formatters.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.SERIALIZATION.JSON.DLL" DiskId="1" Guid="01C3253A-4200-433D-A3B9-D29084CD665D">
+              <File Id="SYSTEM.RUNTIME.SERIALIZATION.JSON.DLL" Name="System.Runtime.Serialization.Json.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.Serialization.Json.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.SERIALIZATION.PRIMITIVES.DLL" DiskId="1" Guid="57F4B50E-FE31-4B1D-BE27-B43CEB99C24C">
+              <File Id="SYSTEM.RUNTIME.SERIALIZATION.PRIMITIVES.DLL" Name="System.Runtime.Serialization.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.Serialization.Primitives.dll" />
+            </Component>
+            <Component Id="SYSTEM.RUNTIME.SERIALIZATION.XML.DLL" DiskId="1" Guid="FD64FC18-FF89-4059-A5AB-0A835684C916">
+              <File Id="SYSTEM.RUNTIME.SERIALIZATION.XML.DLL" Name="System.Runtime.Serialization.Xml.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Runtime.Serialization.Xml.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CLAIMS.DLL" DiskId="1" Guid="4A1FE634-E762-4D4A-9D95-A6AEFBA0A415">
+              <File Id="SYSTEM.SECURITY.CLAIMS.DLL" Name="System.Security.Claims.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Security.Claims.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ALGORITHMS.DLL_1" DiskId="1" Guid="04354C0C-C178-4012-846A-A520E31482BD">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ALGORITHMS.DLL_1" Name="System.Security.Cryptography.Algorithms.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Security.Cryptography.Algorithms.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.CSP.DLL" DiskId="1" Guid="79696A85-5205-421C-8993-1821FD35B969">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.CSP.DLL" Name="System.Security.Cryptography.Csp.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Security.Cryptography.Csp.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ENCODING.DLL_1" DiskId="1" Guid="3A70DE2F-AABF-49D6-9448-F9D02EE33056">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ENCODING.DLL_1" Name="System.Security.Cryptography.Encoding.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Security.Cryptography.Encoding.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.PRIMITIVES.DLL_1" DiskId="1" Guid="CF8D5AAC-88FC-41B3-9FC9-D002DB3F444C">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.PRIMITIVES.DLL_1" Name="System.Security.Cryptography.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Security.Cryptography.Primitives.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.X509CERTIFICATES.DLL_1" DiskId="1" Guid="529AE8F8-A088-4CE9-8F06-8EF5335F6A24">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.X509CERTIFICATES.DLL_1" Name="System.Security.Cryptography.X509Certificates.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Security.Cryptography.X509Certificates.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.PRINCIPAL.DLL" DiskId="1" Guid="E7BC6EA7-485C-4E64-B8D9-6BAB2B20F1E0">
+              <File Id="SYSTEM.SECURITY.PRINCIPAL.DLL" Name="System.Security.Principal.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Security.Principal.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.SECURESTRING.DLL" DiskId="1" Guid="DEFB98F8-DC8D-47E0-839A-556170CB9982">
+              <File Id="SYSTEM.SECURITY.SECURESTRING.DLL" Name="System.Security.SecureString.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Security.SecureString.dll" />
+            </Component>
+            <Component Id="SYSTEM.TEXT.ENCODING.DLL" DiskId="1" Guid="7446D913-4D8F-4B1F-B1C8-90754BEB8D7E">
+              <File Id="SYSTEM.TEXT.ENCODING.DLL" Name="System.Text.Encoding.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Text.Encoding.dll" />
+            </Component>
+            <Component Id="SYSTEM.TEXT.ENCODING.EXTENSIONS.DLL" DiskId="1" Guid="389C339D-ED0D-424F-918E-2256FE850183">
+              <File Id="SYSTEM.TEXT.ENCODING.EXTENSIONS.DLL" Name="System.Text.Encoding.Extensions.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Text.Encoding.Extensions.dll" />
+            </Component>
+            <Component Id="SYSTEM.TEXT.REGULAREXPRESSIONS.DLL" DiskId="1" Guid="9EFF44E1-D492-4733-933E-5D014DD108EF">
+              <File Id="SYSTEM.TEXT.REGULAREXPRESSIONS.DLL" Name="System.Text.RegularExpressions.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Text.RegularExpressions.dll" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.DLL" DiskId="1" Guid="60874C27-7A6E-4F83-87CF-502061F9D871">
+              <File Id="SYSTEM.THREADING.DLL" Name="System.Threading.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.dll" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.OVERLAPPED.DLL" DiskId="1" Guid="C1C05A04-92E1-4948-82CA-800AB098CEDD">
+              <File Id="SYSTEM.THREADING.OVERLAPPED.DLL" Name="System.Threading.Overlapped.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.Overlapped.dll" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.TASKS.DATAFLOW.DLL" DiskId="1" Guid="F270482C-2697-4654-A66E-011441972448">
+              <File Id="SYSTEM.THREADING.TASKS.DATAFLOW.DLL" Name="System.Threading.Tasks.Dataflow.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.Tasks.Dataflow.dll" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.TASKS.DATAFLOW.XML" DiskId="1" Guid="9C248C7C-854C-407F-B9CA-E8DA1116C2F7">
+              <File Id="SYSTEM.THREADING.TASKS.DATAFLOW.XML" Name="System.Threading.Tasks.Dataflow.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.Tasks.Dataflow.xml" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.TASKS.DLL" DiskId="1" Guid="8AF5B71B-A147-49B3-9E7F-3B9A1301B1C4">
+              <File Id="SYSTEM.THREADING.TASKS.DLL" Name="System.Threading.Tasks.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.Tasks.dll" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.TASKS.PARALLEL.DLL" DiskId="1" Guid="8C7A8DFB-7528-4249-BB61-DF90EA382A05">
+              <File Id="SYSTEM.THREADING.TASKS.PARALLEL.DLL" Name="System.Threading.Tasks.Parallel.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.Tasks.Parallel.dll" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.THREAD.DLL" DiskId="1" Guid="F36CC8C2-FAB7-4ED4-ABA3-E7AC1A0FA2B8">
+              <File Id="SYSTEM.THREADING.THREAD.DLL" Name="System.Threading.Thread.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.Thread.dll" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.THREADPOOL.DLL" DiskId="1" Guid="A0F1D6CD-99D1-452A-B21A-DDB8CE7D7243">
+              <File Id="SYSTEM.THREADING.THREADPOOL.DLL" Name="System.Threading.ThreadPool.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.ThreadPool.dll" />
+            </Component>
+            <Component Id="SYSTEM.THREADING.TIMER.DLL" DiskId="1" Guid="68FD2912-D50C-48D5-8DA1-488194220578">
+              <File Id="SYSTEM.THREADING.TIMER.DLL" Name="System.Threading.Timer.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Threading.Timer.dll" />
+            </Component>
+            <Component Id="SYSTEM.VALUETUPLE.DLL" DiskId="1" Guid="C627F1AC-CC38-4476-BE30-BC551DF5CB79">
+              <File Id="SYSTEM.VALUETUPLE.DLL" Name="System.ValueTuple.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.ValueTuple.dll" />
+            </Component>
+            <Component Id="SYSTEM.XML.READERWRITER.DLL" DiskId="1" Guid="932315C5-9AD9-49CA-8F0A-2E6C979B70A6">
+              <File Id="SYSTEM.XML.READERWRITER.DLL" Name="System.Xml.ReaderWriter.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Xml.ReaderWriter.dll" />
+            </Component>
+            <Component Id="SYSTEM.XML.XDOCUMENT.DLL" DiskId="1" Guid="2A9697E6-5584-47F4-95FE-3388A5E49BBF">
+              <File Id="SYSTEM.XML.XDOCUMENT.DLL" Name="System.Xml.XDocument.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Xml.XDocument.dll" />
+            </Component>
+            <Component Id="SYSTEM.XML.XMLDOCUMENT.DLL" DiskId="1" Guid="2C544556-82EE-4E83-8D5F-35340082FA1F">
+              <File Id="SYSTEM.XML.XMLDOCUMENT.DLL" Name="System.Xml.XmlDocument.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Xml.XmlDocument.dll" />
+            </Component>
+            <Component Id="SYSTEM.XML.XMLSERIALIZER.DLL" DiskId="1" Guid="9B0837C0-9AC2-4C70-87B7-650A09CFC227">
+              <File Id="SYSTEM.XML.XMLSERIALIZER.DLL" Name="System.Xml.XmlSerializer.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Xml.XmlSerializer.dll" />
+            </Component>
+            <Component Id="SYSTEM.XML.XPATH.DLL" DiskId="1" Guid="D0762F32-D797-488D-BC92-8FBDAB510971">
+              <File Id="SYSTEM.XML.XPATH.DLL" Name="System.Xml.XPath.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Xml.XPath.dll" />
+            </Component>
+            <Component Id="SYSTEM.XML.XPATH.XDOCUMENT.DLL" DiskId="1" Guid="ADA67EDE-06C3-4928-937F-45B8E71CA0E5">
+              <File Id="SYSTEM.XML.XPATH.XDOCUMENT.DLL" Name="System.Xml.XPath.XDocument.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\System.Xml.XPath.XDocument.dll" />
+            </Component>
+            <Directory Id="DE" Name="de">
+              <Component Id="ENTITYFRAMEWORK.RESOURCES.DLL" DiskId="1" Guid="685F1526-6518-423B-B003-B3666EDF9335">
+                <File Id="ENTITYFRAMEWORK.RESOURCES.DLL" Name="EntityFramework.resources.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\de\EntityFramework.resources.dll" />
+              </Component>
+              <Component Id="ENTITYFRAMEWORK.SQLSERVER.RESOURCES.DLL" DiskId="1" Guid="4E8DEF8E-83D3-44DA-9F69-B01641153D8E">
+                <File Id="ENTITYFRAMEWORK.SQLSERVER.RESOURCES.DLL" Name="EntityFramework.SqlServer.resources.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\de\EntityFramework.SqlServer.resources.dll" />
+              </Component>
+            </Directory>
+            <Directory Id="X64" Name="x64">
+              <Component Id="SQLITE.INTEROP.DLL" DiskId="1" Guid="B52621C6-A121-45D8-8E6A-341C87A9734A">
+                <File Id="SQLITE.INTEROP.DLL" Name="SQLite.Interop.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\x64\SQLite.Interop.dll" />
+              </Component>
+            </Directory>
+            <Directory Id="X86" Name="x86">
+              <Component Id="SQLITE.INTEROP.DLL_1" DiskId="1" Guid="D2130F38-8CED-4A51-8F2F-19F8426337BD">
+                <File Id="SQLITE.INTEROP.DLL_1" Name="SQLite.Interop.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\Plugins\x86\SQLite.Interop.dll" />
+              </Component>
+            </Directory>
+          </Directory>
+          <Directory Id="UI" Name="UI">
+            <Component Id="ENTITYFRAMEWORK.DLL_2" DiskId="1" Guid="7FA85927-7720-4B48-8266-BC7FF608CC1E">
+              <File Id="ENTITYFRAMEWORK.DLL_2" Name="EntityFramework.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\EntityFramework.dll" />
+            </Component>
+            <Component Id="ENTITYFRAMEWORK.SQLSERVER.DLL_2" DiskId="1" Guid="E754E121-508D-4725-ADBA-BF1DEAF506F7">
+              <File Id="ENTITYFRAMEWORK.SQLSERVER.DLL_2" Name="EntityFramework.SqlServer.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\EntityFramework.SqlServer.dll" />
+            </Component>
+            <Component Id="ICSHARPCODE.AVALONEDIT.DLL_2" DiskId="1" Guid="99C35E93-339F-46EA-A5D2-991A43F638A5">
+              <File Id="ICSHARPCODE.AVALONEDIT.DLL_2" Name="ICSharpCode.AvalonEdit.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\ICSharpCode.AvalonEdit.dll" />
+            </Component>
+            <Component Id="NEWTONSOFT.JSON.DLL_2" DiskId="1" Guid="8232863C-A87F-4B9E-AF71-45EEBE6904BC">
+              <File Id="NEWTONSOFT.JSON.DLL_2" Name="Newtonsoft.Json.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\Newtonsoft.Json.dll" />
+            </Component>
+            <Component Id="NLOG.DLL_2" DiskId="1" Guid="CFDD2834-66D9-4CDB-89B4-85D299A5690B">
+              <File Id="NLOG.DLL_2" Name="NLog.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\NLog.dll" />
+            </Component>
+            <Component Id="POORMANSTSQLFORMATTERLIB35.DLL_2" DiskId="1" Guid="CD129EFA-5CF8-4557-8798-860A0403DEEF">
+              <File Id="POORMANSTSQLFORMATTERLIB35.DLL_2" Name="PoorMansTSqlFormatterLib35.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\PoorMansTSqlFormatterLib35.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.CORE.DLL_2" DiskId="1" Guid="A9CF7789-C923-4EB2-BC91-9B567396C94F">
+              <File Id="SOLUINET.DEVTOOLS.CORE.DLL_2" Name="SoluiNet.DevTools.Core.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\SoluiNet.DevTools.Core.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.CORE.DLL.CONFIG_2" DiskId="1" Guid="3BCF64DB-F8A8-428F-ACCF-D7DE8F884B3D">
+              <File Id="SOLUINET.DEVTOOLS.CORE.DLL.CONFIG_2" Name="SoluiNet.DevTools.Core.dll.config" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\SoluiNet.DevTools.Core.dll.config" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.CORE.PDB_2" DiskId="1" Guid="737EEAC3-BB0D-4F09-A314-A8697C678AAB">
+              <File Id="SOLUINET.DEVTOOLS.CORE.PDB_2" Name="SoluiNet.DevTools.Core.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\SoluiNet.DevTools.Core.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.CORE.XML_2" DiskId="1" Guid="5D18DF3A-7359-480F-9F16-B15D82FD3E96">
+              <File Id="SOLUINET.DEVTOOLS.CORE.XML_2" Name="SoluiNet.DevTools.Core.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\SoluiNet.DevTools.Core.xml" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UI.SQL.DLL" DiskId="1" Guid="7AAFB958-2238-40EE-80EC-9B7E880F6E7A">
+              <File Id="SOLUINET.DEVTOOLS.UI.SQL.DLL" Name="SoluiNet.DevTools.UI.Sql.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\SoluiNet.DevTools.UI.Sql.dll" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UI.SQL.PDB" DiskId="1" Guid="1C1BE6CA-2FA7-4C27-8242-FB64C7D52FEC">
+              <File Id="SOLUINET.DEVTOOLS.UI.SQL.PDB" Name="SoluiNet.DevTools.UI.Sql.pdb" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\SoluiNet.DevTools.UI.Sql.pdb" />
+            </Component>
+            <Component Id="SOLUINET.DEVTOOLS.UI.SQL.XML" DiskId="1" Guid="B82E2E80-7FA9-4450-A06C-658939E76BF0">
+              <File Id="SOLUINET.DEVTOOLS.UI.SQL.XML" Name="SoluiNet.DevTools.UI.Sql.xml" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\SoluiNet.DevTools.UI.Sql.xml" />
+            </Component>
+            <Component Id="SYSTEM.DATA.SQLITE.DLL_2" DiskId="1" Guid="45913D1D-2AEB-48D0-AB55-E4034CC6A29E">
+              <File Id="SYSTEM.DATA.SQLITE.DLL_2" Name="System.Data.SQLite.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\System.Data.SQLite.dll" />
+            </Component>
+            <Component Id="SYSTEM.DATA.SQLITE.EF6.DLL_2" DiskId="1" Guid="A5FAE6A9-7502-4316-862B-D08D474C3D83">
+              <File Id="SYSTEM.DATA.SQLITE.EF6.DLL_2" Name="System.Data.SQLite.EF6.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\System.Data.SQLite.EF6.dll" />
+            </Component>
+            <Component Id="SYSTEM.DATA.SQLITE.LINQ.DLL_2" DiskId="1" Guid="818BF943-4924-47B7-85BF-648A81E07F4A">
+              <File Id="SYSTEM.DATA.SQLITE.LINQ.DLL_2" Name="System.Data.SQLite.Linq.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\System.Data.SQLite.Linq.dll" />
+            </Component>
+            <Component Id="SYSTEM.NET.HTTP.DLL_2" DiskId="1" Guid="B67B650E-C3A5-4CD4-A5E5-139ECF1DD81D">
+              <File Id="SYSTEM.NET.HTTP.DLL_2" Name="System.Net.Http.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\System.Net.Http.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ALGORITHMS.DLL_2" DiskId="1" Guid="A104D7F1-394A-481D-A78D-E8A411CBCACD">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ALGORITHMS.DLL_2" Name="System.Security.Cryptography.Algorithms.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\System.Security.Cryptography.Algorithms.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ENCODING.DLL_2" DiskId="1" Guid="36A601A9-2F00-4923-898B-68034FB33E3C">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.ENCODING.DLL_2" Name="System.Security.Cryptography.Encoding.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\System.Security.Cryptography.Encoding.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.PRIMITIVES.DLL_2" DiskId="1" Guid="F1B310BB-BDB8-4139-B2D1-16AC8007C7E3">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.PRIMITIVES.DLL_2" Name="System.Security.Cryptography.Primitives.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\System.Security.Cryptography.Primitives.dll" />
+            </Component>
+            <Component Id="SYSTEM.SECURITY.CRYPTOGRAPHY.X509CERTIFICATES.DLL_2" DiskId="1" Guid="34B67473-5B81-4FFC-84E7-B592786B6C20">
+              <File Id="SYSTEM.SECURITY.CRYPTOGRAPHY.X509CERTIFICATES.DLL_2" Name="System.Security.Cryptography.X509Certificates.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\UI\System.Security.Cryptography.X509Certificates.dll" />
+            </Component>
+          </Directory>
+          <Directory Id="X64_1" Name="x64">
+            <Component Id="SQLITE.INTEROP.DLL_2" DiskId="1" Guid="42C10354-AA3F-4A0E-B1D2-BC88717A4680">
+              <File Id="SQLITE.INTEROP.DLL_2" Name="SQLite.Interop.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\x64\SQLite.Interop.dll" />
+            </Component>
+          </Directory>
+          <Directory Id="X86_1" Name="x86">
+            <Component Id="SQLITE.INTEROP.DLL_3" DiskId="1" Guid="4A37D06A-335A-4287-8FC0-B54EED1F5E74">
+              <File Id="SQLITE.INTEROP.DLL_3" Name="SQLite.Interop.dll" Source="..\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\x86\SQLite.Interop.dll" />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <!-- <Component Id="ProductComponent"> -->
+      <!-- TODO: Insert files, registry keys, and other resources here. -->
+      <!-- </Component> -->
+    </ComponentGroup>
+  </Fragment>
+</Wix>
