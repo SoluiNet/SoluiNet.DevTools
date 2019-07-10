@@ -16,7 +16,7 @@ namespace SoluiNet.DevTools.Core.Tools.Json
     /// </summary>
     public static class JsonTools
     {
-        private const string JsonErrorFormat = @"{ ""error"": ""{0}"", ""exception"": ""{1}"", ""inner_exception"": ""{2}"" }";
+        private const string JsonErrorFormat = @"{{ ""error"": ""{0}"", ""exception"": ""{1}"", ""inner_exception"": ""{2}"" }}";
 
         /// <summary>
         /// Serialize an object to a JSON string.
