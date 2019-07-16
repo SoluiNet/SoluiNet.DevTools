@@ -396,7 +396,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     timeTarget.Key,
                     (Convert.ToDouble(timeTarget.Sum(x => x.Duration)) - timeTarget.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0)).ToDurationString());
 
-                var timeTargetButton = new ExtendedButton() { Content = label, HorizontalAlignment = HorizontalAlignment.Left };
+                var timeTargetButton = new ExtendedButton() { HorizontalAlignment = HorizontalAlignment.Left };
+
+                // timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
+                timeTargetButton.OnBackgroundColourResolving = (applicationName) =>
+                {
+                    return ApplicationIdentificationTools.GetBackgroundAccent(applicationName.ToString().ExtractApplicationName());
+                };
+
+                timeTargetButton.Content = label;
                 timeTargetButton.ToolTip = label;
                 timeTargetButton.Tag = timeTarget;
 
@@ -406,12 +414,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     timeTargetButton.DependencyReferenceValue = highestDuration;
                     timeTargetButton.DependencyValue = Convert.ToDouble(timeTarget.Sum(x => x.Duration));
                 }
-
-                // timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
-                timeTargetButton.OnBackgroundColourResolving = (applicationName) =>
-                {
-                    return ApplicationIdentificationTools.GetBackgroundAccent(applicationName.ToString());
-                };
 
                 timeTargetButton.PreviewMouseMove += (dragSender, dragEvents) =>
                 {
