@@ -27,6 +27,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.General;
+    using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
     /// <summary>
@@ -395,16 +396,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     timeTarget.Key,
                     (Convert.ToDouble(timeTarget.Sum(x => x.Duration)) - timeTarget.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0)).ToDurationString());
 
-                var timeTargetButton = new Button() { Content = label, HorizontalAlignment = HorizontalAlignment.Left };
+                var timeTargetButton = new ExtendedButton() { Content = label, HorizontalAlignment = HorizontalAlignment.Left };
                 timeTargetButton.ToolTip = label;
                 timeTargetButton.Tag = timeTarget;
 
                 if (highestDuration > 0)
                 {
-                    timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.TimeTrackingAssignmentOverview.ActualWidth;
+                    // timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.TimeTrackingAssignmentOverview.ActualWidth;
+                    timeTargetButton.DependencyReferenceValue = highestDuration;
+                    timeTargetButton.DependencyValue = Convert.ToDouble(timeTarget.Sum(x => x.Duration));
                 }
 
-                timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
+                // timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
+                timeTargetButton.OnBackgroundColourResolving = (applicationName) =>
+                {
+                    return ApplicationIdentificationTools.GetBackgroundAccent(applicationName.ToString());
+                };
 
                 timeTargetButton.PreviewMouseMove += (dragSender, dragEvents) =>
                 {

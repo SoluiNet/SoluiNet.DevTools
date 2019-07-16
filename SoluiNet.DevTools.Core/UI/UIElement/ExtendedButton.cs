@@ -2,9 +2,6 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using System.Windows.Input;
-using System.Windows.Media;
-
 namespace SoluiNet.DevTools.Core.UI.UIElement
 {
     using System;
@@ -13,6 +10,8 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
 
     /// <summary>
     /// Provides a button width additional features.
@@ -136,14 +135,13 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
             get
             {
                 return base.Content;
-
             }
 
             set
             {
                 base.Content = value;
 
-                this.Background = this.OnBackgroundColourResolving(value);
+                this.Background = this.OnBackgroundColourResolving?.Invoke(value);
             }
         }
 
