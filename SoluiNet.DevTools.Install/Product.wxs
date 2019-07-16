@@ -14,7 +14,12 @@
       <ComponentGroupRef Id="x86ProgramRootComponents" />
       <ComponentGroupRef Id="x64ProgramRootComponents" />
     </Feature>
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
     <UI />
+    <UIRef Id="WixUI_InstallDir"/>
+    <WixVariable Id="WixUILicenseRtf" Value="License\eula.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="Images\Banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="Images\DialogBg.bmp" />
   </Product>
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">

@@ -1,0 +1,1 @@
+& "${env:ProgramFiles(x86)}\WiX Toolset v3.14\bin\heat.exe" project ..\SoluiNet.DevTools.UI\SoluiNet.DevTools.UI.csproj -pog:Binaries -ag -template:fragment -out GeneratedFromHeatProject.wxs
