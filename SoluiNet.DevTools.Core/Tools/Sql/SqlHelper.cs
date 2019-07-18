@@ -79,6 +79,12 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
         /// <returns>Returns the original table name for the overgiven alias.</returns>
         public static string GetTableByAlias(string sqlCommand, string alias)
         {
+            // ignore SQL functions
+            if (alias.Contains('('))
+            {
+                alias = alias.Split('(').Last();
+            }
+
             Regex aliasDefinitionRegex = new Regex(string.Format(@"(FROM|JOIN)\s+(.*)\s+(AS\s+)?({0})", alias), RegexOptions.IgnoreCase);
 
             if (aliasDefinitionRegex.IsMatch(sqlCommand))
