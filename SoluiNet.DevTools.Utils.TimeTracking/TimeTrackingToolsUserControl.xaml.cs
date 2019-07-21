@@ -25,9 +25,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.Tools.Number;
     using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.Tools.UI;
+    using SoluiNet.DevTools.Core.Tools.XML;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.General;
     using SoluiNet.DevTools.Core.UI.UIElement;
+    using SoluiNet.DevTools.Core.UI.XmlData;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
     /// <summary>
@@ -401,7 +403,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 // timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
                 timeTargetButton.OnBackgroundColourResolving = (applicationName) =>
                 {
-                    return ApplicationIdentificationTools.GetBackgroundAccent(applicationName.ToString().ExtractApplicationName());
+                    // return ApplicationIdentificationTools.GetBackgroundAccent(applicationName.ToString().ExtractApplicationName());
+                    return this.context.Application
+                    .FirstOrDefault(x => x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(applicationName.ToString()))
+                    .ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().SoluiNetBrushDefinition.ToBrush();
                 };
 
                 timeTargetButton.Content = label;

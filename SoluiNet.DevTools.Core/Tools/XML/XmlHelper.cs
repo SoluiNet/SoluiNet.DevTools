@@ -43,6 +43,17 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         }
 
         /// <summary>
+        /// Deserialize a string.
+        /// </summary>
+        /// <typeparam name="T">The type which should be deserialized.</typeparam>
+        /// <param name="serializedString">The serialized object as string.</param>
+        /// <returns>Returns a deserialized instance of <typeparamref name="T"/>.</returns>
+        public static T DeserializeString<T>(this string serializedString)
+        {
+            return Deserialize<T>(serializedString);
+        }
+
+        /// <summary>
         /// Deserialize a stream.
         /// </summary>
         /// <typeparam name="T">The type which should be deserialized.</typeparam>

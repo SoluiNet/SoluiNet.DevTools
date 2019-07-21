@@ -134,5 +134,31 @@ namespace SoluiNet.DevTools.Core.Tools.String
 
             return duration;
         }
+
+        /// <summary>
+        /// Check if a regular expression matches an overgiven string.
+        /// </summary>
+        /// <param name="regExPattern">The regular expression.</param>
+        /// <param name="searchString">The string which should be checked.</param>
+        /// <returns>Returns true if the search string matches the regular expression.</returns>
+        public static bool RegExMatch(this string regExPattern, string searchString)
+        {
+            var regEx = new Regex(regExPattern);
+
+            return regEx.IsMatch(searchString);
+        }
+
+        /// <summary>
+        /// Check if a regular expression matches an overgiven string.
+        /// </summary>
+        /// <param name="searchString">The string which should be checked.</param>
+        /// <param name="regExPattern">The regular expression.</param>
+        /// <returns>Returns true if the search string matches the regular expression.</returns>
+        public static bool MatchesRegEx(this string searchString, string regExPattern)
+        {
+            var regEx = new Regex(regExPattern);
+
+            return regEx.IsMatch(searchString);
+        }
     }
 }

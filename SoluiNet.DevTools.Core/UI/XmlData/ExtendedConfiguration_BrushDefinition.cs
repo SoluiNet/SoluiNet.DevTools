@@ -26,6 +26,8 @@ namespace SoluiNet.DevTools.Core.UI.XmlData {
         
         private SoluiNetBrushDefinitionType soluiNetBrushDefinitionField;
         
+        private string regExField;
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SoluiNet.BrushDefinition")]
         public SoluiNetBrushDefinitionType SoluiNetBrushDefinition {
@@ -34,6 +36,17 @@ namespace SoluiNet.DevTools.Core.UI.XmlData {
             }
             set {
                 this.soluiNetBrushDefinitionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string regEx {
+            get {
+                return this.regExField;
+            }
+            set {
+                this.regExField = value;
             }
         }
     }

@@ -13,6 +13,7 @@
     <xs:sequence>
       <xs:element name="SoluiNet.BrushDefinition" type="bd:SoluiNet.BrushDefinitionType" minOccurs="0" />
     </xs:sequence>
+    <xs:attribute name="regEx" type="xs:string" />
   </xs:complexType>
 
   <xs:element name="SoluiNet.ExtendedConfiguration" type="SoluiNet.ExtendedConfigurationType" />
