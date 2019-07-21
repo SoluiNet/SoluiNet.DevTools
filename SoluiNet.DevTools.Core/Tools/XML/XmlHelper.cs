@@ -16,6 +16,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
     using System.Xml.Serialization;
     using System.Xml.Xsl;
     using SoluiNet.DevTools.Core.Tools.Stream;
+    using SoluiNet.DevTools.Core.Tools.String;
 
     /// <summary>
     /// Provides a collection of methods to work with XML.
@@ -30,6 +31,11 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// <returns>Returns a deserialized instance of <typeparamref name="T"/>.</returns>
         public static T Deserialize<T>(string serializedString)
         {
+            if (string.IsNullOrEmpty(serializedString))
+            {
+                return default(T);
+            }
+
             var stream = new MemoryStream();
 
             var streamWriter = new StreamWriter(stream);
@@ -50,6 +56,11 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// <returns>Returns a deserialized instance of <typeparamref name="T"/>.</returns>
         public static T DeserializeString<T>(this string serializedString)
         {
+            if (string.IsNullOrEmpty(serializedString))
+            {
+                return default(T);
+            }
+
             return Deserialize<T>(serializedString);
         }
 
@@ -78,7 +89,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
 
-            using (var writer = new StringWriter())
+            using (var writer = new EncodedStringWriter(Encoding.UTF8))
             {
                 xmlSerializer.Serialize(writer, instance);
                 return writer.ToString();

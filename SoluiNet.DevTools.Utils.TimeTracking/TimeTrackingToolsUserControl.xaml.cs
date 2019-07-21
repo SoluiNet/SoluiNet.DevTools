@@ -404,9 +404,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 timeTargetButton.OnBackgroundColourResolving = (applicationName) =>
                 {
                     // return ApplicationIdentificationTools.GetBackgroundAccent(applicationName.ToString().ExtractApplicationName());
-                    return this.context.Application
-                    .FirstOrDefault(x => x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(applicationName.ToString()))
-                    .ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().SoluiNetBrushDefinition.ToBrush();
+                    return this.context.Application.Local
+                    .FirstOrDefault(x => !string.IsNullOrEmpty(x.ExtendedConfiguration)
+                        && x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(applicationName.ToString()))?
+                    .ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition.ToBrush();
                 };
 
                 timeTargetButton.Content = label;

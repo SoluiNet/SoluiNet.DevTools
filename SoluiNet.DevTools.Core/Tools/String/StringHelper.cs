@@ -143,6 +143,11 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// <returns>Returns true if the search string matches the regular expression.</returns>
         public static bool RegExMatch(this string regExPattern, string searchString)
         {
+            if (string.IsNullOrEmpty(regExPattern) || string.IsNullOrEmpty(searchString))
+            {
+                return false;
+            }
+
             var regEx = new Regex(regExPattern);
 
             return regEx.IsMatch(searchString);
@@ -156,6 +161,11 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// <returns>Returns true if the search string matches the regular expression.</returns>
         public static bool MatchesRegEx(this string searchString, string regExPattern)
         {
+            if (string.IsNullOrEmpty(regExPattern) || string.IsNullOrEmpty(searchString))
+            {
+                return false;
+            }
+
             var regEx = new Regex(regExPattern);
 
             return regEx.IsMatch(searchString);
