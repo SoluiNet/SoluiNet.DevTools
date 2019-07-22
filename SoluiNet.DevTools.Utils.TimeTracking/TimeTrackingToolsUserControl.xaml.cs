@@ -196,7 +196,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             Duration = duration,
                         });
 
-                        // categoryDistribution.Value -= usageTime.Duration;
                         workingDistributionDictionary[categoryDistribution.Key] -= duration;
 
                         break;
@@ -210,7 +209,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             Duration = categoryDuration,
                         });
 
-                        // categoryDistribution.Value -= usageTime.Duration;
                         duration -= categoryDuration;
                         workingDistributionDictionary[categoryDistribution.Key] -= categoryDuration;
                     }
@@ -368,7 +366,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 return;
             }
 
-            // this.TimeTrackingAssignmentOverview.RemoveEvent("Loaded");
             this.TimeTrackingAssignmentOverview.Loaded += (overviewSender, eventArgs) =>
             {
                 this.RearangeWidths();
@@ -401,10 +398,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var timeTargetButton = new ExtendedButton() { HorizontalAlignment = HorizontalAlignment.Left };
 
-                // timeTargetButton.Background = ApplicationIdentificationTools.GetBackgroundAccent(timeTarget.Key.ExtractApplicationName());
                 timeTargetButton.OnBackgroundColourResolving = (applicationName) =>
                 {
-                    // return ApplicationIdentificationTools.GetBackgroundAccent(applicationName.ToString().ExtractApplicationName());
                     return this.context.Application.Local
                     .FirstOrDefault(x => !string.IsNullOrEmpty(x.ExtendedConfiguration)
                         && x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(applicationName.ToString().ReplaceRegEx(GeneralConstants.DurationSearchPattern)))?
@@ -417,7 +412,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 if (highestDuration > 0)
                 {
-                    // timeTargetButton.Width = Convert.ToDouble(timeTarget.Sum(x => x.Duration)) / highestDuration * this.TimeTrackingAssignmentOverview.ActualWidth;
                     timeTargetButton.DependencyReferenceValue = highestDuration;
                     timeTargetButton.DependencyValue = Convert.ToDouble(timeTarget.Sum(x => x.Duration));
                 }

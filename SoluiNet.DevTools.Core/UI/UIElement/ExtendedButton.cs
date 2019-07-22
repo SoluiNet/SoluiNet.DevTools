@@ -26,13 +26,26 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
         /// </summary>
         public ExtendedButton()
         {
+            this.SelectedBackground = new SolidColorBrush(Colors.LightBlue);
+
             this.OnDependencyValueChanged += this.AdjustWidthForChangedDependencyValue;
 
             this.Click += (sender, args) =>
             {
                 if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 {
-                    this.OnElementSelected?.Invoke(this, new EventArgs());
+                    if (!this.Selected)
+                    {
+                        this.Selected = true;
+                        this.Background = this.SelectedBackground;
+
+                        this.OnElementSelected?.Invoke(this, new EventArgs());
+                    }
+                    else
+                    {
+                        this.Selected = false;
+                        this.Background = this.DefaultBackground;
+                    }
                 }
             };
 
@@ -89,6 +102,21 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
         public bool WidthWithDependency { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the element has been selected or not.
+        /// </summary>
+        public bool Selected { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the background layout for selected elements.
+        /// </summary>
+        public Brush SelectedBackground { get; set; }
+
+        /// <summary>
+        /// Gets or sets the background layout for elements in default state.
+        /// </summary>
+        public Brush DefaultBackground { get; set; }
+
+        /// <summary>
         /// Gets or sets the dependency reference value.
         /// </summary>
         public double DependencyReferenceValue
@@ -142,6 +170,7 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
                 base.Content = value;
 
                 this.Background = this.OnBackgroundColourResolving?.Invoke(value);
+                this.DefaultBackground = this.Background;
             }
         }
 
