@@ -21,6 +21,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Windows.Shapes;
     using LiveCharts;
     using LiveCharts.Wpf;
+    using SoluiNet.DevTools.Core.Constants;
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.Number;
     using SoluiNet.DevTools.Core.Tools.String;
@@ -406,7 +407,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     // return ApplicationIdentificationTools.GetBackgroundAccent(applicationName.ToString().ExtractApplicationName());
                     return this.context.Application.Local
                     .FirstOrDefault(x => !string.IsNullOrEmpty(x.ExtendedConfiguration)
-                        && x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(applicationName.ToString()))?
+                        && x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(applicationName.ToString().ReplaceRegEx(GeneralConstants.DurationSearchPattern)))?
                     .ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition.ToBrush();
                 };
 

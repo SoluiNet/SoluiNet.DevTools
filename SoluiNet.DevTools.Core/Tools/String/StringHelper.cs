@@ -170,5 +170,24 @@ namespace SoluiNet.DevTools.Core.Tools.String
 
             return regEx.IsMatch(searchString);
         }
+
+        /// <summary>
+        /// Check if a regular expression matches an overgiven string.
+        /// </summary>
+        /// <param name="originalString">The string which should be replaced.</param>
+        /// <param name="regExPattern">The regular expression.</param>
+        /// <param name="replacementString">The replacement string.</param>
+        /// <returns>The string with replacement.</returns>
+        public static string ReplaceRegEx(this string originalString, string regExPattern, string replacementString = "")
+        {
+            if (string.IsNullOrEmpty(regExPattern) || string.IsNullOrEmpty(originalString))
+            {
+                return originalString;
+            }
+
+            var regEx = new Regex(regExPattern);
+
+            return regEx.Replace(originalString, replacementString);
+        }
     }
 }

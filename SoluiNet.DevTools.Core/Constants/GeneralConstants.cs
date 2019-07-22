@@ -22,5 +22,13 @@ namespace SoluiNet.DevTools.Core.Constants
         {
             get { return "<ALL>"; }
         }
+
+        /// <summary>
+        /// Gets the search pattern for duration strings.
+        /// </summary>
+        public static string DurationSearchPattern
+        {
+            get { return "(\\s+\\((\\d+w)?\\s*(\\d+d)?\\s*(\\d+h)?\\s*(\\d+m)?\\s*(\\d+s)?\\))"; }
+        }
     }
 }
