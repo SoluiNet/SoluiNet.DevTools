@@ -111,6 +111,10 @@ namespace SoluiNet.DevTools.UI
                 this.UiElements.Items.Add(tabItem);
 
                 tabItem.Content = uiElement;
+                uiElement.TitleChanged += (sender, titleParts) =>
+                {
+                    this.SetTitleParts(titleParts);
+                };
             }
 
             this.LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");

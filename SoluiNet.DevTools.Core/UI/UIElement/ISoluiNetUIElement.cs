@@ -11,10 +11,22 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
     using System.Threading.Tasks;
 
     /// <summary>
+    /// The title change delegate.
+    /// </summary>
+    /// <param name="sender">The sending element.</param>
+    /// <param name="titleParts">The changed title parts.</param>
+    public delegate void TitleChangedHandler(object sender, Dictionary<string, string> titleParts);
+
+    /// <summary>
     /// Provides an interface for UI elements in SoluiNet.DevTools.
     /// </summary>
     public interface ISoluiNetUIElement
     {
+        /// <summary>
+        /// The event handler for a title change.
+        /// </summary>
+        event TitleChangedHandler TitleChanged;
+
         /// <summary>
         /// Gets the label.
         /// </summary>

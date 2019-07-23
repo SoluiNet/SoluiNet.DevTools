@@ -25,7 +25,8 @@ namespace SoluiNet.DevTools.Core.UI.Window
         /// Set the values which can be used for replacing elements in the title.
         /// </summary>
         /// <param name="titleParts">The values which should be inserted to the title.</param>
-        public void SetTitleParts(IDictionary<string, string> titleParts)
+        /// <param name="named">A value indicating whether the overgiven dictionary has named elements.</param>
+        public void SetTitleParts(IDictionary<string, string> titleParts, bool named = false)
         {
             if (titleParts == null || !titleParts.Any())
             {

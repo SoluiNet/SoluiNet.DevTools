@@ -30,7 +30,7 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
 
             this.OnDependencyValueChanged += this.AdjustWidthForChangedDependencyValue;
 
-            this.Click += (sender, args) =>
+            this.PreviewMouseLeftButtonDown += (sender, args) =>
             {
                 if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 {

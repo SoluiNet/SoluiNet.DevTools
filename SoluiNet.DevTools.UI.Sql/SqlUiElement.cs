@@ -70,6 +70,9 @@ namespace SoluiNet.DevTools.UI.Sql
             this.LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI.Sql");
         }
 
+        /// <inheritdoc />
+        public event TitleChangedHandler TitleChanged;
+
         /// <inheritdoc/>
         public string Label
         {
@@ -603,6 +606,12 @@ namespace SoluiNet.DevTools.UI.Sql
                 this.Environments.Items.Add(environment);
             }
 
+            this.TitleChanged?.Invoke(this, new Dictionary<string, string>()
+            {
+                { "project", chosenProject },
+                { "environment", "Default" },
+            });
+
             this.ChangeProjectConnection(chosenProject);
         }
 
@@ -768,6 +777,12 @@ namespace SoluiNet.DevTools.UI.Sql
             }
 
             plugin.Environment = (sender as ComboBox)?.SelectedItem as string;
+
+            this.TitleChanged?.Invoke(this, new Dictionary<string, string>()
+            {
+                { "project", chosenProject },
+                { "environment", plugin.Environment },
+            });
 
             this.ChangeProjectConnection(chosenProject);
         }
