@@ -86,6 +86,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void PrepareStatisticsView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context)
         {
+            var statisticTabs = new TabControl();
+            statisticTabs.TabStripPlacement = Dock.Bottom;
+
+            #region Weighted Targets
             var weightedTimes = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).OrderBy(x => x.Key).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
 
             var barsChart = new CartesianChart();
@@ -116,7 +120,43 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
 
-            this.TimeTrackingStatistics.Children.Add(barsChart);
+            statisticTabs.Items.Add(new TabItem() { Header = "Targets", Content = barsChart });
+            #endregion
+
+            #region Application
+            var durationPerApplication = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.Application.ApplicationName).OrderBy(x => x.Key).Select(x => new { Duration = x.Sum(y => y.Duration), Application = x.Key });
+
+            var applicationChart = new CartesianChart();
+            applicationChart.Name = "DurationPerApplication";
+
+            var applicationSeries = new SeriesCollection();
+
+            var applicationChartValueList = durationPerApplication
+                .Select(x => new { Label = x.Application, Weight = new ChartValues<int> { x.Duration } }).ToList();
+
+            var applicationColumnSeriesList = applicationChartValueList
+                .Select(x => new ColumnSeries() { Title = x.Label?.Substring(0, x.Label.Length >= 30 ? 30 : x.Label.Length), Values = x.Weight }).ToList();
+
+            var applicationDataSource = applicationColumnSeriesList;
+            applicationSeries.AddRange(applicationDataSource);
+
+            applicationChart.Series = applicationSeries;
+
+            var applications = new Axis();
+            applications.Title = "Applications";
+            applications.Labels = durationPerApplication.Select(x => x.Application.Substring(0, 30)).ToList();
+
+            var durations = new Axis();
+            yAxis.Title = "Durations";
+            yAxis.Labels = durationPerApplication.Max(x => x.Duration).CountFrom(start: 0).Select(x => x.ToString()).ToList();
+
+            applicationChart.AxisX.Add(applications);
+            applicationChart.AxisY.Add(durations);
+
+            statisticTabs.Items.Add(new TabItem() { Header = "Applications", Content = applicationChart });
+            #endregion
+
+            this.TimeTrackingStatistics.Children.Add(statisticTabs);
         }
 
         private void DropOnApplicationElement(object dropApplicationSender, DragEventArgs dropApplicationEvents)
