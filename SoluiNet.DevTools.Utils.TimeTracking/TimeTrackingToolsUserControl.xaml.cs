@@ -169,6 +169,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 usageTime.ApplicationId = ((dropApplicationSender as UI.AssignmentTarget).Tag as Entities.Application).ApplicationId;
             }
 
+            foreach (var item in this.TimeTrackingAssignmentOverview.Children.OfType<ExtendedButton>().Where(x => x.Selected))
+            {
+                var applicationData = item.Tag as IGrouping<string, UsageTime>;
+
+                foreach (var applicationUsageTime in applicationData)
+                {
+                    applicationUsageTime.ApplicationId = ((dropApplicationSender as UI.AssignmentTarget).Tag as Entities.Application).ApplicationId;
+                }
+            }
+
             this.context.SaveChanges();
         }
 
