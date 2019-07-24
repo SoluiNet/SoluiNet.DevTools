@@ -552,7 +552,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
                     }
 
-                    var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && !x.CategoryUsageTime.Any()).GroupBy(x => x.ApplicationIdentification);
+                    var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && (!x.CategoryUsageTime.Any() || x.CategoryUsageTime.Sum(y => y.Duration) < x.Duration)).GroupBy(x => x.ApplicationIdentification);
 
                     this.FillTimeTrackingOverview(timeTargets);
                 };
