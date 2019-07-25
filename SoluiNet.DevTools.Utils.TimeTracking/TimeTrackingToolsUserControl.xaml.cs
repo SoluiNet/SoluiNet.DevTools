@@ -298,6 +298,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     newElement.AllowDrop = true;
                     newElement.Drop += dropApplicationDelegate;
 
+                    newElement.PreviewMouseRightButtonDown += (sender, eventArgs) =>
+                    {
+                        var applicationContextMenu = this.FindResource("ApplicationContextMenu") as ContextMenu;
+
+                        applicationContextMenu.PlacementTarget = sender as UI.AssignmentTarget;
+                        applicationContextMenu.IsOpen = true;
+                    };
+
                     return newElement;
                 }
                 else
@@ -593,6 +601,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var queryResults = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
 
             this.FillQueryResults(queryResults);
+        }
+
+        private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
