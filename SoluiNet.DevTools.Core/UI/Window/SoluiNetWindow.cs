@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Core.UI.Window
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Controls;
 
     /// <summary>
     /// The base window class for SoluiNet.DevTools windows.
@@ -34,6 +35,17 @@ namespace SoluiNet.DevTools.Core.UI.Window
             }
 
             this.Title = string.Format(this.TitleFormatString, titleParts.OrderBy(x => x.Key).Select(x => x.Value).ToArray());
+        }
+
+        /// <summary>
+        /// Show the window with an user control.
+        /// </summary>
+        /// <param name="userControl">The user control which should be displayed.</param>
+        public void ShowWithUserControl(UserControl userControl)
+        {
+            this.Content = userControl;
+
+            this.Show();
         }
     }
 }

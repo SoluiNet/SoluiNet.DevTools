@@ -30,6 +30,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.General;
     using SoluiNet.DevTools.Core.UI.UIElement;
+    using SoluiNet.DevTools.Core.UI.Window;
     using SoluiNet.DevTools.Core.UI.XmlData;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
@@ -268,6 +269,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.context.SaveChanges();
         }
 
+        private void RightClickApplication(object sender, MouseButtonEventArgs eventArgs)
+        {
+            var applicationContextMenu = this.FindResource("ApplicationContextMenu") as ContextMenu;
+
+            applicationContextMenu.PlacementTarget = sender as UI.AssignmentTarget;
+            applicationContextMenu.IsOpen = true;
+        }
+
         private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context, bool showOnlyUnassigned = false)
         {
             var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
@@ -278,6 +287,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var applications = context.Application;
 
             DragEventHandler dropApplicationDelegate = this.DropOnApplicationElement;
+            MouseButtonEventHandler rightClickApplicationDelegate = this.RightClickApplication;
 
             this.ApplicationAssignmentGrid.CreateNewElement = () =>
             {
@@ -298,13 +308,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     newElement.AllowDrop = true;
                     newElement.Drop += dropApplicationDelegate;
 
-                    newElement.PreviewMouseRightButtonDown += (sender, eventArgs) =>
-                    {
-                        var applicationContextMenu = this.FindResource("ApplicationContextMenu") as ContextMenu;
-
-                        applicationContextMenu.PlacementTarget = sender as UI.AssignmentTarget;
-                        applicationContextMenu.IsOpen = true;
-                    };
+                    newElement.PreviewMouseRightButtonDown += rightClickApplicationDelegate;
 
                     return newElement;
                 }
@@ -328,6 +332,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 applicationTarget.AllowDrop = true;
                 applicationTarget.Drop += dropApplicationDelegate;
+
+                applicationTarget.PreviewMouseRightButtonDown += rightClickApplicationDelegate;
 
                 this.ApplicationAssignmentGrid.AddElement(applicationTarget);
             }
@@ -605,7 +611,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var window = new SoluiNetWindow();
+
+            window.ShowWithUserControl(new ApplicationSettingsUserControl());
         }
     }
 }
