@@ -40,7 +40,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            var extendedConfiguration = this.application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
+            SoluiNetExtendedConfigurationType extendedConfiguration = null;
+
+            if (!string.IsNullOrEmpty(this.application.ExtendedConfiguration))
+            {
+                this.application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
+            }
+
+            if (extendedConfiguration == null)
+            {
+                extendedConfiguration = new SoluiNetExtendedConfigurationType();
+            }
 
             extendedConfiguration.regEx = this.RegEx.Text;
             extendedConfiguration.SoluiNetBrushDefinition = this.BrushDefintion.GetBrushDefinition();
