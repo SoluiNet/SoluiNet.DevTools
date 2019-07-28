@@ -613,7 +613,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         {
             var window = new SoluiNetWindow();
 
-            window.ShowWithUserControl(new ApplicationSettingsUserControl());
+            // todo: get element which has been right clicked and deliver via constructor parameter
+            window.ShowWithUserControl(new ApplicationSettingsUserControl(null));
         }
     }
 }

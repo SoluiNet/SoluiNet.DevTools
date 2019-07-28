@@ -97,6 +97,22 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         }
 
         /// <summary>
+        /// Serialize an instance.
+        /// </summary>
+        /// <typeparam name="T">The type which should be serialized.</typeparam>
+        /// <param name="instance">The instance of the type which should be serialized.</param>
+        /// <returns>Returns a serialized instance of <typeparamref name="T"/> as string.</returns>
+        public static string SerializeInstance<T>(this T instance)
+        {
+            if (instance == null)
+            {
+                return string.Empty;
+            }
+
+            return Serialize<T>(instance);
+        }
+
+        /// <summary>
         /// Format the overgiven XML string
         /// Taken from: https://stackoverflow.com/questions/1123718/format-xml-string-to-print-friendly-xml-string.
         /// </summary>

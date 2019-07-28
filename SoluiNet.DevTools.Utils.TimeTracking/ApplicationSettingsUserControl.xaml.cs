@@ -18,18 +18,34 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+    using SoluiNet.DevTools.Core.Tools.XML;
+    using SoluiNet.DevTools.Core.UI.XmlData;
 
     /// <summary>
     /// Interaction logic for ApplicationSettingsUserControl.xaml.
     /// </summary>
     public partial class ApplicationSettingsUserControl : UserControl
     {
+        private Entities.Application application;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationSettingsUserControl"/> class.
         /// </summary>
-        public ApplicationSettingsUserControl()
+        /// <param name="application">The application.</param>
+        public ApplicationSettingsUserControl(Entities.Application application)
         {
             this.InitializeComponent();
+            this.application = application ?? throw new ArgumentNullException(nameof(application));
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            var extendedConfiguration = this.application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
+
+            extendedConfiguration.regEx = this.RegEx.Text;
+            extendedConfiguration.SoluiNetBrushDefinition = this.BrushDefintion.GetBrushDefinition();
+
+            this.application.ExtendedConfiguration = extendedConfiguration.SerializeInstance<SoluiNetExtendedConfigurationType>();
         }
     }
 }
