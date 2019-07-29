@@ -44,7 +44,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             if (!string.IsNullOrEmpty(this.application.ExtendedConfiguration))
             {
-                this.application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
+                extendedConfiguration = this.application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
             }
 
             if (extendedConfiguration == null)
@@ -56,6 +56,35 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             extendedConfiguration.SoluiNetBrushDefinition = this.BrushDefintion.GetBrushDefinition();
 
             this.application.ExtendedConfiguration = extendedConfiguration.SerializeInstance<SoluiNetExtendedConfigurationType>();
+
+            Window.GetWindow(this).Close();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            SoluiNetExtendedConfigurationType extendedConfiguration = null;
+
+            if (!string.IsNullOrEmpty(this.application.ExtendedConfiguration))
+            {
+                extendedConfiguration = this.application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
+            }
+
+            if (extendedConfiguration == null)
+            {
+                return;
+            }
+
+            this.RegEx.Text = extendedConfiguration.regEx;
+
+            if (extendedConfiguration.SoluiNetBrushDefinition != null && extendedConfiguration.SoluiNetBrushDefinition.typeSpecified)
+            {
+                this.BrushDefintion.ReadFromBrushDefinition(extendedConfiguration.SoluiNetBrushDefinition);
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(this).Close();
         }
     }
 }

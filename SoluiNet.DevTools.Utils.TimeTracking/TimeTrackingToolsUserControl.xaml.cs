@@ -301,7 +301,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     context.SaveChanges();
 
                     var newElement = new UI.AssignmentTarget() { Label = applicationName };
-                    newElement.Target.Background = ApplicationIdentificationTools.GetBackgroundAccent(applicationName);
+                    newElement.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
 
                     newElement.Tag = application;
 
@@ -326,7 +326,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 applicationTarget.Label = application.ApplicationName;
 
-                applicationTarget.Target.Background = ApplicationIdentificationTools.GetBackgroundAccent(application.ApplicationName);
+                applicationTarget.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
 
                 applicationTarget.Tag = application;
 
@@ -611,10 +611,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
         {
+            var applicationButton = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as UI.AssignmentTarget;
+
             var window = new SoluiNetWindow();
 
             // todo: get element which has been right clicked and deliver via constructor parameter
-            window.ShowWithUserControl(new ApplicationSettingsUserControl(null));
+            window.ShowWithUserControl(new ApplicationSettingsUserControl(applicationButton.Tag as Entities.Application));
+
+            this.context.SaveChanges();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+    using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI.XmlData;
 
@@ -32,6 +33,27 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
         public BrushDefinitionUserControl()
         {
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Read from brush definition and prefill fields.
+        /// </summary>
+        /// <param name="brushDefinition">The brush definition.</param>
+        public void ReadFromBrushDefinition(SoluiNetBrushDefinitionType brushDefinition)
+        {
+            if (!brushDefinition.typeSpecified)
+            {
+                return;
+            }
+
+            switch (brushDefinition.type)
+            {
+                case SoluiNetBrushType.SimpleLinearGradient:
+                    this.Angle.Value = brushDefinition.angleSpecified ? brushDefinition.angle : 0.75;
+                    this.StartColour.SelectedColor = brushDefinition.startColour.ToColour();
+                    this.EndColour.SelectedColor = brushDefinition.endColour.ToColour();
+                    break;
+            }
         }
 
         /// <summary>

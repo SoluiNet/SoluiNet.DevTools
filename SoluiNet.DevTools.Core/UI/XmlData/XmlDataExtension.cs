@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Core.UI.XmlData
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Media;
+    using SoluiNet.DevTools.Core.Tools.String;
 
     /// <summary>
     /// A collection of extension methods for xml data classes.
@@ -28,14 +29,14 @@ namespace SoluiNet.DevTools.Core.UI.XmlData
             switch (soluiNetBrush.type)
             {
                 case SoluiNetBrushType.SimpleLinearGradient:
-                    brush = new LinearGradientBrush((Color)ColorConverter.ConvertFromString(soluiNetBrush.startColour), (Color)ColorConverter.ConvertFromString(soluiNetBrush.endColour), Convert.ToDouble(soluiNetBrush.angle));
+                    brush = new LinearGradientBrush(soluiNetBrush.startColour.ToColour(), soluiNetBrush.endColour.ToColour(), Convert.ToDouble(soluiNetBrush.angle));
                     break;
                 case SoluiNetBrushType.LinearGradient:
                     brush = new LinearGradientBrush();
 
                     foreach (var gradientStop in soluiNetBrush.SoluiNetGradientStop)
                     {
-                        (brush as LinearGradientBrush).GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString(gradientStop.colour), Convert.ToDouble(gradientStop.offset)));
+                        (brush as LinearGradientBrush).GradientStops.Add(new GradientStop(gradientStop.colour.ToColour(), Convert.ToDouble(gradientStop.offset)));
                     }
 
                     (brush as LinearGradientBrush).StartPoint = new System.Windows.Point(Convert.ToDouble(soluiNetBrush.SoluiNetStartPoint.xAxis), Convert.ToDouble(soluiNetBrush.SoluiNetStartPoint.yAxis));
