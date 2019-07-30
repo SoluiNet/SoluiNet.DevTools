@@ -10,12 +10,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.UI.XmlData;
 
     /// <summary>
     /// The entity Category.
     /// </summary>
     [Table("Category")]
-    public class Category
+    public class Category : IContainsExtendedConfiguration
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Category"/> class.
@@ -38,5 +39,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Gets or sets the category usage time links.
         /// </summary>
         public virtual ICollection<CategoryUsageTime> CategoryUsageTime { get; set; }
+
+        /// <inheritdoc />
+        public string ExtendedConfiguration { get; set; }
     }
 }

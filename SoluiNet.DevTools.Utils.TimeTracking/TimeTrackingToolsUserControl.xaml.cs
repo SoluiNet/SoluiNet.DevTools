@@ -278,6 +278,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             applicationContextMenu.IsOpen = true;
         }
 
+        private void RightClickCategory(object sender, MouseButtonEventArgs eventArgs)
+        {
+            var categoryContextMenu = this.FindResource("CategoryContextMenu") as ContextMenu;
+
+            categoryContextMenu.PlacementTarget = sender as UI.AssignmentTargetExtended;
+            categoryContextMenu.IsOpen = true;
+        }
+
         private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context, bool showOnlyUnassigned = false)
         {
             var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
@@ -289,6 +297,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             DragEventHandler dropApplicationDelegate = this.DropOnApplicationElement;
             MouseButtonEventHandler rightClickApplicationDelegate = this.RightClickApplication;
+            MouseButtonEventHandler rightClickCategoryDelegate = this.RightClickCategory;
 
             this.ApplicationAssignmentGrid.CreateNewElement = () =>
             {
@@ -355,11 +364,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     context.SaveChanges();
 
                     var newElement = new UI.AssignmentTargetExtended() { Label = categoryName };
+                    newElement.Target.PrimaryActionButton.Background = !string.IsNullOrEmpty(category.ExtendedConfiguration) ? category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
 
                     newElement.Tag = category;
 
                     newElement.AllowDrop = true;
                     newElement.Drop += dropCategoryDelegate;
+
+                    newElement.PreviewMouseRightButtonDown += rightClickCategoryDelegate;
 
                     return newElement;
                 }
@@ -387,10 +399,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 categoryTarget.Label = category.CategoryName;
 
+                categoryTarget.Target.PrimaryActionButton.Background = !string.IsNullOrEmpty(category.ExtendedConfiguration) ? category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
+
                 categoryTarget.Tag = category;
 
                 categoryTarget.AllowDrop = true;
                 categoryTarget.Drop += dropCategoryDelegate;
+
+                categoryTarget.PreviewMouseRightButtonDown += rightClickCategoryDelegate;
 
                 this.CategoryAssignmentGrid.AddElement(categoryTarget);
             }
@@ -618,6 +634,18 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             // todo: get element which has been right clicked and deliver via constructor parameter
             window.ShowWithUserControl(new ExtendedConfigurationUserControl(applicationButton.Tag as Entities.Application));
+
+            this.context.SaveChanges();
+        }
+
+        private void CategorySettings_Click(object sender, RoutedEventArgs e)
+        {
+            var categoryButton = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as UI.AssignmentTargetExtended;
+
+            var window = new SoluiNetWindow();
+
+            // todo: get element which has been right clicked and deliver via constructor parameter
+            window.ShowWithUserControl(new ExtendedConfigurationUserControl(categoryButton.Tag as Entities.Category));
 
             this.context.SaveChanges();
         }
