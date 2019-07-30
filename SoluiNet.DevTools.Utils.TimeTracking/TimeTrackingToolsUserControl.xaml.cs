@@ -191,9 +191,19 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var dataObject = dropEvents.Data as DataObject;
             var data = dataObject.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
 
+            var usageTimeList = new HashSet<IGrouping<string, UsageTime>>();
+            usageTimeList.Add(data);
+
+            foreach (var item in this.TimeTrackingAssignmentOverview.Children.OfType<ExtendedButton>().Where(x => x.Selected))
+            {
+                var categoryData = item.Tag as IGrouping<string, UsageTime>;
+
+                usageTimeList.Add(categoryData);
+            }
+
             var distributionDictionary = new Dictionary<string, double>();
-            var sumDuration = Convert.ToDouble(data.Sum(x => x.Duration));
-            sumDuration -= data.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0);
+            var sumDuration = Convert.ToDouble(usageTimeList.Sum(x => x.Sum(y => y.Duration)));
+            sumDuration -= usageTimeList.Sum(x => x.Sum(y => y.CategoryUsageTime != null ? y.CategoryUsageTime.Sum(z => z.Duration) : 0));
 
             if (dropEvents.KeyStates.HasFlag(DragDropKeyStates.ShiftKey))
             {
@@ -219,50 +229,53 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var workingDistributionDictionary = new Dictionary<string, double>(distributionDictionary);
 
-            foreach (var usageTime in data)
+            foreach (var usageData in usageTimeList)
             {
-                var duration = Convert.ToDouble(usageTime.Duration);
-
-                foreach (var categoryDistribution in distributionDictionary)
+                foreach (var usageTime in usageData)
                 {
-                    var categoryDuration = workingDistributionDictionary[categoryDistribution.Key];
+                    var duration = Convert.ToDouble(usageTime.Duration);
 
-                    if (categoryDuration <= 0)
+                    foreach (var categoryDistribution in distributionDictionary)
                     {
-                        continue;
-                    }
+                        var categoryDuration = workingDistributionDictionary[categoryDistribution.Key];
 
-                    var categoryToAssign = this.context.Category.Where(x => x.CategoryName == categoryDistribution.Key).FirstOrDefault();
-
-                    if (categoryToAssign == null)
-                    {
-                        continue;
-                    }
-
-                    if (duration <= categoryDuration)
-                    {
-                        this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                        if (categoryDuration <= 0)
                         {
-                            CategoryId = categoryToAssign.CategoryId,
-                            UsageTimeId = usageTime.UsageTimeId,
-                            Duration = duration,
-                        });
+                            continue;
+                        }
 
-                        workingDistributionDictionary[categoryDistribution.Key] -= duration;
+                        var categoryToAssign = this.context.Category.Where(x => x.CategoryName == categoryDistribution.Key).FirstOrDefault();
 
-                        break;
-                    }
-                    else
-                    {
-                        this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                        if (categoryToAssign == null)
                         {
-                            CategoryId = categoryToAssign.CategoryId,
-                            UsageTimeId = usageTime.UsageTimeId,
-                            Duration = categoryDuration,
-                        });
+                            continue;
+                        }
 
-                        duration -= categoryDuration;
-                        workingDistributionDictionary[categoryDistribution.Key] -= categoryDuration;
+                        if (duration <= categoryDuration)
+                        {
+                            this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                            {
+                                CategoryId = categoryToAssign.CategoryId,
+                                UsageTimeId = usageTime.UsageTimeId,
+                                Duration = duration,
+                            });
+
+                            workingDistributionDictionary[categoryDistribution.Key] -= duration;
+
+                            break;
+                        }
+                        else
+                        {
+                            this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                            {
+                                CategoryId = categoryToAssign.CategoryId,
+                                UsageTimeId = usageTime.UsageTimeId,
+                                Duration = categoryDuration,
+                            });
+
+                            duration -= categoryDuration;
+                            workingDistributionDictionary[categoryDistribution.Key] -= categoryDuration;
+                        }
                     }
                 }
             }
