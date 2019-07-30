@@ -1,16 +1,15 @@
-﻿<UserControl x:Class="SoluiNet.DevTools.Utils.TimeTracking.ApplicationSettingsUserControl"
+﻿<UserControl x:Class="SoluiNet.DevTools.Core.UIElement.ExtendedConfigurationUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SoluiNet.DevTools.Utils.TimeTracking"
-             xmlns:soluiNetTimeTrackingUi="clr-namespace:SoluiNet.DevTools.Utils.TimeTracking.UI"
+             xmlns:local="clr-namespace:SoluiNet.DevTools.Core.UIElement"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
     <Grid>
         <Label Content="RegEx" Height="25" Width="250" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <TextBox x:Name="RegEx" Height="25" Width="250" Margin="5, 35" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <soluiNetTimeTrackingUi:BrushDefinitionUserControl x:Name="BrushDefintion" Margin="5, 70, 5, 45" />
+        <local:BrushDefinitionUserControl x:Name="BrushDefintion" Margin="5, 70, 5, 45" />
         <Button x:Name="Save" Height="25" Width="125" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Save" Click="Save_Click" />
         <Button x:Name="Cancel" Height="25" Width="125" Margin="5, 0, 135, 5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Cancel" Click="Cancel_Click" />
     </Grid>

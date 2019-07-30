@@ -56,9 +56,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="ApplicationSettingsUserControl.xaml.cs">
-      <DependentUpon>ApplicationSettingsUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Update="TimeTrackingToolsUserControl.xaml.cs">
       <DependentUpon>TimeTrackingToolsUserControl.xaml</DependentUpon>
     </Compile>
@@ -67,9 +64,6 @@
     </Compile>
     <Compile Update="UI\AssignmentTarget.xaml.cs">
       <DependentUpon>UI\AssignmentTarget.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\BrushDefinitionUserControl.xaml.cs">
-      <DependentUpon>UI\BrushDefinitionUserControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -85,14 +79,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\AssignmentTarget.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ApplicationSettingsUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\BrushDefinitionUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

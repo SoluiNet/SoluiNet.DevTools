@@ -5,7 +5,7 @@
              xmlns:v4="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:soluinet="clr-namespace:SoluiNet.DevTools.Core.UI;assembly=SoluiNet.DevTools.Core"
+             xmlns:soluinet="clr-namespace:SoluiNet.DevTools.Core;assembly=SoluiNet.DevTools.Core"
              xmlns:local="clr-namespace:SoluiNet.DevTools.Utils.TimeTracking"
              xmlns:localui="clr-namespace:SoluiNet.DevTools.Utils.TimeTracking.UI"
              mc:Ignorable="d" 

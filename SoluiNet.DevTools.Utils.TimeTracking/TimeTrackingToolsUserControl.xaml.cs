@@ -32,6 +32,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Core.UI.Window;
     using SoluiNet.DevTools.Core.UI.XmlData;
+    using SoluiNet.DevTools.Core.UIElement;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
     /// <summary>
@@ -616,7 +617,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var window = new SoluiNetWindow();
 
             // todo: get element which has been right clicked and deliver via constructor parameter
-            window.ShowWithUserControl(new ApplicationSettingsUserControl(applicationButton.Tag as Entities.Application));
+            window.ShowWithUserControl(new ExtendedConfigurationUserControl(applicationButton.Tag as Entities.Application));
 
             this.context.SaveChanges();
         }

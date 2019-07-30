@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Utils.TimeTracking.UI
+namespace SoluiNet.DevTools.Core.UIElement
 {
     using System;
     using System.Collections.Generic;

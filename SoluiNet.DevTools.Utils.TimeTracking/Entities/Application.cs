@@ -10,12 +10,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.UI.XmlData;
 
     /// <summary>
     /// The entity Application.
     /// </summary>
     [Table("Application")]
-    public class Application
+    public class Application : IContainsExtendedConfiguration
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Application"/> class.

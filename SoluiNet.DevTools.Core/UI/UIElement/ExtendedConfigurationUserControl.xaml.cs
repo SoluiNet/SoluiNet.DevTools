@@ -1,8 +1,8 @@
-﻿// <copyright file="ApplicationSettingsUserControl.xaml.cs" company="SoluiNet">
+﻿// <copyright file="ExtendedConfigurationUserControl.xaml.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Utils.TimeTracking
+namespace SoluiNet.DevTools.Core.UIElement
 {
     using System;
     using System.Collections.Generic;
@@ -24,27 +24,27 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     /// <summary>
     /// Interaction logic for ApplicationSettingsUserControl.xaml.
     /// </summary>
-    public partial class ApplicationSettingsUserControl : UserControl
+    public partial class ExtendedConfigurationUserControl : UserControl
     {
-        private Entities.Application application;
+        private IContainsExtendedConfiguration configurableElement;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationSettingsUserControl"/> class.
+        /// Initializes a new instance of the <see cref="ExtendedConfigurationUserControl"/> class.
         /// </summary>
-        /// <param name="application">The application.</param>
-        public ApplicationSettingsUserControl(Entities.Application application)
+        /// <param name="configurableElement">The configurable element.</param>
+        public ExtendedConfigurationUserControl(IContainsExtendedConfiguration configurableElement)
         {
             this.InitializeComponent();
-            this.application = application ?? throw new ArgumentNullException(nameof(application));
+            this.configurableElement = configurableElement ?? throw new ArgumentNullException(nameof(configurableElement));
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             SoluiNetExtendedConfigurationType extendedConfiguration = null;
 
-            if (!string.IsNullOrEmpty(this.application.ExtendedConfiguration))
+            if (!string.IsNullOrEmpty(this.configurableElement.ExtendedConfiguration))
             {
-                extendedConfiguration = this.application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
+                extendedConfiguration = this.configurableElement.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
             }
 
             if (extendedConfiguration == null)
@@ -55,7 +55,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             extendedConfiguration.regEx = this.RegEx.Text;
             extendedConfiguration.SoluiNetBrushDefinition = this.BrushDefintion.GetBrushDefinition();
 
-            this.application.ExtendedConfiguration = extendedConfiguration.SerializeInstance<SoluiNetExtendedConfigurationType>();
+            this.configurableElement.ExtendedConfiguration = extendedConfiguration.SerializeInstance<SoluiNetExtendedConfigurationType>();
 
             Window.GetWindow(this).Close();
         }
@@ -64,9 +64,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         {
             SoluiNetExtendedConfigurationType extendedConfiguration = null;
 
-            if (!string.IsNullOrEmpty(this.application.ExtendedConfiguration))
+            if (!string.IsNullOrEmpty(this.configurableElement.ExtendedConfiguration))
             {
-                extendedConfiguration = this.application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
+                extendedConfiguration = this.configurableElement.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>();
             }
 
             if (extendedConfiguration == null)
