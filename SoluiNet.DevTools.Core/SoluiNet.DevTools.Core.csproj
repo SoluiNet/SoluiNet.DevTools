@@ -1,11 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <ProjectGuid>{DDC0B05A-0D22-4883-81C5-CF70A8BF3AF1}</ProjectGuid>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
     <AssemblyTitle>SoluiNet.DevTools.Core</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core</Product>
     <Copyright>Copyright © SoluiNet 2018</Copyright>
+    <UseWpf>true</UseWpf>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -19,8 +21,21 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net461'">
+    <PackageReference Include="AvalonEdit" Version="5.0.4" />
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.5.0" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.111" />
+    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.111" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+    <PackageReference Include="AvalonEdit" Version="6.0.0-preview1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview7.19362.6" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.1" />
+    <PackageReference Include="MiqM.Xceed.Wpf.Toolkit.NETCore" Version="3.4.0.1" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -30,18 +45,17 @@
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="5.0.4" />
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.111" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
-    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.111" />
-    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.111" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PoorMansTSqlFormatterLib35">
       <HintPath>..\libs\PoorMansTSqlFormatterLib35.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net461'">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -90,7 +104,6 @@
     <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="SoluiNet.DevTools.Core.csproj~RF295ae54c.TMP" />
     <None Remove="stylecop.json" />
     <None Remove="UI\UIElement\BrushDefinitionUserControl.xaml" />
     <None Remove="UI\UIElement\ExtendedConfigurationUserControl.xaml" />
