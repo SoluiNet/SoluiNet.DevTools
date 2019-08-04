@@ -1,2 +1,9 @@
 language: csharp
 solution: SoluiNet.DevTools.sln
+
+matrix: 
+  include:
+    - dotnet: 3.0.100-preview7-012821
+      mono: none
+      env: DOTNETCORE=3
+    - mono: latest
