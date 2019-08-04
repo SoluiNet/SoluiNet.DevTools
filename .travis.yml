@@ -19,3 +19,4 @@ matrix:
 script:
   - sudo snap alias dotnet-sdk.dotnet dotnet
   - dotnet --version
+  - dotnet build SoluiNet.DevTools.sln
