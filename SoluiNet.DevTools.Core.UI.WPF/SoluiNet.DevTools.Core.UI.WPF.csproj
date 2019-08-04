@@ -21,6 +21,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -33,7 +36,9 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\ISoluiNetUiApp.cs" />
     <Compile Include="Extensions\GridExtensions.cs" />
+    <Compile Include="Plugin\IUtilitiesDevPlugin.cs" />
     <Compile Include="UI\Converter\DurationConverter.cs" />
     <Compile Include="UI\General\Confirm.cs" />
     <Compile Include="UI\General\Prompt.cs" />
