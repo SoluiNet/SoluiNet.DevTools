@@ -1,3 +1,11 @@
+dist: xenial
+addons:
+  snaps:
+  - name: dotnet-sdk
+    classic: true
+    channel: latest/beta
+sudo: required
+
 language: csharp
 solution: SoluiNet.DevTools.sln
 
@@ -7,3 +15,7 @@ matrix:
       mono: none
       env: DOTNETCORE=3
     - mono: latest
+
+script:
+  - sudo snap alias dotnet-sdk.dotnet dotnet
+  - dotnet --version
