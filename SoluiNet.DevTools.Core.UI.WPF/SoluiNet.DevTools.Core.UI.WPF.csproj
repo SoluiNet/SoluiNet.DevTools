@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;net461</TargetFrameworks>
     <AssemblyTitle>SoluiNet.DevTools.Core</AssemblyTitle>
@@ -31,5 +31,20 @@
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extensions\GridExtensions.cs" />
+    <Compile Include="UI\Converter\DurationConverter.cs" />
+    <Compile Include="UI\General\Confirm.cs" />
+    <Compile Include="UI\General\Prompt.cs" />
+    <Compile Include="UI\UIElement\BrushDefinitionUserControl.xaml.cs" />
+    <Compile Include="UI\UIElement\Editor\CompletionData.cs" />
+    <Compile Include="UI\UIElement\ExtendableGrid.cs" />
+    <Compile Include="UI\UIElement\ExtendedButton.cs" />
+    <Compile Include="UI\UIElement\ExtendedConfigurationUserControl.xaml.cs" />
+    <Compile Include="UI\UIElement\ISoluiNetUIElement.cs" />
+    <Compile Include="UI\UIElement\RemovableUserControl.cs" />
+    <Compile Include="UI\UIElement\TwoActionButton.xaml.cs" />
+    <Compile Include="UI\Window\SoluiNetWindow.cs" />
   </ItemGroup>
 </Project>

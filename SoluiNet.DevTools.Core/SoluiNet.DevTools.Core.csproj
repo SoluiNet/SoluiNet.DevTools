@@ -36,6 +36,18 @@
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Remove="Backup1\**" />
+    <EmbeddedResource Remove="Backup2\**" />
+    <EmbeddedResource Remove="Backup3\**" />
+    <EmbeddedResource Remove="Backup4\**" />
+    <EmbeddedResource Remove="Backup\**" />
+    <None Remove="Backup1\**" />
+    <None Remove="Backup2\**" />
+    <None Remove="Backup3\**" />
+    <None Remove="Backup4\**" />
+    <None Remove="Backup\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -94,5 +106,62 @@
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\ISoluiNetApp.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Configuration\ConfigurationSchema.cs" />
+    <Compile Include="Constants\GeneralConstants.cs" />
+    <Compile Include="Enums\DataExchange\SourceCodeRepository\SearchCommitEnum.cs" />
+    <Compile Include="Enums\DataExchange\TicketingSystem\SearchIssueEnum.cs" />
+    <Compile Include="Enums\WebClientFormatEnum.cs" />
+    <Compile Include="Enums\WebClientTypeEnum.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Formatter\IFormatter.cs" />
+    <Compile Include="Formatter\SqlFormatter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Models\IDatabaseElement.cs" />
+    <Compile Include="Models\StoredFunction.cs" />
+    <Compile Include="Models\StoredProcedure.cs" />
+    <Compile Include="Models\View.cs" />
+    <Compile Include="Plugin\Events\IEventType.cs" />
+    <Compile Include="Plugin\Events\IShutdownEvent.cs" />
+    <Compile Include="Plugin\Events\IStartupEvent.cs" />
+    <Compile Include="Plugin\IAllowsDataExchange.cs" />
+    <Compile Include="Plugin\IBasePlugin.cs" />
+    <Compile Include="Plugin\IContainsSettings.cs" />
+    <Compile Include="Plugin\IFileEditor.cs" />
+    <Compile Include="Plugin\IGroupable.cs" />
+    <Compile Include="Plugin\IHandlesEvent.cs" />
+    <Compile Include="Plugin\IInstallable.cs" />
+    <Compile Include="Plugin\ILinkedPlugin.cs" />
+    <Compile Include="Plugin\IProvidesCredentials.cs" />
+    <Compile Include="Plugin\IProvidesDatabaseConnectivity.cs" />
+    <Compile Include="Plugin\IRunsBackgroundTask.cs" />
+    <Compile Include="Plugin\ISupportsLinkedPlugin.cs" />
+    <Compile Include="Plugin\ISupportsWebClient.cs" />
+    <Compile Include="Plugin\IThemable.cs" />
+    <Compile Include="Plugin\ITransformsData.cs" />
+    <Compile Include="Plugin\IUtilitiesDevPlugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptEngine\ScriptParser.cs" />
+    <Compile Include="ScriptEngine\SqlScript.cs" />
+    <Compile Include="Settings\SettingSchema.cs" />
+    <Compile Include="SyntaxHighlighting\SqlSyntaxProvider.cs" />
+    <Compile Include="Tools\Database\DbHelper.cs" />
+    <Compile Include="Tools\File\FileHelper.cs" />
+    <Compile Include="Tools\Json\JsonTools.cs" />
+    <Compile Include="Tools\Number\NumberTools.cs" />
+    <Compile Include="Tools\Object\ObjectHelper.cs" />
+    <Compile Include="Tools\Plugin\PluginHelper.cs" />
+    <Compile Include="Tools\Sql\SqlHelper.cs" />
+    <Compile Include="Tools\Stream\StreamHelper.cs" />
+    <Compile Include="Tools\String\EncodedStringWriter.cs" />
+    <Compile Include="Tools\String\StringHelper.cs" />
+    <Compile Include="Tools\XML\XmlHelper.cs" />
+    <Compile Include="UI\XmlData\ExtendedConfiguration_BrushDefinition.cs" />
+    <Compile Include="UI\XmlData\IContainsExtendedConfiguration.cs" />
+    <Compile Include="UI\XmlData\XmlDataExtension.cs" />
+    <Compile Include="WebClientDefinition\WebClientDefinitionSchema.cs" />
   </ItemGroup>
 </Project>
