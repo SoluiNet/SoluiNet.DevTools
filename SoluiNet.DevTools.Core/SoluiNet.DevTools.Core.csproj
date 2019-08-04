@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <ProjectGuid>{DDC0B05A-0D22-4883-81C5-CF70A8BF3AF1}</ProjectGuid>
-    <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net461</TargetFrameworks>
     <AssemblyTitle>SoluiNet.DevTools.Core</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core</Product>
