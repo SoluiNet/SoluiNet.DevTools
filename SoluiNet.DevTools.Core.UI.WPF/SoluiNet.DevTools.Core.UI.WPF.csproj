@@ -38,7 +38,12 @@
   <ItemGroup>
     <Compile Include="Application\ISoluiNetUiApp.cs" />
     <Compile Include="Extensions\GridExtensions.cs" />
+    <Compile Include="Plugin\IProvidesDatabaseConnectivity.cs" />
+    <Compile Include="Plugin\IThemable.cs" />
     <Compile Include="Plugin\IUtilitiesDevPlugin.cs" />
+    <Compile Include="Tools\Plugin\PluginHelper.cs" />
+    <Compile Include="Tools\String\StringHelper.cs" />
+    <Compile Include="Tools\UI\UIHelper.cs" />
     <Compile Include="UI\Converter\DurationConverter.cs" />
     <Compile Include="UI\General\Confirm.cs" />
     <Compile Include="UI\General\Prompt.cs" />

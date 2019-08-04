@@ -7,7 +7,12 @@ namespace SoluiNet.DevTools.Core.Tools.Database
     using System;
     using System.Collections.Generic;
     using System.Data;
+#if NET461
     using System.Data.SqlClient;
+#endif
+#if NETSTANDARD2_1
+    using Microsoft.Data.SqlClient;
+#endif
     using System.Data.SQLite;
     using System.Linq;
     using System.Reflection;
