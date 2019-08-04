@@ -68,15 +68,6 @@
     <Compile Update="Settings\SettingSchema.cs">
       <DependentUpon>SettingSchema.xsd</DependentUpon>
     </Compile>
-    <Compile Update="UI\UIElement\BrushDefinitionUserControl.xaml.cs">
-      <DependentUpon>UI\BrushDefinitionUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\UIElement\ExtendedConfigurationUserControl.xaml.cs">
-      <DependentUpon>ExtendedConfigurationUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\UIElement\TwoActionButton.xaml.cs">
-      <DependentUpon>UI\UIElement\TwoActionButton.xaml</DependentUpon>
-    </Compile>
     <Compile Update="WebClientDefinition\WebClientDefinitionSchema.cs">
       <DependentUpon>WebClientDefinitionSchema.xsd</DependentUpon>
     </Compile>
@@ -99,30 +90,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="stylecop.json" />
-    <None Remove="UI\UIElement\BrushDefinitionUserControl.xaml" />
-    <None Remove="UI\UIElement\ExtendedConfigurationUserControl.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="UI\UIElement\BrushDefinitionUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UIElement\ExtendedConfigurationUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UIElement\TwoActionButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
 </Project>
