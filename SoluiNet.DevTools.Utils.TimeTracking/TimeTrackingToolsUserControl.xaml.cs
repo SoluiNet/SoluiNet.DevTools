@@ -662,5 +662,19 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             this.context.SaveChanges();
         }
+
+        private void TimeTrackingAssignmentOverview_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.A && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+            {
+                foreach (var assignment in this.TimeTrackingAssignmentOverview.Children)
+                {
+                    if (assignment is ExtendedButton)
+                    {
+                        (assignment as ExtendedButton).SwitchSelection();
+                    }
+                }
+            }
+        }
     }
 }
