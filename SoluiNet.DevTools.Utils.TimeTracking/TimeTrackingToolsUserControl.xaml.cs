@@ -683,6 +683,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     .GroupBy(x => x.Application != null ? x.Application.ApplicationName : "n/a")
                     .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
             }
+            else if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Category")
+            {
+                summaryResults = this.context.CategoryUsageTime
+                    .Where(x => x.UsageTime.StartTime >= lowerDayLimit && x.UsageTime.StartTime < upperDayLimit)
+                    .GroupBy(x => x.Category != null ? x.Category.CategoryName : "n/a")
+                    .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
+
+                var notAssignedCategoryDuration = this.context.UsageTime
+                                .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && !x.CategoryUsageTime.Any())
+                                .Sum(x => x.Duration);
+
+                summaryResults.Add(
+                    "n/a",
+                    Convert.ToDouble(notAssignedCategoryDuration));
+            }
 
             this.FillSummaryResults(summaryResults);
         }
