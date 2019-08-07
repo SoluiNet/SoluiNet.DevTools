@@ -62,6 +62,18 @@
                     <DataGrid x:Name="QueryData" Margin="0,50,0,0" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Summary">
+                <Grid x:Name="TimeTrackingSummary" Background="#FFE5E5E5">
+                    <v4:DatePicker x:Name="SummaryDateBegin" Height="25" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                    <v4:DatePicker x:Name="SummaryDateEnd" Height="25" Margin="140,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                    <ComboBox x:Name="SummaryType" Height="25" Margin="275,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
+                        <ComboBoxItem>Application</ComboBoxItem>
+                        <ComboBoxItem>Category</ComboBoxItem>
+                    </ComboBox>
+                    <Button x:Name="StartSummary" Height="25" Margin="450,5,0,0" Content="Query" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="StartSummary_Click"/>
+                    <DataGrid x:Name="SummaryData" Margin="0,50,0,0" />
+                </Grid>
+            </TabItem>
             <TabItem Header="Source Data">
                 <Grid x:Name="TimeTrackingSourceData" Background="#FFE5E5E5">
                     <DataGrid x:Name="SourceData" />

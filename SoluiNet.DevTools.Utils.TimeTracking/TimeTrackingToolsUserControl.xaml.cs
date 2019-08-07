@@ -639,6 +639,54 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.FillQueryResults(queryResults);
         }
 
+        private void FillSummaryResults(Dictionary<string, double> summaryResults)
+        {
+            if (summaryResults == null)
+            {
+                return;
+            }
+
+            this.SummaryData.Items.Clear();
+
+            if (this.SummaryData.Columns.Count == 0)
+            {
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Grouping Element", Binding = new Binding("Key") });
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Duration Value", Binding = new Binding("Value") { Converter = new SoluiNet.DevTools.Core.UI.Converter.DurationConverter() } });
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Value", Binding = new Binding("Value") });
+            }
+
+            foreach (var item in summaryResults)
+            {
+                this.SummaryData.Items.Add(item);
+            }
+
+            this.SummaryData.Items.Add(new KeyValuePair<string, double>("Sum", summaryResults.Sum(x => x.Value)));
+        }
+
+        private void StartSummary_Click(object sender, RoutedEventArgs e)
+        {
+            var lowerDayLimit = DateTime.UtcNow.Date;
+            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+            if (this.SummaryDateBegin.SelectedDate.HasValue && this.SummaryDateEnd.SelectedDate.HasValue)
+            {
+                lowerDayLimit = this.SummaryDateBegin.SelectedDate.Value.Date;
+                upperDayLimit = this.SummaryDateEnd.SelectedDate.Value.AddDays(1).Date;
+            }
+
+            Dictionary<string, double> summaryResults = null;
+
+            if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Application")
+            {
+                summaryResults = this.context.UsageTime
+                    .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
+                    .GroupBy(x => x.Application != null ? x.Application.ApplicationName : "n/a")
+                    .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
+            }
+
+            this.FillSummaryResults(summaryResults);
+        }
+
         private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
         {
             var applicationButton = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as UI.AssignmentTarget;
