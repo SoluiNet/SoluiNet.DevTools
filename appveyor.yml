@@ -3,4 +3,4 @@ image: Visual Studio 2017
 before_build:
   - nuget restore
   - cp SoluiNet.DevTools.UI\Settings.Default.xml SoluiNet.DevTools.UI\Settings.xml
-  - cp SoluiNet.DevTools.UI\ConnectionStrings.Default.xml SoluiNet.DevTools.UI\ConnectionStrings.xml
+  - cp SoluiNet.DevTools.UI\ConnectionStrings.Default.config SoluiNet.DevTools.UI\ConnectionStrings.config
