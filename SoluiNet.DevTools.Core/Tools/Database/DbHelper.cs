@@ -2,6 +2,8 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using System.Security.Principal;
+
 namespace SoluiNet.DevTools.Core.Tools.Database
 {
     using System;
@@ -318,7 +320,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <param name="sqlCommand">The SQL command.</param>
         /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
-        public static List<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default")
+        public static List<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsImpersonationContext impersonation = null)
         {
             if (providerType == "System.Data.SqlClient")
             {

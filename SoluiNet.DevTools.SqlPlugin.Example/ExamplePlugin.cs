@@ -2,6 +2,8 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using SoluiNet.DevTools.Core.Tools.Security;
+
 namespace SoluiNet.DevTools.SqlPlugin.Example
 {
     using System;
@@ -117,7 +119,17 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         /// <inheritdoc/>
         public List<DataTable> ExecuteSqlScript(string sqlCommand)
         {
-            return DbHelper.ExecuteSqlScript(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName, ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, sqlCommand);
+            var impersonationContext = SecurityTools.Impersonate();
+            try
+            {
+                return DbHelper.ExecuteSqlScript(
+                    ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName,
+                    ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, sqlCommand);
+            }
+            finally
+            {
+                impersonationContext.Undo();
+            }
         }
 
         /// <inheritdoc/>
