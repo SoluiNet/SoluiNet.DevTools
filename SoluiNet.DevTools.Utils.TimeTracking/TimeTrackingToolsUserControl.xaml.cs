@@ -691,8 +691,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
 
                 var notAssignedCategoryDuration = this.context.UsageTime
-                                .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && !x.CategoryUsageTime.Any())
-                                .Sum(x => x.Duration);
+                    .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && !x.CategoryUsageTime.Any())
+                    .Sum(x => x.Duration);
 
                 summaryResults.Add(
                     "n/a",
