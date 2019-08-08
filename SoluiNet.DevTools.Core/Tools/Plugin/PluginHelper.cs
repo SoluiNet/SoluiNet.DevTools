@@ -261,6 +261,16 @@ namespace SoluiNet.DevTools.Core.Tools
         }
 
         /// <summary>
+        /// Retrieve settings for the plugin.
+        /// </summary>
+        /// <param name="plugin">The plugin.</param>
+        /// <returns>An instance of <see cref="Settings.SoluiNetSettingType"/> which contains all effective settings for the plugin.</returns>
+        public static Settings.SoluiNetSettingType RetrieveSettings(this IContainsSettings plugin)
+        {
+            return GetSettings(plugin);
+        }
+
+        /// <summary>
         /// Get the effective settings for the overgiven plugin as dictionary.
         /// </summary>
         /// <param name="plugin">The plugin for which the settings should be provided.</param>
@@ -278,6 +288,16 @@ namespace SoluiNet.DevTools.Core.Tools
                 .SelectMany(x => x.SoluiNetSettingEntry.Select(y => new { SettingName = string.Format("{0}.{1}", x.name, y.name), SettingValue = y.Value }));
 
             return preparedSettings.ToDictionary(x => x.SettingName, x => (object)x.SettingValue);
+        }
+
+        /// <summary>
+        /// Retrieve settings for the plugin as dictionary.
+        /// </summary>
+        /// <param name="plugin">The plugin.</param>
+        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> which contains all effective settings for the plugin.</returns>
+        public static IDictionary<string, object> RetrieveSettingsAsDictionary(this IContainsSettings plugin)
+        {
+            return GetSettingsAsDictionary(plugin);
         }
 
         /// <summary>

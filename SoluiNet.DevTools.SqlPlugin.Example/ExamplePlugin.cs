@@ -2,6 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using System.Security.Principal;
 using SoluiNet.DevTools.Core.Tools.Security;
 
 namespace SoluiNet.DevTools.SqlPlugin.Example
@@ -113,22 +114,69 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         /// <inheritdoc/>
         public DataTable ExecuteSql(string sqlCommand)
         {
-            return DbHelper.ExecuteSqlCommand(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName, ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, sqlCommand);
+            WindowsImpersonationContext impersonationContext = null;
+
+            var settings = this.RetrieveSettingsAsDictionary();
+
+            if (settings.TryGetValue(string.Format("Impersonation@{0}.User", this.Environment), out var user) &&
+                settings.TryGetValue(string.Format("Impersonation@{0}.Password", this.Environment), out var password))
+            {
+                if (settings.TryGetValue(string.Format("Impersonation@{0}.Domain", this.Environment), out var domain))
+                {
+                    impersonationContext = SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString());
+                }
+                else
+                {
+                    impersonationContext = SecurityTools.Impersonate(user.ToString(), password.ToString());
+                }
+            }
+
+            try
+            {
+                return DbHelper.ExecuteSqlCommand(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName, ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, sqlCommand);
+            }
+            finally
+            {
+                if (impersonationContext != null)
+                {
+                    impersonationContext.Undo();
+                }
+            }
         }
 
         /// <inheritdoc/>
         public List<DataTable> ExecuteSqlScript(string sqlCommand)
         {
-            var impersonationContext = SecurityTools.Impersonate();
+            WindowsImpersonationContext impersonationContext = null;
+
+            var settings = this.RetrieveSettingsAsDictionary();
+
+            if (settings.TryGetValue(string.Format("Impersonation@{0}.User", this.Environment), out var user) &&
+                settings.TryGetValue(string.Format("Impersonation@{0}.Password", this.Environment), out var password))
+            {
+                if (settings.TryGetValue(string.Format("Impersonation@{0}.Domain", this.Environment), out var domain))
+                {
+                    impersonationContext = SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString());
+                }
+                else
+                {
+                    impersonationContext = SecurityTools.Impersonate(user.ToString(), password.ToString());
+                }
+            }
+
             try
             {
                 return DbHelper.ExecuteSqlScript(
                     ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName,
-                    ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, sqlCommand);
+                    ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, 
+                    sqlCommand);
             }
             finally
             {
-                impersonationContext.Undo();
+                if (impersonationContext != null)
+                {
+                    impersonationContext.Undo();
+                }
             }
         }
 
