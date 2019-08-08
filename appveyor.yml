@@ -6,4 +6,4 @@ before_build:
   - cp SoluiNet.DevTools.UI\ConnectionStrings.Default.config SoluiNet.DevTools.UI\ConnectionStrings.config
 
 after_build:
-  - 7z a SoluiNet.DevTools-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Release\*
+  - 7z a SoluiNet.DevTools-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Debug\*
