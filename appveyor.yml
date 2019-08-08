@@ -7,3 +7,7 @@ before_build:
 
 after_build:
   - 7z a SoluiNet.DevTools-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Debug\*
+
+artifacts:
+  - path: SoluiNet.DevTools-%APPVEYOR_BUILD_VERSION%.zip
+    name: SoluiNet.DevTools
