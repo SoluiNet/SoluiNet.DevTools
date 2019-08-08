@@ -8,32 +8,14 @@ namespace SoluiNet.DevTools.Core.Tools.Security
     using System.Runtime.InteropServices;
     using System.Security.Principal;
 
+    /// <summary>
+    /// A collection of security methods.
+    /// </summary>
     public static class SecurityTools
     {
         private const int Logon32LogonInteractive = 2;
 
         private const int Logon32ProviderDefault = 0;
-
-        [DllImport("advapi32.dll")]
-        private static extern int LogonUserA(
-            string lpszUserName,
-            string lpszDomain,
-            string lpszPassword,
-            int dwLogonType,
-            int dwLogonProvider,
-            ref IntPtr phToken);
-
-        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern int DuplicateToken(
-            IntPtr hToken,
-            int impersonationLevel,
-            ref IntPtr hNewToken);
-
-        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool RevertToSelf();
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern bool CloseHandle(IntPtr handle);
 
         /// <summary>
         /// Impersonate to a specific user.
@@ -78,5 +60,26 @@ namespace SoluiNet.DevTools.Core.Tools.Security
 
             return null;
         }
+
+        [DllImport("advapi32.dll")]
+        private static extern int LogonUserA(
+            string lpszUserName,
+            string lpszDomain,
+            string lpszPassword,
+            int dwLogonType,
+            int dwLogonProvider,
+            ref IntPtr phToken);
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int DuplicateToken(
+            IntPtr hToken,
+            int impersonationLevel,
+            ref IntPtr hNewToken);
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool RevertToSelf();
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern bool CloseHandle(IntPtr handle);
     }
 }

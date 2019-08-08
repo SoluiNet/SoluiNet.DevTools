@@ -2,9 +2,6 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using System.Security.Principal;
-using SoluiNet.DevTools.Core.Tools.Security;
-
 namespace SoluiNet.DevTools.SqlPlugin.Example
 {
     using System;
@@ -12,6 +9,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using System.Configuration;
     using System.Data;
     using System.Linq;
+    using System.Security.Principal;
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
@@ -23,6 +21,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Database;
+    using SoluiNet.DevTools.Core.Tools.Security;
     using SoluiNet.DevTools.Core.Tools.UI;
 
     /// <summary>
@@ -168,7 +167,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
             {
                 return DbHelper.ExecuteSqlScript(
                     ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName,
-                    ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, 
+                    ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString,
                     sqlCommand);
             }
             finally
