@@ -34,18 +34,7 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
             {
                 if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 {
-                    if (!this.Selected)
-                    {
-                        this.Selected = true;
-                        this.Background = this.SelectedBackground;
-
-                        this.OnElementSelected?.Invoke(this, new EventArgs());
-                    }
-                    else
-                    {
-                        this.Selected = false;
-                        this.Background = this.DefaultBackground;
-                    }
+                    this.SwitchSelection();
                 }
             };
 
@@ -171,6 +160,25 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
 
                 this.Background = this.OnBackgroundColourResolving?.Invoke(value);
                 this.DefaultBackground = this.Background;
+            }
+        }
+
+        /// <summary>
+        /// Switch the selection state.
+        /// </summary>
+        public void SwitchSelection()
+        {
+            if (!this.Selected)
+            {
+                this.Selected = true;
+                this.Background = this.SelectedBackground;
+
+                this.OnElementSelected?.Invoke(this, new EventArgs());
+            }
+            else
+            {
+                this.Selected = false;
+                this.Background = this.DefaultBackground;
             }
         }
 

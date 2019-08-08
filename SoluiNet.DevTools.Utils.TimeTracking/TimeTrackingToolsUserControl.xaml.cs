@@ -639,6 +639,69 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.FillQueryResults(queryResults);
         }
 
+        private void FillSummaryResults(Dictionary<string, double> summaryResults)
+        {
+            if (summaryResults == null)
+            {
+                return;
+            }
+
+            this.SummaryData.Items.Clear();
+
+            if (this.SummaryData.Columns.Count == 0)
+            {
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Grouping Element", Binding = new Binding("Key") });
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Duration Value", Binding = new Binding("Value") { Converter = new SoluiNet.DevTools.Core.UI.Converter.DurationConverter() } });
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Value", Binding = new Binding("Value") });
+            }
+
+            foreach (var item in summaryResults)
+            {
+                this.SummaryData.Items.Add(item);
+            }
+
+            this.SummaryData.Items.Add(new KeyValuePair<string, double>("Sum", summaryResults.Sum(x => x.Value)));
+        }
+
+        private void StartSummary_Click(object sender, RoutedEventArgs e)
+        {
+            var lowerDayLimit = DateTime.UtcNow.Date;
+            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+            if (this.SummaryDateBegin.SelectedDate.HasValue && this.SummaryDateEnd.SelectedDate.HasValue)
+            {
+                lowerDayLimit = this.SummaryDateBegin.SelectedDate.Value.Date;
+                upperDayLimit = this.SummaryDateEnd.SelectedDate.Value.AddDays(1).Date;
+            }
+
+            Dictionary<string, double> summaryResults = null;
+
+            if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Application")
+            {
+                summaryResults = this.context.UsageTime
+                    .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
+                    .GroupBy(x => x.Application != null ? x.Application.ApplicationName : "n/a")
+                    .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
+            }
+            else if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Category")
+            {
+                summaryResults = this.context.CategoryUsageTime
+                    .Where(x => x.UsageTime.StartTime >= lowerDayLimit && x.UsageTime.StartTime < upperDayLimit)
+                    .GroupBy(x => x.Category != null ? x.Category.CategoryName : "n/a")
+                    .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
+
+                var notAssignedCategoryDuration = this.context.UsageTime
+                    .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && !x.CategoryUsageTime.Any())
+                    .Sum(x => x.Duration);
+
+                summaryResults.Add(
+                    "n/a",
+                    Convert.ToDouble(notAssignedCategoryDuration));
+            }
+
+            this.FillSummaryResults(summaryResults);
+        }
+
         private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
         {
             var applicationButton = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as UI.AssignmentTarget;
@@ -661,6 +724,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             window.ShowWithUserControl(new ExtendedConfigurationUserControl(categoryButton.Tag as Entities.Category));
 
             this.context.SaveChanges();
+        }
+
+        private void TimeTrackingAssignmentOverview_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.A && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+            {
+                foreach (var assignment in this.TimeTrackingAssignmentOverview.Children)
+                {
+                    if (assignment is ExtendedButton)
+                    {
+                        (assignment as ExtendedButton).SwitchSelection();
+                    }
+                }
+            }
         }
     }
 }
