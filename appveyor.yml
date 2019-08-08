@@ -4,3 +4,6 @@ before_build:
   - nuget restore
   - cp SoluiNet.DevTools.UI\Settings.Default.xml SoluiNet.DevTools.UI\Settings.xml
   - cp SoluiNet.DevTools.UI\ConnectionStrings.Default.config SoluiNet.DevTools.UI\ConnectionStrings.config
+
+after_build:
+  - 7z a SoluiNet.DevTools-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\SoluiNet.DevTools.UI\bin\$(TargetFramework)\$(Platform)\$(Configuration)\*
