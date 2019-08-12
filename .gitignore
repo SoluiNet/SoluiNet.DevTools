@@ -10,3 +10,7 @@ packages/**
 /**/*.ConnectionStrings.config
 *.old
 *.TMP
+/SoluiNet.DevTools.Core/*.user
+*.user
+/SoluiNet.DevTools.Utils.TimeTracking/icons/*.png
+/SoluiNet.DevTools.UI/Settings.xml

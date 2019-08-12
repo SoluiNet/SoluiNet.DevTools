@@ -35,7 +35,10 @@
                     </Grid.RowDefinitions>
                     <Grid x:Name="TimeTrackingAssignmentFilters" Grid.Column="0" Grid.Row="0">
                         <Button x:Name="ShowOnlyUnassigned" Content="Show only unassigned" Height="25" Width="125" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" />
-                        <Button x:Name="ShowAll" Content="Show all" Height="25" Width="125" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="140, 5, 0, 0" />
+                        <Button x:Name="ShowAll" Content="Show all" Height="25" Width="70" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="140, 5, 0, 0" />
+                        <Button x:Name="AutomaticAssignmenet" Height="25" Width="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220, 5, 0, 0" Click="AutomaticAssignmenet_Click">
+                            <Image Source="/SoluiNet.DevTools.Utils.TimeTracking;component/icons/automatic_assignment.png" />
+                        </Button>
                         <v4:DatePicker x:Name="AssignmentDate" Height="25" Margin="270, 5, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
                     </Grid>
                     <Grid x:Name="TimeTrackingAssignmentOverview" Grid.Column="0" Grid.Row="1" KeyDown="TimeTrackingAssignmentOverview_KeyDown" />
@@ -64,14 +67,18 @@
             </TabItem>
             <TabItem Header="Summary">
                 <Grid x:Name="TimeTrackingSummary" Background="#FFE5E5E5">
-                    <v4:DatePicker x:Name="SummaryDateBegin" Height="25" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
-                    <v4:DatePicker x:Name="SummaryDateEnd" Height="25" Margin="140,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
-                    <ComboBox x:Name="SummaryType" Height="25" Margin="275,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="83*"/>
+                        <ColumnDefinition Width="711*"/>
+                    </Grid.ColumnDefinitions>
+                    <v4:DatePicker x:Name="SummaryDateBegin" Height="25" Margin="5,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Grid.ColumnSpan="2"/>
+                    <v4:DatePicker x:Name="SummaryDateEnd" Height="25" Margin="57.454,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Grid.Column="1"/>
+                    <ComboBox x:Name="SummaryType" Height="25" Margin="192.454,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Grid.Column="1">
                         <ComboBoxItem>Application</ComboBoxItem>
                         <ComboBoxItem>Category</ComboBoxItem>
                     </ComboBox>
-                    <Button x:Name="StartSummary" Height="25" Margin="450,5,0,0" Content="Query" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="StartSummary_Click"/>
-                    <DataGrid x:Name="SummaryData" Margin="0,50,0,0" />
+                    <Button x:Name="StartSummary" Height="25" Margin="367.454,5,0,0" Content="Query" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="StartSummary_Click" Grid.Column="1"/>
+                    <DataGrid x:Name="SummaryData" Margin="0,50,0,0" Grid.ColumnSpan="2" />
                 </Grid>
             </TabItem>
             <TabItem Header="Source Data">

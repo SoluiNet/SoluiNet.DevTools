@@ -741,5 +741,65 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 }
             }
         }
+
+        private void AutomaticAssignmenet_Click(object sender, RoutedEventArgs e)
+        {
+            var header = ((sender as TabControl).SelectedItem as TabItem).Header.ToString();
+
+            foreach (var assignment in this.TimeTrackingAssignmentOverview.Children)
+            {
+                var content = string.Empty;
+
+                if (assignment is ExtendedButton)
+                {
+                    content = (assignment as ExtendedButton).Content.ToString();
+                }
+
+                if (string.IsNullOrEmpty(content))
+                {
+                    continue;
+                }
+
+                if (header == "Application")
+                {
+                    foreach (var application in this.context.Application)
+                    {
+                        if (string.IsNullOrEmpty(application.ExtendedConfiguration))
+                        {
+                            continue;
+                        }
+
+                        if (content.MatchesRegEx(application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                        {
+                            ((assignment as ExtendedButton).Tag as UsageTime).ApplicationId = application.ApplicationId;
+                        }
+                    }
+                }
+                else if (header == "Category")
+                {
+                    foreach (var category in this.context.Category)
+                    {
+                        if (string.IsNullOrEmpty(category.ExtendedConfiguration))
+                        {
+                            continue;
+                        }
+
+                        if (content.MatchesRegEx(category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                        {
+                            var usageTime = (assignment as ExtendedButton).Tag as UsageTime;
+
+                            this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                            {
+                                UsageTimeId = usageTime.UsageTimeId,
+                                Duration = usageTime.Duration,
+                                CategoryId = category.CategoryId,
+                            });
+                        }
+                    }
+                }
+            }
+
+            this.context.SaveChanges();
+        }
     }
 }

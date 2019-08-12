@@ -14,6 +14,7 @@
     <NoWarn>$(NoWarn),SA1123</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="icons\automatic_assignment.png" />
     <None Remove="stylecop.json" />
     <None Remove="UI\AssignmentTargetExtended.xaml" />
   </ItemGroup>
@@ -83,5 +84,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\automatic_assignment.png" />
+  </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties stylecop_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="copy &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" />
+  </Target>
 </Project>
