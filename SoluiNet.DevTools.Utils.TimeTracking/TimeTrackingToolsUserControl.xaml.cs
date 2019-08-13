@@ -780,7 +780,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void AutomaticAssignmenet_Click(object sender, RoutedEventArgs e)
         {
-            var header = ((sender as TabControl).SelectedItem as TabItem).Header.ToString();
+            var header = (this.TimeTrackingAssignmentTargetTabs.SelectedItem as TabItem)?.Header?.ToString();
 
             foreach (var assignment in this.TimeTrackingAssignmentOverview.Children)
             {
@@ -788,7 +788,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 if (assignment is ExtendedButton)
                 {
-                    content = (assignment as ExtendedButton).Content.ToString();
+                    content = ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Key;
                 }
 
                 if (string.IsNullOrEmpty(content))
@@ -796,7 +796,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     continue;
                 }
 
-                if (header == "Application")
+                if (string.IsNullOrEmpty(header) || header == "Application")
                 {
                     foreach (var application in this.context.Application)
                     {
@@ -807,7 +807,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                         if (content.MatchesRegEx(application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
                         {
-                            ((assignment as ExtendedButton).Tag as UsageTime).ApplicationId = application.ApplicationId;
+                            foreach (var usageTime in ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Select(x => x))
+                            {
+                                usageTime.ApplicationId = application.ApplicationId;
+                            }
                         }
                     }
                 }
@@ -822,14 +825,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                         if (content.MatchesRegEx(category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
                         {
-                            var usageTime = (assignment as ExtendedButton).Tag as UsageTime;
-
-                            this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                            foreach (var usageTime in ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Select(x => x))
                             {
-                                UsageTimeId = usageTime.UsageTimeId,
-                                Duration = usageTime.Duration,
-                                CategoryId = category.CategoryId,
-                            });
+                                this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                                {
+                                    UsageTimeId = usageTime.UsageTimeId,
+                                    Duration = usageTime.Duration,
+                                    CategoryId = category.CategoryId,
+                                });
+                            }
                         }
                     }
                 }
