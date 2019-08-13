@@ -473,6 +473,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        private Brush SetBackgroundForApplicationElements(object applicationName)
+        {
+            return this.context.Application.Local
+            .FirstOrDefault(x => !string.IsNullOrEmpty(x.ExtendedConfiguration)
+                && x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(applicationName.ToString().ReplaceRegEx(GeneralConstants.DurationSearchPattern)))?
+            .ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition.ToBrush();
+        }
+
+        private Brush SetBackgroundForCategoryElements(object categoryName)
+        {
+            return this.context.Category.Local
+            .FirstOrDefault(x => !string.IsNullOrEmpty(x.ExtendedConfiguration)
+                && x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(categoryName.ToString().ReplaceRegEx(GeneralConstants.DurationSearchPattern)))?
+            .ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition.ToBrush();
+        }
+
         private void FillTimeTrackingOverview(IQueryable<IGrouping<string, UsageTime>> timeTargets)
         {
             this.TimeTrackingAssignmentOverview.Children.Clear();
@@ -480,6 +496,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var highestDuration = timeTargets.Any() ? timeTargets.Max(x => x.Any() ? x.Sum(y => y != null ? y.Duration : 0) : 0) : 0;
             this.TimeTrackingAssignmentOverview.Tag = highestDuration;
+
+            var header = (this.TimeTrackingAssignmentTargetTabs.SelectedItem as TabItem)?.Header?.ToString();
 
             foreach (var timeTarget in timeTargets)
             {
@@ -492,13 +510,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var timeTargetButton = new ExtendedButton() { HorizontalAlignment = HorizontalAlignment.Left };
 
-                timeTargetButton.OnBackgroundColourResolving = (applicationName) =>
+                if (string.IsNullOrEmpty(header) || header == "Application")
                 {
-                    return this.context.Application.Local
-                    .FirstOrDefault(x => !string.IsNullOrEmpty(x.ExtendedConfiguration)
-                        && x.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx.RegExMatch(applicationName.ToString().ReplaceRegEx(GeneralConstants.DurationSearchPattern)))?
-                    .ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition.ToBrush();
-                };
+                    timeTargetButton.OnBackgroundColourResolving = this.SetBackgroundForApplicationElements;
+                }
+                else if (header == "Category")
+                {
+                    timeTargetButton.OnBackgroundColourResolving = this.SetBackgroundForCategoryElements;
+                }
 
                 timeTargetButton.Content = label;
                 timeTargetButton.ToolTip = label;
@@ -545,6 +564,23 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
 
             var header = ((sender as TabControl).SelectedItem as TabItem).Header.ToString();
+
+            foreach (var assignmentButton in this.TimeTrackingAssignmentOverview.Children)
+            {
+                if (assignmentButton is ExtendedButton)
+                {
+                    if (string.IsNullOrEmpty(header) || header == "Application")
+                    {
+                        (assignmentButton as ExtendedButton).OnBackgroundColourResolving = this.SetBackgroundForApplicationElements;
+                        (assignmentButton as ExtendedButton).Refresh();
+                    }
+                    else if (header == "Category")
+                    {
+                        (assignmentButton as ExtendedButton).OnBackgroundColourResolving = this.SetBackgroundForCategoryElements;
+                        (assignmentButton as ExtendedButton).Refresh();
+                    }
+                }
+            }
 
             this.ShowAll.RemoveEvent("Click");
             this.ShowAll.Click += (showAllButton, eventArgs) =>

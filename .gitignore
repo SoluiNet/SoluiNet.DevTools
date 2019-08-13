@@ -5,12 +5,12 @@ obj
 .vs/**
 packages/**
 /SoluiNet.DevTools.UI/ConnectionStrings.config
+/SoluiNet.DevTools.UI/Settings.xml
 /UpgradeLog2.htm
 /UpgradeLog.htm
 /**/*.ConnectionStrings.config
 *.old
 *.TMP
-/SoluiNet.DevTools.Core/*.user
 *.user
 /SoluiNet.DevTools.Utils.TimeTracking/icons/*.png
-/SoluiNet.DevTools.UI/Settings.xml
+*tmp.csproj

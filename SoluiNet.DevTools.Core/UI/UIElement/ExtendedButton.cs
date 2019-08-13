@@ -182,6 +182,15 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
             }
         }
 
+        /// <summary>
+        /// Refresh the button layout.
+        /// </summary>
+        public void Refresh()
+        {
+            this.Background = this.OnBackgroundColourResolving?.Invoke(this.Content);
+            this.DefaultBackground = this.Background;
+        }
+
         private void AdjustWidthForChangedDependencyValue(object sender, EventArgs eventArgs)
         {
             if (!((sender as ExtendedButton)?.Parent is Grid))
