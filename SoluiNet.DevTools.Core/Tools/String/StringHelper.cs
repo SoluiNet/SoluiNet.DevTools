@@ -200,5 +200,40 @@ namespace SoluiNet.DevTools.Core.Tools.String
         {
             return (Color)ColorConverter.ConvertFromString(colourString);
         }
+
+        /// <summary>
+        /// Returns true if the string has an affirmative value (1 / true / wahr / y / yes).
+        /// </summary>
+        /// <param name="stringValue">The string value.</param>
+        /// <returns>If the string represents an affirmative value return true, otherwise false.</returns>
+        public static bool IsAffirmative(this string stringValue)
+        {
+            if (stringValue.ToLowerInvariant() == "1")
+            {
+                return true;
+            }
+
+            if (stringValue.ToLowerInvariant() == "true")
+            {
+                return true;
+            }
+
+            if (stringValue.ToLowerInvariant() == "wahr")
+            {
+                return true;
+            }
+
+            if (stringValue.ToLowerInvariant() == "y")
+            {
+                return true;
+            }
+
+            if (stringValue.ToLowerInvariant() == "yes")
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

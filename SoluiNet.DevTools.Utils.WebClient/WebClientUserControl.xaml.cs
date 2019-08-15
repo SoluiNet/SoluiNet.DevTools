@@ -16,6 +16,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
     using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.Tools.XML;
 
     /// <summary>
@@ -61,6 +62,13 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 request.Method = this.HttpMethod.Text;
 
                 var isSoapRequest = this.AdditionalOptions.Options.Any(x => x.Key == "SOAPAction");
+                var useTls12 = this.AdditionalOptions.Options.Any(x => x.Key == "UseTls12") &&
+                               this.AdditionalOptions.Options.First(x => x.Key == "UseTls12").Value.IsAffirmative();
+
+                if (useTls12)
+                {
+                    ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+                }
 
                 if (isSoapRequest)
                 {
