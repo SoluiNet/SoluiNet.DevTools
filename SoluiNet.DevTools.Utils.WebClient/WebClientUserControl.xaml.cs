@@ -118,15 +118,22 @@ namespace SoluiNet.DevTools.Utils.WebClient
             }
             catch (WebException webEx)
             {
-                var errResp = webEx.Response;
-
-                using (var responseStream = errResp.GetResponseStream())
+                if (webEx.Response == null)
                 {
-                    var reader = new StreamReader(responseStream);
+                    this.Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##", webEx.Message, webEx.InnerException?.Message);
+                }
+                else
+                {
+                    var errResp = webEx.Response;
 
-                    var responseText = reader.ReadToEnd();
+                    using (var responseStream = errResp.GetResponseStream())
+                    {
+                        var reader = new StreamReader(responseStream);
 
-                    this.Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##\r\n\r\n{2}", webEx.Message, webEx.InnerException?.Message, XmlHelper.IsXml(responseText) ? XmlHelper.Format(responseText) : responseText);
+                        var responseText = reader.ReadToEnd();
+
+                        this.Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##\r\n\r\n{2}", webEx.Message, webEx.InnerException?.Message, XmlHelper.IsXml(responseText) ? XmlHelper.Format(responseText) : responseText);
+                    }
                 }
             }
             catch (Exception exception)
