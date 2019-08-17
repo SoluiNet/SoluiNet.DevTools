@@ -10,16 +10,12 @@ namespace SoluiNet.DevTools.Core.Plugin
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.CommonMethods;
 
     /// <summary>
     /// Provides an interface for plugins with background tasks.
     /// </summary>
-    public interface IRunsBackgroundTask : IBasePlugin
+    public interface IRunsBackgroundTask : IBasePlugin, IProvidesBackgroundTask
     {
-        /// <summary>
-        /// Execute the background task.
-        /// </summary>
-        /// <returns>Returns the background task which should be executed.</returns>
-        Task ExecuteBackgroundTask();
     }
 }
