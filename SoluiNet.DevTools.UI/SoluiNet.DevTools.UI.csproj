@@ -171,4 +171,7 @@
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" />
+  </Target>
 </Project>

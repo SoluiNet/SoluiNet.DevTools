@@ -61,6 +61,21 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
         /// The delegate for the creation of a new element.
         /// </summary>
         /// <returns>Returns the new element.</returns>
+        /// <example>
+        /// <code>
+        /// var grid = new ExtendableGrid&lt;Button&gt;();
+        ///
+        /// NewElementCreation newElementCreationDelegate = () => {
+        ///   var newButton = new Button();
+        ///
+        ///   // do something with the button
+        ///
+        ///   return newButton;
+        /// }
+        ///
+        /// grid.CreateNewElement = newElementCreationDelegate;
+        /// </code>
+        /// </example>
         public delegate T NewElementCreation();
 
         /// <summary>
