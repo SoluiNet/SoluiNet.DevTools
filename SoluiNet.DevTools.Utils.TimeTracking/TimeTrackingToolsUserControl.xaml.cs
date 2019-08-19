@@ -503,10 +503,24 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 this.TimeTrackingAssignmentOverview.RowDefinitions.Add(new RowDefinition());
 
+                var duration = Convert.ToDouble(timeTarget.Sum(x => x.Duration));
+
+                if (header == "Category")
+                {
+                    duration -= timeTarget.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0);
+                }
+
+                duration = Math.Round(duration);
+
+                if (Math.Abs(duration) < 0.00001)
+                {
+                    continue;
+                }
+
                 var label = string.Format(
                     "{0} ({1})",
                     timeTarget.Key,
-                    (Convert.ToDouble(timeTarget.Sum(x => x.Duration)) - timeTarget.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0)).ToDurationString());
+                    duration.ToDurationString());
 
                 var timeTargetButton = new ExtendedButton() { HorizontalAlignment = HorizontalAlignment.Left };
 
@@ -724,7 +738,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 summaryResults = this.context.CategoryUsageTime
                     .Where(x => x.UsageTime.StartTime >= lowerDayLimit && x.UsageTime.StartTime < upperDayLimit)
                     .GroupBy(x => x.Category != null ? x.Category.CategoryName : "n/a")
-                    .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
+                    .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration))));
 
                 var notAssignedCategoryDurationList = this.context.UsageTime
                     .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit &&
@@ -734,7 +748,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 summaryResults.Add(
                     "n/a",
-                    Convert.ToDouble(notAssignedCategoryDuration));
+                    Math.Round(Convert.ToDouble(notAssignedCategoryDuration)));
             }
 
             this.FillSummaryResults(summaryResults);
