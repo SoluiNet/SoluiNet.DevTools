@@ -11,6 +11,7 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 
     /// <summary>
     /// A plugin which allows to connect with exchange in an office 365 environment.
