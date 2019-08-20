@@ -7,8 +7,11 @@ namespace SoluiNet.DevTools.Utils.WebClient
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
     using System.Net;
+    using System.Reflection;
+    using System.Security.Authentication;
     using System.Windows;
     using System.Windows.Controls;
     using System.Xml;
@@ -36,6 +39,8 @@ namespace SoluiNet.DevTools.Utils.WebClient
         /// Gets or sets the chosen plugin.
         /// </summary>
         private IContainsSettings ChosenPlugin { get; set; }
+
+        private bool RequestShowAdditionalOptions { get; set; }
 
         private void Execute_Click(object sender, RoutedEventArgs e)
         {
@@ -91,6 +96,11 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     WebClientTools.InsertSoapEnvelope(soapEnvelopeXml, request);
                 }
 
+                if (!string.IsNullOrEmpty(this.RequestAuthenticationUser.Text))
+                {
+                    request.Headers.Add("Authorization", "Basic " + (this.RequestAuthenticationUser.Text + ":" + this.RequestAuthenticationPassword.Password).ToBase64());
+                }
+
                 // begin async call to web request.
                 IAsyncResult asyncResult = request.BeginGetResponse(null, null);
 
@@ -103,6 +113,36 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
                 using (var response = request.EndGetResponse(asyncResult))
                 {
+                    var sslProtocols = this.ExtractSslProtocol(response.GetResponseStream());
+
+                    if (sslProtocols >= SslProtocols.Tls12)
+                    {
+                        this.SslVersion.Content = "TLS 1.2";
+                    }
+                    else if (sslProtocols >= SslProtocols.Tls11)
+                    {
+                        this.SslVersion.Content = "TLS 1.1";
+                    }
+                    else if (sslProtocols >= SslProtocols.Tls)
+                    {
+                        this.SslVersion.Content = "TLS";
+                    }
+                    else if (sslProtocols >= SslProtocols.Ssl3)
+                    {
+                        this.SslVersion.Content = "SSL 3";
+                    }
+                    else if (sslProtocols >= SslProtocols.Ssl2)
+                    {
+                        this.SslVersion.Content = "SSL 2";
+                    }
+                    else if (sslProtocols >= SslProtocols.None)
+                    {
+                        this.SslVersion.Content = "None";
+                    }
+
+                    this.ReturnCode.Content = (response as HttpWebResponse)?.StatusCode.ToString() ?? "NONE";
+                    this.ReturnType.Content = response.ContentType;
+
                     using (var reader = new StreamReader(response.GetResponseStream()))
                     {
                         result = reader.ReadToEnd();
@@ -195,6 +235,77 @@ namespace SoluiNet.DevTools.Utils.WebClient
             };
 
             window.ShowDialog();
+        }
+
+        private void RequestShowAuthentication_Click(object sender, RoutedEventArgs e)
+        {
+            if (!this.RequestShowAdditionalOptions)
+            {
+                this.RequestAdditionalOptionRow.Height = new GridLength(150.0);
+
+                this.RequestAuthenticationUser.Visibility = Visibility.Visible;
+                this.RequestAuthenticationPassword.Visibility = Visibility.Visible;
+
+                this.RequestShowAdditionalOptions = true;
+            }
+            else
+            {
+                this.RequestAdditionalOptionRow.Height = new GridLength(40.0);
+
+                this.RequestAuthenticationUser.Visibility = Visibility.Hidden;
+                this.RequestAuthenticationPassword.Visibility = Visibility.Hidden;
+
+                this.RequestShowAdditionalOptions = false;
+            }
+        }
+
+        /// <summary>
+        /// Extract SSL protocol from stream (taken from https://stackoverflow.com/questions/48589590/which-tls-version-was-negotiated/48675492).
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>Returns the SSL protocol.</returns>
+        private SslProtocols ExtractSslProtocol(Stream stream)
+        {
+            if (stream is null)
+            {
+                return SslProtocols.None;
+            }
+
+            var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var metaStream = stream;
+
+            if (stream.GetType().BaseType == typeof(GZipStream))
+            {
+                metaStream = (stream as GZipStream)?.BaseStream;
+            }
+            else if (stream.GetType().BaseType == typeof(DeflateStream))
+            {
+                metaStream = (stream as DeflateStream)?.BaseStream;
+            }
+
+            var connection = metaStream?.GetType().GetProperty("Connection", bindingFlags)?.GetValue(metaStream);
+
+            if (connection == null)
+            {
+                return SslProtocols.None;
+            }
+
+            var usingSecureStream = connection?.GetType().GetProperty("UsingSecureStream", bindingFlags);
+
+            if (usingSecureStream != null && !(bool)usingSecureStream.GetValue(connection))
+            {
+                // Not a Https connection
+                return SslProtocols.None;
+            }
+
+            var tlsStream = connection?.GetType().GetProperty("NetworkStream", bindingFlags)?.GetValue(connection);
+            var tlsState = tlsStream?.GetType().GetField("m_Worker", bindingFlags)?.GetValue(tlsStream);
+            if (tlsState != null)
+            {
+                return (SslProtocols)tlsState.GetType().GetProperty("SslProtocol", bindingFlags)?.GetValue(tlsState);
+            }
+
+            return SslProtocols.None;
         }
     }
 }

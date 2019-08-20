@@ -33,8 +33,30 @@
         <Button x:Name="ReadFromPlugin" Content="Plugins" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="70" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,135,0" VerticalContentAlignment="Center" Click="ReadFromPlugin_Click" />
         <Button x:Name="Execute" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5" Content="Execute" Click="Execute_Click" />
         <Button x:Name="ToggleAdditionalOptions" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="20" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="110, 5" Content="v" Click="AdditionalOptions_Click" />
-        <avalonedit:TextEditor x:Name="Input" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="0" Grid.Row="2" Foreground="#FF303030" Background="LightGray" />
-        <avalonedit:TextEditor x:Name="Output" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Column="1" Grid.Row="2" Foreground="#FF303030" Background="LightGray" />
+        <Grid x:Name="RequestGrid" Grid.Column="0" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition x:Name="RequestAdditionalOptionRow" Height="40" />
+            </Grid.RowDefinitions>
+            <avalonedit:TextEditor x:Name="Input" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Row="0" Foreground="#FF303030" Background="LightGray" />
+            <Grid x:Name="RequestAdditionalOptionGrid" Grid.Row="1">
+                <Button x:Name="RequestShowAuthentication" Content="Authentication" Height="25" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Click="RequestShowAuthentication_Click" />
+                <TextBox x:Name="RequestAuthenticationUser" Height="25" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 45, 0, 0" Visibility="Hidden" />
+                <PasswordBox x:Name="RequestAuthenticationPassword" Height="25" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 85, 0, 0" Visibility="Hidden" />
+            </Grid>
+        </Grid>
+        <Grid x:Name="ResponseGrid" Grid.Column="1" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition x:Name="ResponseAdditionalInfo" Height="40" />
+            </Grid.RowDefinitions>
+            <avalonedit:TextEditor x:Name="Output" Margin="5,5,5,5" VerticalAlignment="Bottom" FontFamily="Consolas" ShowLineNumbers="True" SyntaxHighlighting="XML" Grid.Row="0" Foreground="#FF303030" Background="LightGray" />
+            <Grid x:Name="ResponseAdditionalInfoGrid" Grid.Row="1">
+                <Label x:Name="SslVersion" Content="SSL Version" Background="Black" Foreground="White" Height="25" Width="100" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Right" />
+                <Label x:Name="ReturnCode" Content="Return Code" Background="Black" Foreground="White" Height="25" Width="100" Margin="0, 5, 110, 0" VerticalAlignment="Top" HorizontalAlignment="Right" />
+                <Label x:Name="ReturnType" Content="Return Type" Background="Black" Foreground="White" Height="25" Width="100" Margin="0, 5, 215, 0" VerticalAlignment="Top" HorizontalAlignment="Right" />
+            </Grid>
+        </Grid>
         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <local:WebClientAdditionalOptionsControl x:Name="AdditionalOptions"></local:WebClientAdditionalOptionsControl>
         </Grid>
