@@ -23,11 +23,13 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.Application;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 
     /// <summary>
     /// Interaction logic for "App.xaml".
     /// </summary>
-    public partial class App : Application, ISoluiNetUiApp
+    public partial class App : Application, ISoluiNetUiWpfApp
     {
         /// <summary>
         /// Gets or sets all available plugins.
@@ -37,7 +39,7 @@ namespace SoluiNet.DevTools.UI
         /// <summary>
         /// Gets or sets all available plugins that provide database connectivity functions.
         /// </summary>
-        public ICollection<IProvidesDatabaseConnectivity> SqlPlugins { get; set; }
+        public ICollection<ISqlUiPlugin> SqlPlugins { get; set; }
 
         /// <summary>
         /// Gets or sets all available plugins that provide utility functions.
@@ -106,7 +108,7 @@ namespace SoluiNet.DevTools.UI
             }
 
             Type pluginType = typeof(IBasePlugin);
-            Type sqlPluginType = typeof(IProvidesDatabaseConnectivity);
+            Type sqlPluginType = typeof(ISqlUiPlugin);
             Type utilityPluginType = typeof(IUtilitiesDevPlugin);
             Type backgroundTaskType = typeof(IRunsBackgroundTask);
 
@@ -178,7 +180,7 @@ namespace SoluiNet.DevTools.UI
             }
 
             this.Plugins = new List<IBasePlugin>();
-            this.SqlPlugins = new List<IProvidesDatabaseConnectivity>();
+            this.SqlPlugins = new List<ISqlUiPlugin>();
             this.UtilityPlugins = new List<IUtilitiesDevPlugin>();
             this.BackgroundTaskPlugins = new List<IRunsBackgroundTask>();
 
@@ -192,7 +194,7 @@ namespace SoluiNet.DevTools.UI
 
                 if (type.Value.Contains("SqlDev"))
                 {
-                    var plugin = (IProvidesDatabaseConnectivity)Activator.CreateInstance(type.Key);
+                    var plugin = (ISqlUiPlugin)Activator.CreateInstance(type.Key);
                     this.SqlPlugins.Add(plugin);
                 }
 

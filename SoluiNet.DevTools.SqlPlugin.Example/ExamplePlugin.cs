@@ -23,11 +23,12 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using SoluiNet.DevTools.Core.Tools.Database;
     using SoluiNet.DevTools.Core.Tools.Security;
     using SoluiNet.DevTools.Core.Tools.UI;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 
     /// <summary>
     /// A plugin which provides methods to work with the example project.
     /// </summary>
-    public class ExamplePlugin : IProvidesDatabaseConnectivity, ISupportsWebClient, IContainsSettings, IGroupable, IUtilitiesDevPlugin
+    public class ExamplePlugin : ISqlUiPlugin, ISupportsWebClient, IContainsSettings, IGroupable, IUtilitiesDevPlugin
     {
         /// <inheritdoc/>
         public string Group
@@ -180,7 +181,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         }
 
         /// <inheritdoc/>
-        public void DisplayForWpf(Grid mainGrid)
+        public void Display(Grid mainGrid)
         {
             this.MainGrid = mainGrid;
 

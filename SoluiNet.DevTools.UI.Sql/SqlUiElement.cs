@@ -34,6 +34,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement.Editor;
 
@@ -699,7 +700,7 @@ namespace SoluiNet.DevTools.UI.Sql
             this.SqlCommandText.Text += string.Format("\r\n--{2}: {0}\r\n{1}", script.Description, script.CommandText, script.Name);
         }
 
-        private void ShowDatabaseElementInfo(string type, TreeViewItem selectedItem, IProvidesDatabaseConnectivity plugin)
+        private void ShowDatabaseElementInfo(string type, TreeViewItem selectedItem, ISqlUiPlugin plugin)
         {
             if (selectedItem == null)
             {
@@ -726,7 +727,7 @@ namespace SoluiNet.DevTools.UI.Sql
         {
             var chosenProject = this.Project.Text;
 
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             if (plugin == null)
             {

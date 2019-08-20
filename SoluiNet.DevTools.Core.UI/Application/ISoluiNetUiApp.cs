@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.Application
+namespace SoluiNet.DevTools.Core.UI.Application
 {
     using System;
     using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Core.Application
     using SoluiNet.DevTools.Core.UI.UIElement;
 
     /// <summary>
-    /// Provides an interface for the SoluiNet.DevTools application.
+    /// Provides an interface for the SoluiNet.DevTools UI application.
     /// </summary>
     public interface ISoluiNetUiApp : ISoluiNetApp
     {
