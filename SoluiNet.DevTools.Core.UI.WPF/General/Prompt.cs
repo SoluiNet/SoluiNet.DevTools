@@ -11,7 +11,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.General
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
-    using SoluiNet.DevTools.Core.UI.Window;
+    using SoluiNet.DevTools.Core.UI.WPF.Window;
 
     /// <summary>
     /// Provides methods to display a prompt window.
