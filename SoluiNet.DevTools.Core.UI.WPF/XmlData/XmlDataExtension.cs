@@ -11,6 +11,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.XmlData
     using System.Threading.Tasks;
     using System.Windows.Media;
     using SoluiNet.DevTools.Core.Tools.String;
+    using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
     /// A collection of extension methods for xml data classes.

@@ -20,6 +20,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
     using System.Windows.Shapes;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.UIElement;
 
     /// <summary>
     /// Interaction logic for AssignmentTarget.xaml.

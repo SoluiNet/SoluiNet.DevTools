@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Remove="PrepareText.xaml" />
     <None Remove="ShowText.xaml" />
+    <None Remove="SqlUiElement.xaml" />
     <None Remove="SQL.xshd" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿// <copyright file="ISoluiNetApp.cs" company="SoluiNet">
+﻿// <copyright file="ISoluiNetUiApp.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 

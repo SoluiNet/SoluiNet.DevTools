@@ -104,7 +104,7 @@ namespace SoluiNet.DevTools.UI
                 }
             }
 
-            foreach (var uiElement in (Application.Current as ISoluiNetApp).UiElements)
+            foreach (var uiElement in (Application.Current as ISoluiNetUiApp).UiElements)
             {
                 var tabItem = new TabItem() { Header = uiElement.Label, Name = uiElement.TechnicalName + "_TabItem" };
 

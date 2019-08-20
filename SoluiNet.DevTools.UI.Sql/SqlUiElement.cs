@@ -34,6 +34,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement.Editor;
 
     /// <summary>

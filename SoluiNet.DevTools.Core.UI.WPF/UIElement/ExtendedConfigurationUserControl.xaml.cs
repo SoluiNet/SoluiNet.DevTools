@@ -19,7 +19,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
     using System.Windows.Navigation;
     using System.Windows.Shapes;
     using SoluiNet.DevTools.Core.Tools.XML;
-    using SoluiNet.DevTools.Core.UI.XmlData;
+    using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
     /// Interaction logic for ApplicationSettingsUserControl.xaml.

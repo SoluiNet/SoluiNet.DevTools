@@ -16,7 +16,9 @@
   <ItemGroup>
     <None Remove="icons\automatic_assignment.png" />
     <None Remove="stylecop.json" />
+    <None Remove="UI\AssignmentTarget.xaml" />
     <None Remove="UI\AssignmentTargetExtended.xaml" />
+    <None Remove="TimeTrackingToolsUserControl.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />

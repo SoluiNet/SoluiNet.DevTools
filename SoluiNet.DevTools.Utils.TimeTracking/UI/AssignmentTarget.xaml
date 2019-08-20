@@ -1,5 +1,5 @@
 ﻿<soluinet:RemovableUserControl
-             xmlns:soluinet="clr-namespace:SoluiNet.DevTools.Core.UI.UIElement;assembly=SoluiNet.DevTools.Core"
+             xmlns:soluinet="clr-namespace:SoluiNet.DevTools.Core.UI.WPF.UIElement;assembly=SoluiNet.DevTools.Core.UI.WPF"
              x:Class="SoluiNet.DevTools.Utils.TimeTracking.UI.AssignmentTarget"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
