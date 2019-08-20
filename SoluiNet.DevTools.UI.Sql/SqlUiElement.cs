@@ -34,6 +34,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement.Editor;
@@ -55,11 +56,11 @@ namespace SoluiNet.DevTools.UI.Sql
             this.SqlCommandText.SyntaxHighlighting = highlighting;
             this.SqlCommandText.TextArea.TextEntered += this.SqlCommandText_TextEntered;
 
-            foreach (var plugin in (Application.Current as ISoluiNetApp).SqlPlugins)
+            foreach (var plugin in (Application.Current as ISoluiNetUiWpfApp).SqlPlugins)
             {
                 try
                 {
-                    plugin.DisplayForWpf(this.SqlUiGrid);
+                    plugin.Display(this.SqlUiGrid);
 
                     this.Project.Items.Add(plugin.Name);
                 }
@@ -322,7 +323,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
         private void ExecuteSqlCommand()
         {
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == this.Project.Text);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == this.Project.Text);
 
             if (plugin == null)
             {
@@ -441,28 +442,28 @@ namespace SoluiNet.DevTools.UI.Sql
 
         private IList<Type> GetEntityTypes(string chosenProject)
         {
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEntityTypes(plugin);
         }
 
         private IList<string> GetEntityFields(string chosenProject, string entityName)
         {
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEntityFields(plugin, entityName);
         }
 
         private IList<SqlScript> GetSqlScripts(string chosenProject)
         {
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetSqlScripts(plugin);
         }
 
         private IList<string> GetEnvironments(string chosenProject)
         {
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEnvironments(plugin);
         }
@@ -477,7 +478,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             if (plugin == null)
             {
@@ -771,7 +772,7 @@ namespace SoluiNet.DevTools.UI.Sql
         private void Environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var chosenProject = (sender as ComboBox).SelectedItem as string;
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == this.Project.SelectedItem as string);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == this.Project.SelectedItem as string);
 
             if (plugin == null)
             {
@@ -798,7 +799,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            var plugin = (Application.Current as ISoluiNetApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             // Open code completion after the user has pressed dot:
             var completionWindow = new CompletionWindow(this.SqlCommandText.TextArea);

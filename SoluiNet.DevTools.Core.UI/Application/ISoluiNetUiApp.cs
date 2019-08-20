@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Core.UI.Application
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;

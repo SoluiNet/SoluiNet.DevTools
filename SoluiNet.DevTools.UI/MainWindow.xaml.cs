@@ -33,6 +33,8 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.Tools.Sql;
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
+    using SoluiNet.DevTools.Core.UI.Application;
+    using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Window;
 
     /// <summary>
@@ -47,7 +49,7 @@ namespace SoluiNet.DevTools.UI
         {
             this.InitializeComponent();
 
-            foreach (var utilityPlugin in (Application.Current as ISoluiNetApp).UtilityPlugins)
+            foreach (var utilityPlugin in (Application.Current as ISoluiNetUiWpfApp).UtilityPlugins)
             {
                 try
                 {

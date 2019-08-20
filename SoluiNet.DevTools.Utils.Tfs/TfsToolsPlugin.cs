@@ -12,6 +12,7 @@ namespace SoluiNet.DevTools.Utils.Tfs
     using System.Windows.Controls;
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 
     /// <summary>
     /// A plugin which provides utility functions for working with Microsoft Team Foundation Services.

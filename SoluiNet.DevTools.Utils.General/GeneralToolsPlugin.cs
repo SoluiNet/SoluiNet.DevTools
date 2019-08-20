@@ -12,6 +12,7 @@ namespace SoluiNet.DevTools.Utils.General
     using System.Windows.Controls;
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 
     /// <summary>
     /// A plugin which provides utility functions for general tasks that await a developer.
