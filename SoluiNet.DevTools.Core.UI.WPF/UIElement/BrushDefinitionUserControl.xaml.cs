@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.UIElement
+namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 {
     using System;
     using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Core.UIElement
     using System.Windows.Shapes;
     using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.Tools.UI;
-    using SoluiNet.DevTools.Core.UI.XmlData;
+    using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
     /// Interaction logic for BrushDefinitionUserControl.xaml.

@@ -33,7 +33,7 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.Tools.Sql;
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
-    using SoluiNet.DevTools.Core.UI.Window;
+    using SoluiNet.DevTools.Core.UI.WPF.Window;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml.

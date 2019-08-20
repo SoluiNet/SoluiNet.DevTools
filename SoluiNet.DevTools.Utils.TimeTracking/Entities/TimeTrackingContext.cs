@@ -16,7 +16,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using NLog;
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.Tools.XML;
-    using SoluiNet.DevTools.Core.UI.XmlData;
+    using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
     /// The database context which can be used for time tracking purposes.

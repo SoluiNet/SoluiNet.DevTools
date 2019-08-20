@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.UI.Converter
+namespace SoluiNet.DevTools.Core.UI.WPF.Converter
 {
     using System;
     using System.Globalization;

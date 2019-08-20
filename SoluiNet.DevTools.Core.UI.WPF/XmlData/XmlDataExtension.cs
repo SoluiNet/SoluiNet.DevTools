@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.UI.XmlData
+namespace SoluiNet.DevTools.Core.UI.WPF.XmlData
 {
     using System;
     using System.Collections.Generic;

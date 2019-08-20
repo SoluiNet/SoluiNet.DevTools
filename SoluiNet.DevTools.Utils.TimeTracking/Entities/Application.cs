@@ -10,7 +10,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using SoluiNet.DevTools.Core.UI.XmlData;
+    using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
     /// The entity Application.

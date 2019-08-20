@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.UI.Window
+namespace SoluiNet.DevTools.Core.UI.WPF.Window
 {
     using System;
     using System.Collections.Generic;

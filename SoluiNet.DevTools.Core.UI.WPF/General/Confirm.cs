@@ -1,8 +1,8 @@
-﻿// <copyright file="Prompt.cs" company="SoluiNet">
+﻿// <copyright file="Confirm.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.UI.General
+namespace SoluiNet.DevTools.Core.UI.WPF.General
 {
     using System;
     using System.Collections.Generic;
@@ -14,17 +14,17 @@ namespace SoluiNet.DevTools.Core.UI.General
     using SoluiNet.DevTools.Core.UI.Window;
 
     /// <summary>
-    /// Provides methods to display a prompt window.
+    /// Provides methods to display a confirm window.
     /// </summary>
-    public static class Prompt
+    public static class Confirm
     {
         /// <summary>
-        /// Show a prompt dialog.
+        /// Show a confirm window.
         /// </summary>
-        /// <param name="text">The text which should be displayed for the prompt.</param>
+        /// <param name="text">The text which should be displayed for the confirm.</param>
         /// <param name="caption">The window caption.</param>
-        /// <returns>Returns the value which has been provided to the prompt window.</returns>
-        public static string ShowDialog(string text, string caption)
+        /// <returns>Returns true if the confirmation button has been clicked in the window, otherwise false.</returns>
+        public static bool ShowDialog(string text, string caption)
         {
             var screenWidth = SystemParameters.PrimaryScreenWidth;
             var screenHeight = SystemParameters.PrimaryScreenHeight;
@@ -44,8 +44,9 @@ namespace SoluiNet.DevTools.Core.UI.General
             prompt.Content = mainGrid;
 
             var textLabel = new Label() { Margin = new Thickness(50, 20, 0, 0), Content = text, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
-            var textBox = new TextBox() { Margin = new Thickness(50, 50, 0, 0), Width = 400, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
-            var confirmation = new Button() { Content = "Ok", Margin = new Thickness(350, 70, 0, 0), Width = 100, IsDefault = true, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
+
+            var confirmation = new Button() { Content = "Yes", Margin = new Thickness(50, 70, 0, 0), Width = 100, IsDefault = true, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
+            var declination = new Button() { Content = "No", Margin = new Thickness(30, 70, 0, 0), Width = 100, IsCancel = true, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
 
             confirmation.Click += (sender, e) =>
             {
@@ -53,13 +54,19 @@ namespace SoluiNet.DevTools.Core.UI.General
                 prompt.Close();
             };
 
+            declination.Click += (sender, e) =>
+            {
+                prompt.DialogResult = false;
+                prompt.Close();
+            };
+
             mainGrid.Children.Add(textLabel);
-            mainGrid.Children.Add(textBox);
             mainGrid.Children.Add(confirmation);
+            mainGrid.Children.Add(declination);
 
             var showDialogResult = prompt.ShowDialog();
 
-            return showDialogResult.HasValue && showDialogResult.Value ? textBox.Text : string.Empty;
+            return showDialogResult.HasValue && showDialogResult.Value;
         }
     }
 }

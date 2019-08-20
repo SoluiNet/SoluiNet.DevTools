@@ -27,7 +27,7 @@ namespace SoluiNet.DevTools.UI
     /// <summary>
     /// Interaction logic for "App.xaml".
     /// </summary>
-    public partial class App : Application, ISoluiNetApp
+    public partial class App : Application, ISoluiNetUiApp
     {
         /// <summary>
         /// Gets or sets all available plugins.

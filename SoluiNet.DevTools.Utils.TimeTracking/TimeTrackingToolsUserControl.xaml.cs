@@ -28,11 +28,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.Tools.XML;
     using SoluiNet.DevTools.Core.UI;
-    using SoluiNet.DevTools.Core.UI.General;
     using SoluiNet.DevTools.Core.UI.UIElement;
-    using SoluiNet.DevTools.Core.UI.Window;
-    using SoluiNet.DevTools.Core.UI.XmlData;
-    using SoluiNet.DevTools.Core.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.General;
+    using SoluiNet.DevTools.Core.UI.WPF.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.Window;
+    using SoluiNet.DevTools.Core.XmlData;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
     /// <summary>

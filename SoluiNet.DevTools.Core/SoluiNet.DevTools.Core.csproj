@@ -58,15 +58,6 @@
     <Compile Update="Settings\SettingSchema.cs">
       <DependentUpon>SettingSchema.xsd</DependentUpon>
     </Compile>
-    <Compile Update="UI\UIElement\BrushDefinitionUserControl.xaml.cs">
-      <DependentUpon>UI\BrushDefinitionUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\UIElement\ExtendedConfigurationUserControl.xaml.cs">
-      <DependentUpon>ExtendedConfigurationUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\UIElement\TwoActionButton.xaml.cs">
-      <DependentUpon>UI\UIElement\TwoActionButton.xaml</DependentUpon>
-    </Compile>
     <Compile Update="WebClientDefinition\WebClientDefinitionSchema.cs">
       <DependentUpon>WebClientDefinitionSchema.xsd</DependentUpon>
     </Compile>
@@ -97,25 +88,9 @@
     <None Remove="log.txt" />
     <None Remove="SoluiNet.DevTools.Core.csproj~RF295ae54c.TMP" />
     <None Remove="stylecop.json" />
-    <None Remove="UI\UIElement\BrushDefinitionUserControl.xaml" />
-    <None Remove="UI\UIElement\ExtendedConfigurationUserControl.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="UI\UIElement\BrushDefinitionUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UIElement\ExtendedConfigurationUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UIElement\TwoActionButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="mkdir &quot;$(ProjectDir)images&quot;&#xD;&#xA;copy &quot;$(SolutionDir)icons\soluinet_logo_51x51.svg&quot; &quot;$(ProjectDir)images\logo.svg&quot;&#xD;&#xA;copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)images\favicon.ico&quot;" />
