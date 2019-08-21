@@ -92,6 +92,17 @@
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="UI\UIElement\BrushDefinitionUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="UI\UIElement\ExtendedConfigurationUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="UI\UIElement\TwoActionButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="mkdir &quot;$(ProjectDir)images&quot;&#xD;&#xA;copy &quot;$(SolutionDir)icons\soluinet_logo_51x51.svg&quot; &quot;$(ProjectDir)images\logo.svg&quot;&#xD;&#xA;copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)images\favicon.ico&quot;" />
   </Target>
