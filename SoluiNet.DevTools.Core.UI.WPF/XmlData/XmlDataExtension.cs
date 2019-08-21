@@ -10,7 +10,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.XmlData
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Media;
-    using SoluiNet.DevTools.Core.Tools.String;
+    using SoluiNet.DevTools.Core.UI.WPF.Tools.String;
     using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>

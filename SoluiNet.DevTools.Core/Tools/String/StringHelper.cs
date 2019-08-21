@@ -192,16 +192,6 @@ namespace SoluiNet.DevTools.Core.Tools.String
         }
 
         /// <summary>
-        /// Convert string to colour.
-        /// </summary>
-        /// <param name="colourString">The string which contains a colour definition.</param>
-        /// <returns>Returns a <see cref="Color"/>-object which has been converted from the overgiven string.</returns>
-        public static Color ToColour(this string colourString)
-        {
-            return (Color)ColorConverter.ConvertFromString(colourString);
-        }
-
-        /// <summary>
         /// Returns true if the string has an affirmative value (1 / true / wahr / y / yes).
         /// </summary>
         /// <param name="stringValue">The string value.</param>
