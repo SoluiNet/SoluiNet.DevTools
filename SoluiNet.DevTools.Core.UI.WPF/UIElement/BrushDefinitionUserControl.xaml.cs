@@ -19,7 +19,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
     using System.Windows.Navigation;
     using System.Windows.Shapes;
     using SoluiNet.DevTools.Core.Tools.String;
-    using SoluiNet.DevTools.Core.Tools.UI;
+    using SoluiNet.DevTools.Core.UI.WPF.Tools;
     using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
