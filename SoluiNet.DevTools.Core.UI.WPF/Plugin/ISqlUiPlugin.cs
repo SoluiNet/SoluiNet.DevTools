@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.Plugin
+namespace SoluiNet.DevTools.Core.UI.WPF.Plugin
 {
     using System;
     using System.Collections.Generic;
@@ -12,6 +12,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using System.Windows.Media;
+    using SoluiNet.DevTools.Core.Plugin;
 
     /// <summary>
     /// Provides the interface for a plugin which will provide UI elements for SQL functions.

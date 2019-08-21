@@ -45,9 +45,11 @@
       {
         "files": [
           "api/**.yml",
+          "api/index.md",
           "api-ui/**.yml",
+          "api-ui/index.md",
           "api-ui-wpf/**.yml",
-          "api/index.md"
+          "api-ui-wpf/index.md"
         ]
       },
       {

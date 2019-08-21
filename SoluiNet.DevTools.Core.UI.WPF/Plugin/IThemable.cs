@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.Plugin
+namespace SoluiNet.DevTools.Core.UI.WPF.Plugin
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Media;
+    using SoluiNet.DevTools.Core.Plugin;
 
     /// <summary>
     /// Provides an interface for a plugin which can be themed with colour variations.
