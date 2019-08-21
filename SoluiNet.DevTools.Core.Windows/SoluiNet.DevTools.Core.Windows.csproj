@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{64b47eed-3674-47f1-80fe-969339a8d34c}</ProjectGuid>
+    <ProjectGuid>{64B47EED-3674-47F1-80FE-969339A8D34C}</ProjectGuid>
     <TargetFramework>net461</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Core.Windows</AssemblyTitle>
     <Company>SoluiNet</Company>
