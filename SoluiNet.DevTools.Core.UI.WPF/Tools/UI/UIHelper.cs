@@ -23,8 +23,8 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
     using System.Xml;
     using ICSharpCode.AvalonEdit.Highlighting;
     using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-    using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Tools.String;
+    using SoluiNet.DevTools.Core.UI.WPF.Extensions;
 
     /// <summary>
     /// Provides functions for working with the UI.

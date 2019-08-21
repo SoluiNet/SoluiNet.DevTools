@@ -17,13 +17,13 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using System.Windows.Media;
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Enums;
-    using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Database;
-    using SoluiNet.DevTools.Core.Tools.Security;
-    using SoluiNet.DevTools.Core.Tools.UI;
+    using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
+    using SoluiNet.DevTools.Core.Windows.Tools.Security;
 
     /// <summary>
     /// A plugin which provides methods to work with the example project.
