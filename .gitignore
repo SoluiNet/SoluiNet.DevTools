@@ -14,3 +14,4 @@ packages/**
 *.user
 /SoluiNet.DevTools.Utils.TimeTracking/icons/*.png
 *tmp.csproj
+/SoluiNet.DevTools.Core/log.txt

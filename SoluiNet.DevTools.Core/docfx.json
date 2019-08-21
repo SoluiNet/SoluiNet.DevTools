@@ -12,6 +12,32 @@
       "dest": "api",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
+    },
+    {
+      "src": [
+        {
+          "files": [
+            "**.csproj"
+          ],
+          "src": "../SoluiNet.DevTools.Core.UI/"
+        }
+      ],
+      "dest": "api-ui",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+    {
+      "src": [
+        {
+          "files": [
+            "**.csproj"
+          ],
+          "src": "../SoluiNet.DevTools.Core.UI.WPF/"
+        }
+      ],
+      "dest": "api-ui-wpf",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
     }
   ],
   "build": {
@@ -19,7 +45,11 @@
       {
         "files": [
           "api/**.yml",
-          "api/index.md"
+          "api/index.md",
+          "api-ui/**.yml",
+          "api-ui/index.md",
+          "api-ui-wpf/**.yml",
+          "api-ui-wpf/index.md"
         ]
       },
       {

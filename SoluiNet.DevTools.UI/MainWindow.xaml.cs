@@ -31,9 +31,11 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.ScriptEngine;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Sql;
-    using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
-    using SoluiNet.DevTools.Core.UI.Window;
+    using SoluiNet.DevTools.Core.UI.Application;
+    using SoluiNet.DevTools.Core.UI.WPF.Application;
+    using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
+    using SoluiNet.DevTools.Core.UI.WPF.Window;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml.
@@ -47,7 +49,7 @@ namespace SoluiNet.DevTools.UI
         {
             this.InitializeComponent();
 
-            foreach (var utilityPlugin in (Application.Current as ISoluiNetApp).UtilityPlugins)
+            foreach (var utilityPlugin in (Application.Current as ISoluiNetUiWpfApp).UtilityPlugins)
             {
                 try
                 {
@@ -104,7 +106,7 @@ namespace SoluiNet.DevTools.UI
                 }
             }
 
-            foreach (var uiElement in (Application.Current as ISoluiNetApp).UiElements)
+            foreach (var uiElement in (Application.Current as ISoluiNetUiApp).UiElements)
             {
                 var tabItem = new TabItem() { Header = uiElement.Label, Name = uiElement.TechnicalName + "_TabItem" };
 

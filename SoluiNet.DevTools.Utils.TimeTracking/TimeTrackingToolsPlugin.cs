@@ -16,6 +16,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Utils.TimeTracking.Job;
 
     /// <summary>

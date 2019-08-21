@@ -18,9 +18,9 @@ namespace SoluiNet.DevTools.UI.Sql
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
     using SoluiNet.DevTools.Core.Formatter;
-    using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.UI;
-    using SoluiNet.DevTools.Core.UI.Window;
+    using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
+    using SoluiNet.DevTools.Core.UI.WPF.Window;
 
     /// <summary>
     /// Interaction logic for ShowText.xaml.

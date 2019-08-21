@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Remove="PrepareText.xaml" />
     <None Remove="ShowText.xaml" />
+    <None Remove="SqlUiElement.xaml" />
     <None Remove="SQL.xshd" />
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +40,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -25,14 +25,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.Number;
     using SoluiNet.DevTools.Core.Tools.String;
-    using SoluiNet.DevTools.Core.Tools.UI;
     using SoluiNet.DevTools.Core.Tools.XML;
     using SoluiNet.DevTools.Core.UI;
-    using SoluiNet.DevTools.Core.UI.General;
     using SoluiNet.DevTools.Core.UI.UIElement;
-    using SoluiNet.DevTools.Core.UI.Window;
-    using SoluiNet.DevTools.Core.UI.XmlData;
-    using SoluiNet.DevTools.Core.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.General;
+    using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
+    using SoluiNet.DevTools.Core.UI.WPF.UIElement;
+    using SoluiNet.DevTools.Core.UI.WPF.Window;
+    using SoluiNet.DevTools.Core.UI.WPF.XmlData;
+    using SoluiNet.DevTools.Core.XmlData;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
     /// <summary>
@@ -662,7 +663,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "ApplicationIdentification", Binding = new Binding("ApplicationIdentification") });
                 this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "StartTime", Binding = new Binding("StartTime") });
                 this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "EndTime", Binding = new Binding("EndTime") });
-                this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") { Converter = new SoluiNet.DevTools.Core.UI.Converter.DurationConverter() } });
+                this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") { Converter = new SoluiNet.DevTools.Core.UI.WPF.Converter.DurationConverter() } });
                 this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "Application", Binding = new Binding("Application.ApplicationName") });
                 this.QueryData.Columns.Add(new DataGridTextColumn() { Header = "ApplicationArea", Binding = new Binding("ApplicationArea.ApplicationName") });
             }
@@ -701,7 +702,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             if (this.SummaryData.Columns.Count == 0)
             {
                 this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Grouping Element", Binding = new Binding("Key") });
-                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Duration Value", Binding = new Binding("Value") { Converter = new SoluiNet.DevTools.Core.UI.Converter.DurationConverter() } });
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Duration Value", Binding = new Binding("Value") { Converter = new SoluiNet.DevTools.Core.UI.WPF.Converter.DurationConverter() } });
                 this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Value", Binding = new Binding("Value") });
             }
 

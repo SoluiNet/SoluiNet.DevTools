@@ -10,8 +10,6 @@ namespace SoluiNet.DevTools.Core.Application
     using System.Text;
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.Plugin;
-    using SoluiNet.DevTools.Core.UI;
-    using SoluiNet.DevTools.Core.UI.UIElement;
 
     /// <summary>
     /// Provides an interface for the SoluiNet.DevTools application.
@@ -24,23 +22,8 @@ namespace SoluiNet.DevTools.Core.Application
         ICollection<IBasePlugin> Plugins { get; set; }
 
         /// <summary>
-        /// Gets or sets all available plugins that provide database connectivity functions.
-        /// </summary>
-        ICollection<IProvidesDatabaseConnectivity> SqlPlugins { get; set; }
-
-        /// <summary>
-        /// Gets or sets all available plugins that provide utility functions.
-        /// </summary>
-        ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
-
-        /// <summary>
         /// Gets or sets all available plugins that will run in the background.
         /// </summary>
         ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; set; }
-
-        /// <summary>
-        /// Gets or sets all available UI elements.
-        /// </summary>
-        ICollection<ISoluiNetUIElement> UiElements { get; set; }
     }
 }

@@ -1,5 +1,11 @@
 - name: Articles
   href: articles/
-- name: Api Documentation
+- name: API Documentation
   href: api/
   homepage: api/index.md
+- name: UI API Documentation
+  href: api-ui/
+  homepage: api-ui/index.md
+- name: UI API Documentation (WPF)
+  href: api-ui-wpf/
+  homepage: api-ui-wpf/index.md

@@ -16,7 +16,9 @@
   <ItemGroup>
     <None Remove="icons\automatic_assignment.png" />
     <None Remove="stylecop.json" />
+    <None Remove="UI\AssignmentTarget.xaml" />
     <None Remove="UI\AssignmentTargetExtended.xaml" />
+    <None Remove="TimeTrackingToolsUserControl.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
@@ -68,6 +70,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

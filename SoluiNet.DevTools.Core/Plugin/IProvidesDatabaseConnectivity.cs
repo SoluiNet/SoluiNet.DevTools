@@ -16,7 +16,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides the interface for a plugin which will be working with SQL databases.
     /// </summary>
-    public interface IProvidesDatabaseConnectivity : IBasePlugin, IThemable
+    public interface IProvidesDatabaseConnectivity : IBasePlugin
     {
         /// <summary>
         /// Gets or sets the environment in which the plugin should run in.
@@ -32,12 +32,6 @@ namespace SoluiNet.DevTools.Core.Plugin
         /// Gets the default connection string for the plugin.
         /// </summary>
         string DefaultConnectionStringName { get; }
-
-        /// <summary>
-        /// Method which should be executed to display the plugin in an WPF application.
-        /// </summary>
-        /// <param name="mainGrid">The grid in which the plugin should be displayed.</param>
-        void DisplayForWpf(Grid mainGrid);
 
         /// <summary>
         /// Execute a custom SQL command. Working only with single commands.
