@@ -18,6 +18,10 @@ namespace SoluiNet.DevTools.Utils.ScanImage
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+    using Microsoft.Win32;
+    using SoluiNet.DevTools.Core.Tools.File;
+    using SoluiNet.DevTools.Core.UI.WPF.Tools.Image;
+    using ZXing;
 
     /// <summary>
     /// Interaction logic for ScanImageUserControl.xaml.
@@ -30,6 +34,39 @@ namespace SoluiNet.DevTools.Utils.ScanImage
         public ScanImageUserControl()
         {
             this.InitializeComponent();
+        }
+
+        private void SearchFile_Click(object sender, RoutedEventArgs e)
+        {
+            var loadFileDialog = new OpenFileDialog()
+            {
+                Filter = "All Graphics Types|*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tif;*.tiff|"
+                    + "Bitmap (*.bmp)|*.bmp|GIF (*.gif)|*.gif|JPG (*.jpg,*.jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png|TIFF (*.tif, *.tiff)|*.tif;*.tiff",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+            };
+
+            if (loadFileDialog.ShowDialog() == true)
+            {
+                this.ImageFilePath.Text = loadFileDialog.FileName;
+            }
+        }
+
+        private void IdentifyBarcode_Click(object sender, RoutedEventArgs e)
+        {
+            var barcodeReader = new BarcodeReader();
+
+            var barcodeResult = barcodeReader.Decode(this.ImageFilePath.Text.GetBitmapFromPath());
+
+            this.ImageThumbnail.Source = this.ImageFilePath.Text.GetBitmapFromPath().ConvertToBitmapImage();
+
+            if (barcodeResult != null)
+            {
+                this.ScanResult.Text = string.Format("Type: {0}\r\nText: {1}", barcodeResult.BarcodeFormat.ToString(), barcodeResult.Text);
+            }
+            else
+            {
+                this.ScanResult.Text = "No Barcode found";
+            }
         }
     }
 }
