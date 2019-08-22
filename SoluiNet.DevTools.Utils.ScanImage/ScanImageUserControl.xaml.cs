@@ -21,6 +21,7 @@ namespace SoluiNet.DevTools.Utils.ScanImage
     using Microsoft.Win32;
     using SoluiNet.DevTools.Core.Tools.File;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.Image;
+    using Tesseract;
     using ZXing;
 
     /// <summary>
@@ -66,6 +67,29 @@ namespace SoluiNet.DevTools.Utils.ScanImage
             else
             {
                 this.ScanResult.Text = "No Barcode found";
+            }
+        }
+
+        private void OcrImage_Click(object sender, RoutedEventArgs e)
+        {
+            this.ScanResult.Text = string.Empty;
+
+            this.ImageThumbnail.Source = this.ImageFilePath.Text.GetBitmapFromPath().ConvertToBitmapImage();
+
+            using (var ocrEngine = new TesseractEngine(string.Format("{0}\\tessdata", System.IO.Path.GetDirectoryName(this.GetType().Assembly.Location)), "eng", EngineMode.Default))
+            {
+                // have to load Pix via a bitmap since Pix doesn't support loading a stream.
+                using (var image = this.ImageFilePath.Text.GetBitmapFromPath())
+                {
+                    using (var pix = PixConverter.ToPix(image))
+                    {
+                        using (var page = ocrEngine.Process(pix))
+                        {
+                            // Console.WriteLine(page.GetMeanConfidence() + " : " + page.GetText());
+                            this.ScanResult.Text += string.Format("Confidence {0} - #\"{1}\"#", page.GetMeanConfidence(), page.GetText());
+                        }
+                    }
+                }
             }
         }
     }
