@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.Tools.File
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -14,7 +15,7 @@ namespace SoluiNet.DevTools.Core.Tools.File
     /// <summary>
     /// Provides a collection of methods which help with working with files.
     /// </summary>
-    public class FileHelper
+    public static class FileHelper
     {
         /// <summary>
         /// Load the content from the overgiven file path to a string.
@@ -49,6 +50,34 @@ namespace SoluiNet.DevTools.Core.Tools.File
             }
 
             return fileList;
+        }
+
+        /// <summary>
+        /// Convert an overgiven image file to a bitmap object (taken from: https://stackoverflow.com/questions/24383256/how-can-i-convert-a-jpg-file-into-a-bitmap-using-c).
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>Returns a bitmap object for the overgiven image file path.</returns>
+        public static Bitmap ConvertToBitmap(string filePath)
+        {
+            Bitmap bitmap;
+            using (Stream bmpStream = File.Open(filePath, FileMode.Open))
+            {
+                Image image = Image.FromStream(bmpStream);
+
+                bitmap = new Bitmap(image);
+            }
+
+            return bitmap;
+        }
+
+        /// <summary>
+        /// Convert an overgiven image file to a bitmap object.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>Returns a bitmap object for the overgiven image file path.</returns>
+        public static Bitmap GetBitmapFromPath(this string filePath)
+        {
+            return FileHelper.ConvertToBitmap(filePath);
         }
     }
 }
