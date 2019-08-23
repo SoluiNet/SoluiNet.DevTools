@@ -11,13 +11,20 @@
         <Button x:Name="SearchFile" Content="..." HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="50" Margin="340,10,0,0" Click="SearchFile_Click" />
         <Button x:Name="IdentifyBarcode" Content="Identify Barcode" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,45,0,0" Height="25" Width="100" Click="IdentifyBarcode_Click" />
         <Button x:Name="OcrImage" Content="OCR" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="120,45,0,0" Height="25" Width="50" Click="OcrImage_Click" />
-        <Grid x:Name="ScanResultGrid" Margin="10,80,10,10">
+        <Button x:Name="CropImage" Content="Crop Image" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="180,45,0,0" Height="25" Width="80" Click="CropImage_Click" />
+        <TextBox x:Name="RectangleX" Text="X" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25" Height="25" Margin="10, 80, 0, 0" />
+        <TextBox x:Name="RectangleY" Text="Y" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25" Height="25" Margin="45, 80, 0, 0" />
+        <TextBox x:Name="RectangleWidth" Text="W" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25" Height="25" Margin="80, 80, 0, 0" />
+        <TextBox x:Name="RectangleHeight" Text="H" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25" Height="25" Margin="115, 80, 0, 0" />
+        <Grid x:Name="ScanResultGrid" Margin="10,115,10,10">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="ImagePreview" Width="0" />
                 <ColumnDefinition />
                 <ColumnDefinition Width="250" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="ScanResult" Grid.Column="0" />
-            <Image x:Name="ImageThumbnail" Grid.Column="1" />
+            <Image x:Name="ImagePreviewThumbnail" Grid.Column="0" />
+            <TextBox x:Name="ScanResult" Grid.Column="1" />
+            <Image x:Name="ImageThumbnail" Grid.Column="2" />
         </Grid>
     </Grid>
 </UserControl>
