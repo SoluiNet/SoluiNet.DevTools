@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Utils.ScanImage
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -18,8 +19,10 @@ namespace SoluiNet.DevTools.Utils.ScanImage
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+    using ImageMagick;
     using Microsoft.Win32;
     using SoluiNet.DevTools.Core.Tools.File;
+    using SoluiNet.DevTools.Core.Tools.Image;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.Image;
     using Tesseract;
     using ZXing;
@@ -36,6 +39,8 @@ namespace SoluiNet.DevTools.Utils.ScanImage
         {
             this.InitializeComponent();
         }
+
+        private bool IsCropped { get; set; }
 
         private void SearchFile_Click(object sender, RoutedEventArgs e)
         {
@@ -56,9 +61,9 @@ namespace SoluiNet.DevTools.Utils.ScanImage
         {
             var barcodeReader = new BarcodeReader();
 
-            var barcodeResult = barcodeReader.Decode(this.ImageFilePath.Text.GetBitmapFromPath());
+            var barcodeResult = barcodeReader.Decode(this.GetScannableImage());
 
-            this.ImageThumbnail.Source = this.ImageFilePath.Text.GetBitmapFromPath().ConvertToBitmapImage();
+            this.ImageThumbnail.Source = this.GetThumbnail();
 
             if (barcodeResult != null)
             {
@@ -74,23 +79,75 @@ namespace SoluiNet.DevTools.Utils.ScanImage
         {
             this.ScanResult.Text = string.Empty;
 
-            this.ImageThumbnail.Source = this.ImageFilePath.Text.GetBitmapFromPath().ConvertToBitmapImage();
+            this.ImageThumbnail.Source = this.GetThumbnail();
 
             using (var ocrEngine = new TesseractEngine(string.Format("{0}\\tessdata", System.IO.Path.GetDirectoryName(this.GetType().Assembly.Location)), "eng", EngineMode.Default))
             {
+                var scannableImage = this.GetScannableImage();
+
+                var image = new MagickImage(scannableImage);
+                /* TextCleanerScript cleaner = new TextCleanerScript(); */
+
                 // have to load Pix via a bitmap since Pix doesn't support loading a stream.
-                using (var image = this.ImageFilePath.Text.GetBitmapFromPath())
+                using (var pix = PixConverter.ToPix(scannableImage))
                 {
-                    using (var pix = PixConverter.ToPix(image))
+                    using (var page = ocrEngine.Process(pix))
                     {
-                        using (var page = ocrEngine.Process(pix))
-                        {
-                            // Console.WriteLine(page.GetMeanConfidence() + " : " + page.GetText());
-                            this.ScanResult.Text += string.Format("Confidence {0} - #\"{1}\"#", page.GetMeanConfidence(), page.GetText());
-                        }
+                        // Console.WriteLine(page.GetMeanConfidence() + " : " + page.GetText());
+                        this.ScanResult.Text += string.Format("Confidence {0} - #\"{1}\"#", page.GetMeanConfidence(), page.GetText());
                     }
                 }
             }
+        }
+
+        private ImageSource GetThumbnail()
+        {
+            if (this.IsCropped)
+            {
+                return this.ImageThumbnail.Source = this.ImageFilePath.Text.GetBitmapFromPath().DrawRectangle(
+                    new System.Drawing.Rectangle()
+                    {
+                        Height = Convert.ToInt32(this.RectangleHeight.Text),
+                        Width = Convert.ToInt32(this.RectangleWidth.Text),
+                        X = Convert.ToInt32(this.RectangleX.Text),
+                        Y = Convert.ToInt32(this.RectangleY.Text),
+                    },
+                    System.Drawing.Color.Red)
+                    .ConvertToBitmapImage();
+            }
+            else
+            {
+                return this.ImageFilePath.Text.GetBitmapFromPath().ConvertToBitmapImage();
+            }
+        }
+
+        private Bitmap GetScannableImage()
+        {
+            if (this.IsCropped)
+            {
+                return this.ImageFilePath.Text.GetBitmapFromPath().CropImage(new System.Drawing.Rectangle()
+                {
+                    Height = Convert.ToInt32(this.RectangleHeight.Text),
+                    Width = Convert.ToInt32(this.RectangleWidth.Text),
+                    X = Convert.ToInt32(this.RectangleX.Text),
+                    Y = Convert.ToInt32(this.RectangleY.Text),
+                });
+            }
+            else
+            {
+                return this.ImageFilePath.Text.GetBitmapFromPath();
+            }
+        }
+
+        private void CropImage_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsCropped = true;
+
+            this.ImageThumbnail.Source = this.GetThumbnail();
+
+            this.ImagePreview.Width = new GridLength(250.0);
+
+            this.ImagePreviewThumbnail.Source = this.GetScannableImage().ConvertToBitmapImage();
         }
     }
 }
