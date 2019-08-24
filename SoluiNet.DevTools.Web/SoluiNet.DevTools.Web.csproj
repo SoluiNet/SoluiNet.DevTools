@@ -1,14 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{CED664BB-8DAA-44DE-8DB7-977DC0BA84D7}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net461</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>SoluiNet.DevTools.Web</AssemblyTitle>
     <Product>SoluiNet.DevTools.Web</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
+    <StartupObject>SoluiNet.DevTools.Web.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="NLog" Version="4.6.6" />
+    <PackageReference Include="NLog.Config" Version="4.6.6" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.*" />
     <PackageReference Include="Microsoft.CSharp" Version="4.*" />
     <PackageReference Include="System.Net.Http" Version="4.*" />
