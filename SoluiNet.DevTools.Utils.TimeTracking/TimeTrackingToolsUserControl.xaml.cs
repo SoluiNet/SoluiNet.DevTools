@@ -89,15 +89,18 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void PrepareStatisticsView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context)
         {
-            var statisticTabs = new TabControl();
-            statisticTabs.TabStripPlacement = Dock.Bottom;
+            var statisticTabs = new TabControl
+            {
+                TabStripPlacement = Dock.Bottom,
+            };
 
             #region Weighted Targets
             var weightedTimes = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).OrderBy(x => x.Key).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
 
-            var barsChart = new CartesianChart();
-
-            barsChart.Name = "WeightedTargets";
+            var barsChart = new CartesianChart
+            {
+                Name = "WeightedTargets",
+            };
 
             var seriesCollection = new SeriesCollection();
 
@@ -112,13 +115,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             barsChart.Series = seriesCollection;
 
-            var xAxis = new Axis();
-            xAxis.Title = "Targets";
-            xAxis.Labels = weightedTimes.Select(x => x.Target.Substring(0, 30)).ToList();
+            var xAxis = new Axis
+            {
+                Title = "Targets",
+                Labels = weightedTimes.Select(x => x.Target.Substring(0, 30)).ToList(),
+            };
 
-            var yAxis = new Axis();
-            yAxis.Title = "Weights";
-            yAxis.Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString()).ToList();
+            var yAxis = new Axis
+            {
+                Title = "Weights",
+                Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString()).ToList(),
+            };
 
             barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
@@ -129,8 +136,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             #region Application
             var durationPerApplication = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.Application.ApplicationName).OrderBy(x => x.Key).Select(x => new { Duration = x.Sum(y => y.Duration), Application = x.Key });
 
-            var applicationChart = new CartesianChart();
-            applicationChart.Name = "DurationPerApplication";
+            var applicationChart = new CartesianChart
+            {
+                Name = "DurationPerApplication",
+            };
 
             var applicationSeries = new SeriesCollection();
 
@@ -145,9 +154,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             applicationChart.Series = applicationSeries;
 
-            var applications = new Axis();
-            applications.Title = "Applications";
-            applications.Labels = durationPerApplication.Select(x => x.Application.Substring(0, 30)).ToList();
+            var applications = new Axis
+            {
+                Title = "Applications",
+                Labels = durationPerApplication.Select(x => x.Application.Substring(0, 30)).ToList(),
+            };
 
             var durations = new Axis();
             yAxis.Title = "Durations";
@@ -346,9 +357,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var application in applications)
             {
-                var applicationTarget = new UI.AssignmentTarget();
-
-                applicationTarget.Label = application.ApplicationName;
+                var applicationTarget = new UI.AssignmentTarget
+                {
+                    Label = application.ApplicationName,
+                };
 
                 applicationTarget.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
 
@@ -409,9 +421,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var category in categories)
             {
-                var categoryTarget = new UI.AssignmentTargetExtended();
-
-                categoryTarget.Label = category.CategoryName;
+                var categoryTarget = new UI.AssignmentTargetExtended
+                {
+                    Label = category.CategoryName,
+                };
 
                 categoryTarget.Target.PrimaryActionButton.Background = !string.IsNullOrEmpty(category.ExtendedConfiguration) ? category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
 

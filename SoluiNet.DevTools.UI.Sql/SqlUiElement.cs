@@ -691,9 +691,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 throw new ArgumentNullException(nameof(selectedItem));
             }
 
-            var script = selectedItem.Tag as SqlScript;
-
-            if (script == null)
+            if (!(selectedItem.Tag is SqlScript script))
             {
                 return;
             }
@@ -708,18 +706,19 @@ namespace SoluiNet.DevTools.UI.Sql
                 throw new ArgumentNullException(nameof(selectedItem));
             }
 
-            var databaseElement = selectedItem.Tag as IDatabaseElement;
             var formatter = new SqlFormatter();
 
-            if (databaseElement == null)
+            if (!(selectedItem.Tag is IDatabaseElement databaseElement))
             {
                 return;
             }
 
             this.Logger.Info(string.Format("[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
 
-            var dialog = new ShowText();
-            dialog.Text = formatter.FormatString(databaseElement.BodyDefinition);
+            var dialog = new ShowText
+            {
+                Text = formatter.FormatString(databaseElement.BodyDefinition),
+            };
 
             dialog.Show();
         }
@@ -735,9 +734,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            var selectedItem = this.DatabaseSchema.SelectedItem as TreeViewItem;
-
-            if (selectedItem == null)
+            if (!(this.DatabaseSchema.SelectedItem is TreeViewItem selectedItem))
             {
                 return;
             }
