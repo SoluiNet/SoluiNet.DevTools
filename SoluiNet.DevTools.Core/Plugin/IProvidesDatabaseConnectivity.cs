@@ -10,8 +10,6 @@ namespace SoluiNet.DevTools.Core.Plugin
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using System.Windows.Controls;
-    using System.Windows.Media;
 
     /// <summary>
     /// Provides the interface for a plugin which will be working with SQL databases.

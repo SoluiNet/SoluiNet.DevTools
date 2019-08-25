@@ -10,7 +10,6 @@ namespace SoluiNet.DevTools.Core.Tools.String
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Windows.Media;
 
     /// <summary>
     /// Provides a collection of methods which support working with strings.

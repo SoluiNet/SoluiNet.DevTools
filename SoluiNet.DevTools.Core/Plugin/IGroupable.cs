@@ -9,7 +9,6 @@ namespace SoluiNet.DevTools.Core.Plugin
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using System.Windows.Controls;
 
     /// <summary>
     /// Provides an interface for a plugin which should be grouped.

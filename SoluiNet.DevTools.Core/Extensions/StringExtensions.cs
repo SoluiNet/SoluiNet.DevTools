@@ -11,7 +11,6 @@ namespace SoluiNet.DevTools.Core.Extensions
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Windows;
-    using System.Windows.Media;
 
     /// <summary>
     /// Provides a collection of methods to work with strings.
