@@ -9,6 +9,15 @@
     <Copyright>Copyright © SoluiNet 2019</Copyright>
     <StartupObject>SoluiNet.DevTools.Web.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <OutputPath>bin\$(TargetFramework)\$(Platform)\$(Configuration)\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>$(NoWarn),SA1123</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.6.6" />
     <PackageReference Include="NLog.Config" Version="4.6.6" />
@@ -27,9 +36,19 @@
     <Compile Update="SoluiNetService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="favicon.ico" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
+  </ItemGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" />
+  </Target>
 </Project>

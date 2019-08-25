@@ -19,6 +19,8 @@ namespace SoluiNet.DevTools.Web
     /// </summary>
     public partial class SoluiNetService : ServiceBase
     {
+        private SoluiNetWebServer webServer = null;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SoluiNetService"/> class.
         /// </summary>
@@ -33,6 +35,9 @@ namespace SoluiNet.DevTools.Web
         /// <param name="args">The arguments.</param>
         protected override void OnStart(string[] args)
         {
+            this.webServer = new SoluiNetWebServer();
+
+            this.webServer.Start();
         }
 
         /// <summary>
@@ -40,6 +45,10 @@ namespace SoluiNet.DevTools.Web
         /// </summary>
         protected override void OnStop()
         {
+            if (this.webServer != null)
+            {
+                this.webServer.Stop();
+            }
         }
     }
 }

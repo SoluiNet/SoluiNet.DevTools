@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Core.Tools.Stream
     /// <summary>
     /// Provides a collection of methods to work with streams.
     /// </summary>
-    public class StreamHelper
+    public static class StreamHelper
     {
         /// <summary>
         /// Convert a stream to a string.
@@ -40,6 +40,17 @@ namespace SoluiNet.DevTools.Core.Tools.Stream
             {
                 return reader.ReadToEnd();
             }
+        }
+
+        /// <summary>
+        /// Convert a stream to a string.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="encoding">The encoding. If not provided UTF-8 will be used.</param>
+        /// <returns>Returns a <see cref="string"/> for the contents of the <see cref="Stream"/>.</returns>
+        public static string ReadStringFromStream(this System.IO.Stream stream, Encoding encoding = null)
+        {
+            return StreamToString(stream, encoding);
         }
     }
 }

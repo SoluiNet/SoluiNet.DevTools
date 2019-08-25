@@ -38,18 +38,12 @@ namespace SoluiNet.DevTools.Web
                 throw new ArgumentException("prefixes");
             }
 
-            // A responder method is required
-            if (method == null)
-            {
-                throw new ArgumentException("method");
-            }
-
             foreach (string s in prefixes)
             {
                 this.listener.Prefixes.Add(s);
             }
 
-            this.responderMethod = method;
+            this.responderMethod = method ?? throw new ArgumentException("method");
             this.listener.Start();
         }
 
