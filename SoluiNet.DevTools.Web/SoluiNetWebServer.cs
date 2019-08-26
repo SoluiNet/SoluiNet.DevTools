@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Web
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
@@ -14,6 +15,8 @@ namespace SoluiNet.DevTools.Web
     using System.Threading.Tasks;
     using NLog;
     using SoluiNet.DevTools.Core.Tools.Object;
+    using SoluiNet.DevTools.Core.Tools.Stream;
+    using SoluiNet.DevTools.Core.Web.Renderer;
 
     /// <summary>
     /// The SoluiNet Web Server.
@@ -117,10 +120,15 @@ namespace SoluiNet.DevTools.Web
             }
         }
 
-        private void AddHttpHeaders(int contentLength, ref Socket respondingSocket, string mimeType = "text/html")
+        private void AddHttpHeaders(int contentLength, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
         {
             try
             {
+                if (encoding == null)
+                {
+                    encoding = Encoding.UTF8;
+                }
+
                 if (respondingSocket.Connected)
                 {
                     string headers = string.Format(
@@ -133,7 +141,7 @@ namespace SoluiNet.DevTools.Web
                         contentLength,
                         mimeType);
 
-                    var headerBytes = Encoding.UTF8.GetBytes(headers);
+                    var headerBytes = encoding.GetBytes(headers);
 
                     respondingSocket.Send(headerBytes, headerBytes.Length, SocketFlags.None);
                 }
@@ -144,13 +152,37 @@ namespace SoluiNet.DevTools.Web
             }
         }
 
-        private void Respond(string returningString, ref Socket respondingSocket, string mimeType = "text/html")
+        private void Respond(string returningString, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
+        {
+            try
+            {
+                if (encoding == null)
+                {
+                    encoding = Encoding.UTF8;
+                }
+
+                if (respondingSocket.Connected)
+                {
+                    var returningBytes = encoding.GetBytes(returningString);
+
+                    this.AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType, encoding);
+
+                    respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
+                }
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
+            }
+        }
+
+        private void Respond(Stream returningStream, ref Socket respondingSocket, string mimeType = "text/html")
         {
             try
             {
                 if (respondingSocket.Connected)
                 {
-                    var returningBytes = Encoding.UTF8.GetBytes(returningString);
+                    var returningBytes = returningStream.ToByteArray();
 
                     this.AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType);
 
@@ -165,9 +197,9 @@ namespace SoluiNet.DevTools.Web
 
         private void HandleWebCommunication()
         {
-            try
+            while (true)
             {
-                while (true)
+                try
                 {
                     Socket webSocket = this.webListener.AcceptSocket();
 
@@ -181,21 +213,21 @@ namespace SoluiNet.DevTools.Web
 
                         if (receivingString.StartsWith("GET /Status"))
                         {
-                            this.Respond(string.Format("Status: {0}\r\nVersion: {1}", "OK", this.GetType().Assembly.GetName().Version.ToString()), ref webSocket);
+                            this.Respond(WebRenderer.RenderPage(string.Format("Status: {0}\r\nVersion: {1}", "OK", this.GetType().Assembly.GetName().Version.ToString())), ref webSocket);
                         }
 
                         if (receivingString.StartsWith("GET /favicon.ico"))
                         {
-                            this.Respond(this.GetEmbeddedResourceContent("favicon.ico"), ref webSocket, "image/x-icon");
+                            this.Respond(this.GetEmbeddedResourceContentStream("favicon.ico", string.Empty), ref webSocket, "image/x-icon");
                         }
 
                         webSocket.Close();
                     }
                 }
-            }
-            catch (Exception exception)
-            {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [HandleRequest]", null);
+                catch (Exception exception)
+                {
+                    this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [HandleRequest]", null);
+                }
             }
         }
     }

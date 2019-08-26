@@ -25,8 +25,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="stylecop.json" />
+    <None Remove="Template\Master.sn.html" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Template\Master.sn.html" />
   </ItemGroup>
 </Project>
