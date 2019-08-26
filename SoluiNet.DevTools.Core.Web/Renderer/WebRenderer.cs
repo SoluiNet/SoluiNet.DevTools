@@ -26,13 +26,13 @@ namespace SoluiNet.DevTools.Core.Web.Renderer
         {
             if (string.IsNullOrEmpty(masterPageMarkup))
             {
-                masterPageMarkup = typeof(WebRenderer).GetEmbeddedResourceContent("Master.sn.html", "Template");
+                masterPageMarkup = typeof(WebRenderer).GetEmbeddedResourceContent("Master.snhtml", "Template");
             }
 
             return masterPageMarkup.Inject(new Dictionary<string, string>()
             {
                 { "Content", rawMarkup.InjectCommonValues() },
-                { "Title", title.InjectCommonValues() },
+                { "Title", !string.IsNullOrEmpty(title) ? title.InjectCommonValues() : "SoluiNet.DevTools.Web" },
             });
         }
     }

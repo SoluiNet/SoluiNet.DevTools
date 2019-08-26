@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{A3D93824-3C6B-4A32-9615-6035B7D343F3}</ProjectGuid>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyTitle>SoluiNet.DevTools.Core.Windows</AssemblyTitle>
+    <TargetFramework>net461</TargetFramework>
+    <AssemblyTitle>SoluiNet.DevTools.Core.Web</AssemblyTitle>
     <Company>SoluiNet</Company>
-    <Product>SoluiNet.DevTools.Core.Windows</Product>
+    <Product>SoluiNet.DevTools.Core.Web</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
   <PropertyGroup>
@@ -25,12 +25,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="stylecop.json" />
-    <None Remove="Template\Master.sn.html" />
+    <None Remove="Template\Master.snhtml" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Template\Master.sn.html" />
+    <EmbeddedResource Include="Template\Master.snhtml" />
   </ItemGroup>
 </Project>
