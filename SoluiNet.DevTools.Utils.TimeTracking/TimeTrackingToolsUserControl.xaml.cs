@@ -727,6 +727,36 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.SummaryData.Items.Add(new KeyValuePair<string, double>("Sum", summaryResults.Sum(x => x.Value)));
         }
 
+        private void FillSummaryResults(Dictionary<string, Dictionary<string, double>> summaryResults)
+        {
+            if (summaryResults == null)
+            {
+                return;
+            }
+
+            this.SummaryData.Items.Clear();
+
+            if (this.SummaryData.Columns.Count == 0)
+            {
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Grouping Date", Binding = new Binding("Date") });
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Grouping Element", Binding = new Binding("GroupingElement") });
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Duration Value", Binding = new Binding("Duration") { Converter = new SoluiNet.DevTools.Core.UI.WPF.Converter.DurationConverter() } });
+                this.SummaryData.Columns.Add(new DataGridTextColumn() { Header = "Value", Binding = new Binding("Duration") });
+            }
+
+            foreach (var dateGroupItem in summaryResults)
+            {
+                foreach (var item in dateGroupItem.Value)
+                {
+                    this.SummaryData.Items.Add(new { Date = dateGroupItem.Key, GroupingElement = item.Key, Duration = item.Value });
+                }
+
+                this.SummaryData.Items.Add(new { Date = dateGroupItem.Key, GroupingElement = "Sum", Duration = dateGroupItem.Value.Sum(x => x.Value) });
+            }
+
+            this.SummaryData.Items.Add(new { Date = string.Empty, GroupingElement = "Total Sum", Duration = summaryResults.Sum(x => x.Value.Sum(y => y.Value)) });
+        }
+
         private void StartSummary_Click(object sender, RoutedEventArgs e)
         {
             var lowerDayLimit = DateTime.UtcNow.Date;
@@ -738,34 +768,86 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 upperDayLimit = this.SummaryDateEnd.SelectedDate.Value.AddDays(1).Date;
             }
 
-            Dictionary<string, double> summaryResults = null;
-
-            if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Application")
+            if ((upperDayLimit - lowerDayLimit).TotalMinutes <= 24 * 60)
             {
-                summaryResults = this.context.UsageTime
-                    .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
-                    .GroupBy(x => x.Application != null ? x.Application.ApplicationName : "n/a")
-                    .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
+                Dictionary<string, double> summaryResults = null;
+
+                if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Application")
+                {
+                    summaryResults = this.context.UsageTime
+                        .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
+                        .GroupBy(x => x.Application != null ? x.Application.ApplicationName : "n/a")
+                        .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
+                }
+                else if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Category")
+                {
+                    summaryResults = this.context.CategoryUsageTime
+                        .Where(x => x.UsageTime.StartTime >= lowerDayLimit && x.UsageTime.StartTime < upperDayLimit)
+                        .GroupBy(x => x.Category != null ? x.Category.CategoryName : "n/a")
+                        .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration))));
+
+                    var notAssignedCategoryDurationList = this.context.UsageTime
+                        .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit &&
+                                    !x.CategoryUsageTime.Any());
+
+                    var notAssignedCategoryDuration = notAssignedCategoryDurationList.Any() ? notAssignedCategoryDurationList.Sum(x => x.Duration) : 0;
+
+                    summaryResults.Add(
+                        "n/a",
+                        Math.Round(Convert.ToDouble(notAssignedCategoryDuration)));
+                }
+
+                this.FillSummaryResults(summaryResults);
             }
-            else if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Category")
+            else
             {
-                summaryResults = this.context.CategoryUsageTime
-                    .Where(x => x.UsageTime.StartTime >= lowerDayLimit && x.UsageTime.StartTime < upperDayLimit)
-                    .GroupBy(x => x.Category != null ? x.Category.CategoryName : "n/a")
-                    .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration))));
+                Dictionary<string, Dictionary<string, double>> summaryResults = null;
 
-                var notAssignedCategoryDurationList = this.context.UsageTime
-                    .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit &&
-                                !x.CategoryUsageTime.Any());
+                if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Application")
+                {
+                    var usageTimeInPeriod = this.context.UsageTime
+                        .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
+                        .ToList();
 
-                var notAssignedCategoryDuration = notAssignedCategoryDurationList.Any() ? notAssignedCategoryDurationList.Sum(x => x.Duration) : 0;
+                    foreach (var item in usageTimeInPeriod.GroupBy(x => x.StartTime.Date))
+                    {
+                        summaryResults.Add(
+                            item.Key.ToString("yyyy-MM-dd"),
+                            item
+                                .GroupBy(x => x.Application != null ? x.Application.ApplicationName : "n/a")
+                                .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration)))));
+                    }
+                }
+                else if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Category")
+                {
+                    var usageTimeInPeriod = this.context.CategoryUsageTime
+                        .Where(x => x.UsageTime.StartTime >= lowerDayLimit && x.UsageTime.StartTime < upperDayLimit)
+                        .ToList();
 
-                summaryResults.Add(
-                    "n/a",
-                    Math.Round(Convert.ToDouble(notAssignedCategoryDuration)));
+                    foreach (var item in usageTimeInPeriod.GroupBy(x => x.UsageTime.StartTime))
+                    {
+                        var dateDictionary = item
+                            .GroupBy(x => x.Category != null ? x.Category.CategoryName : "n/a")
+                            .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration))));
+
+                        var notAssignedCategoryDurationList = this.context.UsageTime
+                            .Where(x => x.StartTime >= item.Key.Date && x.StartTime < item.Key.Date.AddDays(1).Date &&
+                                        !x.CategoryUsageTime.Any());
+
+                        var notAssignedCategoryDuration = notAssignedCategoryDurationList.Any() ? notAssignedCategoryDurationList.Sum(x => x.Duration) : 0;
+
+                        dateDictionary.Add(
+                            "n/a",
+                            Math.Round(Convert.ToDouble(notAssignedCategoryDuration)));
+
+                        summaryResults.Add(
+                            item.Key.ToString("yyyy-MM-dd"),
+                            dateDictionary);
+                    }
+                }
+
+                this.FillSummaryResults(summaryResults);
             }
-
-            this.FillSummaryResults(summaryResults);
         }
 
         private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
