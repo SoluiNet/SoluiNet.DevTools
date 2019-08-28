@@ -14,13 +14,13 @@ artifacts:
   - path: SoluiNet.DevTools-%APPVEYOR_BUILD_VERSION%.zip
     name: SoluiNet.DevTools
 
-environment:
-  COVERALLS_SERVICE_NAME: appveyor
-  nodejs_version: "0.10"
-  COVERALLS_REPO_TOKEN:
-  secure: W4w/2P0yaNPf9HlfJ0v6HfaJY0jR6/GjJm7cY0+0+xcWEQ7GTPNKstUL0bFCg2Mi
+#environment:
+#  COVERALLS_SERVICE_NAME: appveyor
+#  nodejs_version: "0.10"
+#  COVERALLS_REPO_TOKEN:
+#  secure: W4w/2P0yaNPf9HlfJ0v6HfaJY0jR6/GjJm7cY0+0+xcWEQ7GTPNKstUL0bFCg2Mi
 
-test_script:
- - npm test
-after_test:
- - node ./node_modules/coveralls/bin/coveralls.js < ./coverage/lcov.info 
+#test_script:
+#  - npm test
+#after_test:
+#  - node ./node_modules/coveralls/bin/coveralls.js < ./coverage/lcov.info 
