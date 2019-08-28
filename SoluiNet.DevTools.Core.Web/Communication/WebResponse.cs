@@ -8,6 +8,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Text;
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.Tools.Stream;
@@ -22,6 +23,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
         /// </summary>
         public WebResponse()
         {
+            this.StatusCode = HttpStatusCode.OK;
         }
 
         /// <summary>
@@ -103,6 +105,11 @@ namespace SoluiNet.DevTools.Core.Web.Communication
         /// </summary>
         public string ContentType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the status code.
+        /// </summary>
+        public HttpStatusCode StatusCode { get; set; }
+
         private Encoding Encoding { get; set; }
 
         /// <summary>
@@ -173,14 +180,16 @@ namespace SoluiNet.DevTools.Core.Web.Communication
             }
 
             string headers = string.Format(
-                "HTTP/1.1\r\n"
-                + "Server: localhost\r\n"
+                "HTTP/1.1 {2} {3}\r\n"
+                + "Server: SoluiNet.WebServer\r\n"
                 + "Content-Type: {1}\r\n"
                 + "Accept-Ranges: bytes\r\n"
                 + "Content-Length: {0}\r\n"
                 + "\r\n",
                 contentLength,
-                mimeType);
+                mimeType,
+                (int)this.StatusCode,
+                this.StatusCode.ToString());
 
             return headers;
         }
