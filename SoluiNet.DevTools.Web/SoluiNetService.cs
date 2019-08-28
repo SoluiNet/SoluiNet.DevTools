@@ -60,11 +60,11 @@ namespace SoluiNet.DevTools.Web
                     }
                     else
                     {
-                        return new Core.Web.Communication.WebResponse("not found", Encoding.UTF8) { StatusCode = System.Net.HttpStatusCode.NotFound };
+                        return new Core.Web.Communication.WebResponse(WebRenderer.RenderPage("not found"), Encoding.UTF8) { StatusCode = System.Net.HttpStatusCode.NotFound };
                     }
                 }
 
-                return new Core.Web.Communication.WebResponse("no supported method", Encoding.UTF8) { StatusCode = System.Net.HttpStatusCode.MethodNotAllowed };
+                return new Core.Web.Communication.WebResponse(WebRenderer.RenderPage("no supported method"), Encoding.UTF8) { StatusCode = System.Net.HttpStatusCode.MethodNotAllowed };
             };
 
             this.webServer.Start();
