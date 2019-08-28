@@ -16,6 +16,7 @@ namespace SoluiNet.DevTools.Web
     using NLog;
     using SoluiNet.DevTools.Core.Tools.Object;
     using SoluiNet.DevTools.Core.Tools.Stream;
+    using SoluiNet.DevTools.Core.Web.Communication;
     using SoluiNet.DevTools.Core.Web.Renderer;
 
     /// <summary>
@@ -45,6 +46,19 @@ namespace SoluiNet.DevTools.Web
                 this.Logger.Error(exception, "An exception occured in SoluiNetWebServer", null);
             }
         }
+
+        /// <summary>
+        /// Handle a web request.
+        /// </summary>
+        /// <param name="webRequest">The web request.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <returns>Returns a <see cref="Core.Web.Communication.WebResponse"/>.</returns>
+        public delegate Core.Web.Communication.WebResponse HandleWebRequest(Core.Web.Communication.WebRequest webRequest, Core.Web.Communication.WebArguments arguments);
+
+        /// <summary>
+        /// The handling of a web request.
+        /// </summary>
+        public event HandleWebRequest HandleRequest;
 
         /// <summary>
         /// Gets a value indicating whether the web server has been started.
@@ -195,6 +209,23 @@ namespace SoluiNet.DevTools.Web
             }
         }
 
+        private void Respond(Core.Web.Communication.WebResponse webResponse, ref Socket respondingSocket)
+        {
+            try
+            {
+                if (respondingSocket.Connected)
+                {
+                    var returningBytes = webResponse.GetResponseBytes();
+
+                    respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
+                }
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond WebResponse]", null);
+            }
+        }
+
         private void HandleWebCommunication()
         {
             while (true)
@@ -211,15 +242,9 @@ namespace SoluiNet.DevTools.Web
 
                         var receivingString = Encoding.UTF8.GetString(receivingBytes);
 
-                        if (receivingString.StartsWith("GET /Status"))
-                        {
-                            this.Respond(WebRenderer.RenderPage(string.Format("Status: {0}\r\nVersion: {1}", "OK", this.GetType().Assembly.GetName().Version.ToString())), ref webSocket);
-                        }
+                        var webResponse = this.HandleRequest?.Invoke(new Core.Web.Communication.WebRequest(receivingString), null);
 
-                        if (receivingString.StartsWith("GET /favicon.ico"))
-                        {
-                            this.Respond(this.GetEmbeddedResourceContentStream("favicon.ico", string.Empty), ref webSocket, "image/x-icon");
-                        }
+                        this.Respond(webResponse, ref webSocket);
 
                         webSocket.Close();
                     }

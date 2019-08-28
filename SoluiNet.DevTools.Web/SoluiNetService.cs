@@ -10,9 +10,12 @@ namespace SoluiNet.DevTools.Web
     using System.Data;
     using System.Diagnostics;
     using System.Linq;
+    using System.Net.Http;
     using System.ServiceProcess;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Tools.Object;
+    using SoluiNet.DevTools.Core.Web.Renderer;
 
     /// <summary>
     /// The SoluiNet service.
@@ -36,6 +39,33 @@ namespace SoluiNet.DevTools.Web
         protected override void OnStart(string[] args)
         {
             this.webServer = new SoluiNetWebServer();
+
+            this.webServer.HandleRequest += (webRequest, webArgs) =>
+            {
+                if (webRequest.Method == HttpMethod.Get)
+                {
+                    if (webRequest.Route.StartsWith("/favicon.ico"))
+                    {
+                        return new Core.Web.Communication.WebResponse(
+                            this.GetEmbeddedResourceContentStream("favicon.ico", string.Empty),
+                            "image/x-icon",
+                            Encoding.UTF8,
+                            true);
+                    }
+                    else if (webRequest.Route.StartsWith("/Status"))
+                    {
+                        return new Core.Web.Communication.WebResponse(
+                            WebRenderer.RenderPage(string.Format("Status: {0}\r\nVersion: {1}", "OK", this.GetType().Assembly.GetName().Version.ToString())),
+                            Encoding.UTF8);
+                    }
+                    else
+                    {
+                        return new Core.Web.Communication.WebResponse("not found", Encoding.UTF8);
+                    }
+                }
+
+                return new Core.Web.Communication.WebResponse("no supported method", Encoding.UTF8);
+            };
 
             this.webServer.Start();
         }
