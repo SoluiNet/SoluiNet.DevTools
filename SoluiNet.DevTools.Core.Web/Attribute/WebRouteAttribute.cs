@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.Attribute
+namespace SoluiNet.DevTools.Core.Web.Attribute
 {
     using System;
     using System.Collections.Generic;
