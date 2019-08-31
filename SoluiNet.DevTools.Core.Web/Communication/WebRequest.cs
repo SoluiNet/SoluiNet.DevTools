@@ -29,7 +29,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
 
             if (!regExMatch.Success)
             {
-                throw new Exception("no valid HTTP request");
+                throw new Exception(string.Format("no valid HTTP request\r\nRequest String: {0}", webRequestString));
             }
 
             if (regExMatch.Groups[1].Success && regExMatch.Groups[1].Value.Equals("GET"))
