@@ -14,6 +14,7 @@ namespace SoluiNet.DevTools.UI
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows;
+    using NLog;
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
@@ -31,6 +32,14 @@ namespace SoluiNet.DevTools.UI
     /// </summary>
     public partial class App : Application, ISoluiNetUiWpfApp
     {
+        private Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
+
         /// <summary>
         /// Gets or sets all available plugins.
         /// </summary>
@@ -60,12 +69,19 @@ namespace SoluiNet.DevTools.UI
         /// <param name="e">The start up event.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            try
+            {
+                base.OnStartup(e);
 
-            this.LoadPlugins();
-            this.LoadUiElements();
+                this.LoadPlugins();
+                this.LoadUiElements();
 
-            this.CallStartupEvent();
+                this.CallStartupEvent();
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
+            }
         }
 
         /// <summary>
@@ -74,9 +90,16 @@ namespace SoluiNet.DevTools.UI
         /// <param name="e">The exit event.</param>
         protected override void OnExit(ExitEventArgs e)
         {
-            base.OnExit(e);
+            try
+            {
+                base.OnExit(e);
 
-            this.CallShutdownEvent();
+                this.CallShutdownEvent();
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
+            }
         }
 
         private void LoadPlugins()
