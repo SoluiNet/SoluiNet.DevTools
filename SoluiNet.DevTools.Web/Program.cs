@@ -11,34 +11,50 @@ namespace SoluiNet.DevTools.Web
     using System.ServiceProcess;
     using System.Text;
     using System.Threading.Tasks;
+    using NLog;
 
     /// <summary>
     /// The service program.
     /// </summary>
     public static class Program
     {
+        private static Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
+
         /// <summary>
         /// The main entrance of the application.
         /// </summary>
         public static void Main()
         {
-            ServiceBase[] servicesToRun;
-
-            servicesToRun = new ServiceBase[]
+            try
             {
+                ServiceBase[] servicesToRun;
+
+                servicesToRun = new ServiceBase[]
+                {
                 new SoluiNetService(),
-            };
+                };
 
-            // In interactive and debug mode ?
-            if (Environment.UserInteractive)
-            {
-                // Simulate the services execution
-                RunInteractiveServices(servicesToRun);
+                // In interactive and debug mode ?
+                if (Environment.UserInteractive)
+                {
+                    // Simulate the services execution
+                    RunInteractiveServices(servicesToRun);
+                }
+                else
+                {
+                    // Normal service execution
+                    ServiceBase.Run(servicesToRun);
+                }
             }
-            else
+            catch (Exception exception)
             {
-                // Normal service execution
-                ServiceBase.Run(servicesToRun);
+                Logger.Error(exception, "Error in SoluiNet.DevTools.Web");
             }
         }
 
