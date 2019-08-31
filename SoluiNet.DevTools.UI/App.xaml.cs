@@ -32,14 +32,6 @@ namespace SoluiNet.DevTools.UI
     /// </summary>
     public partial class App : Application, ISoluiNetUiWpfApp
     {
-        private Logger Logger
-        {
-            get
-            {
-                return LogManager.GetCurrentClassLogger();
-            }
-        }
-
         /// <summary>
         /// Gets or sets all available plugins.
         /// </summary>
@@ -62,6 +54,14 @@ namespace SoluiNet.DevTools.UI
 
         /// <inheritdoc/>
         public ICollection<ISoluiNetUIElement> UiElements { get; set; }
+
+        private Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
 
         /// <summary>
         /// Event handling for start up.
