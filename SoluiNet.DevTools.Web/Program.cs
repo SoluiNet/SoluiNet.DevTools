@@ -37,7 +37,7 @@ namespace SoluiNet.DevTools.Web
 
                 servicesToRun = new ServiceBase[]
                 {
-                new SoluiNetService(),
+                    new SoluiNetService(),
                 };
 
                 // In interactive and debug mode ?
