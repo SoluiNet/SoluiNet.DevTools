@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Core.Web.Renderer
     using System.Text;
     using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Tools.Object;
+    using SoluiNet.DevTools.Core.Web.Context;
 
     /// <summary>
     /// The web renderer.
@@ -26,7 +27,14 @@ namespace SoluiNet.DevTools.Core.Web.Renderer
         {
             if (string.IsNullOrEmpty(masterPageMarkup))
             {
-                masterPageMarkup = typeof(WebRenderer).GetEmbeddedResourceContent("Master.snhtml", "Template");
+                if (string.IsNullOrEmpty(WebContext.LayoutTemplate))
+                {
+                    masterPageMarkup = typeof(WebRenderer).GetEmbeddedResourceContent("Master.snhtml", "Template");
+                }
+                else
+                {
+                    masterPageMarkup = WebContext.LayoutTemplate;
+                }
             }
 
             return masterPageMarkup.Inject(new Dictionary<string, string>()
