@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DeploymentConfiguration"
+    targetNamespace="http://solui.net/DeploymentConfiguration.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://solui.net/DeploymentConfiguration.xsd"
+    xmlns:mstns="http://solui.net/DeploymentConfiguration.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:complexType name="SoluiNet.CopyTask">
+    <xs:attribute name="from" type="xs:string" />
+    <xs:attribute name="to" type="xs:string" />
+    <xs:attribute name="ignorePattern" type="xs:string" />
+  </xs:complexType>
+  
+  <xs:complexType name="SoluiNet.TransformTask">
+    <xs:attribute name="plugin" type="xs:string" />
+    <xs:attribute name="transformation" type="xs:string" />
+    <xs:attribute name="source" type="xs:string" />
+    <xs:attribute name="destination" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="SoluiNet.ExecuteScriptTask">
+    <xs:attribute name="script" type="xs:string" />
+    <xs:attribute name="needsElevatedRights" type="xs:boolean" />
+  </xs:complexType>
+
+  <xs:complexType name="SoluiNet.Task">
+    <xs:choice>
+      <xs:element minOccurs="0" name="SoluiNet.CopyTask" type="SoluiNet.CopyTask" />
+      <xs:element minOccurs="0" name="SoluiNet.TransformTask" type="SoluiNet.TransformTask" />
+      <xs:element minOccurs="0" name="SoluiNet.ExecuteScriptTask" type="SoluiNet.ExecuteScriptTask" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="SoluiNet.DeploymentConfiguration">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" type="SoluiNet.Task" name="SoluiNet.Task" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element type="SoluiNet.DeploymentConfiguration" name="SoluiNet.DeploymentConfiguration" />
+</xs:schema>
