@@ -12,6 +12,8 @@ namespace SoluiNet.DevTools.Web
     using System.Text;
     using System.Threading.Tasks;
     using NLog;
+    using SoluiNet.DevTools.Core.Application;
+    using SoluiNet.DevTools.Core.Web.Application;
 
     /// <summary>
     /// The service program.
@@ -33,6 +35,8 @@ namespace SoluiNet.DevTools.Web
         {
             try
             {
+                ApplicationContext.Application = new WebApplication();
+
                 ServiceBase[] servicesToRun;
 
                 servicesToRun = new ServiceBase[]

@@ -15,9 +15,19 @@ namespace SoluiNet.DevTools.Core.Application
     /// </summary>
     public static class ApplicationContext
     {
+        static ApplicationContext()
+        {
+            Storage = new Dictionary<string, object>();
+        }
+
         /// <summary>
         /// Gets or sets the application.
         /// </summary>
         public static ISoluiNetApp Application { get; set; }
+
+        /// <summary>
+        /// Gets or sets the storage.
+        /// </summary>
+        public static Dictionary<string, object> Storage { get; set; }
     }
 }
