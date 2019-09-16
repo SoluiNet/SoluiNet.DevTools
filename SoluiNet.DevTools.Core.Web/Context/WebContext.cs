@@ -30,5 +30,10 @@ namespace SoluiNet.DevTools.Core.Web.Context
         /// Gets or sets the session.
         /// </summary>
         public static WebSession Session { get; set; }
+
+        /// <summary>
+        /// Gets or sets the routes.
+        /// </summary>
+        public static RouteRegistry Routes { get; set; }
     }
 }
