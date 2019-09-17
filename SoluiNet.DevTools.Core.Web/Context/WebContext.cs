@@ -16,6 +16,12 @@ namespace SoluiNet.DevTools.Core.Web.Context
     /// </summary>
     public static class WebContext
     {
+        static WebContext()
+        {
+            SessionList = new Dictionary<string, WebSession>();
+            Routes = new RouteRegistry();
+        }
+
         /// <summary>
         /// Gets or sets the layout template.
         /// </summary>

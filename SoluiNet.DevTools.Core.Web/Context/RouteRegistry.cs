@@ -15,5 +15,25 @@ namespace SoluiNet.DevTools.Core.Web.Context
     /// </summary>
     public class RouteRegistry : List<WebRoute>
     {
+        /// <summary>
+        /// Gets or sets the route for the overgiven name.
+        /// </summary>
+        /// <param name="controllerName">The controller name.</param>
+        /// <param name="actionName">The action name.</param>
+        /// <returns>Returns the route for the overgiven name.</returns>
+        public WebRoute this[string controllerName, string actionName]
+        {
+            get
+            {
+                return this.Where(x => x.Controller == controllerName && x.Action == actionName).SingleOrDefault();
+            }
+
+            set
+            {
+                var index = this.IndexOf(this.Where(x => x.Controller == controllerName && x.Action == actionName).SingleOrDefault());
+
+                this[index] = value;
+            }
+        }
     }
 }
