@@ -35,5 +35,39 @@ namespace SoluiNet.DevTools.Core.Web.Context
                 this[index] = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the route for the overgiven name.
+        /// </summary>
+        /// <param name="routeName">The route name.</param>
+        /// <returns>Returns the route for the overgiven name.</returns>
+        public WebRoute this[string routeName]
+        {
+            get
+            {
+                if (routeName.StartsWith("/"))
+                {
+                    routeName = routeName.Remove(0, 1);
+                }
+
+                var controllerName = routeName.Split('/')[0];
+                var actionName = routeName.Split('/')[1];
+
+                return this[controllerName, actionName];
+            }
+
+            set
+            {
+                if (routeName.StartsWith("/"))
+                {
+                    routeName = routeName.Remove(0, 1);
+                }
+
+                var controllerName = routeName.Split('/')[0];
+                var actionName = routeName.Split('/')[1];
+
+                this[controllerName, actionName] = value;
+            }
+        }
     }
 }
