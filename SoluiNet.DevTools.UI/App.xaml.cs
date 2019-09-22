@@ -14,6 +14,7 @@ namespace SoluiNet.DevTools.UI
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows;
+    using NLog;
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
@@ -53,6 +54,14 @@ namespace SoluiNet.DevTools.UI
 
         /// <inheritdoc/>
         public ICollection<ISoluiNetUIElement> UiElements { get; set; }
+
+        private Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
 
         /// <summary>
         /// Event handling for start up.
@@ -184,6 +193,8 @@ namespace SoluiNet.DevTools.UI
             this.UtilityPlugins = new List<IUtilitiesDevPlugin>();
             this.BackgroundTaskPlugins = new List<IRunsBackgroundTask>();
 
+            var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
+
             foreach (var type in pluginTypes)
             {
                 if (type.Value.Contains("PluginDev"))
@@ -310,6 +321,11 @@ namespace SoluiNet.DevTools.UI
             {
                 (plugin as IHandlesEvent<IShutdownEvent>).HandleEvent<IShutdownEvent>(new Dictionary<string, object>());
             }
+        }
+
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            this.Logger.Fatal(e.Exception, "Unhandled Exception while executing SoluiNet.DevTools.UI");
         }
     }
 }
