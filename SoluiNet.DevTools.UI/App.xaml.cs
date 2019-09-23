@@ -201,8 +201,12 @@ namespace SoluiNet.DevTools.UI
 
                 if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
                 {
+                    this.Logger.Info(string.Format("Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
+
                     continue;
                 }
+
+                this.Logger.Info(string.Format("Load plugin '{0}'.", assemblyName));
 
                 if (type.Value.Contains("PluginDev"))
                 {

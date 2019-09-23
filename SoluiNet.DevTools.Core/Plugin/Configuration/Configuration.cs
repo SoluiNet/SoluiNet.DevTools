@@ -40,7 +40,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         {
             get
             {
-                var effectiveConfiguration = new Dictionary<string, bool>();
+                var effectiveConfiguration = new Dictionary<string, List<SoluiNetPluginEntryType>>();
 
                 if (Current != null && Current.SoluiNetConfigurationEntry != null && Current.SoluiNetConfigurationEntry.Count() > 0)
                 {
@@ -54,7 +54,16 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                                 {
                                     foreach (var pluginEntry in (entry.Item as SoluiNetInstallationType).SoluiNetPlugin)
                                     {
-                                        effectiveConfiguration.Add(pluginEntry.name, pluginEntry.enabledSpecified && pluginEntry.enabled);
+                                        pluginEntry.Scope = Enums.ConfigurationScopeEnum.PerInstallation;
+
+                                        if (!effectiveConfiguration.ContainsKey(pluginEntry.name))
+                                        {
+                                            effectiveConfiguration.Add(pluginEntry.name, new List<SoluiNetPluginEntryType>() { pluginEntry });
+                                        }
+                                        else
+                                        {
+                                            effectiveConfiguration[pluginEntry.name].Add(pluginEntry);
+                                        }
                                     }
                                 }
                             }
@@ -63,13 +72,28 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                         {
                             if (entry.Item is SoluiNetPluginEntryType)
                             {
-                                effectiveConfiguration.Add((entry.Item as SoluiNetPluginEntryType).name, (entry.Item as SoluiNetPluginEntryType).enabledSpecified && (entry.Item as SoluiNetPluginEntryType).enabled);
+                                var pluginEntry = entry.Item as SoluiNetPluginEntryType;
+                                pluginEntry.Scope = Enums.ConfigurationScopeEnum.General;
+
+                                if (!effectiveConfiguration.ContainsKey(pluginEntry.name))
+                                {
+                                    effectiveConfiguration.Add(pluginEntry.name, new List<SoluiNetPluginEntryType>() { pluginEntry });
+                                }
+                                else
+                                {
+                                    effectiveConfiguration[pluginEntry.name].Add(pluginEntry);
+                                }
                             }
                         }
                     }
                 }
 
-                return effectiveConfiguration;
+                return effectiveConfiguration.ToDictionary(x => x.Key, x =>
+                {
+                    var highestScopePriorityEntry = x.Value.Aggregate((currentMin, y) => (currentMin == null || y.Scope < currentMin.Scope ? y : currentMin));
+
+                    return highestScopePriorityEntry.enabledSpecified && highestScopePriorityEntry.enabled;
+                });
             }
         }
 
