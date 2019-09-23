@@ -207,8 +207,21 @@ namespace SoluiNet.DevTools.UI
             this.UtilityPlugins = new List<IUtilitiesDevPlugin>();
             this.BackgroundTaskPlugins = new List<IRunsBackgroundTask>();
 
+            var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
+
             foreach (var type in pluginTypes)
             {
+                var assemblyName = type.Key.Assembly.GetName().Name;
+
+                if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
+                {
+                    this.Logger.Info(string.Format("Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
+
+                    continue;
+                }
+
+                this.Logger.Info(string.Format("Load plugin '{0}'.", assemblyName));
+
                 if (type.Value.Contains("PluginDev"))
                 {
                     var plugin = (IBasePlugin)Activator.CreateInstance(type.Key);
@@ -333,6 +346,11 @@ namespace SoluiNet.DevTools.UI
             {
                 (plugin as IHandlesEvent<IShutdownEvent>).HandleEvent<IShutdownEvent>(new Dictionary<string, object>());
             }
+        }
+
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            this.Logger.Fatal(e.Exception, "Unhandled Exception while executing SoluiNet.DevTools.UI");
         }
     }
 }
