@@ -12,6 +12,7 @@ namespace SoluiNet.DevTools.Core.Web.Application
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
+    using NLog;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
