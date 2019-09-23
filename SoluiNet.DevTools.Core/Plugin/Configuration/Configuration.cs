@@ -11,6 +11,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
+    using NLog;
     using SoluiNet.DevTools.Core.Tools.File;
     using SoluiNet.DevTools.Core.Tools.XML;
 
@@ -47,7 +48,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                     {
                         if (entry.Item is SoluiNetInstallationType)
                         {
-                            if (Assembly.GetExecutingAssembly().Location == (entry.Item as SoluiNetInstallationType).path)
+                            if (Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) == (entry.Item as SoluiNetInstallationType).path)
                             {
                                 if ((entry.Item as SoluiNetInstallationType).SoluiNetPlugin != null && (entry.Item as SoluiNetInstallationType).SoluiNetPlugin.Count() > 0)
                                 {
@@ -83,6 +84,14 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
             }
         }
 
+        private static Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
+
         /// <summary>
         /// Save the configuration.
         /// </summary>
@@ -110,8 +119,65 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                 pluginConfiguration.SoluiNetConfigurationEntry[0] = new SoluiNetConfigurationEntryType();
                 pluginConfiguration.SoluiNetConfigurationEntry[0].Item = new SoluiNetInstallationType()
                 {
-                    path = Assembly.GetExecutingAssembly().Location,
+                    path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 };
+
+                var pluginList = new List<SoluiNetPluginEntryType>();
+
+                string[] dllFileNames = null;
+                if (Directory.Exists("Plugins"))
+                {
+                    dllFileNames = Directory.GetFiles("Plugins", "*.dll");
+                }
+
+                if (dllFileNames != null)
+                {
+                    ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
+                    foreach (string dllFile in dllFileNames)
+                    {
+                        try
+                        {
+                            var an = AssemblyName.GetAssemblyName(dllFile);
+                            var assembly = Assembly.Load(an);
+                            assemblies.Add(assembly);
+                        }
+                        catch (BadImageFormatException exception)
+                        {
+                            Logger.Warn(exception, "Couldn't load assembly while iterating Plugins directory");
+                        }
+                    }
+
+                    Type pluginType = typeof(IBasePlugin);
+
+                    foreach (var assembly in assemblies)
+                    {
+                        if (assembly == null)
+                        {
+                            continue;
+                        }
+
+                        var types = assembly.GetTypes();
+                        foreach (var type in types)
+                        {
+                            if (type.IsInterface || type.IsAbstract)
+                            {
+                                continue;
+                            }
+
+                            if (type.GetInterface(pluginType.FullName) != null)
+                            {
+                                pluginList.Add(new SoluiNetPluginEntryType()
+                                {
+                                    name = assembly.GetName().Name,
+                                    enabledSpecified = true,
+                                    enabled = true,
+                                });
+                            }
+                        }
+                    }
+                }
+
+                (pluginConfiguration.SoluiNetConfigurationEntry[0].Item as SoluiNetInstallationType).SoluiNetPlugin = pluginList.ToArray();
 
                 Current = pluginConfiguration;
 

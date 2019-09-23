@@ -197,6 +197,13 @@ namespace SoluiNet.DevTools.UI
 
             foreach (var type in pluginTypes)
             {
+                var assemblyName = type.Key.Assembly.GetName().Name;
+
+                if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
+                {
+                    continue;
+                }
+
                 if (type.Value.Contains("PluginDev"))
                 {
                     var plugin = (IBasePlugin)Activator.CreateInstance(type.Key);
