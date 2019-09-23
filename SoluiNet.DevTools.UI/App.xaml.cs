@@ -14,6 +14,7 @@ namespace SoluiNet.DevTools.UI
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows;
+    using NLog;
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
@@ -53,6 +54,14 @@ namespace SoluiNet.DevTools.UI
 
         /// <inheritdoc/>
         public ICollection<ISoluiNetUIElement> UiElements { get; set; }
+
+        private Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
 
         /// <summary>
         /// Event handling for start up.
@@ -184,8 +193,21 @@ namespace SoluiNet.DevTools.UI
             this.UtilityPlugins = new List<IUtilitiesDevPlugin>();
             this.BackgroundTaskPlugins = new List<IRunsBackgroundTask>();
 
+            var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
+
             foreach (var type in pluginTypes)
             {
+                var assemblyName = type.Key.Assembly.GetName().Name;
+
+                if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
+                {
+                    this.Logger.Info(string.Format("Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
+
+                    continue;
+                }
+
+                this.Logger.Info(string.Format("Load plugin '{0}'.", assemblyName));
+
                 if (type.Value.Contains("PluginDev"))
                 {
                     var plugin = (IBasePlugin)Activator.CreateInstance(type.Key);
@@ -310,6 +332,11 @@ namespace SoluiNet.DevTools.UI
             {
                 (plugin as IHandlesEvent<IShutdownEvent>).HandleEvent<IShutdownEvent>(new Dictionary<string, object>());
             }
+        }
+
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            this.Logger.Fatal(e.Exception, "Unhandled Exception while executing SoluiNet.DevTools.UI");
         }
     }
 }
