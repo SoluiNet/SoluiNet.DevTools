@@ -34,6 +34,7 @@ namespace SoluiNet.DevTools.UI.UserControls
             this.InitializeComponent();
 
             this.Installation.Items.Add("General");
+            this.Installation.Items.Add("Effective");
 
             foreach (var configEntry in SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Current.SoluiNetConfigurationEntry)
             {
@@ -65,6 +66,30 @@ namespace SoluiNet.DevTools.UI.UserControls
         private void SavePluginConfiguration_Click(object sender, RoutedEventArgs e)
         {
             SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Save();
+        }
+
+        private void Installation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(this.Installation.SelectedValue.ToString()))
+            {
+                return;
+            }
+
+            this.PluginList.IsReadOnly = false;
+
+            if (this.Installation.SelectedValue.ToString() == "General")
+            {
+                this.PluginList.ItemsSource = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.GetConfigurationByScope();
+            }
+            else if (this.Installation.SelectedValue.ToString() == "Effective")
+            {
+                this.PluginList.IsReadOnly = true;
+                this.PluginList.ItemsSource = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
+            }
+            else
+            {
+                this.PluginList.ItemsSource = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.GetConfigurationByScope(this.Installation.SelectedValue.ToString());
+            }
         }
     }
 }
