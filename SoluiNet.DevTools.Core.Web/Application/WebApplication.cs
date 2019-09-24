@@ -51,6 +51,8 @@ namespace SoluiNet.DevTools.Core.Web.Application
                 catch (BadImageFormatException exception)
                 {
                     Debug.WriteLine(JsonTools.Serialize(exception));
+
+                    this.Logger.Debug(exception, string.Format("Couldn't load assembly '{0}'", dllFile));
                 }
             }
 
