@@ -1,4 +1,4 @@
-﻿// <copyright file="SqlUiElement.cs" company="SoluiNet">
+﻿// <copyright file="SqlUiElement.xaml.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
