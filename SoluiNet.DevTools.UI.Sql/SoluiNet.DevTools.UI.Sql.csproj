@@ -20,7 +20,7 @@
     <None Remove="SQL.xshd" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="5.0.4" />
+    <PackageReference Include="AvalonEdit" Version="6.0.0" />
     <PackageReference Include="NLog" Version="4.6.7" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
