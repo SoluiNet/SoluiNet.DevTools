@@ -71,6 +71,8 @@ namespace SoluiNet.DevTools.UI
         {
             base.OnStartup(e);
 
+            this.Logger.Info(string.Format("Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+
             this.LoadPlugins();
             this.LoadUiElements();
 
@@ -84,6 +86,8 @@ namespace SoluiNet.DevTools.UI
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
+
+            this.Logger.Info(string.Format("Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
             this.CallShutdownEvent();
         }

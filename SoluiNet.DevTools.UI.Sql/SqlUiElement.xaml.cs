@@ -783,7 +783,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             this.TitleChanged?.Invoke(this, new Dictionary<string, string>()
             {
-                { "project", chosenProject },
+                { "project", this.Project.SelectedItem as string },
                 { "environment", plugin.Environment },
             });
 
