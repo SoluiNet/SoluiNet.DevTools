@@ -41,6 +41,13 @@ namespace SoluiNet.DevTools.UI
             this.OptionDetails.Children.Add(new ManageConnectionStrings());
         }
 
+        private void Plugins_Selected(object sender, RoutedEventArgs e)
+        {
+            this.OptionDetails.Children.Clear();
+
+            this.OptionDetails.Children.Add(new PluginConfiguration());
+        }
+
         private void CloseOptions_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

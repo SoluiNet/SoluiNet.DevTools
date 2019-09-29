@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="SoluiNet.DevTools.UI.UserControls.PluginConfiguration"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SoluiNet.DevTools.UI.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ComboBox x:Name="Installation" Margin="10, 10, 10, 0" VerticalAlignment="Top" Height="25" SelectionChanged="Installation_SelectionChanged" />
+        <DataGrid x:Name="PluginList" AutoGenerateColumns="False" Margin="10, 40, 10, 45">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Enabled" Binding="{Binding Value, Mode=OneWay}" />
+                <DataGridTextColumn Header="Plugin Name" Binding="{Binding Key, Mode=OneWay}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="SavePluginConfiguration" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="150" Margin="0, 0, 10, 10" Content="Save" Click="SavePluginConfiguration_Click" />
+    </Grid>
+</UserControl>
