@@ -19,6 +19,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         /// <summary>
         /// Gets or sets the configuration scope.
         /// </summary>
+        [System.Xml.Serialization.XmlIgnore]
         public ConfigurationScopeEnum Scope { get; set; }
     }
 }

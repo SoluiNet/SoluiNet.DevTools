@@ -73,8 +73,10 @@ namespace SoluiNet.DevTools.UI
             {
                 base.OnStartup(e);
 
-                this.LoadPlugins();
-                this.LoadUiElements();
+            this.Logger.Info(string.Format("Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+
+            this.LoadPlugins();
+            this.LoadUiElements();
 
                 this.CallStartupEvent();
             }

@@ -408,9 +408,18 @@ namespace SoluiNet.DevTools.Core.Tools
 
             var pluginList = new List<T>();
 
+            var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
+
             foreach (var assembly in assemblies)
             {
                 if (assembly == null)
+                {
+                    continue;
+                }
+
+                var assemblyName = assembly.GetName().Name;
+
+                if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
                 {
                     continue;
                 }

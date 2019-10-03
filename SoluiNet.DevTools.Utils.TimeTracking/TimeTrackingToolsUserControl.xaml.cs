@@ -814,7 +814,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         summaryResults.Add(
                             item.Key.ToString("yyyy-MM-dd"),
                             item
-                                .GroupBy(x => x.Application != null ? x.Application.ApplicationName : "n/a")
+                                .GroupBy(x => x.Application != null ? (!string.IsNullOrEmpty(x.Application.ApplicationName) ? x.Application.ApplicationName : "n/a") : "n/a")
                                 .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration)))));
                     }
                 }

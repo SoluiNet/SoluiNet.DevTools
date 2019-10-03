@@ -12,7 +12,7 @@
             <TreeViewItem x:Name="GeneralSettings" Header="General" >
                 <TreeViewItem x:Name="ConnectionStringSettings" Header="Connection Strings" Selected="ConnectionStringSettings_Selected" />
             </TreeViewItem>
-            <TreeViewItem x:Name="PluginSettings" Header="Plugins" />
+            <TreeViewItem x:Name="PluginSettings" Header="Plugins" Selected="Plugins_Selected" />
         </TreeView>
         <Grid x:Name="OptionDetails" Margin="175,0,0,40"/>
         <Button x:Name="CloseOptions" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="CloseOptions_Click"/>

@@ -40,60 +40,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         {
             get
             {
-                var effectiveConfiguration = new Dictionary<string, List<SoluiNetPluginEntryType>>();
-
-                if (Current != null && Current.SoluiNetConfigurationEntry != null && Current.SoluiNetConfigurationEntry.Count() > 0)
-                {
-                    foreach (var entry in Current.SoluiNetConfigurationEntry)
-                    {
-                        if (entry.Item is SoluiNetInstallationType)
-                        {
-                            if (Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) == (entry.Item as SoluiNetInstallationType).path)
-                            {
-                                if ((entry.Item as SoluiNetInstallationType).SoluiNetPlugin != null && (entry.Item as SoluiNetInstallationType).SoluiNetPlugin.Count() > 0)
-                                {
-                                    foreach (var pluginEntry in (entry.Item as SoluiNetInstallationType).SoluiNetPlugin)
-                                    {
-                                        pluginEntry.Scope = Enums.ConfigurationScopeEnum.PerInstallation;
-
-                                        if (!effectiveConfiguration.ContainsKey(pluginEntry.name))
-                                        {
-                                            effectiveConfiguration.Add(pluginEntry.name, new List<SoluiNetPluginEntryType>() { pluginEntry });
-                                        }
-                                        else
-                                        {
-                                            effectiveConfiguration[pluginEntry.name].Add(pluginEntry);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (entry.Item is SoluiNetPluginEntryType)
-                            {
-                                var pluginEntry = entry.Item as SoluiNetPluginEntryType;
-                                pluginEntry.Scope = Enums.ConfigurationScopeEnum.General;
-
-                                if (!effectiveConfiguration.ContainsKey(pluginEntry.name))
-                                {
-                                    effectiveConfiguration.Add(pluginEntry.name, new List<SoluiNetPluginEntryType>() { pluginEntry });
-                                }
-                                else
-                                {
-                                    effectiveConfiguration[pluginEntry.name].Add(pluginEntry);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return effectiveConfiguration.ToDictionary(x => x.Key, x =>
-                {
-                    var highestScopePriorityEntry = x.Value.Aggregate((currentMin, y) => (currentMin == null || y.Scope < currentMin.Scope ? y : currentMin));
-
-                    return highestScopePriorityEntry.enabledSpecified && highestScopePriorityEntry.enabled;
-                });
+                return GetConfigurationForExecutingPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
         }
 
@@ -127,6 +74,99 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
 
             streamWriter.Flush();
             streamWriter.Close();
+        }
+
+        /// <summary>
+        /// Get configuration by scope.
+        /// </summary>
+        /// <param name="configurationScope">The configuration scope.</param>
+        /// <returns>Returns the configuration for the overgiven scope.</returns>
+        public static Dictionary<string, bool> GetConfigurationByScope(string configurationScope = "General")
+        {
+            if (configurationScope != "General")
+            {
+                return GetConfigurationForExecutingPath(configurationScope);
+            }
+            else
+            {
+                var configuration = new Dictionary<string, bool>();
+
+                if (Current != null && Current.SoluiNetConfigurationEntry != null && Current.SoluiNetConfigurationEntry.Count() > 0)
+                {
+                    foreach (var entry in Current.SoluiNetConfigurationEntry)
+                    {
+                        if (entry.Item is SoluiNetPluginEntryType)
+                        {
+                            var pluginEntry = entry.Item as SoluiNetPluginEntryType;
+
+                            if (!configuration.ContainsKey(pluginEntry.name))
+                            {
+                                configuration.Add(pluginEntry.name, pluginEntry.enabledSpecified && pluginEntry.enabled);
+                            }
+                        }
+                    }
+                }
+
+                return configuration;
+            }
+        }
+
+        private static Dictionary<string, bool> GetConfigurationForExecutingPath(string executingPath)
+        {
+            var effectiveConfiguration = new Dictionary<string, List<SoluiNetPluginEntryType>>();
+
+            if (Current != null && Current.SoluiNetConfigurationEntry != null && Current.SoluiNetConfigurationEntry.Count() > 0)
+            {
+                foreach (var entry in Current.SoluiNetConfigurationEntry)
+                {
+                    if (entry.Item is SoluiNetInstallationType)
+                    {
+                        if (executingPath == (entry.Item as SoluiNetInstallationType).path)
+                        {
+                            if ((entry.Item as SoluiNetInstallationType).SoluiNetPlugin != null && (entry.Item as SoluiNetInstallationType).SoluiNetPlugin.Count() > 0)
+                            {
+                                foreach (var pluginEntry in (entry.Item as SoluiNetInstallationType).SoluiNetPlugin)
+                                {
+                                    pluginEntry.Scope = Enums.ConfigurationScopeEnum.PerInstallation;
+
+                                    if (!effectiveConfiguration.ContainsKey(pluginEntry.name))
+                                    {
+                                        effectiveConfiguration.Add(pluginEntry.name, new List<SoluiNetPluginEntryType>() { pluginEntry });
+                                    }
+                                    else
+                                    {
+                                        effectiveConfiguration[pluginEntry.name].Add(pluginEntry);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (entry.Item is SoluiNetPluginEntryType)
+                        {
+                            var pluginEntry = entry.Item as SoluiNetPluginEntryType;
+                            pluginEntry.Scope = Enums.ConfigurationScopeEnum.General;
+
+                            if (!effectiveConfiguration.ContainsKey(pluginEntry.name))
+                            {
+                                effectiveConfiguration.Add(pluginEntry.name, new List<SoluiNetPluginEntryType>() { pluginEntry });
+                            }
+                            else
+                            {
+                                effectiveConfiguration[pluginEntry.name].Add(pluginEntry);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return effectiveConfiguration.ToDictionary(x => x.Key, x =>
+            {
+                var highestScopePriorityEntry = x.Value.Aggregate((currentMin, y) => (currentMin == null || y.Scope < currentMin.Scope ? y : currentMin));
+
+                return highestScopePriorityEntry.enabledSpecified && highestScopePriorityEntry.enabled;
+            });
         }
 
         private static void ReadOrCreateConfiguration()

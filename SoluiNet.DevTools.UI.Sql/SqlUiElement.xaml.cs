@@ -1,4 +1,4 @@
-﻿// <copyright file="SqlUiElement.cs" company="SoluiNet">
+﻿// <copyright file="SqlUiElement.xaml.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -780,7 +780,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             this.TitleChanged?.Invoke(this, new Dictionary<string, string>()
             {
-                { "project", chosenProject },
+                { "project", this.Project.SelectedItem as string },
                 { "environment", plugin.Environment },
             });
 

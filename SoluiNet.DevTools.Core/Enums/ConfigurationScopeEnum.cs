@@ -16,6 +16,11 @@ namespace SoluiNet.DevTools.Core.Enums
     public enum ConfigurationScopeEnum
     {
         /// <summary>
+        /// No scope
+        /// </summary>
+        None = 0,
+
+        /// <summary>
         /// A solitary relationless configuration entry.
         /// </summary>
         Solitary = 1,
