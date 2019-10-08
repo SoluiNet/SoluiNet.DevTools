@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL query.</returns>
         public static bool IsSqlQuery(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("select");
+            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("select") || sqlCommand.ToLowerInvariant().TrimStart().StartsWith("with");
         }
 
         /// <summary>
