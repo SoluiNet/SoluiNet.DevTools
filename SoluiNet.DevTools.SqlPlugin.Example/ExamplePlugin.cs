@@ -166,10 +166,12 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
             try
             {
-                return DbHelper.ExecuteSqlScript(
+                return Core.Windows.Tools.Database.DbHelper.ExecuteSqlScript(
                     ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName,
                     ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString,
-                    sqlCommand);
+                    sqlCommand,
+                    this.Environment,
+                    impersonationContext);
             }
             finally
             {
