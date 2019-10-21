@@ -6,7 +6,11 @@ namespace SoluiNet.DevTools.Core.Tools
 {
     using System;
     using System.Collections.Generic;
+#if COMPILED_ON_NETCORE
+    using System.Configuration.ConfigurationManager;
+#else
     using System.Configuration;
+#endif
     using System.IO;
     using System.Linq;
     using System.Reflection;
