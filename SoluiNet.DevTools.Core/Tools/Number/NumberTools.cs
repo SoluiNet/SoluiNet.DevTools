@@ -129,5 +129,65 @@ namespace SoluiNet.DevTools.Core.Tools.Number
 
             return string.Format(formatString, remnantSeconds, minutes, hours, days, weeks);
         }
+
+        /// <summary>
+        /// Get the minute value for the overgiven seconds.
+        /// </summary>
+        /// <param name="seconds">The seconds.</param>
+        /// <returns>Returns the minute value for the overgiven seconds.</returns>
+        public static double SecondsToMinutes(this double seconds)
+        {
+            return seconds / 60;
+        }
+
+        /// <summary>
+        /// Get the hour value for the overgiven seconds.
+        /// </summary>
+        /// <param name="seconds">The seconds.</param>
+        /// <returns>Returns the hour value for the overgiven seconds.</returns>
+        public static double SecondsToHours(this double seconds)
+        {
+            return seconds / 3600;
+        }
+
+        /// <summary>
+        /// Get the second value for the overgiven minutes.
+        /// </summary>
+        /// <param name="minutes">The minutes.</param>
+        /// <returns>Returns the minute value for the overgiven minutes.</returns>
+        public static double MinutesToSeconds(this double minutes)
+        {
+            return minutes * 60;
+        }
+
+        /// <summary>
+        /// Get the hour value for the overgiven minutes.
+        /// </summary>
+        /// <param name="minutes">The minutes.</param>
+        /// <returns>Returns the hour value for the overgiven minutes.</returns>
+        public static double MinutesToHours(this double minutes)
+        {
+            return minutes / 60;
+        }
+
+        /// <summary>
+        /// Get the second value for the overgiven hours.
+        /// </summary>
+        /// <param name="hours">The hours.</param>
+        /// <returns>Returns the second value for the overgiven hours.</returns>
+        public static double HoursToSeconds(this double hours)
+        {
+            return hours * 3600;
+        }
+
+        /// <summary>
+        /// Get the minute value for the overgiven hours.
+        /// </summary>
+        /// <param name="hours">The hours.</param>
+        /// <returns>Returns the minute value for the overgiven hours.</returns>
+        public static double HoursToMinutes(this double hours)
+        {
+            return hours * 60;
+        }
     }
 }

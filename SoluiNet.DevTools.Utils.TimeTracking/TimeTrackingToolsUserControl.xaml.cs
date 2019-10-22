@@ -8,17 +8,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
-    using System.Windows.Documents;
     using System.Windows.Input;
     using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Navigation;
-    using System.Windows.Shapes;
     using LiveCharts;
     using LiveCharts.Wpf;
     using SoluiNet.DevTools.Core.Constants;
@@ -26,8 +20,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.Tools.Number;
     using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.Tools.XML;
-    using SoluiNet.DevTools.Core.UI;
-    using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.General;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement;
@@ -937,6 +929,73 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
 
             this.context.SaveChanges();
+        }
+
+        private void CopyMonthToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            var copyType = (this.CopyType.SelectedItem as ComboBoxItem)?.Content.ToString();
+            var clipboardType = (this.ClipboardType.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (string.IsNullOrEmpty(copyType))
+            {
+                copyType = "Category";
+            }
+
+            if (string.IsNullOrEmpty(clipboardType))
+            {
+                clipboardType = "Excel";
+            }
+
+            var startOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+            var endOfMonth = startOfMonth.AddMonths(1).AddSeconds(-1);
+
+            var categoryName = string.Empty;
+
+            var formatString = string.Empty;
+
+            if (clipboardType == "Excel")
+            {
+                formatString = "{0:0.00}\t";
+            }
+            else if (clipboardType == "CSV")
+            {
+                formatString = "{0:0.00},";
+            }
+            else if (clipboardType == "XML")
+            {
+                formatString = "<value timestamp=\"{1}\">{0:0.00}</value>";
+            }
+
+            var searchValues = this.SearchValue.Text.Split(';');
+
+            if (copyType == "Application")
+            {
+                // do nothing
+            }
+            else if (copyType == "Category")
+            {
+                var usageTimePerDayAndCategory = this.context.CategoryUsageTime.Where(x =>
+                    x.UsageTime.StartTime >= startOfMonth && x.UsageTime.StartTime <= endOfMonth &&
+                    searchValues.Contains(x.Category.CategoryName)).
+                    Select(x => new { Category = x.Category.CategoryName, Duration = x.Duration, StartTime = x.UsageTime.StartTime }).
+                    ToList().
+                    GroupBy(x => new { Category = x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd") }).
+                    ToList();
+
+                var clipboardContent = string.Empty;
+
+                for (var monthIterator = startOfMonth; monthIterator < endOfMonth; monthIterator = monthIterator.AddDays(1))
+                {
+                    clipboardContent += string.Format(
+                        formatString,
+                        usageTimePerDayAndCategory
+                        .Where(x => x.Key.StartTime == monthIterator.ToString("yyyy-MM-dd"))
+                        .Sum(x => x.Sum(y => y.Duration)).SecondsToHours(),
+                        monthIterator.ToString("yyyy-MM-dd"));
+                }
+
+                Clipboard.SetText(clipboardContent);
+            }
         }
     }
 }
