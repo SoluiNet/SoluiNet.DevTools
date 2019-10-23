@@ -5,8 +5,12 @@
 namespace SoluiNet.DevTools.UnitTest
 {
     using System;
+    using System.IO;
+    using System.Text;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using SoluiNet.DevTools.Core.Tools.Number;
+    using SoluiNet.DevTools.Core.Tools.Stream;
+    using SoluiNet.DevTools.Core.Tools.String;
 
     /// <summary>
     /// The tests for the Core library.
@@ -37,6 +41,82 @@ namespace SoluiNet.DevTools.UnitTest
 
             Assert.AreEqual(5850.00, hours.HoursToSeconds(), 0.000005);
             Assert.AreEqual(97.50, hours.HoursToMinutes(), 0.000005);
+        }
+
+        /// <summary>
+        /// Test the string tools.
+        /// </summary>
+        [TestMethod]
+        public void StringTest()
+        {
+            var simpleString = "Hello foo bar. What's up foo bar?";
+
+            Assert.AreEqual("Hello foobar. What's up foo bar?", StringHelper.ReplaceFirstOccurence(simpleString, "foo bar", "foobar"));
+            Assert.AreEqual("Hello . What's up foo bar?", StringHelper.ReplaceFirstOccurence(simpleString, "foo bar"));
+
+            var multiLineStringCrlf = "Hello\r\nfoo bar.\r\nWhat's up\r\nfoo bar?";
+            var multiLineStringLf = "Hello\nfoo bar.\nWhat's up\nfoo bar?";
+
+            Assert.AreEqual("01: Hello\r\n02: foo bar.\r\n03: What's up\r\n04: foo bar?", multiLineStringCrlf.AddLineNumbers());
+            Assert.AreEqual("01: Hello\r\n02: foo bar.\r\n03: What's up\r\n04: foo bar?", multiLineStringLf.AddLineNumbers());
+
+            var simpleStringBase64 = "SGVsbG8gZm9vIGJhci4gV2hhdCdzIHVwIGZvbyBiYXI/";
+
+            Assert.AreEqual(simpleStringBase64, simpleString.ToBase64());
+            Assert.AreEqual(simpleString, simpleStringBase64.FromBase64());
+
+            var durationString = "2w 3d 1h 36m 45s";
+
+            Assert.AreEqual(1474605, durationString.GetSecondsFromDurationString());
+
+            var regExPattern = "(foo\\sbar)+";
+
+            Assert.IsTrue(regExPattern.RegExMatch(simpleString));
+            Assert.IsTrue(simpleString.MatchesRegEx(regExPattern));
+
+            Assert.AreEqual("Hello foobar. What's up foobar?", simpleString.ReplaceRegEx(regExPattern, "foobar"));
+            Assert.AreEqual("Hello. What's up?", simpleString.ReplaceRegEx("(\\s?foo\\sbar\\s?)"));
+
+            Assert.IsTrue("true".IsAffirmative());
+            Assert.IsTrue("True".IsAffirmative());
+            Assert.IsTrue("TRUE".IsAffirmative());
+            Assert.IsTrue("1".IsAffirmative());
+            Assert.IsTrue("wahr".IsAffirmative());
+            Assert.IsTrue("Wahr".IsAffirmative());
+            Assert.IsTrue("WAHR".IsAffirmative());
+            Assert.IsTrue("y".IsAffirmative());
+            Assert.IsTrue("yes".IsAffirmative());
+            Assert.IsTrue("Yes".IsAffirmative());
+            Assert.IsTrue("YES".IsAffirmative());
+
+            Assert.IsFalse("false".IsAffirmative());
+            Assert.IsFalse("n".IsAffirmative());
+            Assert.IsFalse("no".IsAffirmative());
+            Assert.IsFalse("0".IsAffirmative());
+        }
+
+        /// <summary>
+        /// Test the stream tools.
+        /// </summary>
+        [TestMethod]
+        public void StreamTest()
+        {
+            var simpleString = "Hello foo bar. What's up foo bar? ÄÖÜß€";
+
+            var utf8Bytes = Encoding.UTF8.GetBytes(simpleString);
+            var streamUtf8 = new MemoryStream(utf8Bytes);
+
+            Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamUtf8));
+
+            var utf32Bytes = Encoding.UTF32.GetBytes(simpleString);
+            var streamUtf32 = new MemoryStream(utf32Bytes);
+
+            Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamUtf32, Encoding.UTF32));
+
+            var iso88591Bytes = Encoding.GetEncoding("ISO-8859-15").GetBytes(simpleString);
+            var streamIso88591 = new MemoryStream(iso88591Bytes);
+
+            Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamIso88591, Encoding.GetEncoding("ISO-8859-15")));
         }
     }
 }
