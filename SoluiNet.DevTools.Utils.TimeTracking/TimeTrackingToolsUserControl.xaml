@@ -88,16 +88,18 @@
             </TabItem>
             <TabItem Header="Tasks">
                 <Grid x:Name="TimeTrackingTasks" Background="#FFE5E5E5">
-                    <ComboBox x:Name="CopyType" Height="25" Margin="5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
+                    <ComboBox x:Name="CopyType" Height="25" Margin="5,5, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
                         <ComboBoxItem>Application</ComboBoxItem>
                         <ComboBoxItem>Category</ComboBoxItem>
                     </ComboBox>
-                    <ComboBox x:Name="ClipboardType" Height="25" Margin="140,5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
+                    <ComboBox x:Name="ClipboardType" Height="25" Margin="140,5, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
                         <ComboBoxItem>Excel</ComboBoxItem>
                         <ComboBoxItem>CSV</ComboBoxItem>
                         <ComboBoxItem>XML</ComboBoxItem>
                     </ComboBox>
-                    <TextBox x:Name="SearchValue" Height="25" Margin="270,5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="170" />
+                    <TextBox x:Name="SearchValue" Height="25" Margin="270,5, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="170" />
+                    <v4:DatePicker x:Name="TasksDateBegin" Height="25" Margin="450, 5, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                    <v4:DatePicker x:Name="TasksDateEnd" Height="25" Margin="580,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
                     <Button x:Name="CopyDayToClipboard" Content="Copy Day To Clipboard" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,50" />
                     <Button x:Name="CopyMonthToClipboard" Content="Copy Month To Clipboard" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,80" Click="CopyMonthToClipboard_Click" />
                 </Grid>
