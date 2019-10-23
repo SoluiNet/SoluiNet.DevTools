@@ -946,8 +946,18 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 clipboardType = "Excel";
             }
 
-            var startOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
-            var endOfMonth = startOfMonth.AddMonths(1).AddSeconds(-1);
+            var startDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+            var endDate = startDate.AddMonths(1).AddSeconds(-1);
+
+            if (this.TasksDateBegin.SelectedDate.HasValue)
+            {
+                startDate = this.TasksDateBegin.SelectedDate.Value;
+            }
+
+            if (this.TasksDateEnd.SelectedDate.HasValue)
+            {
+                endDate = this.TasksDateEnd.SelectedDate.Value;
+            }
 
             var categoryName = string.Empty;
 
@@ -975,7 +985,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             else if (copyType == "Category")
             {
                 var usageTimePerDayAndCategory = this.context.CategoryUsageTime.Where(x =>
-                    x.UsageTime.StartTime >= startOfMonth && x.UsageTime.StartTime <= endOfMonth &&
+                    x.UsageTime.StartTime >= startDate && x.UsageTime.StartTime <= endDate &&
                     searchValues.Contains(x.Category.CategoryName)).
                     Select(x => new { Category = x.Category.CategoryName, Duration = x.Duration, StartTime = x.UsageTime.StartTime }).
                     ToList().
@@ -984,14 +994,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var clipboardContent = string.Empty;
 
-                for (var monthIterator = startOfMonth; monthIterator < endOfMonth; monthIterator = monthIterator.AddDays(1))
+                for (var dateIterator = startDate; dateIterator < endDate; dateIterator = dateIterator.AddDays(1))
                 {
                     clipboardContent += string.Format(
                         formatString,
                         usageTimePerDayAndCategory
-                        .Where(x => x.Key.StartTime == monthIterator.ToString("yyyy-MM-dd"))
-                        .Sum(x => x.Sum(y => y.Duration)).SecondsToHours(),
-                        monthIterator.ToString("yyyy-MM-dd"));
+                        .Where(x => x.Key.StartTime == dateIterator.ToString("yyyy-MM-dd"))
+                        .Sum(x => x.Sum(y => y.Duration)).SecondsToHours().RoundWithDelta(0.25),
+                        dateIterator.ToString("yyyy-MM-dd"));
                 }
 
                 Clipboard.SetText(clipboardContent);
