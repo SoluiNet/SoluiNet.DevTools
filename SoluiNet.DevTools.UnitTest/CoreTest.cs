@@ -41,6 +41,12 @@ namespace SoluiNet.DevTools.UnitTest
 
             Assert.AreEqual(5850.00, hours.HoursToSeconds(), 0.000005);
             Assert.AreEqual(97.50, hours.HoursToMinutes(), 0.000005);
+
+            var roundableNumber = 1.25;
+            var secondRoundableNumber = 1.24;
+
+            Assert.AreEqual(1.5, roundableNumber.RoundWithDelta(0.5));
+            Assert.AreEqual(1.0, secondRoundableNumber.RoundWithDelta(0.5));
         }
 
         /// <summary>
