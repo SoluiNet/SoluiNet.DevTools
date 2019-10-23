@@ -189,5 +189,27 @@ namespace SoluiNet.DevTools.Core.Tools.Number
         {
             return hours * 60;
         }
+
+        /// <summary>
+        /// Round with a delta.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="delta">The delta.</param>
+        /// <returns>Round the number to the nearest multiple of delta.</returns>
+        public static double RoundWithDelta(this double value, double delta)
+        {
+            var minMultiple = Math.Floor(value / delta);
+            var maxMultiple = minMultiple + 1;
+
+            var differenceMin = Math.Abs((delta * minMultiple) - value);
+            var differenceMax = Math.Abs((delta * maxMultiple) - value);
+
+            if (differenceMin >= differenceMax)
+            {
+                return delta * maxMultiple;
+            }
+
+            return delta * minMultiple;
+        }
     }
 }
