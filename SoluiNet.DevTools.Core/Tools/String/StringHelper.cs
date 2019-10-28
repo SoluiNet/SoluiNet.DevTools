@@ -66,7 +66,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
                 temporaryString += string.Format("{0}: {1}\r\n", lineNumber++.ToString("D" + numberOfDigits.ToString()), line);
             }
 
-            return temporaryString;
+            return temporaryString.Remove(temporaryString.Length - 2, 2);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// <returns>A <see cref="string"/> which represents the base64 value for <paramref name="originalString"/>.</returns>
         public static string ToBase64(this string originalString)
         {
-            var plainTextBytes = Encoding.Unicode.GetBytes(originalString);
+            var plainTextBytes = Encoding.UTF8.GetBytes(originalString);
             return Convert.ToBase64String(plainTextBytes);
         }
 
@@ -88,7 +88,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
         public static string FromBase64(this string encodedString)
         {
             byte[] data = Convert.FromBase64String(encodedString);
-            return Encoding.Unicode.GetString(data);
+            return Encoding.UTF8.GetString(data);
         }
 
         /// <summary>

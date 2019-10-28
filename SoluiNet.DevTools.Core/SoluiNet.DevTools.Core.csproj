@@ -20,7 +20,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="docfx.console" Version="2.45.1">
+    <PackageReference Include="docfx.console" Version="2.46.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -36,10 +36,10 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.111" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
-    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.111" />
-    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.111" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.112" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.112" />
+    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.112" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PoorMansTSqlFormatterLib35">
