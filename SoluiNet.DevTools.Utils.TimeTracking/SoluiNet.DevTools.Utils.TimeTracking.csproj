@@ -18,6 +18,7 @@
     <None Remove="stylecop.json" />
     <None Remove="UI\AssignmentTarget.xaml" />
     <None Remove="UI\AssignmentTargetExtended.xaml" />
+    <None Remove="UI\CategorySettings.xaml" />
     <None Remove="TimeTrackingToolsUserControl.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +69,9 @@
     <Compile Update="UI\AssignmentTarget.xaml.cs">
       <DependentUpon>UI\AssignmentTarget.xaml</DependentUpon>
     </Compile>
+    <Compile Update="UI\CategorySettings.xaml.cs">
+      <DependentUpon>UI\CategorySettings.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
@@ -84,6 +88,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\AssignmentTarget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\CategorySettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
     /// <summary>
     /// Provides an user control to manage category settings.
     /// </summary>
-    public partial class CategorySettings : ExtendedConfigurationUserControl
+    public partial class CategorySettings
     {
         private readonly Category categoryElement;
 
@@ -24,12 +24,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
         /// </summary>
         /// <param name="categoryElement">The category element.</param>
         public CategorySettings(Category categoryElement)
-            : base(categoryElement)
         {
             this.categoryElement = categoryElement;
 
             this.Loaded += (sender, eventArgs) =>
             {
+                this.CategorySettingsGrid.Children.Add(new ExtendedConfigurationUserControl(this.categoryElement));
+
                 var mainGrid = this.FindChild<Grid>("ExtendedConfigurationGrid");
 
                 if (this.distributeEvenlyTarget == null)
