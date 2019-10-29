@@ -27,6 +27,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.UI.WPF.XmlData;
     using SoluiNet.DevTools.Core.XmlData;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
+    using SoluiNet.DevTools.Utils.TimeTracking.UI;
 
     /// <summary>
     /// Interaction logic for TimeTrackingToolsUserControl.xaml.
@@ -196,11 +197,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var distributionDictionary = new Dictionary<string, double>();
             var sumDuration = Convert.ToDouble(usageTimeList.Sum(x => x.Sum(y => y.Duration)));
-            sumDuration -= usageTimeList.Sum(x => x.Sum(y => y.CategoryUsageTime != null ? y.CategoryUsageTime.Sum(z => z.Duration) : 0));
+            sumDuration -= usageTimeList.Sum(x => x.Sum(y => y.CategoryUsageTime?.Sum(z => z.Duration) ?? 0));
 
             if (dropEvents.KeyStates.HasFlag(DragDropKeyStates.ShiftKey))
             {
-                var assignableDuration = Prompt.ShowDialog(string.Format("Which time frame should be assigned? (max. {0})", sumDuration.ToDurationString()), "Select time frame");
+                var assignableDuration = Prompt.ShowDialog(
+                    $"Which time frame should be assigned? (max. {sumDuration.ToDurationString()})", "Select time frame");
 
                 if (assignableDuration.GetSecondsFromDurationString() <= sumDuration)
                 {
@@ -210,9 +212,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             if ((dropSender as UI.AssignmentTargetExtended).Label.Equals("Distribute evenly"))
             {
-                foreach (var category in categories)
+                var assignableCategories = categories.Where(x => x.DistributeEvenlyTarget.GetValueOrDefault(false));
+
+                foreach (var category in assignableCategories)
                 {
-                    distributionDictionary.Add(category.CategoryName, Convert.ToDouble(sumDuration) / categories.Count());
+                    distributionDictionary.Add(category.CategoryName, Convert.ToDouble(sumDuration) / assignableCategories.Count());
                 }
             }
             else
@@ -237,7 +241,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             continue;
                         }
 
-                        var categoryToAssign = this.context.Category.Where(x => x.CategoryName == categoryDistribution.Key).FirstOrDefault();
+                        var categoryToAssign = this.context.Category.FirstOrDefault(x => x.CategoryName == categoryDistribution.Key);
 
                         if (categoryToAssign == null)
                         {
@@ -278,7 +282,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void RightClickApplication(object sender, MouseButtonEventArgs eventArgs)
         {
-            var applicationContextMenu = this.FindResource("ApplicationContextMenu") as ContextMenu;
+            if (!(this.FindResource("ApplicationContextMenu") is ContextMenu applicationContextMenu))
+            {
+                return;
+            }
 
             applicationContextMenu.PlacementTarget = sender as UI.AssignmentTarget;
             applicationContextMenu.IsOpen = true;
@@ -286,7 +293,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void RightClickCategory(object sender, MouseButtonEventArgs eventArgs)
         {
-            var categoryContextMenu = this.FindResource("CategoryContextMenu") as ContextMenu;
+            if (!(this.FindResource("CategoryContextMenu") is ContextMenu categoryContextMenu))
+            {
+                return;
+            }
 
             categoryContextMenu.PlacementTarget = sender as UI.AssignmentTargetExtended;
             categoryContextMenu.IsOpen = true;
@@ -848,7 +858,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var window = new SoluiNetWindow();
 
             // todo: get element which has been right clicked and deliver via constructor parameter
-            window.ShowWithUserControl(new ExtendedConfigurationUserControl(categoryButton.Tag as Entities.Category));
+            window.ShowWithUserControl(new CategorySettings(categoryButton.Tag as Entities.Category));
 
             this.context.SaveChanges();
         }
