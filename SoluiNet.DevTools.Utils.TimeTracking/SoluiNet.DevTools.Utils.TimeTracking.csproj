@@ -16,10 +16,6 @@
   <ItemGroup>
     <None Remove="icons\automatic_assignment.png" />
     <None Remove="stylecop.json" />
-    <None Remove="UI\AssignmentTarget.xaml" />
-    <None Remove="UI\AssignmentTargetExtended.xaml" />
-    <None Remove="UI\CategorySettings.xaml" />
-    <None Remove="TimeTrackingToolsUserControl.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
@@ -33,6 +29,7 @@
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="System.Linq.Dynamic" Version="1.0.7" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
   <ItemGroup>

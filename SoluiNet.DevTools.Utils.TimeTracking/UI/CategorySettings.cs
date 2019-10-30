@@ -25,24 +25,40 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
         /// <param name="categoryElement">The category element.</param>
         public CategorySettings(Category categoryElement)
         {
+            this.InitializeComponent();
+
             this.categoryElement = categoryElement;
 
             this.Loaded += (sender, eventArgs) =>
             {
-                this.CategorySettingsGrid.Children.Add(new ExtendedConfigurationUserControl(this.categoryElement));
+                var extendedConfigurationUserControl = new ExtendedConfigurationUserControl(this.categoryElement);
 
-                var mainGrid = this.FindChild<Grid>("ExtendedConfigurationGrid");
+                this.CategorySettingsGrid.Children.Add(extendedConfigurationUserControl);
+
+                // var mainGrid = extendedConfigurationUserControl.FindChild<Grid>("ExtendedConfigurationGrid");
+                var mainGrid = extendedConfigurationUserControl.Content as Grid;
+
+                if (mainGrid == null)
+                {
+                    return;
+                }
 
                 if (this.distributeEvenlyTarget == null)
                 {
                     this.distributeEvenlyTarget = new CheckBox();
 
                     this.distributeEvenlyTarget.Height = 25.0;
-                    this.distributeEvenlyTarget.Width = 125.0;
+                    this.distributeEvenlyTarget.Width = 200.0;
 
+                    this.distributeEvenlyTarget.VerticalContentAlignment = VerticalAlignment.Center;
+
+                    this.distributeEvenlyTarget.HorizontalAlignment = HorizontalAlignment.Left;
+                    this.distributeEvenlyTarget.VerticalAlignment = VerticalAlignment.Top;
                     this.distributeEvenlyTarget.Margin = new Thickness(260, 35, 0, 0);
 
                     this.distributeEvenlyTarget.Content = "Distribute Evenly Target";
+
+                    this.distributeEvenlyTarget.IsChecked = categoryElement.DistributeEvenlyTarget;
 
                     mainGrid.Children.Add(this.distributeEvenlyTarget);
                 }
