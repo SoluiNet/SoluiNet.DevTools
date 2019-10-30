@@ -8,6 +8,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
+    using System.Linq.Dynamic;
+    using System.Linq.Expressions;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -27,6 +29,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using SoluiNet.DevTools.Core.UI.WPF.XmlData;
     using SoluiNet.DevTools.Core.XmlData;
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
+    using SoluiNet.DevTools.Utils.TimeTracking.UI;
 
     /// <summary>
     /// Interaction logic for TimeTrackingToolsUserControl.xaml.
@@ -79,13 +82,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.PrepareStatisticsView(lowerDayLimit, upperDayLimit, this.context);
         }
 
-        private void PrepareStatisticsView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context)
+        private void PrepareStatisticsView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext localContext)
         {
             var statisticTabs = new TabControl();
             statisticTabs.TabStripPlacement = Dock.Bottom;
 
             #region Weighted Targets
-            var weightedTimes = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).OrderBy(x => x.Key).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
+            var weightedTimes = localContext.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).OrderBy(x => x.Key).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
 
             var barsChart = new CartesianChart();
 
@@ -119,7 +122,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             #endregion
 
             #region Application
-            var durationPerApplication = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.Application.ApplicationName).OrderBy(x => x.Key).Select(x => new { Duration = x.Sum(y => y.Duration), Application = x.Key });
+            var durationPerApplication = localContext.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.Application.ApplicationName).OrderBy(x => x.Key).Select(x => new { Duration = x.Sum(y => y.Duration), Application = x.Key });
 
             var applicationChart = new CartesianChart();
             applicationChart.Name = "DurationPerApplication";
@@ -182,7 +185,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var categories = this.context.Category;
 
             var dataObject = dropEvents.Data as DataObject;
-            var data = dataObject.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
+            var data = dataObject?.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
 
             var usageTimeList = new HashSet<IGrouping<string, UsageTime>>();
             usageTimeList.Add(data);
@@ -196,11 +199,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var distributionDictionary = new Dictionary<string, double>();
             var sumDuration = Convert.ToDouble(usageTimeList.Sum(x => x.Sum(y => y.Duration)));
-            sumDuration -= usageTimeList.Sum(x => x.Sum(y => y.CategoryUsageTime != null ? y.CategoryUsageTime.Sum(z => z.Duration) : 0));
+            sumDuration -= usageTimeList.Sum(x => x.Sum(y => y.CategoryUsageTime?.Sum(z => z.Duration) ?? 0));
 
             if (dropEvents.KeyStates.HasFlag(DragDropKeyStates.ShiftKey))
             {
-                var assignableDuration = Prompt.ShowDialog(string.Format("Which time frame should be assigned? (max. {0})", sumDuration.ToDurationString()), "Select time frame");
+                var assignableDuration = Prompt.ShowDialog(
+                    $"Which time frame should be assigned? (max. {sumDuration.ToDurationString()})", "Select time frame");
 
                 if (assignableDuration.GetSecondsFromDurationString() <= sumDuration)
                 {
@@ -210,9 +214,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             if ((dropSender as UI.AssignmentTargetExtended).Label.Equals("Distribute evenly"))
             {
-                foreach (var category in categories)
+                var assignableCategories = categories.Where(x => x.DistributeEvenlyTarget.GetValueOrDefault(false));
+
+                foreach (var category in assignableCategories)
                 {
-                    distributionDictionary.Add(category.CategoryName, Convert.ToDouble(sumDuration) / categories.Count());
+                    distributionDictionary.Add(category.CategoryName, Convert.ToDouble(sumDuration) / assignableCategories.Count());
                 }
             }
             else
@@ -237,7 +243,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             continue;
                         }
 
-                        var categoryToAssign = this.context.Category.Where(x => x.CategoryName == categoryDistribution.Key).FirstOrDefault();
+                        var categoryToAssign = this.context.Category.FirstOrDefault(x => x.CategoryName == categoryDistribution.Key);
 
                         if (categoryToAssign == null)
                         {
@@ -278,7 +284,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void RightClickApplication(object sender, MouseButtonEventArgs eventArgs)
         {
-            var applicationContextMenu = this.FindResource("ApplicationContextMenu") as ContextMenu;
+            if (!(this.FindResource("ApplicationContextMenu") is ContextMenu applicationContextMenu))
+            {
+                return;
+            }
 
             applicationContextMenu.PlacementTarget = sender as UI.AssignmentTarget;
             applicationContextMenu.IsOpen = true;
@@ -286,7 +295,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void RightClickCategory(object sender, MouseButtonEventArgs eventArgs)
         {
-            var categoryContextMenu = this.FindResource("CategoryContextMenu") as ContextMenu;
+            if (!(this.FindResource("CategoryContextMenu") is ContextMenu categoryContextMenu))
+            {
+                return;
+            }
 
             categoryContextMenu.PlacementTarget = sender as UI.AssignmentTargetExtended;
             categoryContextMenu.IsOpen = true;
@@ -679,6 +691,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var queryResults = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
 
+            if (!string.IsNullOrEmpty(this.QueryFilter.Text))
+            {
+                queryResults = queryResults.Where(this.QueryFilter.Text).ToList();
+            }
+
             this.FillQueryResults(queryResults);
         }
 
@@ -843,12 +860,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void CategorySettings_Click(object sender, RoutedEventArgs e)
         {
-            var categoryButton = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as UI.AssignmentTargetExtended;
+            var categoryButton = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as UI.AssignmentTargetExtended;
+
+            if (categoryButton == null)
+            {
+                return;
+            }
 
             var window = new SoluiNetWindow();
 
-            // todo: get element which has been right clicked and deliver via constructor parameter
-            window.ShowWithUserControl(new ExtendedConfigurationUserControl(categoryButton.Tag as Entities.Category));
+            window.ShowWithUserControl(new CategorySettings(categoryButton.Tag as Entities.Category));
 
             this.context.SaveChanges();
         }
@@ -859,15 +880,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 foreach (var assignment in this.TimeTrackingAssignmentOverview.Children)
                 {
-                    if (assignment is ExtendedButton)
+                    if (assignment is ExtendedButton button)
                     {
-                        (assignment as ExtendedButton).SwitchSelection();
+                        button.SwitchSelection();
                     }
                 }
             }
         }
 
-        private void AutomaticAssignmenet_Click(object sender, RoutedEventArgs e)
+        private void AutomaticAssignment_Click(object sender, RoutedEventArgs e)
         {
             var header = (this.TimeTrackingAssignmentTargetTabs.SelectedItem as TabItem)?.Header?.ToString();
 

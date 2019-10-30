@@ -48,11 +48,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Extensions
         }
 
         /// <summary>
-        /// Finds a Child of a given item in the visual tree.
+        /// Finds a child of a given item in the visual tree.
         /// </summary>
         /// <param name="parent">A direct parent of the queried item.</param>
         /// <typeparam name="T">The type of the queried item.</typeparam>
-        /// <param name="childName">x:Name or Name of child. </param>
+        /// <param name="childName">x:Name or Name of child.</param>
         /// <returns>The first parent item that matches the submitted type parameter.
         /// If not matching item can be found,
         /// a null parent is being returned.</returns>

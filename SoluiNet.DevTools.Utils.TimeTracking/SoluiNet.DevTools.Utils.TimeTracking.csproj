@@ -16,9 +16,6 @@
   <ItemGroup>
     <None Remove="icons\automatic_assignment.png" />
     <None Remove="stylecop.json" />
-    <None Remove="UI\AssignmentTarget.xaml" />
-    <None Remove="UI\AssignmentTargetExtended.xaml" />
-    <None Remove="TimeTrackingToolsUserControl.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
@@ -32,6 +29,7 @@
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="System.Linq.Dynamic" Version="1.0.7" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +66,9 @@
     <Compile Update="UI\AssignmentTarget.xaml.cs">
       <DependentUpon>UI\AssignmentTarget.xaml</DependentUpon>
     </Compile>
+    <Compile Update="UI\CategorySettings.xaml.cs">
+      <DependentUpon>UI\CategorySettings.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
@@ -84,6 +85,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\AssignmentTarget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\CategorySettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
