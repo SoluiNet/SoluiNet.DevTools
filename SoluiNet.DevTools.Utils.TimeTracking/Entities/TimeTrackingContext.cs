@@ -70,6 +70,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         public virtual DbSet<VersionHistory> VersionHistory { get; set; }
 
         /// <summary>
+        /// Gets or sets the FilterHistory accessor.
+        /// </summary>
+        public virtual DbSet<FilterHistory> FilterHistory { get; set; }
+
+        /// <summary>
         /// Gets the logger.
         /// </summary>
         private static Logger Logger
@@ -498,6 +503,23 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     appliedVersion = new Version("1.0.0.10");
                 }
+
+                if (appliedVersion.CompareTo(new Version("1.0.0.11")) < 0)
+                {
+                    command.CommandText = "CREATE TABLE FilterHistory (FilterHistoryId INTEGER PRIMARY KEY, FilterString TEXT, LastExecutionDateTime TEXT, ExecutionUser TEXT)";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+                    command.CommandText = "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                    command.Parameters.AddWithValue("$versionNo", "1.0.0.11");
+                    command.Parameters.AddWithValue("$appliedAt", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff"));
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.11");
+                }
             }
             catch (Exception exception)
             {
@@ -563,6 +585,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             modelBuilder.Entity<VersionHistory>()
                 .ToTable(typeof(VersionHistory).Name)
                 .HasKey(x => x.VersionHistoryId);
+
+            modelBuilder.Entity<FilterHistory>()
+                .ToTable(typeof(FilterHistory).Name)
+                .HasKey(x => x.FilterHistoryId);
         }
 
         private static string GetConnectionString(string nameOrConnectionString)

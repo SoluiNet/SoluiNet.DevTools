@@ -96,6 +96,17 @@
   <ItemGroup>
     <Resource Include="icons\automatic_assignment.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="TimeTrackingToolsUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="UI\AssignmentTarget.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="UI\AssignmentTargetExtended.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties stylecop_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="copy &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" />
