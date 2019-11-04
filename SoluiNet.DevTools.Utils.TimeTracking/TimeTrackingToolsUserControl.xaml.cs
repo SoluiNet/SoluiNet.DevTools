@@ -9,7 +9,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Data.Entity;
     using System.Linq;
     using System.Linq.Dynamic;
-    using System.Linq.Expressions;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -18,6 +17,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using LiveCharts;
     using LiveCharts.Wpf;
     using SoluiNet.DevTools.Core.Constants;
+    using SoluiNet.DevTools.Core.Tools.Dictionary;
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.Number;
     using SoluiNet.DevTools.Core.Tools.String;
@@ -755,6 +755,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void StartSummary_Click(object sender, RoutedEventArgs e)
         {
+            var summaryType = (this.SummaryType.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (string.IsNullOrEmpty(summaryType))
+            {
+                Confirm.ShowDialog("Please select a valid summary type.", "Warning");
+
+                return;
+            }
+
             var lowerDayLimit = DateTime.UtcNow.Date;
             var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
 
@@ -768,14 +777,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 Dictionary<string, double> summaryResults = null;
 
-                if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Application")
+                if (summaryType == "Application")
                 {
                     summaryResults = this.context.UsageTime
                         .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
                         .GroupBy(x => x.Application != null ? x.Application.ApplicationName : "n/a")
                         .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Convert.ToDouble(y.Sum(z => z.Duration)));
                 }
-                else if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Category")
+                else if (summaryType == "Category")
                 {
                     summaryResults = this.context.CategoryUsageTime
                         .Where(x => x.UsageTime.StartTime >= lowerDayLimit && x.UsageTime.StartTime < upperDayLimit)
@@ -797,9 +806,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
             else
             {
-                Dictionary<string, Dictionary<string, double>> summaryResults = null;
+                var summaryResults = new Dictionary<string, Dictionary<string, double>>();
 
-                if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Application")
+                if (summaryType == "Application")
                 {
                     var usageTimeInPeriod = this.context.UsageTime
                         .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
@@ -814,31 +823,49 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                                 .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration)))));
                     }
                 }
-                else if ((this.SummaryType.SelectedItem as ComboBoxItem).Content.ToString() == "Category")
+                else if (summaryType == "Category")
                 {
                     var usageTimeInPeriod = this.context.CategoryUsageTime
                         .Where(x => x.UsageTime.StartTime >= lowerDayLimit && x.UsageTime.StartTime < upperDayLimit)
                         .ToList();
 
-                    foreach (var item in usageTimeInPeriod.GroupBy(x => x.UsageTime.StartTime))
+                    foreach (var item in usageTimeInPeriod.GroupBy(x => x.UsageTime.StartTime.Date))
                     {
                         var dateDictionary = item
                             .GroupBy(x => x.Category != null ? x.Category.CategoryName : "n/a")
                             .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration))));
 
+                        var endTimepoint = item.Key.Date.AddDays(1);
+
                         var notAssignedCategoryDurationList = this.context.UsageTime
-                            .Where(x => x.StartTime >= item.Key.Date && x.StartTime < item.Key.Date.AddDays(1).Date &&
+                            .Where(x => x.StartTime >= item.Key.Date && x.StartTime < endTimepoint &&
                                         !x.CategoryUsageTime.Any());
 
                         var notAssignedCategoryDuration = notAssignedCategoryDurationList.Any() ? notAssignedCategoryDurationList.Sum(x => x.Duration) : 0;
 
-                        dateDictionary.Add(
-                            "n/a",
-                            Math.Round(Convert.ToDouble(notAssignedCategoryDuration)));
+                        if (dateDictionary.ContainsKey("n/a"))
+                        {
+                            dateDictionary["n/a"] += Math.Round(Convert.ToDouble(notAssignedCategoryDuration));
+                        }
+                        else
+                        {
+                            dateDictionary.Add(
+                                "n/a",
+                                Math.Round(Convert.ToDouble(notAssignedCategoryDuration)));
+                        }
 
-                        summaryResults.Add(
-                            item.Key.ToString("yyyy-MM-dd"),
-                            dateDictionary);
+                        if (summaryResults.ContainsKey(item.Key.ToString("yyyy-MM-dd")))
+                        {
+                            var entry = summaryResults[item.Key.ToString()];
+
+                            summaryResults[item.Key.ToString("yyyy-MM-dd")] = entry.Merge(dateDictionary);
+                        }
+                        else
+                        {
+                            summaryResults.Add(
+                                item.Key.ToString("yyyy-MM-dd"),
+                                dateDictionary);
+                        }
                     }
                 }
 
