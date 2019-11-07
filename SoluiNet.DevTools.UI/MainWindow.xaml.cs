@@ -158,13 +158,5 @@ namespace SoluiNet.DevTools.UI
         {
             this.hotKey.Unregister();
         }
-
-        protected override void HwndHook(ref Message m)
-        {
-            if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
-            HandleHotkey();
-            base.HwndHook(ref m);
-        }
-
-}
+    }
 }

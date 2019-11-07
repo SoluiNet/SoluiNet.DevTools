@@ -16,7 +16,10 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
     /// <summary>
     /// The HotKeyHost needed for working with hot keys (taken from https://www.codeproject.com/Tips/274003/Global-Hotkeys-in-WPF).
     /// </summary>
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Use the default windows notification name.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1310:FieldNamesMustNotContainUnderscore",
+        Justification = "Use the default windows notification name.")]
     public sealed class GlobalHotKeyHost : IDisposable
     {
         // ReSharper disable once InconsistentNaming
