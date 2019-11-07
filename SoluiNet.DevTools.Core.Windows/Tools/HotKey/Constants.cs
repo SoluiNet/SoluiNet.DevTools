@@ -4,9 +4,13 @@
 
 namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
 {
+    using System.Diagnostics.CodeAnalysis;
+
     /// <summary>
     /// A collection of constants which may be needed for hot keys.
     /// </summary>
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore",
+        Justification = "Use the default windows notification name.")]
     public static class Constants
     {
         // modifiers
@@ -43,5 +47,4 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
         /// </summary>
         public const int WM_HOTKEY_MSG_ID = 0x0312;
     }
-
 }

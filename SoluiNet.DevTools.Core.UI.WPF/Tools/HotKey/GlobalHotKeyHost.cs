@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Windows.Input;
@@ -15,13 +16,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
     /// <summary>
     /// The HotKeyHost needed for working with hot keys (taken from https://www.codeproject.com/Tips/274003/Global-Hotkeys-in-WPF).
     /// </summary>
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Use the default windows notification name.")]
     public sealed class GlobalHotKeyHost : IDisposable
     {
-        // Can be replaced with "Random"-class
-        private static readonly SerialCounter IdGenerator = new SerialCounter(1);
-
         // ReSharper disable once InconsistentNaming
         private const int WM_HotKey = 786;
+
+        // Can be replaced with "Random"-class
+        private static readonly SerialCounter IdGenerator = new SerialCounter(1);
 
         private readonly HwndSourceHook hook;
         private readonly HwndSource handleSource;
@@ -126,7 +128,6 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
             }
 
             return this.hotKeys.Remove(kvPair.Key);
-
         }
 
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]

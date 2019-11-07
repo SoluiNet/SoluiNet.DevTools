@@ -54,10 +54,6 @@ namespace SoluiNet.DevTools.UI
         {
             this.InitializeComponent();
 
-            var windowInterop = new WindowInteropHelper(Window.GetWindow(this));
-
-            this.hotKey = new GlobalHotKey(Constants.Alt + Constants.Ctrl, Keys.OemQuestion, windowInterop.);
-
             foreach (var utilityPlugin in (System.Windows.Application.Current as ISoluiNetUiWpfApp).UtilityPlugins)
             {
                 try

@@ -34,7 +34,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalHotKey"/> class. This instance has to be registered in an HotKeyHost.
         /// </summary>
-        /// <param name="key">The key</param>
+        /// <param name="key">The key.</param>
         /// <param name="modifiers">The modifier. Multiple modifiers can be combined with or.</param>
         public GlobalHotKey(Key key, ModifierKeys modifiers)
             : this(key, modifiers, true)
@@ -45,9 +45,9 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalHotKey"/> class. This instance has to be registered in an HotKeyHost.
         /// </summary>
-        /// <param name="key">The key</param>
+        /// <param name="key">The key.</param>
         /// <param name="modifiers">The modifier. Multiple modifiers can be combined with or.</param>
-        /// <param name="enabled">Specifies whether the HotKey will be enabled when registered to an HotKeyHost</param>
+        /// <param name="enabled">Specifies whether the HotKey will be enabled when registered to an HotKeyHost.</param>
         public GlobalHotKey(Key key, ModifierKeys modifiers, bool enabled)
         {
             this.Key = key;
@@ -138,15 +138,6 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         }
 
         /// <summary>
-        /// The property changed event handler.
-        /// </summary>
-        /// <param name="propertyName">The property name.</param>
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
         /// Check if this hot key is equal to the overgiven hot key instance.
         /// </summary>
         /// <param name="hotKeyInstance">The hot key instance.</param>
@@ -192,6 +183,18 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         }
 
         /// <summary>
+        /// Get object data from instance.
+        /// </summary>
+        /// <param name="info">The serialization info.</param>
+        /// <param name="context">The streaming context.</param>
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Key", this.Key, typeof(Key));
+            info.AddValue("Modifiers", this.Modifiers, typeof(ModifierKeys));
+            info.AddValue("Enabled", this.Enabled);
+        }
+
+        /// <summary>
         /// Raise event handler for hot key pressed.
         /// </summary>
         internal void RaiseOnHotKeyPressed()
@@ -208,15 +211,12 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         }
 
         /// <summary>
-        /// Get object data from instance.
+        /// The property changed event handler.
         /// </summary>
-        /// <param name="info">The serialization info.</param>
-        /// <param name="context">The streaming context.</param>
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        /// <param name="propertyName">The property name.</param>
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            info.AddValue("Key", this.Key, typeof(Key));
-            info.AddValue("Modifiers", this.Modifiers, typeof(ModifierKeys));
-            info.AddValue("Enabled", this.Enabled);
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

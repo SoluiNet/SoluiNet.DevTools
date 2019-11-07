@@ -16,11 +16,6 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
     public class HotKeyEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets the hot key.
-        /// </summary>
-        public GlobalHotKey HotKey { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="HotKeyEventArgs"/> class.
         /// </summary>
         /// <param name="hotKey">The hot key.</param>
@@ -28,5 +23,10 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         {
             this.HotKey = hotKey;
         }
+
+        /// <summary>
+        /// Gets the hot key.
+        /// </summary>
+        public GlobalHotKey HotKey { get; private set; }
     }
 }
