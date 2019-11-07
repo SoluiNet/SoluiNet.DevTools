@@ -29,4 +29,8 @@
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
 </Project>
