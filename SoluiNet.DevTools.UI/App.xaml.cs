@@ -26,6 +26,7 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
+    using SoluiNet.DevTools.Core.Windows.Tools.HotKey;
 
     /// <summary>
     /// Interaction logic for "App.xaml".

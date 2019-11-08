@@ -15,7 +15,9 @@ namespace SoluiNet.DevTools.UI
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
+    using System.Windows.Forms;
     using System.Windows.Input;
+    using System.Windows.Interop;
     using System.Windows.Media;
     using ICSharpCode.AvalonEdit;
     using ICSharpCode.AvalonEdit.CodeCompletion;
@@ -36,12 +38,15 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
     using SoluiNet.DevTools.Core.UI.WPF.Window;
+    using SoluiNet.DevTools.Core.Windows.Tools.HotKey;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml.
     /// </summary>
     public partial class MainWindow : SoluiNetWindow
     {
+        private readonly GlobalHotKey hotKey = null;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -49,7 +54,7 @@ namespace SoluiNet.DevTools.UI
         {
             this.InitializeComponent();
 
-            foreach (var utilityPlugin in (Application.Current as ISoluiNetUiWpfApp).UtilityPlugins)
+            foreach (var utilityPlugin in (System.Windows.Application.Current as ISoluiNetUiWpfApp).UtilityPlugins)
             {
                 try
                 {
@@ -57,7 +62,7 @@ namespace SoluiNet.DevTools.UI
                     {
                         var groupPluginMenuItem = UIHelper.GetMenuItemByName(this.ExtrasMenuItem, (utilityPlugin as IGroupable).Group);
 
-                        var utilityPluginMenuItem = new MenuItem()
+                        var utilityPluginMenuItem = new System.Windows.Controls.MenuItem()
                         {
                             Header = utilityPlugin.MenuItemLabel,
                         };
@@ -79,7 +84,7 @@ namespace SoluiNet.DevTools.UI
                     }
                     else
                     {
-                        var utilityPluginMenuItem = new MenuItem()
+                        var utilityPluginMenuItem = new System.Windows.Controls.MenuItem()
                         {
                             Header = utilityPlugin.MenuItemLabel,
                         };
@@ -106,7 +111,7 @@ namespace SoluiNet.DevTools.UI
                 }
             }
 
-            foreach (var uiElement in (Application.Current as ISoluiNetUiApp).UiElements)
+            foreach (var uiElement in (System.Windows.Application.Current as ISoluiNetUiApp).UiElements)
             {
                 var tabItem = new TabItem() { Header = uiElement.Label, Name = uiElement.TechnicalName + "_TabItem" };
 
@@ -142,6 +147,16 @@ namespace SoluiNet.DevTools.UI
             var dialog = new Options();
 
             dialog.Show();
+        }
+
+        private void SoluiNetWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.hotKey.Register();
+        }
+
+        private void SoluiNetWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.hotKey.Unregister();
         }
     }
 }

@@ -6,6 +6,9 @@ namespace SoluiNet.DevTools.Core.Tools.Dictionary
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Provides a collection of methods to work with dictionaries.
+    /// </summary>
     public static class DictionaryHelper
     {
         /// <summary>
