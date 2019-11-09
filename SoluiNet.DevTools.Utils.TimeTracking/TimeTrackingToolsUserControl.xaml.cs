@@ -304,102 +304,59 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             categoryContextMenu.IsOpen = true;
         }
 
-        private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context, bool showOnlyUnassigned = false)
+        private void RefreshCategoryAssignmentView(TimeTrackingContext localContext)
         {
-            var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
-                .GroupBy(x => x.ApplicationIdentification);
-
-            this.FillTimeTrackingOverview(timeTargets);
-
-            var applications = context.Application;
-
-            DragEventHandler dropApplicationDelegate = this.DropOnApplicationElement;
-            MouseButtonEventHandler rightClickApplicationDelegate = this.RightClickApplication;
-            MouseButtonEventHandler rightClickCategoryDelegate = this.RightClickCategory;
-
-            this.ApplicationAssignmentGrid.CreateNewElement = () =>
+            if (localContext == null)
             {
-                var applicationName = Prompt.ShowDialog("Please provide an application name", "Application Assignment");
-
-                if (!context.Application.Any(x => x.ApplicationName == applicationName))
-                {
-                    var application = new Entities.Application() { ApplicationName = applicationName };
-
-                    context.Application.Add(application);
-                    context.SaveChanges();
-
-                    var newElement = new UI.AssignmentTarget() { Label = applicationName };
-                    newElement.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
-
-                    newElement.Tag = application;
-
-                    newElement.AllowDrop = true;
-                    newElement.Drop += dropApplicationDelegate;
-
-                    newElement.PreviewMouseRightButtonDown += rightClickApplicationDelegate;
-
-                    return newElement;
-                }
-                else
-                {
-                    MessageBox.Show("Overgiven application name already exists");
-
-                    return null;
-                }
-            };
-
-            foreach (var application in applications)
-            {
-                var applicationTarget = new UI.AssignmentTarget();
-
-                applicationTarget.Label = application.ApplicationName;
-
-                applicationTarget.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
-
-                applicationTarget.Tag = application;
-
-                applicationTarget.AllowDrop = true;
-                applicationTarget.Drop += dropApplicationDelegate;
-
-                applicationTarget.PreviewMouseRightButtonDown += rightClickApplicationDelegate;
-
-                this.ApplicationAssignmentGrid.AddElement(applicationTarget);
+                localContext = this.context;
             }
 
-            var categories = context.Category;
+            this.CategoryAssignmentGrid.Children.Clear();
+            this.CategoryAssignmentGrid.PrepareControl();
+
+            MouseButtonEventHandler rightClickCategoryDelegate = this.RightClickCategory;
+
+            var categories = localContext.Category;
 
             DragEventHandler dropCategoryDelegate = this.DropOnCategoryElement;
 
-            this.CategoryAssignmentGrid.CreateNewElement = () =>
+            if (this.CategoryAssignmentGrid.CreateNewElement == null)
             {
-                var categoryName = Prompt.ShowDialog("Please provide an category name", "Category Assignment");
-
-                if (!context.Category.Any(x => x.CategoryName == categoryName))
+                this.CategoryAssignmentGrid.CreateNewElement = () =>
                 {
-                    var category = new Category() { CategoryName = categoryName };
+                    var categoryName = Prompt.ShowDialog("Please provide an category name", "Category Assignment");
 
-                    context.Category.Add(category);
-                    context.SaveChanges();
+                    if (!localContext.Category.Any(x => x.CategoryName == categoryName))
+                    {
+                        var category = new Category() { CategoryName = categoryName };
 
-                    var newElement = new UI.AssignmentTargetExtended() { Label = categoryName };
-                    newElement.Target.PrimaryActionButton.Background = !string.IsNullOrEmpty(category.ExtendedConfiguration) ? category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
+                        localContext.Category.Add(category);
+                        localContext.SaveChanges();
 
-                    newElement.Tag = category;
+                        var newElement = new UI.AssignmentTargetExtended() { Label = categoryName };
+                        newElement.Target.PrimaryActionButton.Background =
+                            !string.IsNullOrEmpty(category.ExtendedConfiguration)
+                                ? category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
+                                    ?.SoluiNetBrushDefinition?.ToBrush()
+                                : new SolidColorBrush(Colors.WhiteSmoke);
 
-                    newElement.AllowDrop = true;
-                    newElement.Drop += dropCategoryDelegate;
+                        newElement.Tag = category;
 
-                    newElement.PreviewMouseRightButtonDown += rightClickCategoryDelegate;
+                        newElement.AllowDrop = true;
+                        newElement.Drop += dropCategoryDelegate;
 
-                    return newElement;
-                }
-                else
-                {
-                    MessageBox.Show("Overgiven category name already exists");
+                        newElement.PreviewMouseRightButtonDown += rightClickCategoryDelegate;
 
-                    return null;
-                }
-            };
+                        return newElement;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Overgiven category name already exists");
+
+                        return null;
+                    }
+                };
+            }
 
             var distributeEvenlyElement = new UI.AssignmentTargetExtended()
             {
@@ -428,6 +385,89 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 this.CategoryAssignmentGrid.AddElement(categoryTarget);
             }
+        }
+
+        private void RefreshApplicationAssignmentView(TimeTrackingContext localContext)
+        {
+            if (localContext == null)
+            {
+                localContext = this.context;
+            }
+
+            this.ApplicationAreaAssignmentGrid.Children.Clear();
+            this.ApplicationAreaAssignmentGrid.PrepareControl();
+
+            var applications = localContext.Application;
+
+            DragEventHandler dropApplicationDelegate = this.DropOnApplicationElement;
+            MouseButtonEventHandler rightClickApplicationDelegate = this.RightClickApplication;
+
+            if (this.ApplicationAreaAssignmentGrid.CreateNewElement == null)
+            {
+                this.ApplicationAssignmentGrid.CreateNewElement = () =>
+                {
+                    var applicationName =
+                        Prompt.ShowDialog("Please provide an application name", "Application Assignment");
+
+                    if (!localContext.Application.Any(x => x.ApplicationName == applicationName))
+                    {
+                        var application = new Entities.Application() { ApplicationName = applicationName };
+
+                        localContext.Application.Add(application);
+                        localContext.SaveChanges();
+
+                        var newElement = new UI.AssignmentTarget() { Label = applicationName };
+                        newElement.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration)
+                            ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
+                                ?.SoluiNetBrushDefinition?.ToBrush()
+                            : new SolidColorBrush(Colors.WhiteSmoke);
+
+                        newElement.Tag = application;
+
+                        newElement.AllowDrop = true;
+                        newElement.Drop += dropApplicationDelegate;
+
+                        newElement.PreviewMouseRightButtonDown += rightClickApplicationDelegate;
+
+                        return newElement;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Overgiven application name already exists");
+
+                        return null;
+                    }
+                };
+            }
+
+            foreach (var application in applications)
+            {
+                var applicationTarget = new UI.AssignmentTarget();
+
+                applicationTarget.Label = application.ApplicationName;
+
+                applicationTarget.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
+
+                applicationTarget.Tag = application;
+
+                applicationTarget.AllowDrop = true;
+                applicationTarget.Drop += dropApplicationDelegate;
+
+                applicationTarget.PreviewMouseRightButtonDown += rightClickApplicationDelegate;
+
+                this.ApplicationAssignmentGrid.AddElement(applicationTarget);
+            }
+        }
+
+        private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context, bool showOnlyUnassigned = false)
+        {
+            var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
+                .GroupBy(x => x.ApplicationIdentification);
+
+            this.FillTimeTrackingOverview(timeTargets);
+
+            this.RefreshApplicationAssignmentView(context);
+            this.RefreshCategoryAssignmentView(context);
         }
 
         private void PrepareSourceDataView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context)
@@ -1053,6 +1093,25 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 }
 
                 Clipboard.SetText(clipboardContent);
+            }
+        }
+
+        private void CategoryDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var categoryButton = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as UI.AssignmentTargetExtended;
+
+            if (!(categoryButton?.Tag is Category category))
+            {
+                return;
+            }
+
+            if (Confirm.ShowDialog($"Do you really want to delete the category '{category.CategoryName}'?", "Confirm Deletion"))
+            {
+                this.context.Category.Remove(category);
+
+                this.context.SaveChanges();
+
+                this.RefreshCategoryAssignmentView(null);
             }
         }
     }

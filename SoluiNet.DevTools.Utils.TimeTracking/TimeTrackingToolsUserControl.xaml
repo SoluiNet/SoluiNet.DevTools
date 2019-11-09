@@ -16,6 +16,7 @@
         </ContextMenu>
         <ContextMenu x:Key="CategoryContextMenu">
             <MenuItem Header="Settings" Click="CategorySettings_Click" />
+            <MenuItem Header="Delete" Click="CategoryDelete_Click" />
         </ContextMenu>
     </UserControl.Resources>
     <Grid>

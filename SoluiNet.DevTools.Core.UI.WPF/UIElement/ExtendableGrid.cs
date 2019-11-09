@@ -21,11 +21,47 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtendableGrid{T}"/> class.
-        /// The extendable grid will provide a "+"-button which will call the CreateNewElement-event and add this element to its' childs.
+        /// The extendable grid will provide a "+"-button which will call the CreateNewElement-event and add this element to its childs.
         /// </summary>
         public ExtendableGrid()
             : base()
         {
+            this.PrepareControl();
+        }
+
+        /// <summary>
+        /// The delegate for the creation of a new element.
+        /// </summary>
+        /// <returns>Returns the new element.</returns>
+        /// <example>
+        /// <code>
+        /// var grid = new ExtendableGrid&lt;Button&gt;();
+        ///
+        /// NewElementCreation newElementCreationDelegate = () => {
+        ///   var newButton = new Button();
+        ///
+        ///   // do something with the button
+        ///
+        ///   return newButton;
+        /// }
+        ///
+        /// grid.CreateNewElement = newElementCreationDelegate;
+        /// </code>
+        /// </example>
+        public delegate T NewElementCreation();
+
+        /// <summary>
+        /// Gets or sets the create new element event handler.
+        /// </summary>
+        public NewElementCreation CreateNewElement { get; set; }
+
+        /// <summary>
+        /// Prepare the control.
+        /// </summary>
+        public void PrepareControl()
+        {
+            this.RowDefinitions.Clear();
+
             var gridLengthConverter = new GridLengthConverter();
 
             this.RowDefinitions.Add(new RowDefinition() { Height = (GridLength)gridLengthConverter.ConvertFrom(35) });
@@ -56,32 +92,6 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
             this.Children.Add(button);
         }
-
-        /// <summary>
-        /// The delegate for the creation of a new element.
-        /// </summary>
-        /// <returns>Returns the new element.</returns>
-        /// <example>
-        /// <code>
-        /// var grid = new ExtendableGrid&lt;Button&gt;();
-        ///
-        /// NewElementCreation newElementCreationDelegate = () => {
-        ///   var newButton = new Button();
-        ///
-        ///   // do something with the button
-        ///
-        ///   return newButton;
-        /// }
-        ///
-        /// grid.CreateNewElement = newElementCreationDelegate;
-        /// </code>
-        /// </example>
-        public delegate T NewElementCreation();
-
-        /// <summary>
-        /// Gets or sets the create new element event handler.
-        /// </summary>
-        public NewElementCreation CreateNewElement { get; set; }
 
         /// <summary>
         /// Add a new element to the extendable grid.
