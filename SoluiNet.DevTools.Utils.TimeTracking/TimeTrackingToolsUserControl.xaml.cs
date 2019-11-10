@@ -214,7 +214,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             if ((dropSender as UI.AssignmentTargetExtended).Label.Equals("Distribute evenly"))
             {
-                var assignableCategories = categories.Where(x => x.DistributeEvenlyTarget.GetValueOrDefault(false));
+                var assignableCategories = categories.ToList().Where(x => x.DistributeEvenlyTarget.GetValueOrDefault(false));
 
                 foreach (var category in assignableCategories)
                 {
