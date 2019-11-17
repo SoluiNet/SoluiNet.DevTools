@@ -50,6 +50,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         public virtual DbSet<Application> Application { get; set; }
 
         /// <summary>
+        /// Gets or sets the ApplicationArea accessor.
+        /// </summary>
+        public virtual DbSet<ApplicationArea> ApplicationArea { get; set; }
+
+        /// <summary>
         /// Gets or sets the Category accessor.
         /// </summary>
         public virtual DbSet<Category> Category { get; set; }
@@ -519,6 +524,23 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                     command.Parameters.Clear();
 
                     appliedVersion = new Version("1.0.0.11");
+                }
+
+                if (appliedVersion.CompareTo(new Version("1.0.0.12")) < 0)
+                {
+                    command.CommandText = "ALTER TABLE ApplicationArea ADD ExtendedConfiguration TEXT";
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+                    command.CommandText = "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                    command.Parameters.AddWithValue("$versionNo", "1.0.0.12");
+                    command.Parameters.AddWithValue("$appliedAt", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff"));
+
+                    command.ExecuteNonQuery();
+
+                    command.Parameters.Clear();
+
+                    appliedVersion = new Version("1.0.0.12");
                 }
             }
             catch (Exception exception)

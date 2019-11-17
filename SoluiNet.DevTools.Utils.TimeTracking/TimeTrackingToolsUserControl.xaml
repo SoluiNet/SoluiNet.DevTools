@@ -14,6 +14,9 @@
         <ContextMenu x:Key="ApplicationContextMenu">
             <MenuItem Header="Settings" Click="ApplicationSettings_Click" />
         </ContextMenu>
+        <ContextMenu x:Key="ApplicationAreaContextMenu">
+            <MenuItem Header="Settings" Click="ApplicationAreaSettings_Click" />
+        </ContextMenu>
         <ContextMenu x:Key="CategoryContextMenu">
             <MenuItem Header="Settings" Click="CategorySettings_Click" />
             <MenuItem Header="Delete" Click="CategoryDelete_Click" />

@@ -180,6 +180,39 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.context.SaveChanges();
         }
 
+        private void DropOnApplicationAreaElement(object dropApplicationSender, DragEventArgs dropApplicationEvents)
+        {
+            var dataObject = dropApplicationEvents.Data as DataObject;
+            var data = dataObject?.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
+
+            if (data == null)
+            {
+                return;
+            }
+
+            foreach (var usageTime in data)
+            {
+                usageTime.ApplicationAreaId = ((dropApplicationSender as UI.AssignmentTarget)?.Tag as Entities.ApplicationArea)?.ApplicationAreaId;
+            }
+
+            foreach (var item in this.TimeTrackingAssignmentOverview.Children.OfType<ExtendedButton>().Where(x => x.Selected))
+            {
+                var applicationAreaData = item.Tag as IGrouping<string, UsageTime>;
+
+                if (applicationAreaData == null)
+                {
+                    continue;
+                }
+
+                foreach (var applicationUsageTime in applicationAreaData)
+                {
+                    applicationUsageTime.ApplicationAreaId = ((dropApplicationSender as UI.AssignmentTarget)?.Tag as Entities.ApplicationArea)?.ApplicationAreaId;
+                }
+            }
+
+            this.context.SaveChanges();
+        }
+
         private void DropOnCategoryElement(object dropSender, DragEventArgs dropEvents)
         {
             var categories = this.context.Category;
@@ -293,6 +326,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             applicationContextMenu.IsOpen = true;
         }
 
+        private void RightClickApplicationArea(object sender, MouseButtonEventArgs eventArgs)
+        {
+            if (!(this.FindResource("ApplicationAreaContextMenu") is ContextMenu applicationAreaContextMenu))
+            {
+                return;
+            }
+
+            applicationAreaContextMenu.PlacementTarget = sender as UI.AssignmentTarget;
+            applicationAreaContextMenu.IsOpen = true;
+        }
+
         private void RightClickCategory(object sender, MouseButtonEventArgs eventArgs)
         {
             if (!(this.FindResource("CategoryContextMenu") is ContextMenu categoryContextMenu))
@@ -394,15 +438,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 localContext = this.context;
             }
 
-            this.ApplicationAreaAssignmentGrid.Children.Clear();
-            this.ApplicationAreaAssignmentGrid.PrepareControl();
+            this.ApplicationAssignmentGrid.Children.Clear();
+            this.ApplicationAssignmentGrid.PrepareControl();
 
             var applications = localContext.Application;
 
             DragEventHandler dropApplicationDelegate = this.DropOnApplicationElement;
             MouseButtonEventHandler rightClickApplicationDelegate = this.RightClickApplication;
 
-            if (this.ApplicationAreaAssignmentGrid.CreateNewElement == null)
+            if (this.ApplicationAssignmentGrid.CreateNewElement == null)
             {
                 this.ApplicationAssignmentGrid.CreateNewElement = () =>
                 {
@@ -459,6 +503,78 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        private void RefreshApplicationAreaAssignmentView(TimeTrackingContext localContext)
+        {
+            if (localContext == null)
+            {
+                localContext = this.context;
+            }
+
+            this.ApplicationAreaAssignmentGrid.Children.Clear();
+            this.ApplicationAreaAssignmentGrid.PrepareControl();
+
+            var applications = localContext.Application;
+
+            DragEventHandler dropApplicationAreaDelegate = this.DropOnApplicationAreaElement;
+            MouseButtonEventHandler rightClickApplicationAreaDelegate = this.RightClickApplicationArea;
+
+            if (this.ApplicationAreaAssignmentGrid.CreateNewElement == null)
+            {
+                this.ApplicationAreaAssignmentGrid.CreateNewElement = () =>
+                {
+                    var applicationAreaName =
+                        Prompt.ShowDialog("Please provide an application area name", "Application Area Assignment");
+
+                    if (!localContext.Application.Any(x => x.ApplicationName == applicationAreaName))
+                    {
+                        var applicationArea = new Entities.ApplicationArea() { ApplicationName = applicationAreaName };
+
+                        localContext.ApplicationArea.Add(applicationArea);
+                        localContext.SaveChanges();
+
+                        var newElement = new UI.AssignmentTarget() { Label = applicationAreaName };
+                        newElement.Target.Background = !string.IsNullOrEmpty(applicationArea.ExtendedConfiguration)
+                            ? applicationArea.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
+                                ?.SoluiNetBrushDefinition?.ToBrush()
+                            : new SolidColorBrush(Colors.WhiteSmoke);
+
+                        newElement.Tag = applicationArea;
+
+                        newElement.AllowDrop = true;
+                        newElement.Drop += dropApplicationAreaDelegate;
+
+                        newElement.PreviewMouseRightButtonDown += rightClickApplicationAreaDelegate;
+
+                        return newElement;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Overgiven application name already exists");
+
+                        return null;
+                    }
+                };
+            }
+
+            foreach (var application in applications)
+            {
+                var applicationAreaTarget = new UI.AssignmentTarget();
+
+                applicationAreaTarget.Label = application.ApplicationName;
+
+                applicationAreaTarget.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
+
+                applicationAreaTarget.Tag = application;
+
+                applicationAreaTarget.AllowDrop = true;
+                applicationAreaTarget.Drop += dropApplicationAreaDelegate;
+
+                applicationAreaTarget.PreviewMouseRightButtonDown += rightClickApplicationAreaDelegate;
+
+                this.ApplicationAssignmentGrid.AddElement(applicationAreaTarget);
+            }
+        }
+
         private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context, bool showOnlyUnassigned = false)
         {
             var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
@@ -468,6 +584,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             this.RefreshApplicationAssignmentView(context);
             this.RefreshCategoryAssignmentView(context);
+            this.RefreshApplicationAreaAssignmentView(context);
         }
 
         private void PrepareSourceDataView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context)
@@ -478,7 +595,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.SourceData.ItemsSource = context.UsageTime.Local.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit);
         }
 
-        private void RearangeWidths()
+        private void RearrangeWidths()
         {
             var highestDuration = Convert.ToDouble(this.TimeTrackingAssignmentOverview.Tag);
 
@@ -507,14 +624,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             this.TimeTrackingAssignmentOverview.Loaded += (overviewSender, eventArgs) =>
             {
-                this.RearangeWidths();
+                this.RearrangeWidths();
 
                 this.overviewLoaded = true;
             };
 
             if (this.overviewLoaded)
             {
-                this.RearangeWidths();
+                this.RearrangeWidths();
             }
         }
 
@@ -921,6 +1038,23 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             // todo: get element which has been right clicked and deliver via constructor parameter
             window.ShowWithUserControl(new ExtendedConfigurationUserControl(applicationButton.Tag as Entities.Application));
+
+            this.context.SaveChanges();
+        }
+
+        private void ApplicationAreaSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var applicationAreaButton = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as UI.AssignmentTarget;
+
+            if (applicationAreaButton == null)
+            {
+                return;
+            }
+
+            var window = new SoluiNetWindow();
+
+            // todo: get element which has been right clicked and deliver via constructor parameter
+            window.ShowWithUserControl(new ExtendedConfigurationUserControl(applicationAreaButton.Tag as Entities.ApplicationArea));
 
             this.context.SaveChanges();
         }

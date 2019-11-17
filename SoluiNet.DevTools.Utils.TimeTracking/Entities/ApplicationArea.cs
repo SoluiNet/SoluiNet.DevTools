@@ -10,12 +10,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
     /// The entity ApplicationArea.
     /// </summary>
     [Table("ApplicationArea")]
-    public class ApplicationArea
+    public class ApplicationArea : IContainsExtendedConfiguration
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationArea"/> class.
@@ -48,5 +49,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Gets or sets the usage times.
         /// </summary>
         public virtual ICollection<UsageTime> UsageTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extended configuration.
+        /// </summary>
+        public virtual string ExtendedConfiguration { get; set; }
     }
 }
