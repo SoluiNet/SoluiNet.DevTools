@@ -16,6 +16,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Windows.Media;
     using LiveCharts;
     using LiveCharts.Wpf;
+    using NLog;
     using SoluiNet.DevTools.Core.Constants;
     using SoluiNet.DevTools.Core.Tools.Dictionary;
     using SoluiNet.DevTools.Core.Tools.Json;
@@ -60,6 +61,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             this.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             this.Arrange(new Rect(0, 0, this.DesiredSize.Width, this.DesiredSize.Height));
+        }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        private Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -348,6 +360,85 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             categoryContextMenu.IsOpen = true;
         }
 
+        private void SelectCategory(object sender, EventArgs eventArgs)
+        {
+            var categoryTarget = sender as UI.AssignmentTargetExtended;
+
+            var categoryName = categoryTarget?.Label;
+            var category = categoryTarget?.Tag as Entities.Category;
+
+            var lowerDayLimit = DateTime.UtcNow.Date;
+            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+            if (this.AssignmentDate.SelectedDate.HasValue)
+            {
+                lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
+                upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
+            }
+
+            this.CategoryAssignmentGrid.Reset();
+
+            var backToOverviewButton = new UI.AssignmentTargetExtended
+            {
+                Label = "<< Back",
+                Background = new SolidColorBrush(Colors.LightGreen),
+                AllowDrop = false,
+            };
+
+            backToOverviewButton.PreviewMouseLeftButtonDown += (o, args) =>
+            {
+                this.RefreshCategoryAssignmentView(null);
+                this.ShowAllTimeTrackingElements();
+            };
+
+            this.CategoryAssignmentGrid.AddElement(backToOverviewButton);
+
+            var selectedCategoryButton = new UI.AssignmentTargetExtended
+            {
+                Label = categoryName,
+                Tag = category,
+                AllowDrop = true,
+            };
+
+            selectedCategoryButton.Target.PrimaryActionButton.Background = !string.IsNullOrEmpty(category?.ExtendedConfiguration) ? category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
+
+            selectedCategoryButton.PreviewMouseRightButtonDown += this.RightClickApplication;
+
+            this.CategoryAssignmentGrid.AddElement(selectedCategoryButton);
+
+            var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && x.CategoryUsageTime.Any(y => y.Category.CategoryName == categoryName))
+                .GroupBy(x => x.ApplicationIdentification);
+
+            this.FillTimeTrackingOverview(timeTargets, this.SetBackgroundForCategoryElements, false, false);
+        }
+
+        private void FillCategoryTargets(
+            List<Entities.Category> categories,
+            DragEventHandler dropCategoryDelegate,
+            MouseButtonEventHandler rightClickCategoryDelegate,
+            MouseButtonEventHandler selectCategoryDelegate)
+        {
+            foreach (var category in categories)
+            {
+                var categoryTarget = new UI.AssignmentTargetExtended
+                {
+                    Label = category.CategoryName,
+                };
+
+                categoryTarget.Target.PrimaryActionButton.Background = !string.IsNullOrEmpty(category.ExtendedConfiguration) ? category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
+
+                categoryTarget.Tag = category;
+
+                categoryTarget.AllowDrop = true;
+                categoryTarget.Drop += dropCategoryDelegate;
+
+                categoryTarget.PreviewMouseRightButtonDown += rightClickCategoryDelegate;
+                categoryTarget.PreviewMouseLeftButtonDown += selectCategoryDelegate;
+
+                this.CategoryAssignmentGrid.AddElement(categoryTarget);
+            }
+        }
+
         private void RefreshCategoryAssignmentView(TimeTrackingContext localContext)
         {
             if (localContext == null)
@@ -355,12 +446,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 localContext = this.context;
             }
 
-            this.CategoryAssignmentGrid.Children.Clear();
-            this.CategoryAssignmentGrid.PrepareControl();
+            this.CategoryAssignmentGrid.Reset();
 
             MouseButtonEventHandler rightClickCategoryDelegate = this.RightClickCategory;
+            MouseButtonEventHandler selectCategoryDelegate = this.SelectCategory;
 
-            var categories = localContext.Category;
+            var categories = localContext.Category.ToList();
 
             DragEventHandler dropCategoryDelegate = this.DropOnCategoryElement;
 
@@ -412,22 +503,94 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             this.CategoryAssignmentGrid.AddElement(distributeEvenlyElement);
 
-            foreach (var category in categories)
+            this.FillCategoryTargets(categories, dropCategoryDelegate, rightClickCategoryDelegate, selectCategoryDelegate);
+        }
+
+        private void SelectApplication(object sender, EventArgs eventArgs)
+        {
+            var applicationTarget = sender as UI.AssignmentTarget;
+
+            var applicationName = applicationTarget?.Label;
+            var application = applicationTarget?.Tag as Entities.Application;
+
+            var lowerDayLimit = DateTime.UtcNow.Date;
+            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+            if (this.AssignmentDate.SelectedDate.HasValue)
             {
-                var categoryTarget = new UI.AssignmentTargetExtended();
+                lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
+                upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
+            }
 
-                categoryTarget.Label = category.CategoryName;
+            this.ApplicationAssignmentGrid.Reset();
 
-                categoryTarget.Target.PrimaryActionButton.Background = !string.IsNullOrEmpty(category.ExtendedConfiguration) ? category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
+            var backToOverviewButton = new UI.AssignmentTarget
+            {
+                Label = "<< Back",
+                Background = new SolidColorBrush(Colors.LightGreen),
+                AllowDrop = false,
+            };
 
-                categoryTarget.Tag = category;
+            backToOverviewButton.PreviewMouseLeftButtonDown += (o, args) =>
+            {
+                this.RefreshApplicationAssignmentView(null);
+                this.ShowAllTimeTrackingElements();
+            };
 
-                categoryTarget.AllowDrop = true;
-                categoryTarget.Drop += dropCategoryDelegate;
+            this.ApplicationAssignmentGrid.AddElement(backToOverviewButton);
 
-                categoryTarget.PreviewMouseRightButtonDown += rightClickCategoryDelegate;
+            var selectedApplicationButton = new UI.AssignmentTarget
+            {
+                Label = applicationName,
+                Target =
+                {
+                    Background = !string.IsNullOrEmpty(application?.ExtendedConfiguration)
+                        ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
+                            ?.SoluiNetBrushDefinition?.ToBrush()
+                        : new SolidColorBrush(Colors.WhiteSmoke),
+                },
+                Tag = application,
+                AllowDrop = true,
+            };
 
-                this.CategoryAssignmentGrid.AddElement(categoryTarget);
+            selectedApplicationButton.PreviewMouseRightButtonDown += this.RightClickApplication;
+
+            this.ApplicationAssignmentGrid.AddElement(selectedApplicationButton);
+
+            var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit && x.Application.ApplicationName == applicationName)
+                .GroupBy(x => x.ApplicationIdentification);
+
+            this.FillTimeTrackingOverview(timeTargets, this.SetBackgroundForApplicationElements, false, false);
+        }
+
+        private void FillApplicationTargets(
+            List<Entities.Application> applications,
+            DragEventHandler dropApplicationDelegate,
+            MouseButtonEventHandler rightClickApplicationDelegate,
+            MouseButtonEventHandler selectApplicationDelegate)
+        {
+            foreach (var application in applications)
+            {
+                var applicationTarget = new UI.AssignmentTarget
+                {
+                    Label = application.ApplicationName,
+                    Target =
+                    {
+                        Background = !string.IsNullOrEmpty(application.ExtendedConfiguration)
+                            ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
+                                ?.SoluiNetBrushDefinition?.ToBrush()
+                            : new SolidColorBrush(Colors.WhiteSmoke),
+                    },
+                    Tag = application,
+                    AllowDrop = true,
+                };
+
+                applicationTarget.Drop += dropApplicationDelegate;
+
+                applicationTarget.PreviewMouseRightButtonDown += rightClickApplicationDelegate;
+                applicationTarget.PreviewMouseLeftButtonDown += selectApplicationDelegate;
+
+                this.ApplicationAssignmentGrid.AddElement(applicationTarget);
             }
         }
 
@@ -438,13 +601,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 localContext = this.context;
             }
 
-            this.ApplicationAssignmentGrid.Children.Clear();
-            this.ApplicationAssignmentGrid.PrepareControl();
+            this.ApplicationAssignmentGrid.Reset();
 
-            var applications = localContext.Application;
+            var applications = localContext.Application.ToList();
 
             DragEventHandler dropApplicationDelegate = this.DropOnApplicationElement;
             MouseButtonEventHandler rightClickApplicationDelegate = this.RightClickApplication;
+            MouseButtonEventHandler selectApplicationDelegate = this.SelectApplication;
 
             if (this.ApplicationAssignmentGrid.CreateNewElement == null)
             {
@@ -484,23 +647,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 };
             }
 
-            foreach (var application in applications)
-            {
-                var applicationTarget = new UI.AssignmentTarget();
-
-                applicationTarget.Label = application.ApplicationName;
-
-                applicationTarget.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
-
-                applicationTarget.Tag = application;
-
-                applicationTarget.AllowDrop = true;
-                applicationTarget.Drop += dropApplicationDelegate;
-
-                applicationTarget.PreviewMouseRightButtonDown += rightClickApplicationDelegate;
-
-                this.ApplicationAssignmentGrid.AddElement(applicationTarget);
-            }
+            this.FillApplicationTargets(applications, dropApplicationDelegate, rightClickApplicationDelegate, selectApplicationDelegate);
         }
 
         private void RefreshApplicationAreaAssignmentView(TimeTrackingContext localContext)
@@ -571,20 +718,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 applicationAreaTarget.PreviewMouseRightButtonDown += rightClickApplicationAreaDelegate;
 
-                this.ApplicationAssignmentGrid.AddElement(applicationAreaTarget);
+                this.ApplicationAreaAssignmentGrid.AddElement(applicationAreaTarget);
             }
         }
 
-        private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context, bool showOnlyUnassigned = false)
+        private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext localContext, bool showOnlyUnassigned = false)
         {
-            var timeTargets = context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
+            var timeTargets = localContext.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
                 .GroupBy(x => x.ApplicationIdentification);
 
             this.FillTimeTrackingOverview(timeTargets);
 
-            this.RefreshApplicationAssignmentView(context);
-            this.RefreshCategoryAssignmentView(context);
-            this.RefreshApplicationAreaAssignmentView(context);
+            this.RefreshApplicationAssignmentView(localContext);
+            this.RefreshCategoryAssignmentView(localContext);
+            this.RefreshApplicationAreaAssignmentView(localContext);
         }
 
         private void PrepareSourceDataView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext context)
@@ -651,7 +798,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             .ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition.ToBrush();
         }
 
-        private void FillTimeTrackingOverview(IQueryable<IGrouping<string, UsageTime>> timeTargets)
+        private void FillTimeTrackingOverview(
+            IQueryable<IGrouping<string, UsageTime>> timeTargets,
+            ExtendedButton.ResolveBackgroundColour backgroundColourResolveDelegate = null,
+            bool subtractAssignedDuration = true,
+            bool ignoreSmallDurations = true)
         {
             this.TimeTrackingAssignmentOverview.Children.Clear();
             this.TimeTrackingAssignmentOverview.RowDefinitions.Clear();
@@ -667,26 +818,27 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var duration = Convert.ToDouble(timeTarget.Sum(x => x.Duration));
 
-                if (header == "Category")
+                if (header == "Category" && subtractAssignedDuration)
                 {
-                    duration -= timeTarget.Sum(x => x.CategoryUsageTime != null ? x.CategoryUsageTime.Sum(y => y.Duration) : 0);
+                    duration -= timeTarget.Sum(x => x.CategoryUsageTime?.Sum(y => y.Duration) ?? 0);
                 }
 
                 duration = Math.Round(duration);
 
-                if (Math.Abs(duration) < 0.00001)
+                if (Math.Abs(duration) < 0.00001 && ignoreSmallDurations)
                 {
                     continue;
                 }
 
-                var label = string.Format(
-                    "{0} ({1})",
-                    timeTarget.Key,
-                    duration.ToDurationString());
+                var label = $"{timeTarget.Key} ({duration.ToDurationString()})";
 
                 var timeTargetButton = new ExtendedButton() { HorizontalAlignment = HorizontalAlignment.Left };
 
-                if (string.IsNullOrEmpty(header) || header == "Application")
+                if (backgroundColourResolveDelegate != null)
+                {
+                    timeTargetButton.OnBackgroundColourResolving = backgroundColourResolveDelegate;
+                }
+                else if (string.IsNullOrEmpty(header) || header == "Application")
                 {
                     timeTargetButton.OnBackgroundColourResolving = this.SetBackgroundForApplicationElements;
                 }
@@ -732,6 +884,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        private void ShowAllTimeTrackingElements()
+        {
+            var lowerDayLimit = DateTime.UtcNow.Date;
+            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+            if (this.AssignmentDate.SelectedDate.HasValue)
+            {
+                lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
+                upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
+            }
+
+            var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification);
+
+            this.FillTimeTrackingOverview(timeTargets, null, false);
+        }
+
         private void TimeTrackingAssignmentTargetTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((sender as TabControl).SelectedItem == null)
@@ -761,18 +929,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.ShowAll.RemoveEvent("Click");
             this.ShowAll.Click += (showAllButton, eventArgs) =>
             {
-                var lowerDayLimit = DateTime.UtcNow.Date;
-                var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
-
-                if (this.AssignmentDate.SelectedDate.HasValue)
-                {
-                    lowerDayLimit = this.AssignmentDate.SelectedDate.Value.Date;
-                    upperDayLimit = this.AssignmentDate.SelectedDate.Value.AddDays(1).Date;
-                }
-
-                var timeTargets = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification);
-
-                this.FillTimeTrackingOverview(timeTargets);
+                this.ShowAllTimeTrackingElements();
             };
 
             if (header == "Application")
@@ -837,23 +994,33 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void StartQuery_Click(object sender, RoutedEventArgs e)
         {
-            var lowerDayLimit = DateTime.UtcNow.Date;
-            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
-
-            if (this.QueryDateBegin.SelectedDate.HasValue && this.QueryDateEnd.SelectedDate.HasValue)
+            try
             {
-                lowerDayLimit = this.QueryDateBegin.SelectedDate.Value.Date;
-                upperDayLimit = this.QueryDateEnd.SelectedDate.Value.AddDays(1).Date;
+                var lowerDayLimit = DateTime.UtcNow.Date;
+                var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+                if (this.QueryDateBegin.SelectedDate.HasValue && this.QueryDateEnd.SelectedDate.HasValue)
+                {
+                    lowerDayLimit = this.QueryDateBegin.SelectedDate.Value.Date;
+                    upperDayLimit = this.QueryDateEnd.SelectedDate.Value.AddDays(1).Date;
+                }
+
+                var queryResults = this.context.UsageTime
+                    .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
+
+                if (!string.IsNullOrEmpty(this.QueryFilter.Text))
+                {
+                    queryResults = queryResults.Where(this.QueryFilter.Text).ToList();
+                }
+
+                this.FillQueryResults(queryResults);
             }
-
-            var queryResults = this.context.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
-
-            if (!string.IsNullOrEmpty(this.QueryFilter.Text))
+            catch (Exception exception)
             {
-                queryResults = queryResults.Where(this.QueryFilter.Text).ToList();
-            }
+                this.Logger.Error(exception, "Error while executing query '{0}'", !string.IsNullOrEmpty(this.QueryFilter.Text) ? this.QueryFilter.Text : "no filter");
 
-            this.FillQueryResults(queryResults);
+                MessageBox.Show(exception.Message, "Error while executing Query");
+            }
         }
 
         private void FillSummaryResults(Dictionary<string, double> summaryResults)

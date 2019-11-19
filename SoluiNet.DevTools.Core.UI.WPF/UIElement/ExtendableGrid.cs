@@ -113,5 +113,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
             this.Children.Add(newElement);
         }
+
+        /// <summary>
+        /// Reset the control.
+        /// </summary>
+        public void Reset()
+        {
+            this.Children.Clear();
+            this.PrepareControl();
+        }
     }
 }
