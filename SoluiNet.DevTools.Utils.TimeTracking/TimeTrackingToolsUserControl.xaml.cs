@@ -1014,6 +1014,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 }
 
                 this.FillQueryResults(queryResults);
+
+                this.context.FilterHistory.Add(new FilterHistory()
+                {
+                    ExecutionUser = $"{Environment.UserDomainName}\\{Environment.UserName}",
+                    FilterString = this.QueryFilter.Text,
+                    LastExecutionDateTime = DateTime.UtcNow,
+                });
+
+                this.context.SaveChanges();
             }
             catch (Exception exception)
             {
