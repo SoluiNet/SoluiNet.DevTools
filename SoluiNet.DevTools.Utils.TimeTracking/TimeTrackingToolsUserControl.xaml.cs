@@ -92,6 +92,18 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             this.PrepareAssignmentView(lowerDayLimit, upperDayLimit, this.context);
 
             this.PrepareStatisticsView(lowerDayLimit, upperDayLimit, this.context);
+
+            this.PrepareQueryView(this.context);
+        }
+
+        private void PrepareQueryView(TimeTrackingContext localContext)
+        {
+            this.QueryFilter.Items.Clear();
+
+            foreach (var filterHistoryItem in localContext.FilterHistory)
+            {
+                this.QueryFilter.Items.Add(filterHistoryItem.FilterString);
+            }
         }
 
         private void PrepareStatisticsView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext localContext)
@@ -1015,12 +1027,33 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 this.FillQueryResults(queryResults);
 
-                this.context.FilterHistory.Add(new FilterHistory()
+                var userName = $"{Environment.UserDomainName}\\{Environment.UserName}";
+
+                var existingFilters = this.context.FilterHistory.Where(x =>
+                    x.FilterString == this.QueryFilter.Text && x.ExecutionUser == userName);
+
+                if (!existingFilters.Any())
                 {
-                    ExecutionUser = $"{Environment.UserDomainName}\\{Environment.UserName}",
-                    FilterString = this.QueryFilter.Text,
-                    LastExecutionDateTime = DateTime.UtcNow,
-                });
+                    this.context.FilterHistory.Add(new FilterHistory()
+                    {
+                        ExecutionUser = userName,
+                        FilterString = this.QueryFilter.Text,
+                        LastExecutionDateTime = DateTime.UtcNow,
+                    });
+
+                    this.QueryFilter.Items.Add(this.QueryFilter.Text);
+                }
+                else
+                {
+                    var existingFilter = existingFilters
+                        .OrderByDescending(x => x.LastExecutionDateTime)
+                        .FirstOrDefault();
+
+                    if (existingFilter != null)
+                    {
+                        existingFilter.LastExecutionDateTime = DateTime.UtcNow;
+                    }
+                }
 
                 this.context.SaveChanges();
             }
