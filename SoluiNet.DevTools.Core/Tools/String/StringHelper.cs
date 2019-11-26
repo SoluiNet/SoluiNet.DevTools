@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -38,6 +39,11 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// <returns>Returns a <see cref="string"/> which will be displayed correctly in the header of a visual component.</returns>
         public static string PrepareHeaderLabel(string headerLabel, bool removeEntityStructure = true)
         {
+            if (headerLabel == null)
+            {
+                throw new ArgumentNullException(nameof(headerLabel));
+            }
+
             var headerLabelString = headerLabel;
 
             if (headerLabelString.Contains('.') && removeEntityStructure)
@@ -58,12 +64,17 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// <returns>Returns a <see cref="string"/> which represents the <paramref name="originalString"/> with line numbers at the beginning of each line.</returns>
         public static string AddLineNumbers(this string originalString, int numberOfDigits = 2)
         {
+            if (originalString == null)
+            {
+                throw new ArgumentNullException(nameof(originalString));
+            }
+
             var temporaryString = string.Empty;
             var lineNumber = 1;
 
             foreach (var line in originalString.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None))
             {
-                temporaryString += string.Format("{0}: {1}\r\n", lineNumber++.ToString("D" + numberOfDigits.ToString()), line);
+                temporaryString += string.Format(CultureInfo.InvariantCulture, "{0}: {1}\r\n", lineNumber++.ToString("D" + numberOfDigits.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), line);
             }
 
             return temporaryString.Remove(temporaryString.Length - 2, 2);
@@ -108,27 +119,27 @@ namespace SoluiNet.DevTools.Core.Tools.String
             {
                 if (match.Groups[2].Success)
                 {
-                    duration += Convert.ToInt32(match.Groups[2].Value) * 7 * 24 * 60 * 60;
+                    duration += Convert.ToInt32(match.Groups[2].Value, CultureInfo.InvariantCulture) * 7 * 24 * 60 * 60;
                 }
 
                 if (match.Groups[4].Success)
                 {
-                    duration += Convert.ToInt32(match.Groups[4].Value) * 24 * 60 * 60;
+                    duration += Convert.ToInt32(match.Groups[4].Value, CultureInfo.InvariantCulture) * 24 * 60 * 60;
                 }
 
                 if (match.Groups[6].Success)
                 {
-                    duration += Convert.ToInt32(match.Groups[6].Value) * 60 * 60;
+                    duration += Convert.ToInt32(match.Groups[6].Value, CultureInfo.InvariantCulture) * 60 * 60;
                 }
 
                 if (match.Groups[8].Success)
                 {
-                    duration += Convert.ToInt32(match.Groups[8].Value) * 60;
+                    duration += Convert.ToInt32(match.Groups[8].Value, CultureInfo.InvariantCulture) * 60;
                 }
 
                 if (match.Groups[10].Success)
                 {
-                    duration += Convert.ToInt32(match.Groups[10].Value);
+                    duration += Convert.ToInt32(match.Groups[10].Value, CultureInfo.InvariantCulture);
                 }
             }
 
