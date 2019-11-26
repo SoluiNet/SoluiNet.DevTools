@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.Tools
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -38,7 +39,7 @@ namespace SoluiNet.DevTools.Core.Tools
             var dataEntities = plugin.GetType().Assembly.GetTypes().Where(x =>
                     x.IsClass
                     && !string.IsNullOrEmpty(x.Namespace)
-                    && (x.Namespace.StartsWith(string.Format("{0}.{1}", pluginNamespace, "Entities")) || x.Namespace.StartsWith(string.Format("{0}.{1}", pluginNamespace, "Data.Entities"))))
+                    && (x.Namespace.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, "Entities"), StringComparison.InvariantCulture) || x.Namespace.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, "Data.Entities"), StringComparison.InvariantCulture)))
                 .ToList();
 
             if (!dataEntities.Any())
@@ -50,7 +51,7 @@ namespace SoluiNet.DevTools.Core.Tools
                     dataEntities.AddRange(assemblyType.GetTypes().Where(x =>
                             x.IsClass
                             && !string.IsNullOrEmpty(x.Namespace)
-                            && (x.Namespace.StartsWith(string.Format("{0}.{1}", pluginNamespace, "Entities")) || x.Namespace.StartsWith(string.Format("{0}.{1}", pluginNamespace, "Data.Entities"))))
+                            && (x.Namespace.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, "Entities"), StringComparison.InvariantCulture) || x.Namespace.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, "Data.Entities"), StringComparison.InvariantCulture)))
                         .ToList());
                 }
             }
@@ -79,8 +80,8 @@ namespace SoluiNet.DevTools.Core.Tools
                     x.IsClass
                     && x.Name == entityName
                     && !string.IsNullOrEmpty(x.Namespace)
-                    && (x.Namespace.StartsWith(string.Format("{0}.{1}", pluginNamespace, "Entities"))
-                        || x.Namespace.StartsWith(string.Format("{0}.{1}", pluginNamespace, "Data.Entities"))))
+                    && (x.Namespace.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, "Entities"), StringComparison.InvariantCulture)
+                        || x.Namespace.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, "Data.Entities"), StringComparison.InvariantCulture)))
                 .ToList();
 
             if (!dataEntities.Any())
@@ -93,8 +94,8 @@ namespace SoluiNet.DevTools.Core.Tools
                             x.IsClass
                             && x.Name == entityName
                             && !string.IsNullOrEmpty(x.Namespace)
-                            && (x.Namespace.StartsWith(string.Format("{0}.{1}", pluginNamespace, "Entities"))
-                                || x.Namespace.StartsWith(string.Format("{0}.{1}", pluginNamespace, "Data.Entities"))))
+                            && (x.Namespace.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, "Entities"), StringComparison.InvariantCulture)
+                                || x.Namespace.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, "Data.Entities"), StringComparison.InvariantCulture)))
                         .ToList());
                 }
             }
@@ -127,7 +128,7 @@ namespace SoluiNet.DevTools.Core.Tools
             var pluginNamespace = plugin.GetType().Namespace;
 
             var embeddedResources = plugin.GetType().Assembly.GetManifestResourceNames().Where(x =>
-                    x.StartsWith(string.Format("{0}.{1}", pluginNamespace, type)))
+                    x.StartsWith(string.Format(CultureInfo.InvariantCulture, "{0}.{1}", pluginNamespace, type), StringComparison.InvariantCulture))
                 .ToList();
 
             return embeddedResources;
@@ -246,7 +247,7 @@ namespace SoluiNet.DevTools.Core.Tools
                 settingsXml = XmlHelper.Merge(settingsXml, embeddedResourceXml, "SoluiNet.Settings");
             }
 
-            var settingsPathForPlugin = Path.Combine(folderPath, "Plugins", string.Format("Settings.{0}.xml", plugin.Name));
+            var settingsPathForPlugin = Path.Combine(folderPath, "Plugins", string.Format(CultureInfo.InvariantCulture, "Settings.{0}.xml", plugin.Name));
 
             if (System.IO.File.Exists(settingsPathForPlugin))
             {
@@ -285,7 +286,7 @@ namespace SoluiNet.DevTools.Core.Tools
             }
 
             var preparedSettings = settings.SoluiNetEnvironment
-                .SelectMany(x => x.SoluiNetSettingEntry.Select(y => new { SettingName = string.Format("{0}.{1}", x.name, y.name), SettingValue = y.Value }));
+                .SelectMany(x => x.SoluiNetSettingEntry.Select(y => new { SettingName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", x.name, y.name), SettingValue = y.Value }));
 
             return preparedSettings.ToDictionary(x => x.SettingName, x => (object)x.SettingValue);
         }
@@ -307,7 +308,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// <returns>Returns the currently active environment for the overgiven plugin.</returns>
         public static string GetEnvironment(IProvidesDatabaseConnectivity plugin)
         {
-            return plugin.Environment;
+            return plugin?.Environment;
         }
 
         /// <summary>
@@ -333,7 +334,7 @@ namespace SoluiNet.DevTools.Core.Tools
             var environmentList = new List<string>();
 
             environmentList.AddRange(ConfigurationManager.ConnectionStrings.Cast<ConnectionStringSettings>()
-                .Where(x => x.Name.StartsWith(plugin.DefaultConnectionStringName))
+                .Where(x => x.Name.StartsWith(plugin.DefaultConnectionStringName, StringComparison.InvariantCulture))
                 .Select(x => x.Name == plugin.DefaultConnectionStringName ?
                     "Default" :
                     x.Name.Replace(plugin.DefaultConnectionStringName + ".", string.Empty)));
