@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Core.Tools.Stream
     /// <summary>
     /// Provides a collection of methods to work with streams.
     /// </summary>
-    public class StreamHelper
+    public static class StreamHelper
     {
         /// <summary>
         /// Convert a stream to a string.

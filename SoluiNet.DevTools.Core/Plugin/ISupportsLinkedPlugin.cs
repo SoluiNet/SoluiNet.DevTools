@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides an interface which shows that this plugin supports linked plugins.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1040:Avoid empty interfaces", Justification = "Still in development. May not be empty anymore in future.")]
     public interface ISupportsLinkedPlugin
     {
     }
