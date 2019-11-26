@@ -350,6 +350,11 @@ namespace SoluiNet.DevTools.Core.Tools
         /// <returns>Returns an instance of <see cref="Assembly"/> which contains the assembly for which the event was looking for.</returns>
         public static Assembly LoadAssembly(object sender, ResolveEventArgs args)
         {
+            if (args == null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
             var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             if (string.IsNullOrEmpty(folderPath))
@@ -443,7 +448,7 @@ namespace SoluiNet.DevTools.Core.Tools
                     {
                         var typeInterfaces = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition().FullName == pluginType.GetGenericTypeDefinition().FullName);
 
-                        if (typeInterfaces == null || typeInterfaces.Count() == 0)
+                        if (typeInterfaces == null || !typeInterfaces.Any())
                         {
                             continue;
                         }
@@ -453,12 +458,12 @@ namespace SoluiNet.DevTools.Core.Tools
                             var pluginGenericArguments = pluginType.GetGenericArguments();
                             var typeGenericArguments = typeInterface.GetGenericArguments();
 
-                            if (pluginGenericArguments.Count() != typeGenericArguments.Count())
+                            if (pluginGenericArguments.Length != typeGenericArguments.Length)
                             {
                                 continue;
                             }
 
-                            for (int i = 0; i < pluginGenericArguments.Count(); i++)
+                            for (int i = 0; i < pluginGenericArguments.Length; i++)
                             {
                                 var genericArgument = pluginGenericArguments[i];
 
@@ -491,7 +496,7 @@ namespace SoluiNet.DevTools.Core.Tools
 
             foreach (var plugin in pluginList)
             {
-                if (plugin.Name.Equals(name))
+                if (plugin.Name.Equals(name, StringComparison.InvariantCulture))
                 {
                     return plugin;
                 }

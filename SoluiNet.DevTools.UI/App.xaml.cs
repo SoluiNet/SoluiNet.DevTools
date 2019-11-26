@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.UI
     using System.Configuration;
     using System.Data;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -72,7 +73,7 @@ namespace SoluiNet.DevTools.UI
         {
             base.OnStartup(e);
 
-            this.Logger.Info(string.Format("Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+            this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
             this.LoadPlugins();
             this.LoadUiElements();
@@ -88,7 +89,7 @@ namespace SoluiNet.DevTools.UI
         {
             base.OnExit(e);
 
-            this.Logger.Info(string.Format("Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+            this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
             this.CallShutdownEvent();
         }
@@ -206,12 +207,12 @@ namespace SoluiNet.DevTools.UI
 
                 if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
                 {
-                    this.Logger.Info(string.Format("Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
+                    this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
 
                     continue;
                 }
 
-                this.Logger.Info(string.Format("Load plugin '{0}'.", assemblyName));
+                this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Load plugin '{0}'.", assemblyName));
 
                 if (type.Value.Contains("PluginDev"))
                 {

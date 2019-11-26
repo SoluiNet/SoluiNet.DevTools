@@ -8,6 +8,7 @@ namespace SoluiNet.DevTools.UI
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -72,11 +73,16 @@ namespace SoluiNet.DevTools.UI
                             utilityPlugin.Execute(x =>
                             {
                                 var pluginVisualizeWindow = new VisualPluginContainer();
-                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", string.Format("{0} / {1}", (utilityPlugin as IGroupable).Group, utilityPlugin.MenuItemLabel) } });
+                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", string.Format(CultureInfo.InvariantCulture, "{0} / {1}", (utilityPlugin as IGroupable).Group, utilityPlugin.MenuItemLabel) } });
 
                                 pluginVisualizeWindow.ContentGrid.Children.Add(x);
 
                                 pluginVisualizeWindow.Show();
+
+                                if (x is IDisposable disposableObject)
+                                {
+                                    disposableObject.Dispose();
+                                }
                             });
                         };
 
@@ -99,6 +105,11 @@ namespace SoluiNet.DevTools.UI
                                 pluginVisualizeWindow.ContentGrid.Children.Add(x);
 
                                 pluginVisualizeWindow.Show();
+
+                                if (x is IDisposable disposableObject)
+                                {
+                                    disposableObject.Dispose();
+                                }
                             });
                         };
 
@@ -108,6 +119,8 @@ namespace SoluiNet.DevTools.UI
                 catch (Exception exception)
                 {
                     this.Logger.Error(exception);
+
+                    throw;
                 }
             }
 
@@ -124,7 +137,7 @@ namespace SoluiNet.DevTools.UI
                 };
             }
 
-            this.LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
+            this.LoggingPath = string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
         }
 
         private string LoggingPath { get; set; }

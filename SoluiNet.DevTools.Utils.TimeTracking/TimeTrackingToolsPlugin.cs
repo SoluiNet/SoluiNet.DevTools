@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -89,8 +90,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// Call this method if the plugin should be displayed.
         /// </summary>
         /// <param name="displayInPluginContainer">The delegate which should be called for displaying the plugin.</param>
+        [SuppressMessage(
+            "Microsoft.Reliability",
+            "CA2000:DisposeObjectsBeforeLosingScope",
+            Justification = "Current calling methods in MainWindow.xaml already call a Dispose if possible.")]
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
+            if (displayInPluginContainer == null)
+            {
+                throw new ArgumentNullException(nameof(displayInPluginContainer));
+            }
+
             displayInPluginContainer(new TimeTrackingToolsUserControl());
         }
 

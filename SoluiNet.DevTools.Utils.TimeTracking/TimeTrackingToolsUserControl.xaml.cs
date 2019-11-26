@@ -7,8 +7,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
+    using System.Globalization;
     using System.Linq;
     using System.Linq.Dynamic;
+    using System.Reflection;
+    using System.Resources;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -35,7 +38,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     /// <summary>
     /// Interaction logic for TimeTrackingToolsUserControl.xaml.
     /// </summary>
-    public partial class TimeTrackingToolsUserControl : UserControl
+    public partial class TimeTrackingToolsUserControl : UserControl, IDisposable
     {
         /// <summary>
         /// A value which indicates if a mouse is moving or not.
@@ -51,6 +54,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// The database context where time tracking will be stored.
         /// </summary>
         private TimeTrackingContext context;
+
+        /// <summary>
+        /// A value which indicates if this instance has been disposed already.
+        /// </summary>
+        private bool disposed = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTrackingToolsUserControl"/> class.
@@ -72,6 +80,43 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 return LogManager.GetCurrentClassLogger();
             }
+        }
+
+        private ResourceManager Resources
+        {
+            get
+            {
+                return new ResourceManager("SoluiNet.DevTools.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
+            }
+        }
+
+        /// <summary>
+        /// Dispose time tracking tool user control.
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose time tracking tool user control.
+        /// </summary>
+        /// <param name="disposing">A value which indicates if managed objects should be disposed.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                this.context?.Dispose();
+            }
+
+            this.disposed = true;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -137,7 +182,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var yAxis = new Axis();
             yAxis.Title = "Weights";
-            yAxis.Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString()).ToList();
+            yAxis.Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
 
             barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
@@ -170,7 +215,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             var durations = new Axis();
             yAxis.Title = "Durations";
-            yAxis.Labels = durationPerApplication.Max(x => x.Duration).CountFrom(start: 0).Select(x => x.ToString()).ToList();
+            yAxis.Labels = durationPerApplication.Max(x => x.Duration).CountFrom(start: 0).Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
 
             applicationChart.AxisX.Add(applications);
             applicationChart.AxisY.Add(durations);
@@ -269,7 +314,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 }
             }
 
-            if ((dropSender as UI.AssignmentTargetExtended).Label.Equals("Distribute evenly"))
+            if ((dropSender as UI.AssignmentTargetExtended).Label.Equals("Distribute evenly", StringComparison.InvariantCulture))
             {
                 var assignableCategories = categories.ToList().Where(x => x.DistributeEvenlyTarget.GetValueOrDefault(false));
 
@@ -756,7 +801,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void RearrangeWidths()
         {
-            var highestDuration = Convert.ToDouble(this.TimeTrackingAssignmentOverview.Tag);
+            var highestDuration = Convert.ToDouble(this.TimeTrackingAssignmentOverview.Tag, CultureInfo.InvariantCulture);
 
             foreach (var element in this.TimeTrackingAssignmentOverview.Children)
             {
@@ -1061,7 +1106,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 this.Logger.Error(exception, "Error while executing query '{0}'", !string.IsNullOrEmpty(this.QueryFilter.Text) ? this.QueryFilter.Text : "no filter");
 
-                MessageBox.Show(exception.Message, "Error while executing Query");
+                MessageBox.Show(exception.Message, this.Resources.GetString("QueryError", CultureInfo.CurrentCulture));
             }
         }
 
@@ -1183,7 +1228,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     foreach (var item in usageTimeInPeriod.GroupBy(x => x.StartTime.Date))
                     {
                         summaryResults.Add(
-                            item.Key.ToString("yyyy-MM-dd"),
+                            item.Key.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                             item
                                 .GroupBy(x => x.Application != null ? (!string.IsNullOrEmpty(x.Application.ApplicationName) ? x.Application.ApplicationName : "n/a") : "n/a")
                                 .ToDictionary(x => !string.IsNullOrEmpty(x.Key) ? x.Key : "n/a", y => Math.Round(Convert.ToDouble(y.Sum(z => z.Duration)))));
@@ -1220,16 +1265,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                                 Math.Round(Convert.ToDouble(notAssignedCategoryDuration)));
                         }
 
-                        if (summaryResults.ContainsKey(item.Key.ToString("yyyy-MM-dd")))
+                        if (summaryResults.ContainsKey(item.Key.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)))
                         {
-                            var entry = summaryResults[item.Key.ToString()];
+                            var entry = summaryResults[item.Key.ToString(CultureInfo.InvariantCulture)];
 
-                            summaryResults[item.Key.ToString("yyyy-MM-dd")] = entry.Merge(dateDictionary);
+                            summaryResults[item.Key.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)] = entry.Merge(dateDictionary);
                         }
                         else
                         {
                             summaryResults.Add(
-                                item.Key.ToString("yyyy-MM-dd"),
+                                item.Key.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                                 dateDictionary);
                         }
                     }
@@ -1420,7 +1465,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     searchValues.Contains(x.Category.CategoryName)).
                     Select(x => new { Category = x.Category.CategoryName, Duration = x.Duration, StartTime = x.UsageTime.StartTime }).
                     ToList().
-                    GroupBy(x => new { Category = x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd") }).
+                    GroupBy(x => new { Category = x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
                     ToList();
 
                 var clipboardContent = string.Empty;
@@ -1428,11 +1473,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 for (var dateIterator = startDate; dateIterator < endDate; dateIterator = dateIterator.AddDays(1))
                 {
                     clipboardContent += string.Format(
+                        CultureInfo.InvariantCulture,
                         formatString,
                         usageTimePerDayAndCategory
-                        .Where(x => x.Key.StartTime == dateIterator.ToString("yyyy-MM-dd"))
+                        .Where(x => x.Key.StartTime == dateIterator.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture))
                         .Sum(x => x.Sum(y => y.Duration)).SecondsToHours().RoundWithDelta(0.25),
-                        dateIterator.ToString("yyyy-MM-dd"));
+                        dateIterator.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
                 }
 
                 Clipboard.SetText(clipboardContent);

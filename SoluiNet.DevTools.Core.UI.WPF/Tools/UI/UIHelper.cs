@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Data;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -41,6 +42,21 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <param name="fields">A list of field names.</param>
         public static void FillResultsTab(string key, Grid containingGrid, string title, IQueryable<object> results, IEnumerable<string> fields)
         {
+            if (title == null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
+            if (fields == null)
+            {
+                throw new ArgumentNullException(nameof(fields));
+            }
+
+            if (results == null)
+            {
+                throw new ArgumentNullException(nameof(results));
+            }
+
             var tableKey = title.Replace(" ", string.Empty);
 
             var dataGrid = new DataGrid();
@@ -68,6 +84,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>The contents of the <see cref="DataGrid"/> as <see cref="DataTable"/>.</returns>
         public static DataTable GetDataGridData(DataGrid dataGrid, List<string> columnNames = null)
         {
+            if (dataGrid == null)
+            {
+                throw new ArgumentNullException(nameof(dataGrid));
+            }
+
             if (dataGrid.ItemsSource != null)
             {
                 return (dataGrid.ItemsSource as DataView)?.ToTable();
@@ -128,9 +149,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// </summary>
         /// <param name="dataGrid">The data grid.</param>
         /// <param name="columnNames">A list of column names which should be exported. If not provided all columns will be exported.</param>
-        /// <returns>The contents of the selected rocws in the <see cref="DataGrid"/> as <see cref="DataTable"/>.</returns>
+        /// <returns>The contents of the selected rows in the <see cref="DataGrid"/> as <see cref="DataTable"/>.</returns>
         public static DataTable GetDataGridSelectedRowsData(DataGrid dataGrid, List<string> columnNames = null)
         {
+            if (dataGrid == null)
+            {
+                throw new ArgumentNullException(nameof(dataGrid));
+            }
+
             if (dataGrid.ItemsSource != null)
             {
                 return (dataGrid.ItemsSource as DataView)?.ToTable();
@@ -199,7 +225,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         {
             var dataTable = GetDataGridData(dataGrid);
 
-            return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+            try
+            {
+                return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+            }
+            finally
+            {
+                dataTable.Dispose();
+            }
         }
 
         /// <summary>
@@ -213,7 +246,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         {
             var dataTable = GetDataGridData(dataGrid);
 
-            return GetXmlStringForDataTable(dataTable, rootElementName, recordElementName);
+            try
+            {
+                return GetXmlStringForDataTable(dataTable, rootElementName, recordElementName);
+            }
+            finally
+            {
+                dataTable.Dispose();
+            }
         }
 
         /// <summary>
@@ -226,7 +266,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         {
             var dataTable = GetDataGridData(dataGrid);
 
-            return GetSqlStringForDataTable(dataTable, tableName);
+            try
+            {
+                return GetSqlStringForDataTable(dataTable, tableName);
+            }
+            finally
+            {
+                dataTable.Dispose();
+            }
         }
 
         /// <summary>
@@ -242,7 +289,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         {
             var dataTable = GetDataGridSelectedRowsData(dataGrid);
 
-            return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+            try
+            {
+                return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+            }
+            finally
+            {
+                dataTable.Dispose();
+            }
         }
 
         /// <summary>
@@ -256,9 +310,21 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>A <see cref="string"/> which represents the data from the selected columns in a <see cref="DataGrid"/>.</returns>
         public static string GetDataGridColumnsAsText(DataGrid dataGrid, string separator = "\t", string rowSeparator = "\r\n", bool quoteTexts = false, string textQuote = "\"")
         {
+            if (dataGrid == null)
+            {
+                throw new ArgumentNullException(nameof(dataGrid));
+            }
+
             var dataTable = GetDataGridData(dataGrid, new List<string> { dataGrid.CurrentCell.Column.Header.ToString() });
 
-            return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+            try
+            {
+                return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+            }
+            finally
+            {
+                dataTable.Dispose();
+            }
         }
 
         /// <summary>
@@ -272,9 +338,21 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>A <see cref="string"/> which represents the data from the selected cells in a <see cref="DataGrid"/>.</returns>
         public static string GetDataGridSelectedColumnsAsText(DataGrid dataGrid, string separator = "\t", string rowSeparator = "\r\n", bool quoteTexts = false, string textQuote = "\"")
         {
+            if (dataGrid == null)
+            {
+                throw new ArgumentNullException(nameof(dataGrid));
+            }
+
             var dataTable = GetDataGridSelectedRowsData(dataGrid, new List<string> { dataGrid.CurrentCell.Column.Header.ToString() });
 
-            return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+            try
+            {
+                return GetStringForDataTable(dataTable, separator, rowSeparator, quoteTexts, textQuote);
+            }
+            finally
+            {
+                dataTable.Dispose();
+            }
         }
 
         /// <summary>
@@ -284,6 +362,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>A <see cref="string"/> which represents the data from a single cell in a <see cref="DataGrid"/>.</returns>
         public static string GetSelectedCellAsText(DataGrid dataGrid)
         {
+            if (dataGrid == null)
+            {
+                throw new ArgumentNullException(nameof(dataGrid));
+            }
+
             var cellValue = string.Empty;
 
             try
@@ -308,6 +391,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>The <see cref="IHighlightingDefinition"/> which was saved with the overgiven resource name.</returns>
         public static IHighlightingDefinition LoadHighlightingDefinition(Type type, string resourceName)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
             var fullName = type.Namespace + "." + resourceName;
 
             using (var stream = type.Assembly.GetManifestResourceStream(fullName))
@@ -327,6 +415,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>A <see cref="MenuItem"/> which has the overgiven name.</returns>
         public static MenuItem GetMenuItemByName(MenuItem parentMenuItem, string name)
         {
+            if (parentMenuItem == null)
+            {
+                throw new ArgumentNullException(nameof(parentMenuItem));
+            }
+
             MenuItem menuItem = null;
 
             foreach (var item in parentMenuItem.Items)
@@ -378,6 +471,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>Returns an instance of <see cref="Assembly"/> which contains the assembly for which the event was looking for.</returns>
         public static Assembly LoadUiElementAssembly(object sender, ResolveEventArgs args)
         {
+            if (args == null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
             var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             if (string.IsNullOrEmpty(folderPath))
@@ -476,7 +574,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>Returns a hex string representation of the colour.</returns>
         public static string ToHexValue(this Color colour)
         {
-            return string.Format("#{0:X2}{1:X2}{2:X2}", colour.R, colour.G, colour.B);
+            return string.Format(CultureInfo.InvariantCulture, "#{0:X2}{1:X2}{2:X2}", colour.R, colour.G, colour.B);
         }
 
         /// <summary>
@@ -496,7 +594,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>Returns a rgb string representation of the colour.</returns>
         public static string ToRGBValue(this Color colour)
         {
-            return string.Format("RGB({0},{1},{2})", colour.R, colour.G, colour.B);
+            return string.Format(CultureInfo.InvariantCulture, "RGB({0},{1},{2})", colour.R, colour.G, colour.B);
         }
 
         /// <summary>
@@ -512,9 +610,9 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
             {
                 var match = colorRegex.Match(colour);
 
-                var redParts = Convert.ToByte(match.Groups[1].Value);
-                var greenParts = Convert.ToByte(match.Groups[2].Value);
-                var blueParts = Convert.ToByte(match.Groups[3].Value);
+                var redParts = Convert.ToByte(match.Groups[1].Value, CultureInfo.InvariantCulture);
+                var greenParts = Convert.ToByte(match.Groups[2].Value, CultureInfo.InvariantCulture);
+                var blueParts = Convert.ToByte(match.Groups[3].Value, CultureInfo.InvariantCulture);
 
                 return Color.FromRgb(redParts, greenParts, blueParts);
             }
@@ -609,28 +707,28 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
             var data = string.Empty;
 
             data += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n";
-            data += string.Format("<{0}>", rootElementName);
+            data += string.Format(CultureInfo.InvariantCulture, "<{0}>", rootElementName);
 
             foreach (var row in dataTable.Rows)
             {
-                data += string.Format("<{0}>", recordElementName);
+                data += string.Format(CultureInfo.InvariantCulture, "<{0}>", recordElementName);
 
                 for (var i = 0; i < dataTable.Columns.Count; i++)
                 {
                     var column = dataTable.Columns[i];
 
-                    data += string.Format("<{0}>", column.ColumnName);
+                    data += string.Format(CultureInfo.InvariantCulture, "<{0}>", column.ColumnName);
 
                     var columnData = ((DataRow)row)[column.ColumnName].ToString();
                     data += columnData;
 
-                    data += string.Format("</{0}>", column.ColumnName);
+                    data += string.Format(CultureInfo.InvariantCulture, "</{0}>", column.ColumnName);
                 }
 
-                data += string.Format("</{0}>", recordElementName);
+                data += string.Format(CultureInfo.InvariantCulture, "</{0}>", recordElementName);
             }
 
-            data += string.Format("</{0}>", rootElementName);
+            data += string.Format(CultureInfo.InvariantCulture, "</{0}>", rootElementName);
 
             return data;
         }
@@ -650,7 +748,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
 
             var data = string.Empty;
 
-            data += string.Format("INSERT INTO {0} (", tableName);
+            data += string.Format(CultureInfo.InvariantCulture, "INSERT INTO {0} (", tableName);
 
             for (var i = 0; i < dataTable.Columns.Count; i++)
             {
@@ -682,9 +780,9 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
                     }
                     else if (dateRegex.IsMatch(columnData.ToString()) || germanDateRegex.IsMatch(columnData.ToString()))
                     {
-                        var dateValue = Convert.ToDateTime(columnData);
+                        var dateValue = Convert.ToDateTime(columnData, CultureInfo.InvariantCulture);
 
-                        data += string.Format("CONVERT(DATETIME, '{0}', 126)", dateValue.ToString("yyyy-MM-ddTHH:mm:ss.fff"));
+                        data += string.Format(CultureInfo.InvariantCulture, "CONVERT(DATETIME, '{0}', 126)", dateValue.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture));
                     }
                     else if (intRegex.IsMatch(columnData.ToString()) || floatRegex.IsMatch(columnData.ToString()))
                     {
@@ -699,10 +797,10 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
                                 data += columnData;
                                 break;
                             case DateTime _:
-                                data += string.Format("CAST('{0}' AS DATETIME)", ((DateTime)columnData).ToString("yyyy-MM-ddTHH:mm:ss.ffffzzz"));
+                                data += string.Format(CultureInfo.InvariantCulture, "CAST('{0}' AS DATETIME)", ((DateTime)columnData).ToString("yyyy-MM-ddTHH:mm:ss.ffffzzz", CultureInfo.InvariantCulture));
                                 break;
                             default:
-                                data += string.Format("'{0}'", columnData.ToString().Replace("'", "''"));
+                                data += string.Format(CultureInfo.InvariantCulture, "'{0}'", columnData.ToString().Replace("'", "''"));
                                 break;
                         }
                     }
