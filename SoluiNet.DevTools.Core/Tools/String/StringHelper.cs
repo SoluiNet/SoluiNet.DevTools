@@ -197,27 +197,32 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// <returns>If the string represents an affirmative value return true, otherwise false.</returns>
         public static bool IsAffirmative(this string stringValue)
         {
-            if (stringValue.ToLowerInvariant() == "1")
+            if (stringValue == null)
+            {
+                throw new ArgumentNullException(nameof(stringValue));
+            }
+
+            if (stringValue.ToUpperInvariant() == "1")
             {
                 return true;
             }
 
-            if (stringValue.ToLowerInvariant() == "true")
+            if (stringValue.ToUpperInvariant() == "TRUE")
             {
                 return true;
             }
 
-            if (stringValue.ToLowerInvariant() == "wahr")
+            if (stringValue.ToUpperInvariant() == "WAHR")
             {
                 return true;
             }
 
-            if (stringValue.ToLowerInvariant() == "y")
+            if (stringValue.ToUpperInvariant() == "Y")
             {
                 return true;
             }
 
-            if (stringValue.ToLowerInvariant() == "yes")
+            if (stringValue.ToUpperInvariant() == "YES")
             {
                 return true;
             }

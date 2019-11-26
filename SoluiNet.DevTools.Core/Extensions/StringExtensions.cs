@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.Extensions
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -26,7 +27,12 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL query.</returns>
         public static bool IsSqlQuery(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("select") || sqlCommand.ToLowerInvariant().TrimStart().StartsWith("with");
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            return sqlCommand.ToUpperInvariant().TrimStart().StartsWith("SELECT", StringComparison.InvariantCulture) || sqlCommand.ToUpperInvariant().TrimStart().StartsWith("WITH", StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -36,7 +42,12 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL update.</returns>
         public static bool IsSqlUpdate(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("update");
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            return sqlCommand.ToUpperInvariant().TrimStart().StartsWith("UPDATE", StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -46,7 +57,12 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL insert.</returns>
         public static bool IsSqlInsert(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("insert");
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            return sqlCommand.ToUpperInvariant().TrimStart().StartsWith("INSERT", StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -56,7 +72,12 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL delete.</returns>
         public static bool IsSqlDelete(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("delete");
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            return sqlCommand.ToUpperInvariant().TrimStart().StartsWith("DELETE", StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -66,7 +87,12 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL execute.</returns>
         public static bool IsSqlExecute(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("exec");
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            return sqlCommand.ToUpperInvariant().TrimStart().StartsWith("EXEC", StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -76,7 +102,12 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL drop.</returns>
         public static bool IsSqlDrop(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("drop");
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            return sqlCommand.ToUpperInvariant().TrimStart().StartsWith("DROP", StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -86,7 +117,12 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL create.</returns>
         public static bool IsSqlCreate(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("create");
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            return sqlCommand.ToUpperInvariant().TrimStart().StartsWith("CREATE", StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -96,7 +132,12 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns true if the string variable contains a SQL alter.</returns>
         public static bool IsSqlAlter(this string sqlCommand)
         {
-            return sqlCommand.ToLowerInvariant().TrimStart().StartsWith("alter");
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            return sqlCommand.ToUpperInvariant().TrimStart().StartsWith("ALTER", StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -107,6 +148,11 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns a string with replaced environment placeholders.</returns>
         public static string SetEnvironment(this string originalString, string environment = "Default")
         {
+            if (originalString == null)
+            {
+                throw new ArgumentNullException(nameof(originalString));
+            }
+
             return originalString.Replace("[Environment]", environment);
         }
 
@@ -129,7 +175,7 @@ namespace SoluiNet.DevTools.Core.Extensions
             {
                 foreach (var entry in environment.SoluiNetSettingEntry)
                 {
-                    settingsDictionary.Add(string.Format("Settings.{0}.{1}", environment.name, entry.name), entry.Value);
+                    settingsDictionary.Add(string.Format(CultureInfo.InvariantCulture, "Settings.{0}.{1}", environment.name, entry.name), entry.Value);
                 }
             }
 
@@ -144,11 +190,16 @@ namespace SoluiNet.DevTools.Core.Extensions
         /// <returns>Returns a string with injected variables (i.e. &lt;[variableName]&gt;).</returns>
         public static string Inject(this string originalString, Dictionary<string, string> injectionValues)
         {
+            if (injectionValues == null)
+            {
+                throw new ArgumentNullException(nameof(injectionValues));
+            }
+
             var adjustedString = originalString;
 
             foreach (var injection in injectionValues)
             {
-                var replaceRegex = new Regex(string.Format(VariableFormat, injection.Key));
+                var replaceRegex = new Regex(string.Format(CultureInfo.InvariantCulture, VariableFormat, injection.Key));
 
                 adjustedString = replaceRegex.Replace(adjustedString, injection.Value);
             }
@@ -165,14 +216,14 @@ namespace SoluiNet.DevTools.Core.Extensions
         {
             var commonValueDictionary = new Dictionary<string, string>()
             {
-                { "UtcDateTime", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss") },
-                { "DateTime", DateTime.Now.ToString("yyyy-MM-dd\"T\"HH:mm:ss") },
+                { "UtcDateTime", DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss", CultureInfo.InvariantCulture) },
+                { "DateTime", DateTime.Now.ToString("yyyy-MM-dd\"T\"HH:mm:ss", CultureInfo.InvariantCulture) },
                 { "UserName", Environment.UserName },
                 { "MachineName", Environment.MachineName },
                 { "CurrentDirectory", Environment.CurrentDirectory },
                 { "UserDomainName", Environment.UserDomainName },
-                { "Timestamp", new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString() },
-                { "UtcTimestamp", new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString() },
+                { "Timestamp", new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture) },
+                { "UtcTimestamp", new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture) },
             };
 
             return originalString.Inject(commonValueDictionary);
