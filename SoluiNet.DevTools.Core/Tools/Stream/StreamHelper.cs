@@ -41,5 +41,36 @@ namespace SoluiNet.DevTools.Core.Tools.Stream
                 return reader.ReadToEnd();
             }
         }
+
+        /// <summary>
+        /// Convert a stream to a string.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="encoding">The encoding. If not provided UTF-8 will be used.</param>
+        /// <returns>Returns a <see cref="string"/> for the contents of the <see cref="Stream"/>.</returns>
+        public static string ReadStringFromStream(this System.IO.Stream stream, Encoding encoding = null)
+        {
+            return StreamToString(stream, encoding);
+        }
+
+        /// <summary>
+        /// Convert stream to byte array (taken from: https://stackoverflow.com/questions/221925/creating-a-byte-array-from-a-stream).
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>Returns the converted stream as byte array.</returns>
+        public static byte[] ToByteArray(this System.IO.Stream stream)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+
+                return ms.ToArray();
+            }
+        }
     }
 }

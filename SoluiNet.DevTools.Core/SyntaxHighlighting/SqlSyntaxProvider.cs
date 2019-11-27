@@ -15,8 +15,8 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
     /// </summary>
     public static class SqlSyntaxProvider
     {
+        private static readonly List<char> Specials = new List<char>();
         private static List<string> tags = new List<string>();
-        private static List<char> specials = new List<char>();
 
         static SqlSyntaxProvider()
         {
@@ -46,7 +46,7 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
                 '\n',
                 '\t',
             };
-            specials = new List<char>(chrs);
+            Specials = new List<char>(chrs);
         }
 
         /// <summary>

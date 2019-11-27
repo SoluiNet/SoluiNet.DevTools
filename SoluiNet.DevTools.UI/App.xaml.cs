@@ -71,14 +71,21 @@ namespace SoluiNet.DevTools.UI
         /// <param name="e">The start up event.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            try
+            {
+                base.OnStartup(e);
 
             this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
             this.LoadPlugins();
             this.LoadUiElements();
 
-            this.CallStartupEvent();
+                this.CallStartupEvent();
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
+            }
         }
 
         /// <summary>
@@ -87,11 +94,18 @@ namespace SoluiNet.DevTools.UI
         /// <param name="e">The exit event.</param>
         protected override void OnExit(ExitEventArgs e)
         {
-            base.OnExit(e);
+            try
+            {
+                base.OnExit(e);
+                
+                this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
-            this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
-
-            this.CallShutdownEvent();
+                this.CallShutdownEvent();
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
+            }
         }
 
         private void LoadPlugins()
@@ -119,6 +133,8 @@ namespace SoluiNet.DevTools.UI
                 catch (BadImageFormatException exception)
                 {
                     Debug.WriteLine(JsonTools.Serialize(exception));
+
+                    this.Logger.Debug(exception, string.Format("Couldn't load assembly '{0}'", dllFile));
                 }
             }
 
