@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -40,12 +41,19 @@ namespace SoluiNet.DevTools.Core.Tools.XML
 
             var streamWriter = new StreamWriter(stream);
 
-            streamWriter.Write(serializedString);
-            streamWriter.Flush();
+            try
+            {
+                streamWriter.Write(serializedString);
+                streamWriter.Flush();
 
-            stream.Position = 0;
+                stream.Position = 0;
 
-            return Deserialize<T>(stream);
+                return Deserialize<T>(stream);
+            }
+            finally
+            {
+                streamWriter.Dispose();
+            }
         }
 
         /// <summary>
@@ -74,9 +82,18 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
 
-            var deserializedElement = (T)xmlSerializer.Deserialize(stream);
+            var xmlReader = XmlReader.Create(stream);
 
-            return deserializedElement;
+            try
+            {
+                var deserializedElement = (T)xmlSerializer.Deserialize(xmlReader);
+
+                return deserializedElement;
+            }
+            finally
+            {
+                xmlReader.Dispose();
+            }
         }
 
         /// <summary>
@@ -124,36 +141,57 @@ namespace SoluiNet.DevTools.Core.Tools.XML
 
             var stream = new MemoryStream();
             var xmlWriter = new XmlTextWriter(stream, Encoding.Unicode);
-            var xmlDoc = new XmlDocument();
+            var xmlDoc = new XmlDocument() { XmlResolver = null };
 
             try
             {
-                // Load the XmlDocument with the XML.
-                xmlDoc.LoadXml(xmlString);
+                var stringReader = new StringReader(xmlString);
+                var xmlReader = XmlReader.Create(stringReader, new XmlReaderSettings() { XmlResolver = null });
 
-                xmlWriter.Formatting = Formatting.Indented;
+                try
+                {
+                    // Load the XmlDocument with the XML.
+                    xmlDoc.Load(xmlReader);
 
-                // Write the XML into a formatting XmlTextWriter
-                xmlDoc.WriteContentTo(xmlWriter);
-                xmlWriter.Flush();
-                stream.Flush();
+                    xmlWriter.Formatting = Formatting.Indented;
 
-                // Have to rewind the MemoryStream in order to read
-                // its contents.
-                stream.Position = 0;
+                    // Write the XML into a formatting XmlTextWriter
+                    xmlDoc.WriteContentTo(xmlWriter);
+                    xmlWriter.Flush();
+                    stream.Flush();
 
-                // Read MemoryStream contents into a StreamReader.
-                var reader = new StreamReader(stream);
+                    // Have to rewind the MemoryStream in order to read
+                    // its contents.
+                    stream.Position = 0;
 
-                // Extract the text from the StreamReader.
-                var formattedXml = reader.ReadToEnd();
+                    // Read MemoryStream contents into a StreamReader.
+                    var reader = new StreamReader(stream);
 
-                result = formattedXml;
+                    try
+                    {
+                        // Extract the text from the StreamReader.
+                        var formattedXml = reader.ReadToEnd();
+
+                        result = formattedXml;
+                    }
+                    finally
+                    {
+                        reader.Dispose();
+                    }
+                }
+                finally
+                {
+                    xmlReader.Dispose();
+                }
             }
             catch (XmlException)
             {
                 // Handle the exception
                 return string.Empty;
+            }
+            finally
+            {
+                xmlWriter.Dispose();
             }
 
             return result;
@@ -193,11 +231,16 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// <returns>Returns true if overgiven text contains a valid XML root node.</returns>
         public static bool IsValidXmlRootNode(string xmlText)
         {
+            if (xmlText == null)
+            {
+                throw new ArgumentNullException(nameof(xmlText));
+            }
+
             var xmlRegex = new Regex("</([^>]+?)>$");
 
             var endNode = xmlRegex.Match(xmlText);
 
-            return endNode.Success && xmlText.Contains(string.Format("<{0}", endNode.Groups[1].Value));
+            return endNode.Success && xmlText.Contains(string.Format(CultureInfo.InvariantCulture, "<{0}", endNode.Groups[1].Value));
         }
 
         /// <summary>
@@ -207,6 +250,11 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// <returns>Returns true if overgiven text is a XML string.</returns>
         public static bool IsXml(string xmlText)
         {
+            if (xmlText == null)
+            {
+                throw new ArgumentNullException(nameof(xmlText));
+            }
+
             return xmlText.Contains("<?xml") || IsValidXmlRootNode(xmlText);
         }
 
@@ -217,6 +265,11 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         /// <returns>Returns a serialized XML document as string.</returns>
         public static string Serialize(XDocument xmlDocument)
         {
+            if (xmlDocument == null)
+            {
+                throw new ArgumentNullException(nameof(xmlDocument));
+            }
+
             var stream = new MemoryStream();
 
             xmlDocument.Save(stream);

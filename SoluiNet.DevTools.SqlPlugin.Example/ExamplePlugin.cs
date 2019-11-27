@@ -8,21 +8,16 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using System.Collections.Generic;
     using System.Configuration;
     using System.Data;
-    using System.Linq;
     using System.Security.Principal;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
-    using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Enums;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Database;
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
-    using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
     using SoluiNet.DevTools.Core.Windows.Tools.Security;
 
     /// <summary>
@@ -118,17 +113,12 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
             var settings = this.RetrieveSettingsAsDictionary();
 
-            if (settings.TryGetValue(string.Format("Impersonation@{0}.User", this.Environment), out var user) &&
-                settings.TryGetValue(string.Format("Impersonation@{0}.Password", this.Environment), out var password))
+            if (settings.TryGetValue($"Impersonation@{this.Environment}.User", out var user) &&
+                settings.TryGetValue($"Impersonation@{this.Environment}.Password", out var password))
             {
-                if (settings.TryGetValue(string.Format("Impersonation@{0}.Domain", this.Environment), out var domain))
-                {
-                    impersonationContext = SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString());
-                }
-                else
-                {
-                    impersonationContext = SecurityTools.Impersonate(user.ToString(), password.ToString());
-                }
+                impersonationContext = settings.TryGetValue($"Impersonation@{this.Environment}.Domain", out var domain) ?
+                    SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString()) :
+                    SecurityTools.Impersonate(user.ToString(), password.ToString());
             }
 
             try
@@ -137,10 +127,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
             }
             finally
             {
-                if (impersonationContext != null)
-                {
-                    impersonationContext.Undo();
-                }
+                impersonationContext?.Undo();
             }
         }
 
@@ -151,17 +138,12 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
             var settings = this.RetrieveSettingsAsDictionary();
 
-            if (settings.TryGetValue(string.Format("Impersonation@{0}.User", this.Environment), out var user) &&
-                settings.TryGetValue(string.Format("Impersonation@{0}.Password", this.Environment), out var password))
+            if (settings.TryGetValue($"Impersonation@{this.Environment}.User", out var user) &&
+                settings.TryGetValue($"Impersonation@{this.Environment}.Password", out var password))
             {
-                if (settings.TryGetValue(string.Format("Impersonation@{0}.Domain", this.Environment), out var domain))
-                {
-                    impersonationContext = SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString());
-                }
-                else
-                {
-                    impersonationContext = SecurityTools.Impersonate(user.ToString(), password.ToString());
-                }
+                impersonationContext = settings.TryGetValue($"Impersonation@{this.Environment}.Domain", out var domain) ?
+                    SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString()) :
+                    SecurityTools.Impersonate(user.ToString(), password.ToString());
             }
 
             try
@@ -173,10 +155,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
             }
             finally
             {
-                if (impersonationContext != null)
-                {
-                    impersonationContext.Undo();
-                }
+                impersonationContext?.Undo();
             }
         }
 
@@ -252,6 +231,11 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         /// <param name="displayInPluginContainer">The delegate which should be called for displaying the plugin.</param>
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
+            if (displayInPluginContainer == null)
+            {
+                throw new ArgumentNullException(nameof(displayInPluginContainer));
+            }
+
             displayInPluginContainer(new ExampleUserControl());
         }
     }

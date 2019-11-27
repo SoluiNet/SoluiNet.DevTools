@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
     /// </summary>
     public partial class ExtendedConfigurationUserControl : UserControl
     {
-        private IContainsExtendedConfiguration configurableElement;
+        private readonly IContainsExtendedConfiguration configurableElement;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtendedConfigurationUserControl"/> class.
@@ -53,11 +53,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
             }
 
             extendedConfiguration.regEx = this.RegEx.Text;
-            extendedConfiguration.SoluiNetBrushDefinition = this.BrushDefintion.GetBrushDefinition();
+            extendedConfiguration.SoluiNetBrushDefinition = this.BrushDefinition.GetBrushDefinition();
 
             this.configurableElement.ExtendedConfiguration = extendedConfiguration.SerializeInstance<SoluiNetExtendedConfigurationType>();
 
-            Window.GetWindow(this).Close();
+            Window.GetWindow(this)?.Close();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -78,13 +78,13 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
             if (extendedConfiguration.SoluiNetBrushDefinition != null && extendedConfiguration.SoluiNetBrushDefinition.typeSpecified)
             {
-                this.BrushDefintion.ReadFromBrushDefinition(extendedConfiguration.SoluiNetBrushDefinition);
+                this.BrushDefinition.ReadFromBrushDefinition(extendedConfiguration.SoluiNetBrushDefinition);
             }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            Window.GetWindow(this).Close();
+            Window.GetWindow(this)?.Close();
         }
     }
 }

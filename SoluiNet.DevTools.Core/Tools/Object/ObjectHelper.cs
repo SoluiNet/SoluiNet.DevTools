@@ -24,6 +24,11 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// <returns>Returns a <see cref="List{T}"/> of property names.</returns>
         public static List<string> GetPrimitiveProperties(this object instance)
         {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
             var instanceType = instance.GetType();
 
             return instanceType.GetProperties()?.Where(property => property.PropertyType.IsPrimitive || property.PropertyType == typeof(string)).Select(x => x.Name).ToList();
@@ -36,6 +41,11 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// <returns>Returns a <see cref="List{T}"/> of property names.</returns>
         public static List<string> GetObjectProperties(this object instance)
         {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
             var instanceType = instance.GetType();
 
             return instanceType.GetProperties()?.Where(property => !property.PropertyType.IsPrimitive && property.PropertyType != typeof(string) && !typeof(ICollection).IsAssignableFrom(property.PropertyType)).Select(x => x.Name).ToList();

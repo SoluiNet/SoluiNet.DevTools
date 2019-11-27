@@ -40,7 +40,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// </summary>
         public virtual ICollection<CategoryUsageTime> CategoryUsageTime { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this category can be targeted for distribute evenly.
+        /// </summary>
+        public virtual bool? DistributeEvenlyTarget { get; set; }
+
         /// <inheritdoc />
-        public string ExtendedConfiguration { get; set; }
+        public virtual string ExtendedConfiguration { get; set; }
     }
 }

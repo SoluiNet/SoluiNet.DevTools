@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Events
     /// <summary>
     /// Handles the shutdown event.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1040:Avoid empty interfaces", Justification = "Still in development. May not be empty anymore in future.")]
     public interface IShutdownEvent : IEventType
     {
     }

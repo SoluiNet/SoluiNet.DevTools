@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
     using System.Data;
     using System.Data.SqlClient;
     using System.Data.SQLite;
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using System.Security.Principal;
@@ -183,7 +184,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 
                                         using (var reader = cmd.ExecuteReader())
                                         {
-                                            var dataTable = new DataTable(string.Format("QueryResult-{0:D}", Guid.NewGuid()));
+                                            var dataTable = new DataTable(string.Format(CultureInfo.InvariantCulture, "QueryResult-{0:D}", Guid.NewGuid()));
 
                                             dataTable.Load(reader);
                                             dataTable.ExtendedProperties.Add("SqlCommand", sqlScriptPart);
@@ -220,7 +221,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
 
                                         var affectedRows = cmd.ExecuteNonQuery();
 
-                                        var dataTable = new DataTable(string.Format("ExecutionResult-{0:D}", Guid.NewGuid()));
+                                        var dataTable = new DataTable(string.Format(CultureInfo.InvariantCulture, "ExecutionResult-{0:D}", Guid.NewGuid()));
 
                                         dataTable.Columns.Add(new DataColumn("AffectedRows", typeof(int)));
                                         dataTable.ExtendedProperties.Add("SqlCommand", sqlScriptPart);
