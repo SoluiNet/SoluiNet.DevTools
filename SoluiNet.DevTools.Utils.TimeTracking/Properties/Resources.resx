@@ -117,7 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ConfirmDeletion" xml:space="preserve">
+    <value>Confirm Deletion</value>
+  </data>
   <data name="QueryError" xml:space="preserve">
     <value>Error while executing Query</value>
+  </data>
+  <data name="SelectSummaryType" xml:space="preserve">
+    <value>Please select a valid summary type.</value>
+  </data>
+  <data name="SelectTimeFrame" xml:space="preserve">
+    <value>Select time frame</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
 </root>

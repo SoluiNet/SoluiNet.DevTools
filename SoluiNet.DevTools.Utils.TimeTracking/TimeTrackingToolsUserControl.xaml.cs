@@ -82,7 +82,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
-        private ResourceManager Resources
+        private new ResourceManager Resources
         {
             get
             {
@@ -306,7 +306,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             if (dropEvents.KeyStates.HasFlag(DragDropKeyStates.ShiftKey))
             {
                 var assignableDuration = Prompt.ShowDialog(
-                    $"Which time frame should be assigned? (max. {sumDuration.ToDurationString()})", "Select time frame");
+                    $"Which time frame should be assigned? (max. {sumDuration.ToDurationString()})", this.Resources.GetString("SelectTimeFrame", CultureInfo.CurrentCulture));
 
                 if (assignableDuration.GetSecondsFromDurationString() <= sumDuration)
                 {
@@ -1170,7 +1170,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             if (string.IsNullOrEmpty(summaryType))
             {
-                Confirm.ShowDialog("Please select a valid summary type.", "Warning");
+                Confirm.ShowDialog(
+                    this.Resources.GetString("SelectSummaryType", CultureInfo.CurrentCulture),
+                    this.Resources.GetString("Warning", CultureInfo.CurrentCulture));
 
                 return;
             }
@@ -1494,7 +1496,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 return;
             }
 
-            if (Confirm.ShowDialog($"Do you really want to delete the category '{category.CategoryName}'?", "Confirm Deletion"))
+            if (Confirm.ShowDialog(
+                $"Do you really want to delete the category '{category.CategoryName}'?",
+                this.Resources.GetString("ConfirmDeletion", CultureInfo.CurrentCulture)))
             {
                 this.context.Category.Remove(category);
 

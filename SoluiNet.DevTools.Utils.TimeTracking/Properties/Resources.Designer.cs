@@ -61,11 +61,47 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Confirm Deletion ähnelt.
+        /// </summary>
+        internal static string ConfirmDeletion {
+            get {
+                return ResourceManager.GetString("ConfirmDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Error while executing Query ähnelt.
         /// </summary>
         internal static string QueryError {
             get {
                 return ResourceManager.GetString("QueryError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please select a valid summary type. ähnelt.
+        /// </summary>
+        internal static string SelectSummaryType {
+            get {
+                return ResourceManager.GetString("SelectSummaryType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select time frame ähnelt.
+        /// </summary>
+        internal static string SelectTimeFrame {
+            get {
+                return ResourceManager.GetString("SelectTimeFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Warning ähnelt.
+        /// </summary>
+        internal static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }
