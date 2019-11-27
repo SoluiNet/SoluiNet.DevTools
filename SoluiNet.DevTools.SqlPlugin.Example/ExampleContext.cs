@@ -38,6 +38,11 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         /// <param name="modelBuilder">The model builder.</param>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            if (modelBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(modelBuilder));
+            }
+
             modelBuilder.Entity<Entities.Customer>()
                 .Property(e => e.Email)
                 .IsUnicode(false);

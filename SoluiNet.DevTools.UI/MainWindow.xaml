@@ -8,7 +8,7 @@
         xmlns:ui="clr-namespace:SoluiNet.DevTools.Core.UI.WPF.Window;assembly=SoluiNet.DevTools.Core.UI.WPF"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
-        Title="SoluiNet.DevTools" TitleFormatString=" {1} ({0}) - SoluiNet.DevTools" Height="450" Width="800">
+        Title="SoluiNet.DevTools" TitleFormatString=" {1} ({0}) - SoluiNet.DevTools" Height="450" Width="800" Closing="SoluiNetWindow_Closing" Loaded="SoluiNetWindow_Loaded">
     <Grid x:Name="MainGrid">
         <DockPanel>
             <Menu x:Name="TopMenu" DockPanel.Dock="Top" Height="20">

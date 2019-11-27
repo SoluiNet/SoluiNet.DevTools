@@ -34,6 +34,10 @@
     <!--<PackageReference Include="EntityFramework.SqlServer" Version="6.2.0" />-->
     <PackageReference Include="LiveCharts" Version="0.9.7" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
@@ -46,13 +50,11 @@
     <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.112" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="AvalonEdit" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
-      <HintPath>..\packages\AvalonEdit.5.0.4\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -98,6 +100,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.Windows\SoluiNet.DevTools.Core.Windows.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

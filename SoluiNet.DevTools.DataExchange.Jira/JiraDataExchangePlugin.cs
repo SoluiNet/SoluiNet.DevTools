@@ -49,6 +49,11 @@ namespace SoluiNet.DevTools.DataExchange.Jira
         /// <param name="displayInPluginContainer">The delegate which should be called for displaying the plugin.</param>
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
+            if (displayInPluginContainer == null)
+            {
+                throw new ArgumentNullException(nameof(displayInPluginContainer));
+            }
+
             displayInPluginContainer(new JiraUserControl());
         }
 
@@ -60,6 +65,11 @@ namespace SoluiNet.DevTools.DataExchange.Jira
         /// <returns>Returns a list of issues that are matching the overgiven parameters.</returns>
         public List<object> GetData(string entityName, IDictionary<string, object> searchData)
         {
+            if (searchData == null)
+            {
+                throw new ArgumentNullException(nameof(searchData));
+            }
+
             // throw new NotImplementedException();
             var settings = PluginHelper.GetSettingsAsDictionary(this);
 

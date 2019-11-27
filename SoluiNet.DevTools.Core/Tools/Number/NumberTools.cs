@@ -211,5 +211,41 @@ namespace SoluiNet.DevTools.Core.Tools.Number
 
             return delta * minMultiple;
         }
+
+        /// <summary>
+        /// Check if type is a numeric type (Taken from https://stackoverflow.com/questions/1749966/c-sharp-how-to-determine-whether-a-type-is-a-number).
+        /// </summary>
+        /// <param name="instance">An instance of the type.</param>
+        /// <returns>Returns true if the instance is a numeric type.</returns>
+        public static bool IsNumericType(this object instance)
+        {
+            return instance.GetType().IsNumericType();
+        }
+
+        /// <summary>
+        /// Check if type is a numeric type (Taken from https://stackoverflow.com/questions/1749966/c-sharp-how-to-determine-whether-a-type-is-a-number).
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Returns true if the type is a numeric type.</returns>
+        public static bool IsNumericType(this Type type)
+        {
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Decimal:
+                case TypeCode.Double:
+                case TypeCode.Single:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 }

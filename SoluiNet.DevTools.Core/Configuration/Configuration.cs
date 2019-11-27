@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -27,14 +28,9 @@ namespace SoluiNet.DevTools.Core.Configuration
         /// <returns>The value of the configuration entry as a <see cref="string"/>.</returns>
         public static string GetConfigurationEntry(string entryName, string pluginName = "Core", string alternativeConfigKey = "")
         {
-            var config = ReadXmlConfiguration(!string.IsNullOrEmpty(alternativeConfigKey) ? string.Format("Configuration.{0}", alternativeConfigKey) : string.Empty);
+            var config = ReadXmlConfiguration(!string.IsNullOrEmpty(alternativeConfigKey) ? string.Format(CultureInfo.InvariantCulture, "Configuration.{0}", alternativeConfigKey) : string.Empty);
 
-            if (config == null)
-            {
-                return string.Empty;
-            }
-
-            var pluginArea = config.SoluiNetPlugin.FirstOrDefault(x => x.name == pluginName);
+            var pluginArea = config?.SoluiNetPlugin.FirstOrDefault(x => x.name == pluginName);
 
             if (pluginArea == null)
             {
@@ -65,11 +61,18 @@ namespace SoluiNet.DevTools.Core.Configuration
                 return null;
             }
 
-            var xmlReader = XmlReader.Create(configFilePath);
+            var xmlReader = XmlReader.Create(configFilePath, new XmlReaderSettings() { XmlResolver = null });
 
-            var xmlSerializer = new XmlSerializer(typeof(SoluiNetConfigurationType));
+            try
+            {
+                var xmlSerializer = new XmlSerializer(typeof(SoluiNetConfigurationType));
 
-            return xmlSerializer.Deserialize(xmlReader) as SoluiNetConfigurationType;
+                return xmlSerializer.Deserialize(xmlReader) as SoluiNetConfigurationType;
+            }
+            finally
+            {
+                xmlReader.Dispose();
+            }
         }
     }
 }

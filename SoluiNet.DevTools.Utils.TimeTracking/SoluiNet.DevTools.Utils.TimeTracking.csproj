@@ -22,6 +22,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.7.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -57,6 +61,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="TimeTrackingToolsUserControl.xaml.cs">
       <DependentUpon>TimeTrackingToolsUserControl.xaml</DependentUpon>
     </Compile>
@@ -95,6 +104,23 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\automatic_assignment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="TimeTrackingToolsUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="UI\AssignmentTarget.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="UI\AssignmentTargetExtended.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties stylecop_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
