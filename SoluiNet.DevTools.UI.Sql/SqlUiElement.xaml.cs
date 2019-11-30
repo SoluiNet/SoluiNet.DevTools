@@ -1,4 +1,4 @@
-﻿// <copyright file="SqlUiElement.xaml.cs" company="SoluiNet">
+// <copyright file="SqlUiElement.xaml.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -695,9 +695,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 throw new ArgumentNullException(nameof(selectedItem));
             }
 
-            var script = selectedItem.Tag as SqlScript;
-
-            if (script == null)
+            if (!(selectedItem.Tag is SqlScript script))
             {
                 return;
             }
@@ -712,10 +710,9 @@ namespace SoluiNet.DevTools.UI.Sql
                 throw new ArgumentNullException(nameof(selectedItem));
             }
 
-            var databaseElement = selectedItem.Tag as IDatabaseElement;
             var formatter = new SqlFormatter();
 
-            if (databaseElement == null)
+            if (!(selectedItem.Tag is IDatabaseElement databaseElement))
             {
                 return;
             }
@@ -746,9 +743,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            var selectedItem = this.DatabaseSchema.SelectedItem as TreeViewItem;
-
-            if (selectedItem == null)
+            if (!(this.DatabaseSchema.SelectedItem is TreeViewItem selectedItem))
             {
                 return;
             }

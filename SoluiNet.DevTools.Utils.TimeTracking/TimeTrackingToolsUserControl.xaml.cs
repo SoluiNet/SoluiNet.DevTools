@@ -153,15 +153,18 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void PrepareStatisticsView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext localContext)
         {
-            var statisticTabs = new TabControl();
-            statisticTabs.TabStripPlacement = Dock.Bottom;
+            var statisticTabs = new TabControl
+            {
+                TabStripPlacement = Dock.Bottom,
+            };
 
             #region Weighted Targets
             var weightedTimes = localContext.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.ApplicationIdentification).OrderBy(x => x.Key).Select(x => new { Weight = x.Sum(y => y.Duration), Target = x.Key });
 
-            var barsChart = new CartesianChart();
-
-            barsChart.Name = "WeightedTargets";
+            var barsChart = new CartesianChart
+            {
+                Name = "WeightedTargets",
+            };
 
             var seriesCollection = new SeriesCollection();
 
@@ -176,13 +179,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             barsChart.Series = seriesCollection;
 
-            var xAxis = new Axis();
-            xAxis.Title = "Targets";
-            xAxis.Labels = weightedTimes.Select(x => x.Target.Substring(0, 30)).ToList();
+            var xAxis = new Axis
+            {
+                Title = "Targets",
+                Labels = weightedTimes.Select(x => x.Target.Substring(0, 30)).ToList(),
+            };
 
-            var yAxis = new Axis();
-            yAxis.Title = "Weights";
-            yAxis.Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
+            var yAxis = new Axis
+            {
+                Title = "Weights",
+                Labels = weightedTimes.Max(x => x.Weight).CountFrom(start: 0).Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList(),
+            };
 
             barsChart.AxisX.Add(xAxis);
             barsChart.AxisY.Add(yAxis);
@@ -193,8 +200,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             #region Application
             var durationPerApplication = localContext.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).GroupBy(x => x.Application.ApplicationName).OrderBy(x => x.Key).Select(x => new { Duration = x.Sum(y => y.Duration), Application = x.Key });
 
-            var applicationChart = new CartesianChart();
-            applicationChart.Name = "DurationPerApplication";
+            var applicationChart = new CartesianChart
+            {
+                Name = "DurationPerApplication",
+            };
 
             var applicationSeries = new SeriesCollection();
 
@@ -209,9 +218,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             applicationChart.Series = applicationSeries;
 
-            var applications = new Axis();
-            applications.Title = "Applications";
-            applications.Labels = durationPerApplication.Select(x => x.Application.Substring(0, 30)).ToList();
+            var applications = new Axis
+            {
+                Title = "Applications",
+                Labels = durationPerApplication.Select(x => x.Application.Substring(0, 30)).ToList(),
+            };
 
             var durations = new Axis();
             yAxis.Title = "Durations";
