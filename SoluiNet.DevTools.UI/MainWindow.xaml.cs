@@ -77,7 +77,7 @@ namespace SoluiNet.DevTools.UI
 
                                 pluginVisualizeWindow.ContentGrid.Children.Add(x);
 
-                                pluginVisualizeWindow.Show();
+                                pluginVisualizeWindow.ShowDialog();
 
                                 if (x is IDisposable disposableObject)
                                 {
@@ -104,7 +104,7 @@ namespace SoluiNet.DevTools.UI
 
                                 pluginVisualizeWindow.ContentGrid.Children.Add(x);
 
-                                pluginVisualizeWindow.Show();
+                                pluginVisualizeWindow.ShowDialog();
 
                                 if (x is IDisposable disposableObject)
                                 {

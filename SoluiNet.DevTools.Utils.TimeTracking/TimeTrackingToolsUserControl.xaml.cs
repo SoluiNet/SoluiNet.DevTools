@@ -1507,5 +1507,60 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 this.RefreshCategoryAssignmentView(null);
             }
         }
+
+        private void FillDailyTimespanResults(IEnumerable<UsageTime> queryResults)
+        {
+            this.DailyTimespanData.Items.Clear();
+
+            if (this.DailyTimespanData.Columns.Count == 0)
+            {
+                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "Date", Binding = new Binding("Date") });
+                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "StartTime", Binding = new Binding("StartTime") });
+                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "EndTime", Binding = new Binding("EndTime") });
+                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") });
+            }
+
+            foreach (var item in queryResults.ToList().GroupBy(x => x.StartTime.Date))
+            {
+                var firstItem = item.OrderBy(x => x.StartTime).FirstOrDefault();
+                var lastItem = item.OrderByDescending(x => x.StartTime).FirstOrDefault();
+
+                var endTime = lastItem?.StartTime.AddSeconds(lastItem?.Duration ?? 0);
+
+                this.DailyTimespanData.Items.Add(new
+                {
+                    Date = item.Key.Date.ToString(CultureInfo.InvariantCulture),
+                    StartTime = firstItem?.StartTime,
+                    EndTime = endTime,
+                    Duration = ((endTime - (firstItem?.StartTime ?? endTime)) ?? new TimeSpan(0)).TotalSeconds.RoundWithDelta(1).ToDurationString(),
+                });
+            }
+        }
+
+        private void DailyTimespanQuery_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var lowerDayLimit = DateTime.UtcNow.Date;
+                var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
+
+                if (this.DailyTimespanBegin.SelectedDate.HasValue && this.DailyTimespanEnd.SelectedDate.HasValue)
+                {
+                    lowerDayLimit = this.DailyTimespanBegin.SelectedDate.Value.Date;
+                    upperDayLimit = this.DailyTimespanEnd.SelectedDate.Value.AddDays(1).Date;
+                }
+
+                var queryResults = this.context.UsageTime
+                    .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
+
+                this.FillDailyTimespanResults(queryResults);
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Error(exception, "Error while executing daily time span query");
+
+                MessageBox.Show(exception.Message, this.Resources.GetString("QueryError", CultureInfo.CurrentCulture));
+            }
+        }
     }
 }

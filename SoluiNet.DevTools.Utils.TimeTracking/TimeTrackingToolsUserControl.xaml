@@ -70,6 +70,14 @@
                     <DataGrid x:Name="QueryData" Margin="0,80,0,0" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Daily Timespan">
+                <Grid x:Name="TimeTrackingDailyTimespan" Background="#FFE5E5E5">
+                    <v4:DatePicker x:Name="DailyTimespanBegin" Height="25" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                    <v4:DatePicker x:Name="DailyTimespanEnd" Height="25" Margin="140,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                    <Button x:Name="DailyTimespanQuery" Height="25" Margin="350,5,0,0" Content="Query" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="DailyTimespanQuery_Click"/>
+                    <DataGrid x:Name="DailyTimespanData" Margin="0,40,0,0" />
+                </Grid>
+            </TabItem>
             <TabItem Header="Summary">
                 <Grid x:Name="TimeTrackingSummary" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
