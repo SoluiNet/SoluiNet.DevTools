@@ -1,4 +1,4 @@
-﻿// <copyright file="SqlUiElement.xaml.cs" company="SoluiNet">
+// <copyright file="SqlUiElement.xaml.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -8,35 +8,27 @@ namespace SoluiNet.DevTools.UI.Sql
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
-    using System.Windows.Media;
-    using ICSharpCode.AvalonEdit;
     using ICSharpCode.AvalonEdit.CodeCompletion;
-    using ICSharpCode.AvalonEdit.Editing;
     using Microsoft.Win32;
     using NLog;
-    using SoluiNet.DevTools.Core;
-    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Formatter;
     using SoluiNet.DevTools.Core.Models;
-    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.ScriptEngine;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Sql;
-    using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
-    using SoluiNet.DevTools.Core.UI.WPF.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement.Editor;
 
     /// <summary>
@@ -56,21 +48,27 @@ namespace SoluiNet.DevTools.UI.Sql
             this.SqlCommandText.SyntaxHighlighting = highlighting;
             this.SqlCommandText.TextArea.TextEntered += this.SqlCommandText_TextEntered;
 
-            foreach (var plugin in (Application.Current as ISoluiNetUiWpfApp).SqlPlugins)
-            {
-                try
-                {
-                    plugin.Display(this.SqlUiGrid);
+            var sqlUiPlugins = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins;
 
-                    this.Project.Items.Add(plugin.Name);
-                }
-                catch (Exception exception)
+            if (sqlUiPlugins != null)
+            {
+                foreach (var plugin in sqlUiPlugins)
                 {
-                    this.Logger.Error(exception);
+                    try
+                    {
+                        plugin.Display(this.SqlUiGrid);
+
+                        this.Project.Items.Add(plugin.Name);
+                    }
+                    catch (Exception exception)
+                    {
+                        this.Logger.Error(exception);
+                        throw;
+                    }
                 }
             }
 
-            this.LoggingPath = string.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI.Sql");
+            this.LoggingPath = string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI.Sql");
         }
 
         /// <inheritdoc />
@@ -94,7 +92,7 @@ namespace SoluiNet.DevTools.UI.Sql
             }
         }
 
-        private string LoggingPath { get; set; }
+        private string LoggingPath { get; }
 
         private Logger Logger
         {
@@ -239,7 +237,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 var saveFileDialog = new SaveFileDialog()
                 {
                     DefaultExt = ".csv",
-                    Filter = "Comma Seperated Values (*.csv)|*.csv",
+                    Filter = "Comma Separated Values (*.csv)|*.csv",
                     InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 };
 
@@ -310,6 +308,7 @@ namespace SoluiNet.DevTools.UI.Sql
                     File.WriteAllText(
                         saveFileDialog.FileName,
                         string.Format(
+                            CultureInfo.InvariantCulture,
                             "/*{0}*/\r\n{1}",
                             ((TabItem)containingGrid.Parent).Tag.ToString(),
                             UIHelper.GetDataGridAsSql(containingGrid)),
@@ -323,7 +322,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
         private void ExecuteSqlCommand()
         {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == this.Project.Text);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == this.Project.Text);
 
             if (plugin == null)
             {
@@ -334,7 +333,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 ? this.SqlCommandText.Text
                 : this.SqlCommandText.SelectedText;
 
-            this.Logger.Info(string.Format("[{1} ({2})] Executing SQL command: {0}", sqlCommand, this.Project.Text, plugin.Environment));
+            this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] Executing SQL command: {0}", sqlCommand, this.Project.Text, plugin.Environment));
 
             var data = plugin.ExecuteSqlScript(sqlCommand);
 
@@ -351,20 +350,20 @@ namespace SoluiNet.DevTools.UI.Sql
 
                 dataGridSqlResults.LoadingRow += (sender, eventInfo) =>
                 {
-                    eventInfo.Row.Header = (eventInfo.Row.GetIndex() + 1).ToString();
+                    eventInfo.Row.Header = (eventInfo.Row.GetIndex() + 1).ToString(CultureInfo.InvariantCulture);
                 };
 
                 dataGridSqlResults.CopyingRowClipboardContent += (sender, args) =>
                 {
                     args.ClipboardRowContent.Clear();
-                    args.ClipboardRowContent.Add(new DataGridClipboardCellContent(args.Item, (sender as DataGrid).Columns[0], UIHelper.GetSelectedCellAsText(sender as DataGrid)));
+                    args.ClipboardRowContent.Add(new DataGridClipboardCellContent(args.Item, (sender as DataGrid)?.Columns[0], UIHelper.GetSelectedCellAsText(sender as DataGrid)));
                 };
 
                 var tabIndexSqlResults = this.SqlResults.Items.Add(new TabItem()
                 {
                     Header = new ContentControl()
                     {
-                        Content = string.Format("{0} - {1:yyyy-MM-dd\"T\"HH:mm:ss}", plugin.Name, DateTime.Now),
+                        Content = string.Format(CultureInfo.InvariantCulture, "{0} - {1:yyyy-MM-dd\"T\"HH:mm:ss}", plugin.Name, DateTime.Now),
                     },
                 });
 
@@ -428,42 +427,47 @@ namespace SoluiNet.DevTools.UI.Sql
 
         private void ExpandButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!(sender is Button button))
+            {
+                return;
+            }
+
             if (this.DatabaseSchema.Visibility == Visibility.Collapsed)
             {
                 this.DatabaseSchema.Visibility = Visibility.Visible;
-                (sender as Button).Content = "<";
+                button.Content = "<";
             }
             else
             {
                 this.DatabaseSchema.Visibility = Visibility.Collapsed;
-                (sender as Button).Content = ">";
+                button.Content = ">";
             }
         }
 
         private IList<Type> GetEntityTypes(string chosenProject)
         {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEntityTypes(plugin);
         }
 
         private IList<string> GetEntityFields(string chosenProject, string entityName)
         {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEntityFields(plugin, entityName);
         }
 
         private IList<SqlScript> GetSqlScripts(string chosenProject)
         {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetSqlScripts(plugin);
         }
 
         private IList<string> GetEnvironments(string chosenProject)
         {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             return PluginHelper.GetEnvironments(plugin);
         }
@@ -478,7 +482,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             if (plugin == null)
             {
@@ -599,7 +603,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
         private void Project_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var chosenProject = (sender as ComboBox).SelectedItem as string;
+            var chosenProject = (sender as ComboBox)?.SelectedItem as string ?? string.Empty;
             var environments = this.GetEnvironments(chosenProject);
 
             this.Environments.Items.Clear();
@@ -677,11 +681,11 @@ namespace SoluiNet.DevTools.UI.Sql
 
             if (sqlTableNameElements.Length > 1)
             {
-                sqlTableName = string.Join(".", sqlTableNameElements.Select(x => string.Format("\"{0}\"", x)));
+                sqlTableName = string.Join(".", sqlTableNameElements.Select(x => string.Format(CultureInfo.InvariantCulture, "\"{0}\"", x)));
             }
 
             this.SqlCommandText.Text += (string.IsNullOrEmpty(this.SqlCommandText.Text) ? string.Empty : "\r\n") +
-                                   string.Format("SELECT TOP 1000 * FROM {0}", sqlTableName);
+                                   string.Format(CultureInfo.InvariantCulture, "SELECT TOP 1000 * FROM {0}", sqlTableName);
         }
 
         private void GetSqlForScript(TreeViewItem selectedItem)
@@ -696,7 +700,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            this.SqlCommandText.Text += string.Format("\r\n--{2}: {0}\r\n{1}", script.Description, script.CommandText, script.Name);
+            this.SqlCommandText.Text += string.Format(CultureInfo.InvariantCulture, "\r\n--{2}: {0}\r\n{1}", script.Description, script.CommandText, script.Name);
         }
 
         private void ShowDatabaseElementInfo(string type, TreeViewItem selectedItem, ISqlUiPlugin plugin)
@@ -713,12 +717,17 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            this.Logger.Info(string.Format("[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
+            this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
 
             var dialog = new ShowText
             {
                 Text = formatter.FormatString(databaseElement.BodyDefinition),
             };
+
+            dialog.SetTitleParts(new Dictionary<string, string>()
+            {
+                { "0", string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type) },
+            });
 
             dialog.Show();
         }
@@ -727,7 +736,7 @@ namespace SoluiNet.DevTools.UI.Sql
         {
             var chosenProject = this.Project.Text;
 
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             if (plugin == null)
             {
@@ -768,8 +777,8 @@ namespace SoluiNet.DevTools.UI.Sql
 
         private void Environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var chosenProject = (sender as ComboBox).SelectedItem as string;
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == this.Project.SelectedItem as string);
+            var chosenProject = (sender as ComboBox)?.SelectedItem as string ?? string.Empty;
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == this.Project.SelectedItem as string);
 
             if (plugin == null)
             {
@@ -796,7 +805,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            var plugin = (Application.Current as ISoluiNetUiWpfApp).SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             // Open code completion after the user has pressed dot:
             var completionWindow = new CompletionWindow(this.SqlCommandText.TextArea);
