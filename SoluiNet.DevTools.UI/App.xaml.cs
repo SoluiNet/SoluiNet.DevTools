@@ -6,28 +6,21 @@ namespace SoluiNet.DevTools.UI
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
-    using System.Data;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows;
     using NLog;
-    using SoluiNet.DevTools.Core;
-    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
-    using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
-    using SoluiNet.DevTools.Core.Windows.Tools.HotKey;
 
     /// <summary>
     /// Interaction logic for "App.xaml".
@@ -35,27 +28,27 @@ namespace SoluiNet.DevTools.UI
     public partial class App : Application, ISoluiNetUiWpfApp
     {
         /// <summary>
-        /// Gets or sets all available plugins.
+        /// Gets all available plugins.
         /// </summary>
-        public ICollection<IBasePlugin> Plugins { get; set; }
+        public ICollection<IBasePlugin> Plugins { get; private set; }
 
         /// <summary>
-        /// Gets or sets all available plugins that provide database connectivity functions.
+        /// Gets all available plugins that provide database connectivity functions.
         /// </summary>
-        public ICollection<ISqlUiPlugin> SqlPlugins { get; set; }
+        public ICollection<ISqlUiPlugin> SqlPlugins { get; private set; }
 
         /// <summary>
-        /// Gets or sets all available plugins that provide utility functions.
+        /// Gets all available plugins that provide utility functions.
         /// </summary>
-        public ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
+        public ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; private set; }
 
         /// <summary>
-        /// Gets or sets all available plugins that will run in the background.
+        /// Gets all available plugins that will run in the background.
         /// </summary>
-        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; set; }
+        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; private set; }
 
         /// <inheritdoc/>
-        public ICollection<ISoluiNetUIElement> UiElements { get; set; }
+        public ICollection<ISoluiNetUIElement> UiElements { get; private set; }
 
         private Logger Logger
         {
@@ -75,12 +68,12 @@ namespace SoluiNet.DevTools.UI
             {
                 base.OnStartup(e);
 
-            this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+                this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
-            this.LoadPlugins();
-            this.LoadUiElements();
+                this.LoadPlugins();
+                this.LoadUiElements();
 
-                this.CallStartupEvent();
+                App.CallStartupEvent();
             }
             catch (Exception exception)
             {
@@ -97,14 +90,30 @@ namespace SoluiNet.DevTools.UI
             try
             {
                 base.OnExit(e);
-                
+
                 this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
-                this.CallShutdownEvent();
+                App.CallShutdownEvent();
             }
             catch (Exception exception)
             {
                 this.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
+            }
+        }
+
+        private static void CallStartupEvent()
+        {
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IStartupEvent>>())
+            {
+                plugin.HandleEvent<IStartupEvent>(new Dictionary<string, object>());
+            }
+        }
+
+        private static void CallShutdownEvent()
+        {
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IShutdownEvent>>())
+            {
+                plugin.HandleEvent<IShutdownEvent>(new Dictionary<string, object>());
             }
         }
 
@@ -134,7 +143,7 @@ namespace SoluiNet.DevTools.UI
                 {
                     Debug.WriteLine(JsonTools.Serialize(exception));
 
-                    this.Logger.Debug(exception, string.Format("Couldn't load assembly '{0}'", dllFile));
+                    this.Logger.Debug(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't load assembly '{0}'", dllFile));
                 }
             }
 
@@ -255,13 +264,13 @@ namespace SoluiNet.DevTools.UI
 
                     Task.Run(() =>
                     {
-                        (plugin as IRunsBackgroundTask).ExecuteBackgroundTask();
+                        plugin.ExecuteBackgroundTask();
                     });
                 }
             }
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.AssemblyResolve += new ResolveEventHandler(PluginHelper.LoadAssembly);
+            currentDomain.AssemblyResolve += PluginHelper.LoadAssembly;
         }
 
         private void LoadUiElements()
@@ -337,23 +346,7 @@ namespace SoluiNet.DevTools.UI
             }
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.AssemblyResolve += new ResolveEventHandler(UIHelper.LoadUiElementAssembly);
-        }
-
-        private void CallStartupEvent()
-        {
-            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IStartupEvent>>())
-            {
-                (plugin as IHandlesEvent<IStartupEvent>).HandleEvent<IStartupEvent>(new Dictionary<string, object>());
-            }
-        }
-
-        private void CallShutdownEvent()
-        {
-            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IShutdownEvent>>())
-            {
-                (plugin as IHandlesEvent<IShutdownEvent>).HandleEvent<IShutdownEvent>(new Dictionary<string, object>());
-            }
+            currentDomain.AssemblyResolve += UIHelper.LoadUiElementAssembly;
         }
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)

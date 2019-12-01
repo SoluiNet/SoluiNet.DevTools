@@ -20,13 +20,13 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Application
     public interface ISoluiNetUiWpfApp : ISoluiNetUiApp
     {
         /// <summary>
-        /// Gets or sets all available plugins that provide database connectivity functions.
+        /// Gets all available plugins that provide database connectivity functions.
         /// </summary>
-        ICollection<ISqlUiPlugin> SqlPlugins { get; set; }
+        ICollection<ISqlUiPlugin> SqlPlugins { get; }
 
         /// <summary>
-        /// Gets or sets all available plugins that provide utility functions.
+        /// Gets all available plugins that provide utility functions.
         /// </summary>
-        ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; set; }
+        ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; }
     }
 }

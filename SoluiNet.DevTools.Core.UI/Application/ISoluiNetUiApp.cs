@@ -20,8 +20,8 @@ namespace SoluiNet.DevTools.Core.UI.Application
     public interface ISoluiNetUiApp : ISoluiNetApp
     {
         /// <summary>
-        /// Gets or sets all available UI elements.
+        /// Gets all available UI elements.
         /// </summary>
-        ICollection<ISoluiNetUIElement> UiElements { get; set; }
+        ICollection<ISoluiNetUIElement> UiElements { get; }
     }
 }

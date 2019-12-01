@@ -17,13 +17,13 @@ namespace SoluiNet.DevTools.Core.Application
     public interface ISoluiNetApp
     {
         /// <summary>
-        /// Gets or sets all available plugins.
+        /// Gets all available plugins.
         /// </summary>
-        ICollection<IBasePlugin> Plugins { get; set; }
+        ICollection<IBasePlugin> Plugins { get; }
 
         /// <summary>
-        /// Gets or sets all available plugins that will run in the background.
+        /// Gets all available plugins that will run in the background.
         /// </summary>
-        ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; set; }
+        ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; }
     }
 }
