@@ -1519,16 +1519,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
-        private void FillDailyTimespanResults(IEnumerable<UsageTime> queryResults)
+        private void FillTimespanResults(IEnumerable<UsageTime> queryResults)
         {
-            this.DailyTimespanData.Items.Clear();
+            this.TimespanData.Items.Clear();
 
-            if (this.DailyTimespanData.Columns.Count == 0)
+            if (this.TimespanData.Columns.Count == 0)
             {
-                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "Date", Binding = new Binding("Date") });
-                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "StartTime", Binding = new Binding("StartTime") });
-                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "EndTime", Binding = new Binding("EndTime") });
-                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") });
+                this.TimespanData.Columns.Add(new DataGridTextColumn() { Header = "Date", Binding = new Binding("Date") });
+                this.TimespanData.Columns.Add(new DataGridTextColumn() { Header = "StartTime", Binding = new Binding("StartTime") });
+                this.TimespanData.Columns.Add(new DataGridTextColumn() { Header = "EndTime", Binding = new Binding("EndTime") });
+                this.TimespanData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") });
             }
 
             foreach (var item in queryResults.ToList().GroupBy(x => x.StartTime.Date))
@@ -1538,7 +1538,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var endTime = lastItem?.StartTime.AddSeconds(lastItem?.Duration ?? 0);
 
-                this.DailyTimespanData.Items.Add(new
+                this.TimespanData.Items.Add(new
                 {
                     Date = item.Key.Date.ToString(CultureInfo.InvariantCulture),
                     StartTime = firstItem?.StartTime,
@@ -1548,27 +1548,27 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
-        private void DailyTimespanQuery_Click(object sender, RoutedEventArgs e)
+        private void TimespanQuery_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 var lowerDayLimit = DateTime.UtcNow.Date;
                 var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
 
-                if (this.DailyTimespanBegin.SelectedDate.HasValue && this.DailyTimespanEnd.SelectedDate.HasValue)
+                if (this.TimespanBegin.SelectedDate.HasValue && this.TimespanEnd.SelectedDate.HasValue)
                 {
-                    lowerDayLimit = this.DailyTimespanBegin.SelectedDate.Value.Date;
-                    upperDayLimit = this.DailyTimespanEnd.SelectedDate.Value.AddDays(1).Date;
+                    lowerDayLimit = this.TimespanBegin.SelectedDate.Value.Date;
+                    upperDayLimit = this.TimespanEnd.SelectedDate.Value.AddDays(1).Date;
                 }
 
                 var queryResults = this.context.UsageTime
                     .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
 
-                this.FillDailyTimespanResults(queryResults);
+                this.FillTimespanResults(queryResults);
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "Error while executing daily time span query");
+                this.Logger.Error(exception, "Error while executing time span query");
 
                 MessageBox.Show(exception.Message, this.Resources.GetString("QueryError", CultureInfo.CurrentCulture));
             }
