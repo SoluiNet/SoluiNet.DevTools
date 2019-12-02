@@ -32,6 +32,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <param name="sqlCommand">The SQL command.</param>
         /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
         /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         public static DataTable ExecuteSqlCommand<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
             where TConnection : IDbConnection
             where TCommand : IDbCommand
@@ -122,6 +123,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <param name="sqlCommand">The SQL command.</param>
         /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         public static List<DataTable> ExecuteSqlScript<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
            where TConnection : IDbConnection
            where TCommand : IDbCommand

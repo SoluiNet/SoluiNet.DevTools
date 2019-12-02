@@ -62,6 +62,7 @@ namespace SoluiNet.DevTools.UI
         /// Event handling for start up.
         /// </summary>
         /// <param name="e">The start up event.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         protected override void OnStartup(StartupEventArgs e)
         {
             try
@@ -85,6 +86,7 @@ namespace SoluiNet.DevTools.UI
         /// Event handling for exit.
         /// </summary>
         /// <param name="e">The exit event.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         protected override void OnExit(ExitEventArgs e)
         {
             try
