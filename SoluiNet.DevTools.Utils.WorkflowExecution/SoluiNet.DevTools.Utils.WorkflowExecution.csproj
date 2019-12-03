@@ -45,6 +45,17 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="WorkflowExecutionUserControl.xaml.cs">
+      <DependentUpon>WorkflowExecutionUserControl.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="WorkflowExecutionUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="WorkflowExecutionUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
