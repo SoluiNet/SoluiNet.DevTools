@@ -8,13 +8,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using Quartz;
     using Quartz.Impl;
-    using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
@@ -23,9 +20,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     /// <summary>
     /// A plugin which provides utility functions for time tracking.
     /// </summary>
+    [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Will be used from outside sources")]
     public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask, IHandlesEvent<IStartupEvent>, IHandlesEvent<IShutdownEvent>
     {
-        private static System.Threading.Mutex mutex = null;
+        private static System.Threading.Mutex mutex;
 
         /// <summary>
         /// Gets the technical name of the plugin.
@@ -54,8 +52,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var factory = new StdSchedulerFactory(props);
 
             // get a scheduler
-            var scheduler = await factory.GetScheduler();
-            await scheduler.Start();
+            var scheduler = await factory.GetScheduler().ConfigureAwait(true);
+            await scheduler.Start().ConfigureAwait(true);
 
             var logJob = JobBuilder.Create<LogForegroundWindowTask>()
                 .WithIdentity("ForegroundWindowLogger", "TimeTracking")
@@ -69,7 +67,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     .RepeatForever())
                 .Build();
 
-            await scheduler.ScheduleJob(logJob, logTrigger);
+            await scheduler.ScheduleJob(logJob, logTrigger).ConfigureAwait(true);
 
             var dbJob = JobBuilder.Create<SaveForegroundWindowTaskToDb>()
                 .WithIdentity("ForegroundWindowDbPersister", "TimeTracking")
@@ -83,7 +81,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     .RepeatForever())
                 .Build();
 
-            await scheduler.ScheduleJob(dbJob, dbTrigger);
+            await scheduler.ScheduleJob(dbJob, dbTrigger).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -109,6 +107,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// </summary>
         /// <param name="eventArgs">The event arguments.</param>
         /// <typeparam name="T">The event type.</typeparam>
+        [SuppressMessage(
+            "Design",
+            "CA1031:Do not catch general exception types",
+            Justification = "The catch is needed for the creation of the mutex.")]
         public void HandleEvent<T>(Dictionary<string, object> eventArgs)
             where T : IEventType
         {
@@ -123,7 +125,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 {
                     mutex = System.Threading.Mutex.OpenExisting("soluinet.devtools_TimeTracking");
 
-                    // we got mutex and can try to obtain a lock by waitone
+                    // we got mutex and can try to obtain a lock by WaitOne
                     mutex.WaitOne();
                 }
                 catch
