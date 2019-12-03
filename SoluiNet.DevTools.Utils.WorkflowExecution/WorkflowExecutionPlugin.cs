@@ -1,23 +1,14 @@
-﻿// <copyright file="WebClientPlugin.cs" company="SoluiNet">
-// Copyright (c) SoluiNet. All rights reserved.
-// </copyright>
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 
-namespace SoluiNet.DevTools.Utils.WebClient
+namespace SoluiNet.DevTools.Utils.WorkflowExecution
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Windows.Controls;
-    using SoluiNet.DevTools.Core;
-    using SoluiNet.DevTools.Core.Plugin;
-    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
-
-    /// <summary>
-    /// A plugin which provides utility functions for working with web services.
-    /// </summary>
-    public class WebClientPlugin : IUtilitiesDevPlugin
+    public class WorkflowExecutionPlugin : IUtilitiesDevPlugin
     {
         /// <summary>
         /// Gets the technical name of the plugin.
