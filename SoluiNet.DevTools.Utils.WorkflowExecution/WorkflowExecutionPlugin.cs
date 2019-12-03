@@ -1,13 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+﻿// <copyright file="WorkflowExecutionPlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Utils.WorkflowExecution
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Controls;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+
+    /// <summary>
+    /// A plugin which allows to execute workflows.
+    /// </summary>
     public class WorkflowExecutionPlugin : IUtilitiesDevPlugin
     {
         /// <summary>
@@ -37,7 +44,7 @@ namespace SoluiNet.DevTools.Utils.WorkflowExecution
                 throw new ArgumentNullException(nameof(displayInPluginContainer));
             }
 
-            displayInPluginContainer(new WebClientUserControl());
+            displayInPluginContainer(new WorkflowExecutionUserControl());
         }
     }
 }
