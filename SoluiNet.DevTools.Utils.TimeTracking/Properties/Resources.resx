@@ -120,6 +120,12 @@
   <data name="ConfirmDeletion" xml:space="preserve">
     <value>Confirm Deletion</value>
   </data>
+  <data name="DescriptionForMeantime" xml:space="preserve">
+    <value>Please provide a description for which what happened in the meantime</value>
+  </data>
+  <data name="MeantimeDescriptionTitle" xml:space="preserve">
+    <value>TimeTracking - Provide Description</value>
+  </data>
   <data name="QueryError" xml:space="preserve">
     <value>Error while executing Query</value>
   </data>

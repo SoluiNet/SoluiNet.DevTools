@@ -70,6 +70,24 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please provide a description for which what happened in the meantime ähnelt.
+        /// </summary>
+        internal static string DescriptionForMeantime {
+            get {
+                return ResourceManager.GetString("DescriptionForMeantime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die TimeTracking - Provide Description ähnelt.
+        /// </summary>
+        internal static string MeantimeDescriptionTitle {
+            get {
+                return ResourceManager.GetString("MeantimeDescriptionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Error while executing Query ähnelt.
         /// </summary>
         internal static string QueryError {
