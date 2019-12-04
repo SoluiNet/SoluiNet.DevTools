@@ -46,6 +46,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.General
             confirmation.Click += (sender, e) =>
             {
                 prompt.DialogResult = true;
+
                 prompt.Close();
             };
 

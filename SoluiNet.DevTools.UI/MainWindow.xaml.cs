@@ -164,12 +164,12 @@ namespace SoluiNet.DevTools.UI
 
         private void SoluiNetWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            this.hotKey?.Register();
+            this.hotKey?.Unregister();
         }
 
         private void SoluiNetWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.hotKey?.Unregister();
+            this.hotKey?.Register();
         }
     }
 }

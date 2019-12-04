@@ -2,27 +2,25 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Resources;
-using SoluiNet.DevTools.Core.Tools.Number;
-using SoluiNet.DevTools.Core.UI.WPF.General;
-using SoluiNet.DevTools.Utils.TimeTracking.Entities;
-
 namespace SoluiNet.DevTools.Utils.TimeTracking
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Linq;
+    using System.Reflection;
+    using System.Resources;
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using Quartz;
     using Quartz.Impl;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
+    using SoluiNet.DevTools.Core.UI.WPF.General;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Utils.TimeTracking.Entities;
     using SoluiNet.DevTools.Utils.TimeTracking.Job;
 
     /// <summary>
@@ -50,13 +48,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         }
 
         /// <summary>
-        /// The resources.
+        /// Gets the resources.
         /// </summary>
-        private ResourceManager Resources
+        private static ResourceManager Resources
         {
             get
             {
-                return new ResourceManager("SoluiNet.DevTools.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
+                return new ResourceManager("SoluiNet.DevTools.Utils.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
             }
         }
 
@@ -153,36 +151,47 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     mutex = new System.Threading.Mutex(true, "soluinet.devtools_TimeTracking"); // these names need to match.
                 }
 
-                var context = new TimeTrackingContext();
-
-                try
+                if (System.Windows.Application.Current.MainWindow != null)
                 {
-                    var currentDate = DateTime.UtcNow.Date;
-
-                    var lastUsageTime = context.UsageTime.Where(x => x.StartTime > currentDate).OrderByDescending(x => x.StartTime).FirstOrDefault();
-
-                    if (lastUsageTime == null ||
-                        !((DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime().AddSeconds(lastUsageTime.Duration)).TotalSeconds > 15))
+                    System.Windows.Application.Current.MainWindow.Loaded += (sender, args) =>
                     {
-                        return;
-                    }
+                        var context = new TimeTrackingContext();
 
-                    var usageTimeName = Prompt.ShowDialog(
-                        this.Resources.GetString("DescriptionForMeantime", CultureInfo.CurrentCulture),
-                        this.Resources.GetString("MeantimeDescriptionTitle", CultureInfo.CurrentCulture));
+                        try
+                        {
+                            var currentDate = DateTime.UtcNow.Date;
 
-                    context.UsageTime.Add(new UsageTime()
-                    {
-                        StartTime = lastUsageTime.StartTime.ToUniversalTime().AddSeconds(lastUsageTime.Duration),
-                        ApplicationIdentification = usageTimeName,
-                        Duration = Convert.ToInt32((DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime().AddSeconds(lastUsageTime.Duration)).TotalSeconds),
-                    });
+                            var lastUsageTime = context.UsageTime.Where(x => x.StartTime > currentDate)
+                                .OrderByDescending(x => x.StartTime).FirstOrDefault();
 
-                    context.SaveChanges();
-                }
-                finally
-                {
-                    context.Dispose();
+                            if (lastUsageTime == null ||
+                                !((DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime()
+                                       .AddSeconds(lastUsageTime.Duration)).TotalSeconds > 15))
+                            {
+                                return;
+                            }
+
+                            var usageTimeName = Prompt.ShowDialog(
+                                Resources.GetString("DescriptionForMeantime", CultureInfo.CurrentCulture),
+                                Resources.GetString("MeantimeDescriptionTitle", CultureInfo.CurrentCulture));
+
+                            context.UsageTime.Add(new UsageTime()
+                            {
+                                StartTime =
+                                    lastUsageTime.StartTime.ToUniversalTime().AddSeconds(lastUsageTime.Duration),
+                                ApplicationIdentification = usageTimeName,
+                                Duration = Convert.ToInt32(
+                                    (DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime()
+                                         .AddSeconds(lastUsageTime.Duration)).TotalSeconds),
+                            });
+
+                            context.SaveChanges();
+                        }
+                        finally
+                        {
+                            context.Dispose();
+                        }
+                    };
                 }
             }
         }

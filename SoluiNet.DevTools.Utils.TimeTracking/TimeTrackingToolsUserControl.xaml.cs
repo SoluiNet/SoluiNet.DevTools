@@ -86,7 +86,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         {
             get
             {
-                return new ResourceManager("SoluiNet.DevTools.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
+                return new ResourceManager("SoluiNet.DevTools.Utils.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
             }
         }
 
