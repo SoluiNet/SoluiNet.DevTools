@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# IDE0025: Ausdruckskörper für Eigenschaften verwenden
+csharp_style_expression_bodied_properties = false:silent

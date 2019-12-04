@@ -27,7 +27,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     /// A plugin which provides utility functions for time tracking.
     /// </summary>
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Will be used from outside sources")]
-    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask, IHandlesEvent<IStartupEvent>, IHandlesEvent<IShutdownEvent>
+    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask, IHandlesEvent<IStartupEvent>, IHandlesEvent<IShutdownEvent>, IHandlesEvent<IApplicationStartedEvent>
     {
         private static System.Threading.Mutex mutex;
 
@@ -150,48 +150,45 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     // the specified mutex doesn't exist, we should create it
                     mutex = new System.Threading.Mutex(true, "soluinet.devtools_TimeTracking"); // these names need to match.
                 }
+            }
+            else if (typeof(T).IsAssignableFrom(typeof(IApplicationStartedEvent)))
+            {
+                var context = new TimeTrackingContext();
 
-                if (System.Windows.Application.Current.MainWindow != null)
+                try
                 {
-                    System.Windows.Application.Current.MainWindow.Loaded += (sender, args) =>
+                    var currentDateTime = DateTime.UtcNow;
+                    var currentDate = currentDateTime.Date;
+
+                    var lastUsageTime = context.UsageTime.Where(x => x.StartTime > currentDate)
+                        .OrderByDescending(x => x.StartTime).FirstOrDefault();
+
+                    if (lastUsageTime == null ||
+                        !((DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime()
+                               .AddSeconds(lastUsageTime.Duration)).TotalSeconds > 15))
                     {
-                        var context = new TimeTrackingContext();
+                        return;
+                    }
 
-                        try
-                        {
-                            var currentDate = DateTime.UtcNow.Date;
+                    var usageTimeName = Prompt.ShowDialog(
+                        Resources.GetString("DescriptionForMeantime", CultureInfo.CurrentCulture),
+                        Resources.GetString("MeantimeDescriptionTitle", CultureInfo.CurrentCulture));
 
-                            var lastUsageTime = context.UsageTime.Where(x => x.StartTime > currentDate)
-                                .OrderByDescending(x => x.StartTime).FirstOrDefault();
+                    context.UsageTime.Add(new UsageTime()
+                    {
+                        StartTime =
+                            lastUsageTime.StartTime.ToUniversalTime().AddSeconds(lastUsageTime.Duration),
+                        ApplicationIdentification = usageTimeName,
+                        Duration = Convert.ToInt32(
+                            (currentDateTime - lastUsageTime.StartTime.ToUniversalTime()
+                                 .AddSeconds(lastUsageTime.Duration)).TotalSeconds),
+                    });
 
-                            if (lastUsageTime == null ||
-                                !((DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime()
-                                       .AddSeconds(lastUsageTime.Duration)).TotalSeconds > 15))
-                            {
-                                return;
-                            }
-
-                            var usageTimeName = Prompt.ShowDialog(
-                                Resources.GetString("DescriptionForMeantime", CultureInfo.CurrentCulture),
-                                Resources.GetString("MeantimeDescriptionTitle", CultureInfo.CurrentCulture));
-
-                            context.UsageTime.Add(new UsageTime()
-                            {
-                                StartTime =
-                                    lastUsageTime.StartTime.ToUniversalTime().AddSeconds(lastUsageTime.Duration),
-                                ApplicationIdentification = usageTimeName,
-                                Duration = Convert.ToInt32(
-                                    (DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime()
-                                         .AddSeconds(lastUsageTime.Duration)).TotalSeconds),
-                            });
-
-                            context.SaveChanges();
-                        }
-                        finally
-                        {
-                            context.Dispose();
-                        }
-                    };
+                    context.SaveChanges();
+                }
+                finally
+                {
+                    context.Dispose();
                 }
             }
         }

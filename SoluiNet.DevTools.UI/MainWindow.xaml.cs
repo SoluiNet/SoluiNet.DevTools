@@ -2,6 +2,8 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using SoluiNet.DevTools.Core.Plugin.Events;
+
 namespace SoluiNet.DevTools.UI
 {
     using System;
@@ -170,6 +172,11 @@ namespace SoluiNet.DevTools.UI
         private void SoluiNetWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.hotKey?.Register();
+
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IApplicationStartedEvent>>())
+            {
+                plugin.HandleEvent<IApplicationStartedEvent>(new Dictionary<string, object>());
+            }
         }
     }
 }
