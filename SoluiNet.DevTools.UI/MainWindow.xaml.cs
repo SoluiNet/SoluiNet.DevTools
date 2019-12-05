@@ -2,41 +2,17 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using SoluiNet.DevTools.Core.Plugin.Events;
-
 namespace SoluiNet.DevTools.UI
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data;
     using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Forms;
-    using System.Windows.Input;
-    using System.Windows.Interop;
-    using System.Windows.Media;
-    using ICSharpCode.AvalonEdit;
-    using ICSharpCode.AvalonEdit.CodeCompletion;
-    using ICSharpCode.AvalonEdit.Editing;
-    using Microsoft.Win32;
     using NLog;
-    using NLog.Internal;
-    using SoluiNet.DevTools.Core;
-    using SoluiNet.DevTools.Core.Application;
-    using SoluiNet.DevTools.Core.Formatter;
-    using SoluiNet.DevTools.Core.Models;
     using SoluiNet.DevTools.Core.Plugin;
-    using SoluiNet.DevTools.Core.ScriptEngine;
+    using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Core.Tools;
-    using SoluiNet.DevTools.Core.Tools.Sql;
-    using SoluiNet.DevTools.Core.UI;
     using SoluiNet.DevTools.Core.UI.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
@@ -57,72 +33,86 @@ namespace SoluiNet.DevTools.UI
         {
             this.InitializeComponent();
 
-            foreach (var utilityPlugin in (System.Windows.Application.Current as ISoluiNetUiWpfApp).UtilityPlugins)
+            var utilitiesDevPlugins = (System.Windows.Application.Current as ISoluiNetUiWpfApp)?.UtilityPlugins;
+
+            if (utilitiesDevPlugins != null)
             {
-                try
+                foreach (var utilityPlugin in utilitiesDevPlugins)
                 {
-                    if (utilityPlugin is IGroupable)
+                    try
                     {
-                        var groupPluginMenuItem = UIHelper.GetMenuItemByName(this.ExtrasMenuItem, (utilityPlugin as IGroupable).Group);
-
-                        var utilityPluginMenuItem = new System.Windows.Controls.MenuItem()
+                        if (utilityPlugin is IGroupable)
                         {
-                            Header = utilityPlugin.MenuItemLabel,
-                        };
+                            var groupPluginMenuItem = UIHelper.GetMenuItemByName(this.ExtrasMenuItem,
+                                (utilityPlugin as IGroupable).Group);
 
-                        utilityPluginMenuItem.Click += (sender, args) =>
-                        {
-                            utilityPlugin.Execute(x =>
+                            var utilityPluginMenuItem = new System.Windows.Controls.MenuItem()
                             {
-                                var pluginVisualizeWindow = new VisualPluginContainer();
-                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", string.Format(CultureInfo.InvariantCulture, "{0} / {1}", (utilityPlugin as IGroupable).Group, utilityPlugin.MenuItemLabel) } });
+                                Header = utilityPlugin.MenuItemLabel,
+                            };
 
-                                pluginVisualizeWindow.ContentGrid.Children.Add(x);
-
-                                pluginVisualizeWindow.ShowDialog();
-
-                                if (x is IDisposable disposableObject)
+                            utilityPluginMenuItem.Click += (sender, args) =>
+                            {
+                                utilityPlugin.Execute(x =>
                                 {
-                                    disposableObject.Dispose();
-                                }
-                            });
-                        };
+                                    var pluginVisualizeWindow = new VisualPluginContainer();
+                                    pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>()
+                                    {
+                                        {
+                                            "0",
+                                            string.Format(CultureInfo.InvariantCulture, "{0} / {1}",
+                                                (utilityPlugin as IGroupable).Group, utilityPlugin.MenuItemLabel)
+                                        }
+                                    });
 
-                        groupPluginMenuItem.Items.Add(utilityPluginMenuItem);
+                                    pluginVisualizeWindow.ContentGrid.Children.Add(x);
+
+                                    pluginVisualizeWindow.ShowDialog();
+
+                                    if (x is IDisposable disposableObject)
+                                    {
+                                        disposableObject.Dispose();
+                                    }
+                                });
+                            };
+
+                            groupPluginMenuItem.Items.Add(utilityPluginMenuItem);
+                        }
+                        else
+                        {
+                            var utilityPluginMenuItem = new System.Windows.Controls.MenuItem()
+                            {
+                                Header = utilityPlugin.MenuItemLabel,
+                            };
+
+                            utilityPluginMenuItem.Click += (sender, args) =>
+                            {
+                                utilityPlugin.Execute(x =>
+                                {
+                                    var pluginVisualizeWindow = new VisualPluginContainer();
+                                    pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>()
+                                        {{"0", utilityPlugin.MenuItemLabel}});
+
+                                    pluginVisualizeWindow.ContentGrid.Children.Add(x);
+
+                                    pluginVisualizeWindow.ShowDialog();
+
+                                    if (x is IDisposable disposableObject)
+                                    {
+                                        disposableObject.Dispose();
+                                    }
+                                });
+                            };
+
+                            this.ExtrasMenuItem.Items.Add(utilityPluginMenuItem);
+                        }
                     }
-                    else
+                    catch (Exception exception)
                     {
-                        var utilityPluginMenuItem = new System.Windows.Controls.MenuItem()
-                        {
-                            Header = utilityPlugin.MenuItemLabel,
-                        };
+                        this.Logger.Error(exception);
 
-                        utilityPluginMenuItem.Click += (sender, args) =>
-                        {
-                            utilityPlugin.Execute(x =>
-                            {
-                                var pluginVisualizeWindow = new VisualPluginContainer();
-                                pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>() { { "0", utilityPlugin.MenuItemLabel } });
-
-                                pluginVisualizeWindow.ContentGrid.Children.Add(x);
-
-                                pluginVisualizeWindow.ShowDialog();
-
-                                if (x is IDisposable disposableObject)
-                                {
-                                    disposableObject.Dispose();
-                                }
-                            });
-                        };
-
-                        this.ExtrasMenuItem.Items.Add(utilityPluginMenuItem);
+                        throw;
                     }
-                }
-                catch (Exception exception)
-                {
-                    this.Logger.Error(exception);
-
-                    throw;
                 }
             }
 
@@ -142,7 +132,7 @@ namespace SoluiNet.DevTools.UI
             this.LoggingPath = string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
         }
 
-        private string LoggingPath { get; set; }
+        private string LoggingPath { get; }
 
         private Logger Logger
         {
