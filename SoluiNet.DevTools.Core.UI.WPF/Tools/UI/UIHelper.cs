@@ -59,8 +59,10 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
 
             var tableKey = title.Replace(" ", string.Empty);
 
-            var dataGrid = new DataGrid();
-            dataGrid.IsReadOnly = true;
+            var dataGrid = new DataGrid
+            {
+                IsReadOnly = true,
+            };
 
             var tabIndexCdv = containingGrid.FindChild<TabControl>(key + "_TabItem_Tabs").Items.Add(new TabItem() { Name = key + "_Grid_" + tableKey, Header = title });
             ((TabItem)containingGrid.FindChild<TabControl>(key + "_TabItem_Tabs").Items[tabIndexCdv]).Content = dataGrid;
@@ -360,6 +362,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// </summary>
         /// <param name="dataGrid">The data grid which should be exported.</param>
         /// <returns>A <see cref="string"/> which represents the data from a single cell in a <see cref="DataGrid"/>.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         public static string GetSelectedCellAsText(DataGrid dataGrid)
         {
             if (dataGrid == null)
@@ -367,7 +370,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
                 throw new ArgumentNullException(nameof(dataGrid));
             }
 
-            var cellValue = string.Empty;
+            string cellValue;
 
             try
             {
@@ -400,7 +403,9 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
 
             using (var stream = type.Assembly.GetManifestResourceStream(fullName))
             {
-                using (var reader = new XmlTextReader(stream))
+                var settings = new XmlReaderSettings() { XmlResolver = null };
+
+                using (var reader = XmlReader.Create(stream ?? throw new InvalidOperationException("Stream is null or empty"), settings))
                 {
                     return HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
@@ -424,9 +429,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
 
             foreach (var item in parentMenuItem.Items)
             {
-                var childMenuItem = item as MenuItem;
-
-                if (childMenuItem == null || childMenuItem.Header.ToString() != name)
+                if (!(item is MenuItem childMenuItem) || childMenuItem.Header.ToString() != name)
                 {
                     continue;
                 }
@@ -542,15 +545,6 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <param name="eventName">The event name.</param>
         public static void RemoveEvent(this Control uiElement, string eventName = "Click")
         {
-            /* FieldInfo fieldInfo = typeof(Control).GetField(string.Format("Event{0}", eventName), BindingFlags.Static | BindingFlags.NonPublic);
-            object eventClick = fieldInfo.GetValue(uiElement);
-
-            PropertyInfo property = uiElement.GetType().GetProperty("Events", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            EventHandlerList list = (EventHandlerList)property.GetValue(uiElement, null);
-
-            list.RemoveHandler(eventClick, list[eventClick]); */
-
             var routedEventHandlers = GetRoutedEventHandlers(uiElement, ButtonBase.ClickEvent);
 
             if (routedEventHandlers == null)
@@ -560,9 +554,9 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
 
             foreach (var routedEventHandler in routedEventHandlers)
             {
-                if (uiElement is Button)
+                if (uiElement is Button button)
                 {
-                    (uiElement as Button).Click -= (RoutedEventHandler)routedEventHandler.Handler;
+                    button.Click -= (RoutedEventHandler)routedEventHandler.Handler;
                 }
             }
         }

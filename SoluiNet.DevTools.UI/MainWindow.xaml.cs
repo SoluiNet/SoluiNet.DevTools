@@ -41,10 +41,11 @@ namespace SoluiNet.DevTools.UI
                 {
                     try
                     {
-                        if (utilityPlugin is IGroupable)
+                        if (utilityPlugin is IGroupable groupedUtilityPlugin)
                         {
-                            var groupPluginMenuItem = UIHelper.GetMenuItemByName(this.ExtrasMenuItem,
-                                (utilityPlugin as IGroupable).Group);
+                            var groupPluginMenuItem = UIHelper.GetMenuItemByName(
+                                this.ExtrasMenuItem,
+                                groupedUtilityPlugin.Group);
 
                             var utilityPluginMenuItem = new System.Windows.Controls.MenuItem()
                             {
@@ -60,9 +61,12 @@ namespace SoluiNet.DevTools.UI
                                     {
                                         {
                                             "0",
-                                            string.Format(CultureInfo.InvariantCulture, "{0} / {1}",
-                                                (utilityPlugin as IGroupable).Group, utilityPlugin.MenuItemLabel)
-                                        }
+                                            string.Format(
+                                                CultureInfo.InvariantCulture,
+                                                "{0} / {1}",
+                                                (utilityPlugin as IGroupable)?.Group,
+                                                utilityPlugin.MenuItemLabel)
+                                        },
                                     });
 
                                     pluginVisualizeWindow.ContentGrid.Children.Add(x);
@@ -91,7 +95,7 @@ namespace SoluiNet.DevTools.UI
                                 {
                                     var pluginVisualizeWindow = new VisualPluginContainer();
                                     pluginVisualizeWindow.SetTitleParts(new Dictionary<string, string>()
-                                        {{"0", utilityPlugin.MenuItemLabel}});
+                                        { { "0", utilityPlugin.MenuItemLabel } });
 
                                     pluginVisualizeWindow.ContentGrid.Children.Add(x);
 

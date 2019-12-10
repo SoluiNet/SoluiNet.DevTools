@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Web
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -32,6 +33,7 @@ namespace SoluiNet.DevTools.Web
         /// <summary>
         /// Initializes a new instance of the <see cref="SoluiNetWebServer"/> class.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         public SoluiNetWebServer()
         {
             try
@@ -43,7 +45,7 @@ namespace SoluiNet.DevTools.Web
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer", null);
             }
         }
 
@@ -71,7 +73,7 @@ namespace SoluiNet.DevTools.Web
             }
         }
 
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {
@@ -102,7 +104,7 @@ namespace SoluiNet.DevTools.Web
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Start]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Start]", null);
                 throw;
             }
         }
@@ -129,11 +131,13 @@ namespace SoluiNet.DevTools.Web
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Stop]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Stop]", null);
                 throw;
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Readability of Header string will be improved by using multiple lines")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void AddHttpHeaders(int contentLength, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
         {
             try
@@ -146,6 +150,7 @@ namespace SoluiNet.DevTools.Web
                 if (respondingSocket.Connected)
                 {
                     string headers = string.Format(
+                        CultureInfo.InvariantCulture,
                         "HTTP/1.1\r\n"
                         + "Server: localhost\r\n"
                         + "Content-Type: {1}\r\n"
@@ -162,10 +167,11 @@ namespace SoluiNet.DevTools.Web
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [AddHeaders]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [AddHeaders]", null);
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void Respond(string returningString, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
         {
             try
@@ -186,10 +192,11 @@ namespace SoluiNet.DevTools.Web
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void Respond(Stream returningStream, ref Socket respondingSocket, string mimeType = "text/html")
         {
             try
@@ -205,10 +212,11 @@ namespace SoluiNet.DevTools.Web
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void Respond(Core.Web.Communication.WebResponse webResponse, ref Socket respondingSocket)
         {
             try
@@ -222,10 +230,11 @@ namespace SoluiNet.DevTools.Web
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond WebResponse]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond WebResponse]", null);
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void HandleWebCommunication()
         {
             while (true)
@@ -251,7 +260,7 @@ namespace SoluiNet.DevTools.Web
                 }
                 catch (Exception exception)
                 {
-                    this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [HandleRequest]", null);
+                    Logger.Error(exception, "An exception occured in SoluiNetWebServer [HandleRequest]", null);
                 }
             }
         }

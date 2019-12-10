@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
@@ -15,7 +16,6 @@ namespace SoluiNet.DevTools.Utils.WebClient
     using System.Windows;
     using System.Windows.Controls;
     using System.Xml;
-    using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
@@ -42,6 +42,8 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
         private bool RequestShowAdditionalOptions { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5397:Do not use deprecated SslProtocols values", Justification = "Even older protocols should be supported by this method")]
         private void Execute_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -61,7 +63,9 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
                 var settings = PluginHelper.GetSettings(this.ChosenPlugin);
 
-                var request = (HttpWebRequest)WebRequest.Create(url);
+                var uri = new Uri(url);
+
+                var request = (HttpWebRequest)WebRequest.Create(uri);
                 var content = this.Input.Text.SetEnvironment(environment).InjectCommonValues().InjectSettings(settings);
 
                 request.Method = this.HttpMethod.Text;
@@ -79,7 +83,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 {
                     var injectionDictionary = new Dictionary<string, string>()
                     {
-                        { "ContentLength", content.Length.ToString() },
+                        { "ContentLength", content.Length.ToString(CultureInfo.InvariantCulture) },
                     };
 
                     request.ContentType = this.ContentType.Text;
@@ -89,11 +93,21 @@ namespace SoluiNet.DevTools.Utils.WebClient
                         request.Headers.Add(element.Key, element.Value.SetEnvironment(environment).InjectCommonValues().InjectSettings(settings).Inject(injectionDictionary));
                     }
 
-                    var soapEnvelopeXml = new XmlDocument();
+                    var soapEnvelopeXml = new XmlDocument() { XmlResolver = null };
 
-                    soapEnvelopeXml.LoadXml(content);
+                    var stringReader = new StringReader(content);
+                    var xmlReader = XmlReader.Create(stringReader, new XmlReaderSettings() { XmlResolver = null });
 
-                    WebClientTools.InsertSoapEnvelope(soapEnvelopeXml, request);
+                    try
+                    {
+                        soapEnvelopeXml.Load(xmlReader);
+
+                        WebClientTools.InsertSoapEnvelope(soapEnvelopeXml, request);
+                    }
+                    finally
+                    {
+                        xmlReader.Dispose();
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(this.RequestAuthenticationUser.Text))
@@ -102,14 +116,14 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 }
 
                 // begin async call to web request.
-                IAsyncResult asyncResult = request.BeginGetResponse(null, null);
+                var asyncResult = request.BeginGetResponse(null, null);
 
                 // suspend this thread until call is complete. You might want to
                 // do something useful here like update your UI.
                 asyncResult.AsyncWaitHandle.WaitOne();
 
                 // get the response from the completed web request.
-                var result = string.Empty;
+                string result;
 
                 using (var response = request.EndGetResponse(asyncResult))
                 {
@@ -143,7 +157,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     this.ReturnCode.Content = (response as HttpWebResponse)?.StatusCode.ToString() ?? "NONE";
                     this.ReturnType.Content = response.ContentType;
 
-                    using (var reader = new StreamReader(response.GetResponseStream()))
+                    using (var reader = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException("Response is null or empty")))
                     {
                         result = reader.ReadToEnd();
 
@@ -160,7 +174,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             {
                 if (webEx.Response == null)
                 {
-                    this.Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##", webEx.Message, webEx.InnerException?.Message);
+                    this.Output.Text = string.Format(CultureInfo.InvariantCulture, "##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##", webEx.Message, webEx.InnerException?.Message);
                 }
                 else
                 {
@@ -170,23 +184,35 @@ namespace SoluiNet.DevTools.Utils.WebClient
                     {
                         var reader = new StreamReader(responseStream);
 
-                        var responseText = reader.ReadToEnd();
+                        try
+                        {
+                            var responseText = reader.ReadToEnd();
 
-                        this.Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##\r\n\r\n{2}", webEx.Message, webEx.InnerException?.Message, XmlHelper.IsXml(responseText) ? XmlHelper.Format(responseText) : responseText);
+                            this.Output.Text = string.Format(
+                                CultureInfo.InvariantCulture,
+                                "##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##\r\n\r\n{2}",
+                                webEx.Message,
+                                webEx.InnerException?.Message,
+                                XmlHelper.IsXml(responseText) ? XmlHelper.Format(responseText) : responseText);
+                        }
+                        finally
+                        {
+                            reader.Dispose();
+                        }
                     }
                 }
             }
             catch (Exception exception)
             {
-                this.Output.Text = string.Format("##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##", exception.Message, exception.InnerException?.Message);
+                this.Output.Text = string.Format(CultureInfo.InvariantCulture, "##EXCEPTION##\r\n{0}\r\n{1}\r\n##EXCEPTION##", exception.Message, exception.InnerException?.Message);
             }
         }
 
         private void AdditionalOptions_Click(object sender, RoutedEventArgs e)
         {
-            var tagInfo = Convert.ToString(this.ToggleAdditionalOptions.Tag);
+            var tagInfo = Convert.ToString(this.ToggleAdditionalOptions.Tag, CultureInfo.InvariantCulture);
 
-            var expanded = Convert.ToBoolean(string.IsNullOrEmpty(tagInfo) ? "false" : tagInfo);
+            var expanded = Convert.ToBoolean(string.IsNullOrEmpty(tagInfo) ? "false" : tagInfo, CultureInfo.InvariantCulture);
 
             if (!expanded)
             {
@@ -290,7 +316,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 return SslProtocols.None;
             }
 
-            var usingSecureStream = connection?.GetType().GetProperty("UsingSecureStream", bindingFlags);
+            var usingSecureStream = connection.GetType().GetProperty("UsingSecureStream", bindingFlags);
 
             if (usingSecureStream != null && !(bool)usingSecureStream.GetValue(connection))
             {
@@ -298,11 +324,11 @@ namespace SoluiNet.DevTools.Utils.WebClient
                 return SslProtocols.None;
             }
 
-            var tlsStream = connection?.GetType().GetProperty("NetworkStream", bindingFlags)?.GetValue(connection);
+            var tlsStream = connection.GetType().GetProperty("NetworkStream", bindingFlags)?.GetValue(connection);
             var tlsState = tlsStream?.GetType().GetField("m_Worker", bindingFlags)?.GetValue(tlsStream);
             if (tlsState != null)
             {
-                return (SslProtocols)tlsState.GetType().GetProperty("SslProtocol", bindingFlags)?.GetValue(tlsState);
+                return (SslProtocols)tlsState.GetType()?.GetProperty("SslProtocol", bindingFlags)?.GetValue(tlsState);
             }
 
             return SslProtocols.None;

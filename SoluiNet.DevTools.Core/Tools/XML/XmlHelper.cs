@@ -34,7 +34,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         {
             if (string.IsNullOrEmpty(serializedString))
             {
-                return default(T);
+                return default;
             }
 
             var stream = new MemoryStream();
@@ -66,7 +66,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
         {
             if (string.IsNullOrEmpty(serializedString))
             {
-                return default(T);
+                return default;
             }
 
             return Deserialize<T>(serializedString);

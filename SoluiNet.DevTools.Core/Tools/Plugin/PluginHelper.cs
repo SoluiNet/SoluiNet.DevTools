@@ -502,7 +502,7 @@ namespace SoluiNet.DevTools.Core.Tools
                 }
             }
 
-            return default(T);
+            return default;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
     }
 }

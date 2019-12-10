@@ -58,6 +58,11 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// <returns>Returns a <see cref="List{T}"/> of property names.</returns>
         public static List<string> GetEmbeddedResourceNames(this object instance)
         {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
             return instance.GetType().GetEmbeddedResourceNames();
         }
 
@@ -68,6 +73,11 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// <returns>Returns a <see cref="List{T}"/> of property names.</returns>
         public static List<string> GetEmbeddedResourceNames(this Type type)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
             return type.Assembly.GetManifestResourceNames().ToList();
         }
 
@@ -116,6 +126,11 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// <returns>Returns the content stream of the embedded resource.</returns>
         public static System.IO.Stream GetEmbeddedResourceContentStream(this object instance, string resourceName, string resourceNamespace = "")
         {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
             return instance.GetType().GetEmbeddedResourceContentStream(resourceName, resourceNamespace);
         }
 
@@ -130,14 +145,12 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         {
             var possibleResources = type.GetEmbeddedResourceNames()
                 .Where(x =>
-                    x.EndsWith((!string.IsNullOrEmpty(resourceNamespace) ? resourceNamespace + "." : string.Empty) + resourceName));
+                    x.EndsWith(
+                        (!string.IsNullOrEmpty(resourceNamespace) ? resourceNamespace + "." : string.Empty) + resourceName,
+                        StringComparison.InvariantCulture))
+                .ToList();
 
-            if (!possibleResources.Any())
-            {
-                return null;
-            }
-
-            return type.Assembly.GetManifestResourceStream(possibleResources.First());
+            return !possibleResources.Any() ? null : type?.Assembly.GetManifestResourceStream(possibleResources.First());
         }
     }
 }
