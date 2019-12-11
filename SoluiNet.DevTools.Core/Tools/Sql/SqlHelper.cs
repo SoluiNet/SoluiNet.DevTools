@@ -6,10 +6,9 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
-    using System.Text;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Provides a collection of useful methods to work with SQL.
@@ -26,6 +25,11 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
         /// <returns>A <see cref="bool"/> value which is true if the <see cref="string"/> is a SQL script.</returns>
         public static bool IsScript(this string sqlCommand)
         {
+            if (string.IsNullOrEmpty(sqlCommand))
+            {
+                return false;
+            }
+
             if (sqlCommand.Contains(EXECUTE_SCRIPT_PART_KEYWORD))
             {
                 return true;
@@ -51,6 +55,11 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
         /// <returns>A <see cref="List{T}"/> where each entry represents a single SQL script.</returns>
         public static List<string> GetSingleScripts(this string sqlCommand)
         {
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
             return sqlCommand.Split(new string[] { EXECUTE_SCRIPT_PART_KEYWORD }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.TrimStart().TrimEnd()).ToList();
         }
 
@@ -79,13 +88,23 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
         /// <returns>Returns the original table name for the overgiven alias.</returns>
         public static string GetTableByAlias(string sqlCommand, string alias)
         {
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
+            if (string.IsNullOrEmpty(alias))
+            {
+                throw new ArgumentNullException(nameof(alias));
+            }
+
             // ignore SQL functions
             if (alias.Contains('('))
             {
                 alias = alias.Split('(').Last();
             }
 
-            Regex aliasDefinitionRegex = new Regex(string.Format(@"(FROM|JOIN)\s+(.*)\s+(AS\s+)?({0})", alias), RegexOptions.IgnoreCase);
+            var aliasDefinitionRegex = new Regex(string.Format(CultureInfo.InvariantCulture, @"(FROM|JOIN)\s+(.*)\s+(AS\s+)?({0})", alias), RegexOptions.IgnoreCase);
 
             if (aliasDefinitionRegex.IsMatch(sqlCommand))
             {
@@ -105,6 +124,11 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
         /// <returns>Returns the SQL command at the current cursor position.</returns>
         public static string GetSqlCommandByPosition(string sqlCommand, int cursorPosition)
         {
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
             var beginningOfSqlRegex = new Regex(@"^(\r?\n)?[^\(]?SELECT", RegexOptions.IgnoreCase);
             var endOfSqlRegex = new Regex(@"((;)|(\r?\n\r?\n))$", RegexOptions.IgnoreCase);
 
@@ -159,6 +183,11 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
         /// <returns>Returns the alias at the current cursor position.</returns>
         public static string GetAliasByPosition(string sqlCommand, int cursorPosition)
         {
+            if (sqlCommand == null)
+            {
+                throw new ArgumentNullException(nameof(sqlCommand));
+            }
+
             var aliasRegex = new Regex("^\\s(([\\\"]?.+[\\\"]?)|(.+))\\.", RegexOptions.IgnoreCase);
 
             var alias = string.Empty;

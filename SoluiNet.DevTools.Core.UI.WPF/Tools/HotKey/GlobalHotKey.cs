@@ -60,8 +60,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         /// </summary>
         /// <param name="info">The info.</param>
         /// <param name="context">The context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'context' parameter has been added for future implementations")]
         protected GlobalHotKey(SerializationInfo info, StreamingContext context)
         {
+            if (info == null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
+
             this.Key = (Key)info.GetValue("Key", typeof(Key));
             this.Modifiers = (ModifierKeys)info.GetValue("Modifiers", typeof(ModifierKeys));
             this.Enabled = info.GetBoolean("Enabled");
@@ -92,7 +98,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
                 if (this.key != value)
                 {
                     this.key = value;
-                    this.OnPropertyChanged("Key");
+                    this.OnPropertyChanged(nameof(this.Key));
                 }
             }
         }
@@ -112,7 +118,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
                 if (this.modifiers != value)
                 {
                     this.modifiers = value;
-                    this.OnPropertyChanged("Modifiers");
+                    this.OnPropertyChanged(nameof(this.Modifiers));
                 }
             }
         }
@@ -132,7 +138,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
                 if (value != this.enabled)
                 {
                     this.enabled = value;
-                    this.OnPropertyChanged("Enabled");
+                    this.OnPropertyChanged(nameof(this.Enabled));
                 }
             }
         }
@@ -189,6 +195,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         /// <param name="context">The streaming context.</param>
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            if (info == null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
+
             info.AddValue("Key", this.Key, typeof(Key));
             info.AddValue("Modifiers", this.Modifiers, typeof(ModifierKeys));
             info.AddValue("Enabled", this.Enabled);

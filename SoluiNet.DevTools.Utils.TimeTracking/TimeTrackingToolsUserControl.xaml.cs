@@ -74,7 +74,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// <summary>
         /// Gets the logger.
         /// </summary>
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {
@@ -82,7 +82,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
-        private new ResourceManager Resources
+        private static new ResourceManager Resources
         {
             get
             {
@@ -317,7 +317,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             if (dropEvents.KeyStates.HasFlag(DragDropKeyStates.ShiftKey))
             {
                 var assignableDuration = Prompt.ShowDialog(
-                    $"Which time frame should be assigned? (max. {sumDuration.ToDurationString()})", this.Resources.GetString("SelectTimeFrame", CultureInfo.CurrentCulture));
+                    $"Which time frame should be assigned? (max. {sumDuration.ToDurationString()})", Resources.GetString("SelectTimeFrame", CultureInfo.CurrentCulture));
 
                 if (assignableDuration.GetSecondsFromDurationString() <= sumDuration)
                 {
@@ -1115,9 +1115,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "Error while executing query '{0}'", !string.IsNullOrEmpty(this.QueryFilter.Text) ? this.QueryFilter.Text : "no filter");
+                Logger.Error(exception, "Error while executing query '{0}'", !string.IsNullOrEmpty(this.QueryFilter.Text) ? this.QueryFilter.Text : "no filter");
 
-                MessageBox.Show(exception.Message, this.Resources.GetString("QueryError", CultureInfo.CurrentCulture));
+                MessageBox.Show(exception.Message, Resources.GetString("QueryError", CultureInfo.CurrentCulture));
             }
         }
 
@@ -1182,8 +1182,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             if (string.IsNullOrEmpty(summaryType))
             {
                 Confirm.ShowDialog(
-                    this.Resources.GetString("SelectSummaryType", CultureInfo.CurrentCulture),
-                    this.Resources.GetString("Warning", CultureInfo.CurrentCulture));
+                    Resources.GetString("SelectSummaryType", CultureInfo.CurrentCulture),
+                    Resources.GetString("Warning", CultureInfo.CurrentCulture));
 
                 return;
             }
@@ -1509,7 +1509,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             if (Confirm.ShowDialog(
                 $"Do you really want to delete the category '{category.CategoryName}'?",
-                this.Resources.GetString("ConfirmDeletion", CultureInfo.CurrentCulture)))
+                Resources.GetString("ConfirmDeletion", CultureInfo.CurrentCulture)))
             {
                 this.context.Category.Remove(category);
 
@@ -1568,9 +1568,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "Error while executing time span query");
+                Logger.Error(exception, "Error while executing time span query");
 
-                MessageBox.Show(exception.Message, this.Resources.GetString("QueryError", CultureInfo.CurrentCulture));
+                MessageBox.Show(exception.Message, Resources.GetString("QueryError", CultureInfo.CurrentCulture));
             }
         }
     }

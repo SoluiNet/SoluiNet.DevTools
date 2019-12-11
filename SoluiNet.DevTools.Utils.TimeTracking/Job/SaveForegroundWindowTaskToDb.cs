@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Job
         /// <summary>
         /// Gets the logger.
         /// </summary>
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {

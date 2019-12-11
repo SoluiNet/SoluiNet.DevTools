@@ -38,6 +38,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// <summary>
         /// Gets or sets the category usage time links.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Usage",
+            "CA2227:Collection properties should be read only",
+            Justification = "This property will be used from Entity Framework. Just to be safe the setter shouldn't be removed")]
         public virtual ICollection<CategoryUsageTime> CategoryUsageTime { get; set; }
 
         /// <summary>

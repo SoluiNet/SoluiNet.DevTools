@@ -5,17 +5,13 @@
 namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Data;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -24,6 +20,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
     using System.Xml;
     using ICSharpCode.AvalonEdit.Highlighting;
     using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+    using SoluiNet.DevTools.Core.Tools.Resources;
     using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
 
@@ -405,7 +402,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
             {
                 var settings = new XmlReaderSettings() { XmlResolver = null };
 
-                using (var reader = XmlReader.Create(stream ?? throw new InvalidOperationException("Stream is null or empty"), settings))
+                using (var reader = XmlReader.Create(stream ?? throw new InvalidOperationException(typeof(UIHelper).GetResourceString("NullOrEmptyStream")), settings))
                 {
                     return HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
