@@ -71,12 +71,15 @@ namespace SoluiNet.DevTools.UI
 
                                     pluginVisualizeWindow.ContentGrid.Children.Add(x);
 
-                                    pluginVisualizeWindow.ShowDialog();
+                                    pluginVisualizeWindow.Show();
 
-                                    if (x is IDisposable disposableObject)
+                                    pluginVisualizeWindow.Closed += (closedSender, closedEventArgs) =>
                                     {
-                                        disposableObject.Dispose();
-                                    }
+                                        if (x is IDisposable disposableObject)
+                                        {
+                                            disposableObject.Dispose();
+                                        }
+                                    };
                                 });
                             };
 
@@ -99,12 +102,15 @@ namespace SoluiNet.DevTools.UI
 
                                     pluginVisualizeWindow.ContentGrid.Children.Add(x);
 
-                                    pluginVisualizeWindow.ShowDialog();
+                                    pluginVisualizeWindow.Show();
 
-                                    if (x is IDisposable disposableObject)
+                                    pluginVisualizeWindow.Closed += (closedSender, closedEventArgs) =>
                                     {
-                                        disposableObject.Dispose();
-                                    }
+                                        if (x is IDisposable disposableObject)
+                                        {
+                                            disposableObject.Dispose();
+                                        }
+                                    };
                                 });
                             };
 
