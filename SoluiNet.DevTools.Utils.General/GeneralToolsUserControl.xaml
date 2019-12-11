@@ -54,6 +54,20 @@
                     <Button x:Name="Calculate" Content="Calculate" Height="30" Width="150" Margin="5,110" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Calculate_Click"></Button>
                 </Grid>
             </TabItem>
+            <TabItem Header="Strings">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="StringInput" Height="75" Margin="5,5,0,5" VerticalAlignment="Top" AcceptsReturn="True"></TextBox>
+                    <TextBox x:Name="AdditionalParameters" Height="25" Margin="5,85,0,5" VerticalAlignment="Top"></TextBox>
+                    <ComboBox x:Name="StringModification" Height="25" Width="150" Margin="5,115,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <ComboBoxItem Content="Upper"></ComboBoxItem>
+                        <ComboBoxItem Content="Lower"></ComboBoxItem>
+                        <ComboBoxItem Content="Substring"></ComboBoxItem>
+                        <ComboBoxItem Content="ToBase64"></ComboBoxItem>
+                    </ComboBox>
+                    <TextBox x:Name="StringOutput" Height="75" Margin="5,145,0,5" VerticalAlignment="Top" AcceptsReturn="True"></TextBox>
+                    <Button x:Name="CalculateString" Content="Calculate" Height="30" Width="150" Margin="5,230,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="CalculateString_Click"></Button>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>
