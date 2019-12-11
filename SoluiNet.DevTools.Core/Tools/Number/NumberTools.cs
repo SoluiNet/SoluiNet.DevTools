@@ -70,7 +70,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (hours >= 24)
             {
                 days = hours / 24;
-                hours = hours % 24;
+                hours %= 24;
 
                 formatString = "{3}d {2}h {1}m {0}s";
             }
@@ -78,7 +78,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (days >= 7)
             {
                 weeks = days / 7;
-                days = days % 7;
+                days %= 7;
 
                 formatString = "{4}w {3}d {2}h {1}m {0}s";
             }
@@ -104,7 +104,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (minutes >= 60)
             {
                 hours = minutes / 60;
-                minutes = minutes % 60;
+                minutes %= 60;
 
                 formatString = "{2}h {1}m {0}s";
             }
@@ -112,7 +112,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (hours >= 24)
             {
                 days = hours / 24;
-                hours = hours % 24;
+                hours %= 24;
 
                 formatString = "{3}d {2}h {1}m {0}s";
             }
@@ -120,7 +120,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (days >= 7)
             {
                 weeks = days / 7;
-                days = days % 7;
+                days %= 7;
 
                 formatString = "{4}w {3}d {2}h {1}m {0}s";
             }

@@ -57,7 +57,7 @@ namespace SoluiNet.DevTools.Core.Tools.Resources
                 culture = CultureInfo.CurrentCulture;
             }
 
-            var classAssemblyName = classType.Assembly.FullName;
+            var classAssemblyName = new AssemblyName(classType.Assembly.FullName).Name;
 
             var baseName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", classAssemblyName, resourcePath);
 

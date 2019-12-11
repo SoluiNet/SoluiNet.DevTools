@@ -263,9 +263,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         private void DropOnApplicationAreaElement(object dropApplicationSender, DragEventArgs dropApplicationEvents)
         {
             var dataObject = dropApplicationEvents.Data as DataObject;
-            var data = dataObject?.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
 
-            if (data == null)
+            if (!(dataObject?.GetData(typeof(IGrouping<string, UsageTime>)) is IGrouping<string, UsageTime> data))
             {
                 return;
             }
@@ -277,9 +276,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var item in this.TimeTrackingAssignmentOverview.Children.OfType<ExtendedButton>().Where(x => x.Selected))
             {
-                var applicationAreaData = item.Tag as IGrouping<string, UsageTime>;
-
-                if (applicationAreaData == null)
+                if (!(item.Tag is IGrouping<string, UsageTime> applicationAreaData))
                 {
                     continue;
                 }
@@ -300,8 +297,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var dataObject = dropEvents.Data as DataObject;
             var data = dataObject?.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
 
-            var usageTimeList = new HashSet<IGrouping<string, UsageTime>>();
-            usageTimeList.Add(data);
+            var usageTimeList = new HashSet<IGrouping<string, UsageTime>> { data };
 
             foreach (var item in this.TimeTrackingAssignmentOverview.Children.OfType<ExtendedButton>().Where(x => x.Selected))
             {
@@ -773,15 +769,23 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var application in applications)
             {
-                var applicationAreaTarget = new UI.AssignmentTarget();
+                var applicationAreaTarget = new UI.AssignmentTarget
+                {
+                    Label = application.ApplicationName,
+                    Target =
+                    {
+                        Background = !string.IsNullOrEmpty(application.ExtendedConfiguration)
+                            ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
+                                ?.SoluiNetBrushDefinition?.ToBrush()
+                            : new SolidColorBrush(Colors.WhiteSmoke)
+                    },
+                    Tag = application,
+                    AllowDrop = true
+                };
 
-                applicationAreaTarget.Label = application.ApplicationName;
 
-                applicationAreaTarget.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
 
-                applicationAreaTarget.Tag = application;
 
-                applicationAreaTarget.AllowDrop = true;
                 applicationAreaTarget.Drop += dropApplicationAreaDelegate;
 
                 applicationAreaTarget.PreviewMouseRightButtonDown += rightClickApplicationAreaDelegate;
@@ -1311,9 +1315,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void ApplicationAreaSettings_Click(object sender, RoutedEventArgs e)
         {
-            var applicationAreaButton = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as UI.AssignmentTarget;
-
-            if (applicationAreaButton == null)
+            if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is UI.AssignmentTarget applicationAreaButton))
             {
                 return;
             }
@@ -1328,9 +1330,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void CategorySettings_Click(object sender, RoutedEventArgs e)
         {
-            var categoryButton = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as UI.AssignmentTargetExtended;
-
-            if (categoryButton == null)
+            if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is UI.AssignmentTargetExtended categoryButton))
             {
                 return;
             }
@@ -1476,9 +1476,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 var usageTimePerDayAndCategory = this.context.CategoryUsageTime.Where(x =>
                     x.UsageTime.StartTime >= startDate && x.UsageTime.StartTime <= endDate &&
                     searchValues.Contains(x.Category.CategoryName)).
-                    Select(x => new { Category = x.Category.CategoryName, Duration = x.Duration, StartTime = x.UsageTime.StartTime }).
+                    Select(x => new { Category = x.Category.CategoryName, x.Duration, x.UsageTime.StartTime }).
                     ToList().
-                    GroupBy(x => new { Category = x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
+                    GroupBy(x => new {x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
                     ToList();
 
                 var clipboardContent = string.Empty;
@@ -1541,7 +1541,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 this.TimespanData.Items.Add(new
                 {
                     Date = item.Key.Date.ToString(CultureInfo.InvariantCulture),
-                    StartTime = firstItem?.StartTime,
+                    firstItem?.StartTime,
                     EndTime = endTime,
                     Duration = ((endTime - (firstItem?.StartTime ?? endTime)) ?? new TimeSpan(0)).TotalSeconds.RoundWithDelta(1).ToDurationString(),
                 });

@@ -5,7 +5,6 @@
 namespace SoluiNet.DevTools.Web
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -13,12 +12,9 @@ namespace SoluiNet.DevTools.Web
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
-    using System.Threading.Tasks;
     using NLog;
-    using SoluiNet.DevTools.Core.Tools.Object;
+    using SoluiNet.DevTools.Core.Tools.Resources;
     using SoluiNet.DevTools.Core.Tools.Stream;
-    using SoluiNet.DevTools.Core.Web.Communication;
-    using SoluiNet.DevTools.Core.Web.Renderer;
 
     /// <summary>
     /// The SoluiNet Web Server.
@@ -40,7 +36,7 @@ namespace SoluiNet.DevTools.Web
             {
                 var ipAddress = Dns.GetHostEntry("localhost").AddressList.First(x => x.AddressFamily != AddressFamily.InterNetworkV6);
 
-                Console.WriteLine("Starting SoluiNetWebServer, listening on {0}:{1}...", ipAddress.ToString(), 31337);
+                Console.WriteLine(this.GetResourceString("SoluiNetServerStarting"), ipAddress.ToString(), 31337);
                 this.webListener = new TcpListener(ipAddress, 31337);
             }
             catch (Exception exception)
@@ -88,7 +84,7 @@ namespace SoluiNet.DevTools.Web
         {
             if (this.started)
             {
-                throw new Exception("SoluiNetWebServer already started.");
+                throw new Exception(this.GetResourceString("SoluiNetServerAlreadyStarted"));
             }
 
             try
@@ -98,7 +94,7 @@ namespace SoluiNet.DevTools.Web
                 this.webCommunicationHandlerThread = new Thread(new ThreadStart(this.HandleWebCommunication));
                 this.webCommunicationHandlerThread.Start();
 
-                Console.WriteLine("SoluiNetWebServer started.");
+                Console.WriteLine(this.GetResourceString("SoluiNetServerStarted"));
 
                 this.started = true;
             }
@@ -116,7 +112,7 @@ namespace SoluiNet.DevTools.Web
         {
             if (!this.started)
             {
-                throw new Exception("SoluiNetWebServer can't be stopped if it hasn't been started.");
+                throw new Exception(this.GetResourceString("SoluiNetServerHasNotBeenStarted"));
             }
 
             try
@@ -125,7 +121,7 @@ namespace SoluiNet.DevTools.Web
 
                 this.webListener.Stop();
 
-                Console.WriteLine("SoluiNetWebServer stopped...");
+                Console.WriteLine(this.GetResourceString("SoluiNetServerStopped"));
 
                 this.started = false;
             }
@@ -149,7 +145,7 @@ namespace SoluiNet.DevTools.Web
 
                 if (respondingSocket.Connected)
                 {
-                    string headers = string.Format(
+                    var headers = string.Format(
                         CultureInfo.InvariantCulture,
                         "HTTP/1.1\r\n"
                         + "Server: localhost\r\n"
