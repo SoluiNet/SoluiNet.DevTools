@@ -6,11 +6,11 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
-    using System.Threading.Tasks;
     using NLog;
     using SoluiNet.DevTools.Core.Tools.File;
     using SoluiNet.DevTools.Core.Tools.XML;
@@ -18,6 +18,10 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
     /// <summary>
     /// The plugin configuration.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.Naming",
+        "CA1724:TypeNamesShouldNotMatchNamespaces",
+        Justification = "The class name Configuration is easier to find and to understand than some class name with a prefix or suffix")]
     public static class Configuration
     {
         /// <summary>
@@ -51,7 +55,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         {
             get
             {
-                return string.Format("{0}\\SoluiNet.DevTools\\pluginConfiguration.xml", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+                return string.Format(CultureInfo.InvariantCulture, "{0}\\SoluiNet.DevTools\\pluginConfiguration.xml", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
             }
         }
 
@@ -91,7 +95,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
             {
                 var configuration = new Dictionary<string, bool>();
 
-                if (Current != null && Current.SoluiNetConfigurationEntry != null && Current.SoluiNetConfigurationEntry.Count() > 0)
+                if (Current != null && Current.SoluiNetConfigurationEntry != null && Current.SoluiNetConfigurationEntry.Any())
                 {
                     foreach (var entry in Current.SoluiNetConfigurationEntry)
                     {
@@ -115,7 +119,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         {
             var effectiveConfiguration = new Dictionary<string, List<SoluiNetPluginEntryType>>();
 
-            if (Current != null && Current.SoluiNetConfigurationEntry != null && Current.SoluiNetConfigurationEntry.Count() > 0)
+            if (Current != null && Current.SoluiNetConfigurationEntry != null && Current.SoluiNetConfigurationEntry.Any())
             {
                 foreach (var entry in Current.SoluiNetConfigurationEntry)
                 {
@@ -123,7 +127,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                     {
                         if (executingPath == (entry.Item as SoluiNetInstallationType).path)
                         {
-                            if ((entry.Item as SoluiNetInstallationType).SoluiNetPlugin != null && (entry.Item as SoluiNetInstallationType).SoluiNetPlugin.Count() > 0)
+                            if ((entry.Item as SoluiNetInstallationType).SoluiNetPlugin != null && (entry.Item as SoluiNetInstallationType).SoluiNetPlugin.Any())
                             {
                                 foreach (var pluginEntry in (entry.Item as SoluiNetInstallationType).SoluiNetPlugin)
                                 {
@@ -173,17 +177,21 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         {
             if (File.Exists(LocalConfigurationPath))
             {
-                Current = XmlHelper.DeserializeString<SoluiNetPluginConfigurationType>(FileHelper.StringFromFile(LocalConfigurationPath));
+                Current = FileHelper.StringFromFile(LocalConfigurationPath).DeserializeString<SoluiNetPluginConfigurationType>();
             }
             else
             {
-                var pluginConfiguration = new SoluiNetPluginConfigurationType();
-
-                pluginConfiguration.SoluiNetConfigurationEntry = new SoluiNetConfigurationEntryType[1];
-                pluginConfiguration.SoluiNetConfigurationEntry[0] = new SoluiNetConfigurationEntryType();
-                pluginConfiguration.SoluiNetConfigurationEntry[0].Item = new SoluiNetInstallationType()
+                var pluginConfiguration = new SoluiNetPluginConfigurationType
                 {
-                    path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                    SoluiNetConfigurationEntry = new SoluiNetConfigurationEntryType[1],
+                };
+
+                pluginConfiguration.SoluiNetConfigurationEntry[0] = new SoluiNetConfigurationEntryType
+                {
+                    Item = new SoluiNetInstallationType()
+                    {
+                        path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                    },
                 };
 
                 var pluginList = new List<SoluiNetPluginEntryType>();

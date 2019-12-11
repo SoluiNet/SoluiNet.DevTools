@@ -92,7 +92,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
 
             if (hotKey.Key == 0)
             {
-                throw new ArgumentNullException("hotKey.Key");
+                throw new ArgumentException("hotKey.Key is 0", nameof(hotKey));
             }
 
             if (this.hotKeys.ContainsValue(hotKey))

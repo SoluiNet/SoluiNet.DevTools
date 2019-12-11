@@ -74,7 +74,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// <summary>
         /// Gets the logger.
         /// </summary>
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {
@@ -82,11 +82,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
-        private new ResourceManager Resources
+        private static new ResourceManager Resources
         {
             get
             {
-                return new ResourceManager("SoluiNet.DevTools.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
+                return new ResourceManager("SoluiNet.DevTools.Utils.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
             }
         }
 
@@ -263,9 +263,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         private void DropOnApplicationAreaElement(object dropApplicationSender, DragEventArgs dropApplicationEvents)
         {
             var dataObject = dropApplicationEvents.Data as DataObject;
-            var data = dataObject?.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
 
-            if (data == null)
+            if (!(dataObject?.GetData(typeof(IGrouping<string, UsageTime>)) is IGrouping<string, UsageTime> data))
             {
                 return;
             }
@@ -277,9 +276,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var item in this.TimeTrackingAssignmentOverview.Children.OfType<ExtendedButton>().Where(x => x.Selected))
             {
-                var applicationAreaData = item.Tag as IGrouping<string, UsageTime>;
-
-                if (applicationAreaData == null)
+                if (!(item.Tag is IGrouping<string, UsageTime> applicationAreaData))
                 {
                     continue;
                 }
@@ -300,8 +297,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var dataObject = dropEvents.Data as DataObject;
             var data = dataObject?.GetData(typeof(IGrouping<string, UsageTime>)) as IGrouping<string, UsageTime>;
 
-            var usageTimeList = new HashSet<IGrouping<string, UsageTime>>();
-            usageTimeList.Add(data);
+            var usageTimeList = new HashSet<IGrouping<string, UsageTime>> { data };
 
             foreach (var item in this.TimeTrackingAssignmentOverview.Children.OfType<ExtendedButton>().Where(x => x.Selected))
             {
@@ -317,7 +313,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             if (dropEvents.KeyStates.HasFlag(DragDropKeyStates.ShiftKey))
             {
                 var assignableDuration = Prompt.ShowDialog(
-                    $"Which time frame should be assigned? (max. {sumDuration.ToDurationString()})", this.Resources.GetString("SelectTimeFrame", CultureInfo.CurrentCulture));
+                    $"Which time frame should be assigned? (max. {sumDuration.ToDurationString()})", Resources.GetString("SelectTimeFrame", CultureInfo.CurrentCulture));
 
                 if (assignableDuration.GetSecondsFromDurationString() <= sumDuration)
                 {
@@ -773,15 +769,23 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var application in applications)
             {
-                var applicationAreaTarget = new UI.AssignmentTarget();
+                var applicationAreaTarget = new UI.AssignmentTarget
+                {
+                    Label = application.ApplicationName,
+                    Target =
+                    {
+                        Background = !string.IsNullOrEmpty(application.ExtendedConfiguration)
+                            ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
+                                ?.SoluiNetBrushDefinition?.ToBrush()
+                            : new SolidColorBrush(Colors.WhiteSmoke)
+                    },
+                    Tag = application,
+                    AllowDrop = true
+                };
 
-                applicationAreaTarget.Label = application.ApplicationName;
 
-                applicationAreaTarget.Target.Background = !string.IsNullOrEmpty(application.ExtendedConfiguration) ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()?.SoluiNetBrushDefinition?.ToBrush() : new SolidColorBrush(Colors.WhiteSmoke);
 
-                applicationAreaTarget.Tag = application;
 
-                applicationAreaTarget.AllowDrop = true;
                 applicationAreaTarget.Drop += dropApplicationAreaDelegate;
 
                 applicationAreaTarget.PreviewMouseRightButtonDown += rightClickApplicationAreaDelegate;
@@ -1115,9 +1119,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "Error while executing query '{0}'", !string.IsNullOrEmpty(this.QueryFilter.Text) ? this.QueryFilter.Text : "no filter");
+                Logger.Error(exception, "Error while executing query '{0}'", !string.IsNullOrEmpty(this.QueryFilter.Text) ? this.QueryFilter.Text : "no filter");
 
-                MessageBox.Show(exception.Message, this.Resources.GetString("QueryError", CultureInfo.CurrentCulture));
+                MessageBox.Show(exception.Message, Resources.GetString("QueryError", CultureInfo.CurrentCulture));
             }
         }
 
@@ -1182,8 +1186,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             if (string.IsNullOrEmpty(summaryType))
             {
                 Confirm.ShowDialog(
-                    this.Resources.GetString("SelectSummaryType", CultureInfo.CurrentCulture),
-                    this.Resources.GetString("Warning", CultureInfo.CurrentCulture));
+                    Resources.GetString("SelectSummaryType", CultureInfo.CurrentCulture),
+                    Resources.GetString("Warning", CultureInfo.CurrentCulture));
 
                 return;
             }
@@ -1311,9 +1315,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void ApplicationAreaSettings_Click(object sender, RoutedEventArgs e)
         {
-            var applicationAreaButton = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as UI.AssignmentTarget;
-
-            if (applicationAreaButton == null)
+            if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is UI.AssignmentTarget applicationAreaButton))
             {
                 return;
             }
@@ -1328,9 +1330,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void CategorySettings_Click(object sender, RoutedEventArgs e)
         {
-            var categoryButton = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as UI.AssignmentTargetExtended;
-
-            if (categoryButton == null)
+            if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is UI.AssignmentTargetExtended categoryButton))
             {
                 return;
             }
@@ -1476,9 +1476,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 var usageTimePerDayAndCategory = this.context.CategoryUsageTime.Where(x =>
                     x.UsageTime.StartTime >= startDate && x.UsageTime.StartTime <= endDate &&
                     searchValues.Contains(x.Category.CategoryName)).
-                    Select(x => new { Category = x.Category.CategoryName, Duration = x.Duration, StartTime = x.UsageTime.StartTime }).
+                    Select(x => new { Category = x.Category.CategoryName, x.Duration, x.UsageTime.StartTime }).
                     ToList().
-                    GroupBy(x => new { Category = x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
+                    GroupBy(x => new {x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
                     ToList();
 
                 var clipboardContent = string.Empty;
@@ -1509,7 +1509,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             if (Confirm.ShowDialog(
                 $"Do you really want to delete the category '{category.CategoryName}'?",
-                this.Resources.GetString("ConfirmDeletion", CultureInfo.CurrentCulture)))
+                Resources.GetString("ConfirmDeletion", CultureInfo.CurrentCulture)))
             {
                 this.context.Category.Remove(category);
 
@@ -1519,16 +1519,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
-        private void FillDailyTimespanResults(IEnumerable<UsageTime> queryResults)
+        private void FillTimespanResults(IEnumerable<UsageTime> queryResults)
         {
-            this.DailyTimespanData.Items.Clear();
+            this.TimespanData.Items.Clear();
 
-            if (this.DailyTimespanData.Columns.Count == 0)
+            if (this.TimespanData.Columns.Count == 0)
             {
-                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "Date", Binding = new Binding("Date") });
-                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "StartTime", Binding = new Binding("StartTime") });
-                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "EndTime", Binding = new Binding("EndTime") });
-                this.DailyTimespanData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") });
+                this.TimespanData.Columns.Add(new DataGridTextColumn() { Header = "Date", Binding = new Binding("Date") });
+                this.TimespanData.Columns.Add(new DataGridTextColumn() { Header = "StartTime", Binding = new Binding("StartTime") });
+                this.TimespanData.Columns.Add(new DataGridTextColumn() { Header = "EndTime", Binding = new Binding("EndTime") });
+                this.TimespanData.Columns.Add(new DataGridTextColumn() { Header = "Duration", Binding = new Binding("Duration") });
             }
 
             foreach (var item in queryResults.ToList().GroupBy(x => x.StartTime.Date))
@@ -1538,39 +1538,39 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var endTime = lastItem?.StartTime.AddSeconds(lastItem?.Duration ?? 0);
 
-                this.DailyTimespanData.Items.Add(new
+                this.TimespanData.Items.Add(new
                 {
                     Date = item.Key.Date.ToString(CultureInfo.InvariantCulture),
-                    StartTime = firstItem?.StartTime,
+                    firstItem?.StartTime,
                     EndTime = endTime,
                     Duration = ((endTime - (firstItem?.StartTime ?? endTime)) ?? new TimeSpan(0)).TotalSeconds.RoundWithDelta(1).ToDurationString(),
                 });
             }
         }
 
-        private void DailyTimespanQuery_Click(object sender, RoutedEventArgs e)
+        private void TimespanQuery_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 var lowerDayLimit = DateTime.UtcNow.Date;
                 var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
 
-                if (this.DailyTimespanBegin.SelectedDate.HasValue && this.DailyTimespanEnd.SelectedDate.HasValue)
+                if (this.TimespanBegin.SelectedDate.HasValue && this.TimespanEnd.SelectedDate.HasValue)
                 {
-                    lowerDayLimit = this.DailyTimespanBegin.SelectedDate.Value.Date;
-                    upperDayLimit = this.DailyTimespanEnd.SelectedDate.Value.AddDays(1).Date;
+                    lowerDayLimit = this.TimespanBegin.SelectedDate.Value.Date;
+                    upperDayLimit = this.TimespanEnd.SelectedDate.Value.AddDays(1).Date;
                 }
 
                 var queryResults = this.context.UsageTime
                     .Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).ToList();
 
-                this.FillDailyTimespanResults(queryResults);
+                this.FillTimespanResults(queryResults);
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "Error while executing daily time span query");
+                Logger.Error(exception, "Error while executing time span query");
 
-                MessageBox.Show(exception.Message, this.Resources.GetString("QueryError", CultureInfo.CurrentCulture));
+                MessageBox.Show(exception.Message, Resources.GetString("QueryError", CultureInfo.CurrentCulture));
             }
         }
     }

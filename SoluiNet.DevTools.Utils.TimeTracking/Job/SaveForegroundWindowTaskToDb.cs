@@ -5,9 +5,8 @@
 namespace SoluiNet.DevTools.Utils.TimeTracking.Job
 {
     using System;
-    using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using NLog;
     using Quartz;
@@ -21,7 +20,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Job
         /// <summary>
         /// Gets the logger.
         /// </summary>
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {
@@ -30,42 +29,62 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Job
         }
 
         /// <inheritdoc/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1031:Do not catch general exception types",
+            Justification = "Exceptions which happen in a background task couldn't be brought to front. So log them instead.")]
         public async Task Execute(IJobExecutionContext context)
         {
             try
             {
-                this.SaveForegroundWindowToDb();
+                SaveForegroundWindowToDb();
             }
             catch (Exception exception)
             {
-                LogManager.GetCurrentClassLogger().Fatal(string.Format("{0}\r\n{1}", exception.Message, exception.InnerException != null ? exception.InnerException.Message : string.Empty));
+                LogManager.GetCurrentClassLogger().Fatal(string.Format(CultureInfo.InvariantCulture, "{0}\r\n{1}", exception.Message, exception.InnerException != null ? exception.InnerException.Message : string.Empty));
             }
 
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         }
 
-        private void SaveForegroundWindowToDb()
+        private static void SaveForegroundWindowToDb()
         {
             var windowName = TimeTrackingTools.GetTitleOfWindowInForeground();
 
             var context = new TimeTrackingContext();
 
-            var lowerDayLimit = DateTime.UtcNow.Date;
-            var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
-
-            var lastEntry = context.UsageTime.Where(x => x.ApplicationIdentification == windowName && x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit).OrderByDescending(x => x.StartTime).FirstOrDefault();
-
-            if (lastEntry == null || (DateTime.UtcNow - lastEntry.StartTime.ToUniversalTime().AddSeconds(lastEntry.Duration)).TotalSeconds > 15)
+            try
             {
-                context.UsageTime.Add(new UsageTime() { StartTime = DateTime.UtcNow, ApplicationIdentification = windowName, Duration = 10 });
+                var lowerDayLimit = DateTime.UtcNow.Date;
+                var upperDayLimit = DateTime.UtcNow.AddDays(1).Date;
 
-                context.SaveChanges();
+                var lastEntry = context.UsageTime
+                    .Where(x => x.ApplicationIdentification == windowName && x.StartTime >= lowerDayLimit &&
+                                x.StartTime < upperDayLimit).OrderByDescending(x => x.StartTime).FirstOrDefault();
+
+                if (lastEntry == null ||
+                    (DateTime.UtcNow - lastEntry.StartTime.ToUniversalTime().AddSeconds(lastEntry.Duration))
+                    .TotalSeconds > 15)
+                {
+                    context.UsageTime.Add(new UsageTime()
+                    {
+                        StartTime = DateTime.UtcNow,
+                        ApplicationIdentification = windowName,
+                        Duration = 10,
+                    });
+
+                    context.SaveChanges();
+                }
+                else
+                {
+                    lastEntry.Duration += 10;
+
+                    context.SaveChanges();
+                }
             }
-            else
+            finally
             {
-                lastEntry.Duration += 10;
-
-                context.SaveChanges();
+                context.Dispose();
             }
         }
     }

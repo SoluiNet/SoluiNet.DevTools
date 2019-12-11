@@ -17,7 +17,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Converter
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return System.Convert.ToDouble(value).ToDurationString();
+            return System.Convert.ToDouble(value, CultureInfo.InvariantCulture).ToDurationString();
         }
 
         /// <inheritdoc/>

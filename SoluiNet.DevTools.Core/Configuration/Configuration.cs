@@ -4,19 +4,20 @@
 
 namespace SoluiNet.DevTools.Core.Configuration
 {
-    using System;
-    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Xml;
     using System.Xml.Serialization;
 
     /// <summary>
     /// Provides a class which allows working with the configuration files.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.Naming",
+        "CA1724:TypeNamesShouldNotMatchNamespaces",
+        Justification = "The class name Configuration is easier to find and to understand than some class name with a prefix or suffix")]
     public static class Configuration
     {
         /// <summary>

@@ -5,10 +5,7 @@
 namespace SoluiNet.DevTools.Core.Tools.Json
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using System.Globalization;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -23,6 +20,7 @@ namespace SoluiNet.DevTools.Core.Tools.Json
         /// </summary>
         /// <param name="serializableObject">The object which should be serialized.</param>
         /// <returns>Returns a string which represents the overgiven object in JSON format.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         public static string Serialize(object serializableObject)
         {
             try
@@ -38,11 +36,12 @@ namespace SoluiNet.DevTools.Core.Tools.Json
             catch (Exception exception)
             {
                 return string.Format(
+                    CultureInfo.InvariantCulture,
                     JsonErrorFormat,
                     "not serializable",
                     exception.Message,
                     exception.InnerException != null ? exception.InnerException.Message : string.Empty);
-                }
+            }
         }
     }
 }

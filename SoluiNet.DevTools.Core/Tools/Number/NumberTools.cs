@@ -6,9 +6,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using System.Globalization;
 
     /// <summary>
     /// Provides a collection of methods which allows working with numbers.
@@ -64,7 +62,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (minutes >= 60)
             {
                 hours = minutes / 60;
-                minutes = minutes % 60;
+                minutes %= 60;
 
                 formatString = "{2}h {1}m {0}s";
             }
@@ -72,7 +70,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (hours >= 24)
             {
                 days = hours / 24;
-                hours = hours % 24;
+                hours %= 24;
 
                 formatString = "{3}d {2}h {1}m {0}s";
             }
@@ -80,12 +78,12 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (days >= 7)
             {
                 weeks = days / 7;
-                days = days % 7;
+                days %= 7;
 
                 formatString = "{4}w {3}d {2}h {1}m {0}s";
             }
 
-            return string.Format(formatString, remnantSeconds, minutes, hours, days, weeks);
+            return string.Format(CultureInfo.InvariantCulture, formatString, remnantSeconds, minutes, hours, days, weeks);
         }
 
         /// <summary>
@@ -106,7 +104,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (minutes >= 60)
             {
                 hours = minutes / 60;
-                minutes = minutes % 60;
+                minutes %= 60;
 
                 formatString = "{2}h {1}m {0}s";
             }
@@ -114,7 +112,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (hours >= 24)
             {
                 days = hours / 24;
-                hours = hours % 24;
+                hours %= 24;
 
                 formatString = "{3}d {2}h {1}m {0}s";
             }
@@ -122,12 +120,12 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (days >= 7)
             {
                 weeks = days / 7;
-                days = days % 7;
+                days %= 7;
 
                 formatString = "{4}w {3}d {2}h {1}m {0}s";
             }
 
-            return string.Format(formatString, remnantSeconds, minutes, hours, days, weeks);
+            return string.Format(CultureInfo.InvariantCulture, formatString, remnantSeconds, minutes, hours, days, weeks);
         }
 
         /// <summary>
@@ -219,6 +217,11 @@ namespace SoluiNet.DevTools.Core.Tools.Number
         /// <returns>Returns true if the instance is a numeric type.</returns>
         public static bool IsNumericType(this object instance)
         {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
             return instance.GetType().IsNumericType();
         }
 

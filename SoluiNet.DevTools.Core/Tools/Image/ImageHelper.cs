@@ -5,13 +5,8 @@
 namespace SoluiNet.DevTools.Core.Tools.Image
 {
     using System;
-    using System.Collections.Generic;
     using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Tools.Resources;
 
     /// <summary>
     /// Provides a collection of methods which help with working with images.
@@ -27,9 +22,9 @@ namespace SoluiNet.DevTools.Core.Tools.Image
         public static Bitmap CropImage(this Bitmap image, Rectangle area)
         {
             // An empty bitmap which will hold the cropped image
-            Bitmap bitmap = new Bitmap(area.Width, area.Height);
+            var bitmap = new Bitmap(area.Width, area.Height);
 
-            Graphics g = Graphics.FromImage(bitmap);
+            var g = Graphics.FromImage(bitmap);
 
             // Draw the given area (section) of the source image
             // at location 0,0 on the empty bitmap (bmp)
@@ -47,18 +42,29 @@ namespace SoluiNet.DevTools.Core.Tools.Image
         /// <returns>Returns an image with a drawn rectangle.</returns>
         public static Bitmap DrawRectangle(this Bitmap image, Rectangle area, Color colour)
         {
+            if (image == null)
+            {
+                throw new ArgumentNullException(nameof(image));
+            }
+
             var bitmap = image.Clone() as Bitmap;
 
             // Create pen.
-            Pen pen = new Pen(colour, 3);
-            /* pen.Alignment = PenAlignment.Inset; */
+            var pen = new Pen(colour, 3);
 
-            Graphics g = Graphics.FromImage(bitmap);
+            try
+            {
+                var g = Graphics.FromImage(bitmap ?? throw new InvalidOperationException(typeof(ImageHelper).GetResourceString("NullBitmap")));
 
-            // Draw rectangle to image.
-            g.DrawRectangle(pen, area);
+                // Draw rectangle to image.
+                g.DrawRectangle(pen, area);
 
-            return bitmap;
+                return bitmap;
+            }
+            finally
+            {
+                pen.Dispose();
+            }
         }
     }
 }

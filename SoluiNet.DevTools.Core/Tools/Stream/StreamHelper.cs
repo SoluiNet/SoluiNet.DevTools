@@ -60,16 +60,21 @@ namespace SoluiNet.DevTools.Core.Tools.Stream
         /// <returns>Returns the converted stream as byte array.</returns>
         public static byte[] ToByteArray(this System.IO.Stream stream)
         {
-            byte[] buffer = new byte[16 * 1024];
-            using (MemoryStream ms = new MemoryStream())
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            var buffer = new byte[16 * 1024];
+            using (var memoryStream = new MemoryStream())
             {
                 int read;
                 while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    ms.Write(buffer, 0, read);
+                    memoryStream.Write(buffer, 0, read);
                 }
 
-                return ms.ToArray();
+                return memoryStream.ToArray();
             }
         }
     }

@@ -31,15 +31,14 @@ namespace SoluiNet.DevTools.Web
         /// <summary>
         /// The main entrance of the application.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         public static void Main()
         {
             try
             {
                 ApplicationContext.Application = new WebApplication();
 
-                ServiceBase[] servicesToRun;
-
-                servicesToRun = new ServiceBase[]
+                var servicesToRun = new ServiceBase[]
                 {
                     new SoluiNetService(),
                 };
@@ -72,13 +71,13 @@ namespace SoluiNet.DevTools.Web
             Console.WriteLine();
 
             // Get the method to invoke on each service to start it
-            MethodInfo onStartMethod = typeof(ServiceBase).GetMethod("OnStart", BindingFlags.Instance | BindingFlags.NonPublic);
+            var onStartMethod = typeof(ServiceBase).GetMethod("OnStart", BindingFlags.Instance | BindingFlags.NonPublic);
 
             // Start services loop
-            foreach (ServiceBase service in servicesToRun)
+            foreach (var service in servicesToRun)
             {
                 Console.WriteLine("Starting {0} ... ", service.ServiceName);
-                onStartMethod.Invoke(service, new object[] { new string[] { } });
+                onStartMethod?.Invoke(service, new object[] { Array.Empty<string>() });
                 Console.WriteLine("{0} started successfully", service.ServiceName);
             }
 
@@ -91,13 +90,13 @@ namespace SoluiNet.DevTools.Web
             Console.WriteLine();
 
             // Get the method to invoke on each service to stop it
-            MethodInfo onStopMethod = typeof(ServiceBase).GetMethod("OnStop", BindingFlags.Instance | BindingFlags.NonPublic);
+            var onStopMethod = typeof(ServiceBase).GetMethod("OnStop", BindingFlags.Instance | BindingFlags.NonPublic);
 
             // Stop loop
-            foreach (ServiceBase service in servicesToRun)
+            foreach (var service in servicesToRun)
             {
                 Console.WriteLine("Stopping {0} ... ", service.ServiceName);
-                onStopMethod.Invoke(service, null);
+                onStopMethod?.Invoke(service, null);
                 Console.WriteLine("{0} stopped succesfully", service.ServiceName);
             }
 

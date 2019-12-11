@@ -8,24 +8,28 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Linq;
-    using System.Text;
+    using System.Reflection;
+    using System.Resources;
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using Quartz;
     using Quartz.Impl;
-    using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
+    using SoluiNet.DevTools.Core.UI.WPF.General;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Utils.TimeTracking.Entities;
     using SoluiNet.DevTools.Utils.TimeTracking.Job;
 
     /// <summary>
     /// A plugin which provides utility functions for time tracking.
     /// </summary>
-    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask, IHandlesEvent<IStartupEvent>, IHandlesEvent<IShutdownEvent>
+    [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Will be used from outside sources")]
+    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask, IHandlesEvent<IStartupEvent>, IHandlesEvent<IShutdownEvent>, IHandlesEvent<IApplicationStartedEvent>
     {
-        private static System.Threading.Mutex mutex = null;
+        private static System.Threading.Mutex mutex;
 
         /// <summary>
         /// Gets the technical name of the plugin.
@@ -43,6 +47,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             get { return "Time Tracking Tools"; }
         }
 
+        /// <summary>
+        /// Gets the resources.
+        /// </summary>
+        private static ResourceManager Resources
+        {
+            get
+            {
+                return new ResourceManager("SoluiNet.DevTools.Utils.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
+            }
+        }
+
         /// <inheritdoc/>
         public async Task ExecuteBackgroundTask()
         {
@@ -54,8 +69,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             var factory = new StdSchedulerFactory(props);
 
             // get a scheduler
-            var scheduler = await factory.GetScheduler();
-            await scheduler.Start();
+            var scheduler = await factory.GetScheduler().ConfigureAwait(true);
+            await scheduler.Start().ConfigureAwait(true);
 
             var logJob = JobBuilder.Create<LogForegroundWindowTask>()
                 .WithIdentity("ForegroundWindowLogger", "TimeTracking")
@@ -69,7 +84,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     .RepeatForever())
                 .Build();
 
-            await scheduler.ScheduleJob(logJob, logTrigger);
+            await scheduler.ScheduleJob(logJob, logTrigger).ConfigureAwait(true);
 
             var dbJob = JobBuilder.Create<SaveForegroundWindowTaskToDb>()
                 .WithIdentity("ForegroundWindowDbPersister", "TimeTracking")
@@ -83,7 +98,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     .RepeatForever())
                 .Build();
 
-            await scheduler.ScheduleJob(dbJob, dbTrigger);
+            await scheduler.ScheduleJob(dbJob, dbTrigger).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -109,6 +124,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// </summary>
         /// <param name="eventArgs">The event arguments.</param>
         /// <typeparam name="T">The event type.</typeparam>
+        [SuppressMessage(
+            "Design",
+            "CA1031:Do not catch general exception types",
+            Justification = "The catch is needed for the creation of the mutex.")]
         public void HandleEvent<T>(Dictionary<string, object> eventArgs)
             where T : IEventType
         {
@@ -123,13 +142,53 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 {
                     mutex = System.Threading.Mutex.OpenExisting("soluinet.devtools_TimeTracking");
 
-                    // we got mutex and can try to obtain a lock by waitone
+                    // we got mutex and can try to obtain a lock by WaitOne
                     mutex.WaitOne();
                 }
                 catch
                 {
                     // the specified mutex doesn't exist, we should create it
                     mutex = new System.Threading.Mutex(true, "soluinet.devtools_TimeTracking"); // these names need to match.
+                }
+            }
+            else if (typeof(T).IsAssignableFrom(typeof(IApplicationStartedEvent)))
+            {
+                var context = new TimeTrackingContext();
+
+                try
+                {
+                    var currentDateTime = DateTime.UtcNow;
+                    var currentDate = currentDateTime.Date;
+
+                    var lastUsageTime = context.UsageTime.Where(x => x.StartTime > currentDate)
+                        .OrderByDescending(x => x.StartTime).FirstOrDefault();
+
+                    if (lastUsageTime == null ||
+                        !((DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime()
+                               .AddSeconds(lastUsageTime.Duration)).TotalSeconds > 15))
+                    {
+                        return;
+                    }
+
+                    var usageTimeName = Prompt.ShowDialog(
+                        Resources.GetString("DescriptionForMeantime", CultureInfo.CurrentCulture),
+                        Resources.GetString("MeantimeDescriptionTitle", CultureInfo.CurrentCulture));
+
+                    context.UsageTime.Add(new UsageTime()
+                    {
+                        StartTime =
+                            lastUsageTime.StartTime.ToUniversalTime().AddSeconds(lastUsageTime.Duration),
+                        ApplicationIdentification = usageTimeName,
+                        Duration = Convert.ToInt32(
+                            (currentDateTime - lastUsageTime.StartTime.ToUniversalTime()
+                                 .AddSeconds(lastUsageTime.Duration)).TotalSeconds),
+                    });
+
+                    context.SaveChanges();
+                }
+                finally
+                {
+                    context.Dispose();
                 }
             }
         }

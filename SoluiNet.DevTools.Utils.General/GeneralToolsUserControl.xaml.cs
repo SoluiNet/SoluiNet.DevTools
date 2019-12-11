@@ -6,18 +6,11 @@ namespace SoluiNet.DevTools.Utils.General
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Documents;
-    using System.Windows.Input;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Navigation;
-    using System.Windows.Shapes;
+    using SoluiNet.DevTools.Core.Tools.String;
 
     /// <summary>
     /// Interaction logic for GeneralToolsUserControl.xaml.
@@ -71,18 +64,13 @@ namespace SoluiNet.DevTools.Utils.General
         }
 
         /// <summary>
-        /// Gets or sets the readable characters.
+        /// Gets the readable characters.
         /// </summary>
         public static Dictionary<char, string> ReadableCharacters
         {
             get
             {
                 return readableCharacters;
-            }
-
-            set
-            {
-                readableCharacters = value;
             }
         }
 
@@ -112,7 +100,7 @@ namespace SoluiNet.DevTools.Utils.General
                         break;
                 }
 
-                var decimalValue = Convert.ToInt64(this.NumberOutput.Text);
+                var decimalValue = Convert.ToInt64(this.NumberOutput.Text, CultureInfo.InvariantCulture);
 
                 var binaryResult = string.Empty;
 
@@ -120,7 +108,7 @@ namespace SoluiNet.DevTools.Utils.General
 
                 for (int i = 0; i < numberArray.Length; i++)
                 {
-                    binaryResult += baseForCalculation == 16 ? GeneralTools.GetHexadecimalValue(numberArray[i]) : numberArray[i].ToString();
+                    binaryResult += baseForCalculation == 16 ? GeneralTools.GetHexadecimalValue(numberArray[i]) : numberArray[i].ToString(CultureInfo.InvariantCulture);
                 }
 
                 this.BinaryInput.Text = binaryResult;
@@ -151,18 +139,18 @@ namespace SoluiNet.DevTools.Utils.General
                 for (int i = 0; i < this.BinaryInput.Text.Length; i++)
                 {
                     var valence = Convert.ToInt64(Math.Pow(baseForCalculation, this.BinaryInput.Text.Length - 1 - i));
-                    var quantity = baseForCalculation == 16 ? GeneralTools.GetDecimalValueForHex(this.BinaryInput.Text[i]) : Convert.ToInt64(this.BinaryInput.Text[i].ToString());
+                    var quantity = baseForCalculation == 16 ? GeneralTools.GetDecimalValueForHex(this.BinaryInput.Text[i]) : Convert.ToInt64(this.BinaryInput.Text[i].ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
                     decimalValue += quantity * valence;
                 }
 
-                this.NumberOutput.Text = decimalValue.ToString();
+                this.NumberOutput.Text = decimalValue.ToString(CultureInfo.InvariantCulture);
             }
         }
 
         private string MapCharToReadableString(char c)
         {
-            return ReadableCharacters.ContainsKey(c) ? ReadableCharacters[c] : c.ToString();
+            return ReadableCharacters.ContainsKey(c) ? ReadableCharacters[c] : c.ToString(CultureInfo.InvariantCulture);
         }
 
         private void TabControl_Initialized(object sender, EventArgs e)
@@ -183,6 +171,66 @@ namespace SoluiNet.DevTools.Utils.General
             }
 
             this.AsciiTable.Items.Add(asciiRow);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "A lower cast is inteded at this point.")]
+        private void CalculateString_Click(object sender, RoutedEventArgs e)
+        {
+            var inputValue = this.StringInput.Text;
+            var selectedModification = (this.StringModification.SelectedItem as ComboBoxItem).Content;
+
+            var outputValue = inputValue;
+
+            switch (selectedModification.ToString())
+            {
+                case "Upper":
+                    outputValue = inputValue.ToUpperInvariant();
+                    break;
+                case "Lower":
+                    outputValue = inputValue.ToLowerInvariant();
+                    break;
+                case "Substring":
+                    var additionalParameters = this.AdditionalParameters.Text;
+                    var startIndex = 0;
+                    var length = inputValue.Length;
+
+                    var lengthProvided = false;
+
+                    if (!string.IsNullOrEmpty(additionalParameters))
+                    {
+                        if (additionalParameters.Contains(','))
+                        {
+                            startIndex = Convert.ToInt32(additionalParameters.Split(',')[0], CultureInfo.InvariantCulture);
+                            length = Convert.ToInt32(additionalParameters.Split(',')[1], CultureInfo.InvariantCulture);
+
+                            lengthProvided = true;
+                        }
+                        else
+                        {
+                            startIndex = Convert.ToInt32(additionalParameters, CultureInfo.InvariantCulture);
+                            length -= startIndex;
+                        }
+                    }
+
+                    if (lengthProvided)
+                    {
+                        outputValue = inputValue.Substring(startIndex, length);
+                    }
+                    else
+                    {
+                        outputValue = inputValue.Substring(startIndex);
+                    }
+
+                    break;
+                case "ToBase64":
+                    outputValue = inputValue.ToBase64();
+                    break;
+                default:
+                    outputValue = string.Format(CultureInfo.InvariantCulture, "no change ({0})", inputValue);
+                    break;
+            }
+
+            this.StringOutput.Text = outputValue;
         }
     }
 }

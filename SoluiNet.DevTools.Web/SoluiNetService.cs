@@ -5,15 +5,10 @@
 namespace SoluiNet.DevTools.Web
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Data;
-    using System.Diagnostics;
-    using System.Linq;
+    using System.Globalization;
     using System.Net.Http;
     using System.ServiceProcess;
     using System.Text;
-    using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.Tools.Object;
     using SoluiNet.DevTools.Core.Web.Renderer;
 
@@ -44,7 +39,7 @@ namespace SoluiNet.DevTools.Web
             {
                 if (webRequest.Method == HttpMethod.Get)
                 {
-                    if (webRequest.Route.StartsWith("/favicon.ico"))
+                    if (webRequest.Route.StartsWith("/favicon.ico", StringComparison.InvariantCulture))
                     {
                         return new Core.Web.Communication.WebResponse(
                             this.GetEmbeddedResourceContentStream("favicon.ico", string.Empty),
@@ -52,10 +47,10 @@ namespace SoluiNet.DevTools.Web
                             Encoding.UTF8,
                             true);
                     }
-                    else if (webRequest.Route.StartsWith("/Status"))
+                    else if (webRequest.Route.StartsWith("/Status", StringComparison.InvariantCulture))
                     {
                         return new Core.Web.Communication.WebResponse(
-                            WebRenderer.RenderPage(string.Format("Status: {0}\r\nVersion: {1}", "OK", this.GetType().Assembly.GetName().Version.ToString())),
+                            WebRenderer.RenderPage(string.Format(CultureInfo.InvariantCulture, "Status: {0}\r\nVersion: {1}", "OK", this.GetType().Assembly.GetName().Version.ToString())),
                             Encoding.UTF8);
                     }
                     else
@@ -75,10 +70,7 @@ namespace SoluiNet.DevTools.Web
         /// </summary>
         protected override void OnStop()
         {
-            if (this.webServer != null)
-            {
-                this.webServer.Stop();
-            }
+            this.webServer?.Stop();
         }
     }
 }

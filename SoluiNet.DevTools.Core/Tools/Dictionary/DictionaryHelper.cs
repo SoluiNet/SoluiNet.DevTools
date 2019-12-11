@@ -4,6 +4,7 @@
 
 namespace SoluiNet.DevTools.Core.Tools.Dictionary
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -24,24 +25,38 @@ namespace SoluiNet.DevTools.Core.Tools.Dictionary
             Dictionary<TKey, double> secondDictionary,
             string mergeOperation = "sum")
         {
-            if (mergeOperation == "sum")
+            if (firstDictionary == null)
             {
-                foreach (var item in secondDictionary)
-                {
-                    if (firstDictionary.ContainsKey(item.Key))
-                    {
-                        firstDictionary[item.Key] += item.Value;
-                    }
-                    else
-                    {
-                        firstDictionary.Add(item.Key, item.Value);
-                    }
-                }
-
-                return firstDictionary;
+                throw new ArgumentNullException(nameof(firstDictionary));
             }
 
-            return null;
+            if (secondDictionary == null)
+            {
+                throw new ArgumentNullException(nameof(secondDictionary));
+            }
+
+            switch (mergeOperation)
+            {
+                case "sum":
+                {
+                    foreach (var item in secondDictionary)
+                    {
+                        if (firstDictionary.ContainsKey(item.Key))
+                        {
+                            firstDictionary[item.Key] += item.Value;
+                        }
+                        else
+                        {
+                            firstDictionary.Add(item.Key, item.Value);
+                        }
+                    }
+
+                    return firstDictionary;
+                }
+
+                default:
+                    return null;
+            }
         }
     }
 }

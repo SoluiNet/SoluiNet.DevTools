@@ -5,19 +5,16 @@
 namespace SoluiNet.DevTools.Web
 {
     using System;
-    using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
-    using System.Threading.Tasks;
     using NLog;
-    using SoluiNet.DevTools.Core.Tools.Object;
+    using SoluiNet.DevTools.Core.Tools.Resources;
     using SoluiNet.DevTools.Core.Tools.Stream;
-    using SoluiNet.DevTools.Core.Web.Communication;
-    using SoluiNet.DevTools.Core.Web.Renderer;
 
     /// <summary>
     /// The SoluiNet Web Server.
@@ -32,18 +29,19 @@ namespace SoluiNet.DevTools.Web
         /// <summary>
         /// Initializes a new instance of the <see cref="SoluiNetWebServer"/> class.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         public SoluiNetWebServer()
         {
             try
             {
                 var ipAddress = Dns.GetHostEntry("localhost").AddressList.First(x => x.AddressFamily != AddressFamily.InterNetworkV6);
 
-                Console.WriteLine("Starting SoluiNetWebServer, listening on {0}:{1}...", ipAddress.ToString(), 31337);
+                Console.WriteLine(this.GetResourceString("SoluiNetServerStarting"), ipAddress.ToString(), 31337);
                 this.webListener = new TcpListener(ipAddress, 31337);
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer", null);
             }
         }
 
@@ -71,7 +69,7 @@ namespace SoluiNet.DevTools.Web
             }
         }
 
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {
@@ -86,7 +84,7 @@ namespace SoluiNet.DevTools.Web
         {
             if (this.started)
             {
-                throw new Exception("SoluiNetWebServer already started.");
+                throw new Exception(this.GetResourceString("SoluiNetServerAlreadyStarted"));
             }
 
             try
@@ -96,13 +94,13 @@ namespace SoluiNet.DevTools.Web
                 this.webCommunicationHandlerThread = new Thread(new ThreadStart(this.HandleWebCommunication));
                 this.webCommunicationHandlerThread.Start();
 
-                Console.WriteLine("SoluiNetWebServer started.");
+                Console.WriteLine(this.GetResourceString("SoluiNetServerStarted"));
 
                 this.started = true;
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Start]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Start]", null);
                 throw;
             }
         }
@@ -114,7 +112,7 @@ namespace SoluiNet.DevTools.Web
         {
             if (!this.started)
             {
-                throw new Exception("SoluiNetWebServer can't be stopped if it hasn't been started.");
+                throw new Exception(this.GetResourceString("SoluiNetServerHasNotBeenStarted"));
             }
 
             try
@@ -123,18 +121,20 @@ namespace SoluiNet.DevTools.Web
 
                 this.webListener.Stop();
 
-                Console.WriteLine("SoluiNetWebServer stopped...");
+                Console.WriteLine(this.GetResourceString("SoluiNetServerStopped"));
 
                 this.started = false;
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Stop]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Stop]", null);
                 throw;
             }
         }
 
-        private void AddHttpHeaders(int contentLength, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Readability of Header string will be improved by using multiple lines")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
+        private static void AddHttpHeaders(int contentLength, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
         {
             try
             {
@@ -145,7 +145,8 @@ namespace SoluiNet.DevTools.Web
 
                 if (respondingSocket.Connected)
                 {
-                    string headers = string.Format(
+                    var headers = string.Format(
+                        CultureInfo.InvariantCulture,
                         "HTTP/1.1\r\n"
                         + "Server: localhost\r\n"
                         + "Content-Type: {1}\r\n"
@@ -162,10 +163,29 @@ namespace SoluiNet.DevTools.Web
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [AddHeaders]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [AddHeaders]", null);
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
+        private static void Respond(Core.Web.Communication.WebResponse webResponse, ref Socket respondingSocket)
+        {
+            try
+            {
+                if (respondingSocket.Connected)
+                {
+                    var returningBytes = webResponse.GetResponseBytes();
+
+                    respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond WebResponse]", null);
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void Respond(string returningString, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
         {
             try
@@ -179,17 +199,18 @@ namespace SoluiNet.DevTools.Web
                 {
                     var returningBytes = encoding.GetBytes(returningString);
 
-                    this.AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType, encoding);
+                    AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType, encoding);
 
                     respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
                 }
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void Respond(Stream returningStream, ref Socket respondingSocket, string mimeType = "text/html")
         {
             try
@@ -198,34 +219,18 @@ namespace SoluiNet.DevTools.Web
                 {
                     var returningBytes = returningStream.ToByteArray();
 
-                    this.AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType);
+                    AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType);
 
                     respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
                 }
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
             }
         }
 
-        private void Respond(Core.Web.Communication.WebResponse webResponse, ref Socket respondingSocket)
-        {
-            try
-            {
-                if (respondingSocket.Connected)
-                {
-                    var returningBytes = webResponse.GetResponseBytes();
-
-                    respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
-                }
-            }
-            catch (Exception exception)
-            {
-                this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond WebResponse]", null);
-            }
-        }
-
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void HandleWebCommunication()
         {
             while (true)
@@ -244,14 +249,14 @@ namespace SoluiNet.DevTools.Web
 
                         var webResponse = this.HandleRequest?.Invoke(new Core.Web.Communication.WebRequest(receivingString), null);
 
-                        this.Respond(webResponse, ref webSocket);
+                        Respond(webResponse, ref webSocket);
 
                         webSocket.Close();
                     }
                 }
                 catch (Exception exception)
                 {
-                    this.Logger.Error(exception, "An exception occured in SoluiNetWebServer [HandleRequest]", null);
+                    Logger.Error(exception, "An exception occured in SoluiNetWebServer [HandleRequest]", null);
                 }
             }
         }

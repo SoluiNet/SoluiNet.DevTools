@@ -26,8 +26,8 @@ namespace SoluiNet.DevTools.Core.Application
         public static ISoluiNetApp Application { get; set; }
 
         /// <summary>
-        /// Gets or sets the storage.
+        /// Gets the storage.
         /// </summary>
-        public static Dictionary<string, object> Storage { get; set; }
+        public static Dictionary<string, object> Storage { get; }
     }
 }

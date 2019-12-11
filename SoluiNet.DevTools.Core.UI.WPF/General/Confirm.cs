@@ -4,11 +4,7 @@
 
 namespace SoluiNet.DevTools.Core.UI.WPF.General
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using System.Globalization;
     using System.Windows;
     using System.Windows.Controls;
     using SoluiNet.DevTools.Core.UI.WPF.Window;
@@ -34,7 +30,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.General
                 Width = 500,
                 Height = 150,
                 TitleFormatString = "Dialog ({0}) - SoluiNet.DevTools",
-                Title = string.Format("Dialog ({0}) - SoluiNet.DevTools", caption),
+                Title = string.Format(CultureInfo.InvariantCulture, "Dialog ({0}) - SoluiNet.DevTools", caption),
                 Left = (screenWidth / 2) - 250,
                 Top = (screenHeight / 2) - 75,
             };

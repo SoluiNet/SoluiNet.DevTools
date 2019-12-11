@@ -6,21 +6,25 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Provides a collection of methods to work with SQL syntaxes.
+    /// Provides a collection of methods to work with SQL syntax.
     /// </summary>
     public static class SqlSyntaxProvider
     {
-        private static readonly List<char> Specials = new List<char>();
-        private static List<string> tags = new List<string>();
+        private static readonly List<char> Specials;
+        private static readonly List<string> Tags;
 
         static SqlSyntaxProvider()
         {
-            string[] strs =
+            Specials = new List<char>();
+            Tags = new List<string>();
+
+            string[] strings =
             {
                 "Anchor",
                 "Applet",
@@ -29,10 +33,10 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
                 "Boolean",
             };
 
-            tags = new List<string>(strs);
+            Tags = new List<string>(strings);
 
             // We also want to know all possible delimiters so adding this stuff.
-            char[] chrs =
+            char[] characters =
             {
                 '.',
                 ')',
@@ -46,7 +50,8 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
                 '\n',
                 '\t',
             };
-            Specials = new List<char>(chrs);
+
+            Specials = new List<char>(characters);
         }
 
         /// <summary>
@@ -56,7 +61,8 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
         /// <returns>Returns true if the tag is a known tag.</returns>
         public static bool IsKnownTag(string tag)
         {
-            return tags.Exists(delegate(string s) { return s.ToLower().Equals(tag.ToLower()); });
+            return Tags.Exists(s =>
+                s.ToUpperInvariant().Equals(tag.ToUpperInvariant(), StringComparison.InvariantCulture));
         }
 
         /// <summary>
@@ -66,7 +72,8 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
         /// <returns>Returns true if a known tag contains the overgiven tag.</returns>
         public static List<string> GetJSProvider(string tag)
         {
-            return tags.FindAll(delegate(string s) { return s.ToLower().StartsWith(tag.ToLower()); });
+            return Tags.FindAll(s =>
+                s.ToUpperInvariant().StartsWith(tag.ToUpperInvariant(), StringComparison.InvariantCulture));
         }
     }
 }

@@ -33,6 +33,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
         /// </summary>
         /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "The constructor called with parameter contextOwnsConnection=true should activate the disposing of the DbConnection after use.")]
         public TimeTrackingContext(string nameOrConnectionString = "name=TimeTrackingContext")
             : base(new SQLiteConnection() { ConnectionString = GetConnectionString(nameOrConnectionString) }, true)
         {
@@ -94,6 +95,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Create the database if it doesn't exist.
         /// </summary>
         /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         public static void CreateIfNotExists(string nameOrConnectionString = "name=TimeTrackingContext")
         {
             if (nameOrConnectionString == null)
@@ -698,6 +700,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
         private static string GetConnectionString(string nameOrConnectionString)
         {
+            if (nameOrConnectionString == null)
+            {
+                throw new ArgumentNullException(nameof(nameOrConnectionString));
+            }
+
             var connectionString = nameOrConnectionString;
 
             if (nameOrConnectionString.StartsWith("name=", StringComparison.InvariantCulture))

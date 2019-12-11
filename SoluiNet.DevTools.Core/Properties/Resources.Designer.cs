@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SoluiNet.DevTools.Utils.TimeTracking.Properties {
+namespace SoluiNet.DevTools.Core.Properties {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Properties {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -39,7 +39,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SoluiNet.DevTools.Utils.TimeTracking.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SoluiNet.DevTools.Core.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,65 +61,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Confirm Deletion ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bitmap is null ähnelt.
         /// </summary>
-        internal static string ConfirmDeletion {
+        internal static string NullBitmap {
             get {
-                return ResourceManager.GetString("ConfirmDeletion", resourceCulture);
+                return ResourceManager.GetString("NullBitmap", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Please provide a description for which what happened in the meantime ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Stream is null or empty ähnelt.
         /// </summary>
-        internal static string DescriptionForMeantime {
+        internal static string NullOrEmptyStream {
             get {
-                return ResourceManager.GetString("DescriptionForMeantime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die TimeTracking - Provide Description ähnelt.
-        /// </summary>
-        internal static string MeantimeDescriptionTitle {
-            get {
-                return ResourceManager.GetString("MeantimeDescriptionTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Error while executing Query ähnelt.
-        /// </summary>
-        internal static string QueryError {
-            get {
-                return ResourceManager.GetString("QueryError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Please select a valid summary type. ähnelt.
-        /// </summary>
-        internal static string SelectSummaryType {
-            get {
-                return ResourceManager.GetString("SelectSummaryType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Select time frame ähnelt.
-        /// </summary>
-        internal static string SelectTimeFrame {
-            get {
-                return ResourceManager.GetString("SelectTimeFrame", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Warning ähnelt.
-        /// </summary>
-        internal static string Warning {
-            get {
-                return ResourceManager.GetString("Warning", resourceCulture);
+                return ResourceManager.GetString("NullOrEmptyStream", resourceCulture);
             }
         }
     }

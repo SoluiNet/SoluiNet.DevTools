@@ -10,11 +10,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
     using System.Data.SqlClient;
     using System.Data.SQLite;
     using System.Globalization;
-    using System.Linq;
-    using System.Reflection;
     using System.Security.Principal;
-    using System.Text;
-    using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Tools.Sql;
 
@@ -32,80 +28,79 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <param name="sqlCommand">The SQL command.</param>
         /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
         /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'environment' parameter has been added for future implementations")]
         public static DataTable ExecuteSqlCommand<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
             where TConnection : IDbConnection
             where TCommand : IDbCommand
         {
             var connectionType = typeof(TConnection);
-            ConstructorInfo connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
+            var connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
 
             var commandType = typeof(TCommand);
-            ConstructorInfo commandConstructor = commandType.GetConstructor(new[] { typeof(string), connectionType });
+            var commandConstructor = commandType.GetConstructor(new[] { typeof(string), connectionType });
 
-            using (TConnection con = (TConnection)connectionConstructor.Invoke(new object[] { connectionString }))
+            using (var con = (TConnection)connectionConstructor?.Invoke(new object[] { connectionString }))
             {
                 try
                 {
-                    try
+                    con?.Open();
+
+                    var cmd = (TCommand)commandConstructor?.Invoke(new object[] { sqlCommand, con });
+
+                    if (sqlCommand.IsSqlQuery())
                     {
-                        con.Open();
-
-                        var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
-
-                        if (sqlCommand.IsSqlQuery())
+                        using (var reader = cmd?.ExecuteReader())
                         {
-                            using (var reader = cmd.ExecuteReader())
-                            {
-                                var dataTable = new DataTable("QueryResult");
+                            var dataTable = new DataTable("QueryResult");
 
-                                dataTable.Load(reader);
+                            dataTable.Load(reader);
+
+                            return dataTable;
+                        }
+                    }
+                    else
+                    {
+                        using (var transaction = con.BeginTransaction())
+                        {
+                            try
+                            {
+                                cmd.Transaction = transaction;
+
+                                var affectedRows = cmd.ExecuteNonQuery();
+
+                                var dataTable = new DataTable("ExecutionResult");
+
+                                dataTable.Columns.Add(new DataColumn("AffectedRows", typeof(int)));
+
+                                dataTable.Rows.Add(affectedRows);
+
+                                transaction.Commit();
 
                                 return dataTable;
                             }
-                        }
-                        else
-                        {
-                            using (var transaction = con.BeginTransaction())
+                            catch
                             {
-                                try
-                                {
-                                    cmd.Transaction = transaction;
+                                transaction.Rollback();
 
-                                    var affectedRows = cmd.ExecuteNonQuery();
-
-                                    var dataTable = new DataTable("ExecutionResult");
-
-                                    dataTable.Columns.Add(new DataColumn("AffectedRows", typeof(int)));
-
-                                    dataTable.Rows.Add(affectedRows);
-
-                                    transaction.Commit();
-
-                                    return dataTable;
-                                }
-                                catch
-                                {
-                                    transaction.Rollback();
-
-                                    throw;
-                                }
+                                throw;
                             }
                         }
                     }
-                    catch (Exception exception)
-                    {
-                        var dataTable = new DataTable("Error");
+                }
+                catch (Exception exception)
+                {
+                    var dataTable = new DataTable("Error");
 
-                        dataTable.Columns.Add(new DataColumn("ExceptionMessage", typeof(string)));
+                    dataTable.Columns.Add(new DataColumn("ExceptionMessage", typeof(string)));
 
-                        dataTable.Rows.Add(exception.Message + "\r\n" + exception.InnerException);
+                    dataTable.Rows.Add(exception.Message + "\r\n" + exception.InnerException);
 
-                        return dataTable;
-                    }
+                    return dataTable;
                 }
                 finally
                 {
-                    if (con.State == ConnectionState.Open)
+                    if (con?.State == ConnectionState.Open)
                     {
                         con.Close();
                     }
@@ -122,142 +117,141 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <param name="sqlCommand">The SQL command.</param>
         /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'environment' parameter has been added for future implementations")]
         public static List<DataTable> ExecuteSqlScript<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
            where TConnection : IDbConnection
            where TCommand : IDbCommand
         {
             var connectionType = typeof(TConnection);
-            ConstructorInfo connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
+            var connectionConstructor = connectionType.GetConstructor(new[] { typeof(string) });
 
             var commandType = typeof(TCommand);
-            ConstructorInfo commandConstructor = commandType.GetConstructor(new[] { typeof(string), connectionType });
+            var commandConstructor = commandType.GetConstructor(new[] { typeof(string), connectionType });
 
-            using (TConnection con = (TConnection)connectionConstructor.Invoke(new object[] { connectionString }))
+            using (var con = (TConnection)connectionConstructor?.Invoke(new object[] { connectionString }))
             {
                 try
                 {
-                    try
+                    con.Open();
+
+                    if (sqlCommand.IsSqlQuery() && !sqlCommand.IsScript())
                     {
-                        con.Open();
+                        var cmd = (TCommand)commandConstructor?.Invoke(new object[] { sqlCommand, con });
 
-                        if (sqlCommand.IsSqlQuery() && !sqlCommand.IsScript())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
+                            var dataTable = new DataTable("QueryResult");
 
-                            using (var reader = cmd.ExecuteReader())
-                            {
-                                var dataTable = new DataTable("QueryResult");
+                            dataTable.Load(reader);
+                            dataTable.ExtendedProperties.Add("SqlCommand", sqlCommand);
 
-                                dataTable.Load(reader);
-                                dataTable.ExtendedProperties.Add("SqlCommand", sqlCommand);
-
-                                return new List<DataTable>() { dataTable };
-                            }
+                            return new List<DataTable>() { dataTable };
                         }
-                        else if (sqlCommand.IsSqlExecute() && !sqlCommand.IsScript())
+                    }
+                    else if (sqlCommand.IsSqlExecute() && !sqlCommand.IsScript())
+                    {
+                        var cmd = (TCommand)commandConstructor?.Invoke(new object[] { sqlCommand, con });
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
+                            var dataTable = new DataTable("QueryResult");
 
-                            using (var reader = cmd.ExecuteReader())
-                            {
-                                var dataTable = new DataTable("QueryResult");
+                            dataTable.Load(reader);
+                            dataTable.ExtendedProperties.Add("SqlCommand", sqlCommand);
 
-                                dataTable.Load(reader);
-                                dataTable.ExtendedProperties.Add("SqlCommand", sqlCommand);
-
-                                return new List<DataTable>() { dataTable };
-                            }
+                            return new List<DataTable>() { dataTable };
                         }
-                        else if (sqlCommand.IsScript() && !sqlCommand.ContainsDdlCommand())
+                    }
+                    else if (sqlCommand.IsScript() && !sqlCommand.ContainsDdlCommand())
+                    {
+                        var dataTables = new List<DataTable>();
+
+                        foreach (var sqlScriptPart in sqlCommand.GetSingleScripts())
                         {
-                            var dataTables = new List<DataTable>();
+                            var cmd = (TCommand)commandConstructor?.Invoke(new object[] { sqlCommand, con });
 
-                            foreach (var sqlScriptPart in sqlCommand.GetSingleScripts())
+                            using (var transaction = con.BeginTransaction())
                             {
-                                var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
-
-                                using (var transaction = con.BeginTransaction())
+                                try
                                 {
-                                    try
+                                    cmd.Transaction = transaction;
+
+                                    using (var reader = cmd.ExecuteReader())
                                     {
-                                        cmd.Transaction = transaction;
+                                        var dataTable = new DataTable(string.Format(CultureInfo.InvariantCulture, "QueryResult-{0:D}", Guid.NewGuid()));
 
-                                        using (var reader = cmd.ExecuteReader())
-                                        {
-                                            var dataTable = new DataTable(string.Format(CultureInfo.InvariantCulture, "QueryResult-{0:D}", Guid.NewGuid()));
-
-                                            dataTable.Load(reader);
-                                            dataTable.ExtendedProperties.Add("SqlCommand", sqlScriptPart);
-
-                                            transaction.Commit();
-
-                                            dataTables.Add(dataTable);
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        transaction.Rollback();
-
-                                        throw;
-                                    }
-                                }
-                            }
-
-                            return dataTables;
-                        }
-                        else
-                        {
-                            var dataTables = new List<DataTable>();
-
-                            foreach (var sqlScriptPart in sqlCommand.GetSingleScripts())
-                            {
-                                var cmd = (TCommand)commandConstructor.Invoke(new object[] { sqlCommand, con });
-
-                                using (var transaction = con.BeginTransaction())
-                                {
-                                    try
-                                    {
-                                        cmd.Transaction = transaction;
-
-                                        var affectedRows = cmd.ExecuteNonQuery();
-
-                                        var dataTable = new DataTable(string.Format(CultureInfo.InvariantCulture, "ExecutionResult-{0:D}", Guid.NewGuid()));
-
-                                        dataTable.Columns.Add(new DataColumn("AffectedRows", typeof(int)));
+                                        dataTable.Load(reader);
                                         dataTable.ExtendedProperties.Add("SqlCommand", sqlScriptPart);
-
-                                        dataTable.Rows.Add(affectedRows);
 
                                         transaction.Commit();
 
                                         dataTables.Add(dataTable);
                                     }
-                                    catch
-                                    {
-                                        transaction.Rollback();
+                                }
+                                catch
+                                {
+                                    transaction.Rollback();
 
-                                        throw;
-                                    }
+                                    throw;
                                 }
                             }
-
-                            return dataTables;
                         }
+
+                        return dataTables;
                     }
-                    catch (Exception exception)
+                    else
                     {
-                        var dataTable = new DataTable("Error");
+                        var dataTables = new List<DataTable>();
 
-                        dataTable.Columns.Add(new DataColumn("ExceptionMessage", typeof(string)));
+                        foreach (var sqlScriptPart in sqlCommand.GetSingleScripts())
+                        {
+                            var cmd = (TCommand)commandConstructor?.Invoke(new object[] { sqlCommand, con });
 
-                        dataTable.Rows.Add(exception.Message + "\r\n" + exception.InnerException);
+                            using (var transaction = con.BeginTransaction())
+                            {
+                                try
+                                {
+                                    cmd.Transaction = transaction;
 
-                        return new List<DataTable>() { dataTable };
+                                    var affectedRows = cmd.ExecuteNonQuery();
+
+                                    var dataTable = new DataTable(string.Format(CultureInfo.InvariantCulture, "ExecutionResult-{0:D}", Guid.NewGuid()));
+
+                                    dataTable.Columns.Add(new DataColumn("AffectedRows", typeof(int)));
+                                    dataTable.ExtendedProperties.Add("SqlCommand", sqlScriptPart);
+
+                                    dataTable.Rows.Add(affectedRows);
+
+                                    transaction.Commit();
+
+                                    dataTables.Add(dataTable);
+                                }
+                                catch
+                                {
+                                    transaction.Rollback();
+
+                                    throw;
+                                }
+                            }
+                        }
+
+                        return dataTables;
                     }
+                }
+                catch (Exception exception)
+                {
+                    var dataTable = new DataTable("Error");
+
+                    dataTable.Columns.Add(new DataColumn("ExceptionMessage", typeof(string)));
+
+                    dataTable.Rows.Add(exception.Message + "\r\n" + exception.InnerException);
+
+                    return new List<DataTable>() { dataTable };
                 }
                 finally
                 {
-                    if (con.State == ConnectionState.Open)
+                    if (con?.State == ConnectionState.Open)
                     {
                         con.Close();
                     }
@@ -299,17 +293,15 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         public static DataTable ExecuteSqlCommand(string providerType, string connectionString, string sqlCommand, string environment = "Default")
         {
-            if (providerType == "System.Data.SqlClient")
+            switch (providerType)
             {
-                return ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                case "System.Data.SqlClient":
+                    return ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                case "System.Data.SQLite":
+                    return ExecuteSqlCommand<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+                default:
+                    return null;
             }
-
-            if (providerType == "System.Data.SQLite")
-            {
-                return ExecuteSqlCommand<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -321,19 +313,18 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
         /// <param name="impersonation">The impersonation which can be used for executing the SQL script.</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'impersonation' parameter has been added for future implementations")]
         public static List<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsImpersonationContext impersonation = null)
         {
-            if (providerType == "System.Data.SqlClient")
+            switch (providerType)
             {
-                return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                case "System.Data.SqlClient":
+                    return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                case "System.Data.SQLite":
+                    return ExecuteSqlScript<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+                default:
+                    return null;
             }
-
-            if (providerType == "System.Data.SQLite")
-            {
-                return ExecuteSqlScript<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
-            }
-
-            return null;
         }
     }
 }
