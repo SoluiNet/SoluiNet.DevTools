@@ -62,7 +62,7 @@ namespace SoluiNet.DevTools.Core.Tools.Number
             if (minutes >= 60)
             {
                 hours = minutes / 60;
-                minutes = minutes % 60;
+                minutes %= 60;
 
                 formatString = "{2}h {1}m {0}s";
             }

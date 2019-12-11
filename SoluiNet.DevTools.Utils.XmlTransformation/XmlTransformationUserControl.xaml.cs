@@ -5,22 +5,9 @@
 namespace SoluiNet.DevTools.Utils.XmlTransformation
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using System.Globalization;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Documents;
-    using System.Windows.Input;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Navigation;
-    using System.Windows.Shapes;
-    using System.Xml;
-    using System.Xml.Schema;
     using System.Xml.Xsl;
     using Microsoft.Win32;
     using SoluiNet.DevTools.Core.Tools.File;
@@ -38,6 +25,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
             this.InitializeComponent();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and displayed directly")]
         private void Transform_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -49,6 +37,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
                 if (exception is XsltException)
                 {
                     this.Output.Text = string.Format(
+                        CultureInfo.InvariantCulture,
                         "Error while transforming:\r\n  {0}\r\n  {1}",
                         exception.Message,
                         exception.InnerException != null ? exception.InnerException.Message : string.Empty);
@@ -56,6 +45,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
                 else
                 {
                     this.Output.Text = string.Format(
+                        CultureInfo.InvariantCulture,
                         "Error while transforming:\r\n  {0}\r\n  {1}",
                         exception.Message,
                         exception.InnerException != null ? exception.InnerException.Message : string.Empty);

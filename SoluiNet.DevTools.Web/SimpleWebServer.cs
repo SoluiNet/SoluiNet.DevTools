@@ -9,12 +9,13 @@ namespace SoluiNet.DevTools.Web
     using System.Net;
     using System.Text;
     using System.Threading;
+    using NLog;
 
     /// <summary>
     /// Provides a simple web server (taken from https://codehosting.net/blog/BlogEngine/post/Simple-C-Web-Server).
     /// Copyright (c) 2013 David's Blog (www.codehosting.net).
     /// </summary>
-    public class SimpleWebServer
+    public class SimpleWebServer : IDisposable
     {
         private readonly HttpListener listener = new HttpListener();
         private readonly Func<HttpListenerRequest, string> responderMethod;
@@ -58,9 +59,15 @@ namespace SoluiNet.DevTools.Web
             // do nothing else
         }
 
+        private static Logger Logger
+        {
+            get { return LogManager.GetCurrentClassLogger(); }
+        }
+
         /// <summary>
         /// Run the web server.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         public void Run()
         {
             ThreadPool.QueueUserWorkItem((o) =>
@@ -76,14 +83,14 @@ namespace SoluiNet.DevTools.Web
                                 var ctx = c as HttpListenerContext;
                                 try
                                 {
-                                    string rstr = this.responderMethod(ctx.Request);
-                                    byte[] buf = Encoding.UTF8.GetBytes(rstr);
+                                    var rstr = this.responderMethod(ctx.Request);
+                                    var buf = Encoding.UTF8.GetBytes(rstr);
                                     ctx.Response.ContentLength64 = buf.Length;
                                     ctx.Response.OutputStream.Write(buf, 0, buf.Length);
                                 }
-                                catch
+                                catch (Exception exception)
                                 {
-                                    // suppress any exceptions
+                                    Logger.Fatal(exception);
                                 }
                                 finally
                                 {
@@ -94,11 +101,19 @@ namespace SoluiNet.DevTools.Web
                             this.listener.GetContext());
                     }
                 }
-                catch
+                catch (Exception exception)
                 {
-                    // suppress any exceptions
+                    Logger.Fatal(exception);
                 }
             });
+        }
+
+        /// <summary>
+        /// Dispose the SimpleWebServer instance.
+        /// </summary>
+        public void Dispose()
+        {
+            ((IDisposable)this.listener)?.Dispose();
         }
 
         /// <summary>

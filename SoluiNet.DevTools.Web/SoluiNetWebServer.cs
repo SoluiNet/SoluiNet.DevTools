@@ -138,7 +138,7 @@ namespace SoluiNet.DevTools.Web
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Readability of Header string will be improved by using multiple lines")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
-        private void AddHttpHeaders(int contentLength, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
+        private static void AddHttpHeaders(int contentLength, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
         {
             try
             {
@@ -172,6 +172,24 @@ namespace SoluiNet.DevTools.Web
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
+        private static void Respond(Core.Web.Communication.WebResponse webResponse, ref Socket respondingSocket)
+        {
+            try
+            {
+                if (respondingSocket.Connected)
+                {
+                    var returningBytes = webResponse.GetResponseBytes();
+
+                    respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond WebResponse]", null);
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         private void Respond(string returningString, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
         {
             try
@@ -185,7 +203,7 @@ namespace SoluiNet.DevTools.Web
                 {
                     var returningBytes = encoding.GetBytes(returningString);
 
-                    this.AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType, encoding);
+                    AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType, encoding);
 
                     respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
                 }
@@ -205,7 +223,7 @@ namespace SoluiNet.DevTools.Web
                 {
                     var returningBytes = returningStream.ToByteArray();
 
-                    this.AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType);
+                    AddHttpHeaders(returningBytes.Length, ref respondingSocket, mimeType);
 
                     respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
                 }
@@ -213,24 +231,6 @@ namespace SoluiNet.DevTools.Web
             catch (Exception exception)
             {
                 Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond]", null);
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
-        private void Respond(Core.Web.Communication.WebResponse webResponse, ref Socket respondingSocket)
-        {
-            try
-            {
-                if (respondingSocket.Connected)
-                {
-                    var returningBytes = webResponse.GetResponseBytes();
-
-                    respondingSocket.Send(returningBytes, returningBytes.Length, SocketFlags.None);
-                }
-            }
-            catch (Exception exception)
-            {
-                Logger.Error(exception, "An exception occured in SoluiNetWebServer [Respond WebResponse]", null);
             }
         }
 
@@ -253,7 +253,7 @@ namespace SoluiNet.DevTools.Web
 
                         var webResponse = this.HandleRequest?.Invoke(new Core.Web.Communication.WebRequest(receivingString), null);
 
-                        this.Respond(webResponse, ref webSocket);
+                        Respond(webResponse, ref webSocket);
 
                         webSocket.Close();
                     }
