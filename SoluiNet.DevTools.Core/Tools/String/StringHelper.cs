@@ -5,12 +5,13 @@
 namespace SoluiNet.DevTools.Core.Tools.String
 {
     using System;
-    using System.Collections.Generic;
+    using System.CodeDom;
+    using System.CodeDom.Compiler;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Provides a collection of methods which support working with strings.
@@ -239,6 +240,52 @@ namespace SoluiNet.DevTools.Core.Tools.String
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Convert a string to literal which will be usable in C#. (See also: https://stackoverflow.com/questions/323640/can-i-convert-a-c-sharp-string-value-to-an-escaped-string-literal).
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        /// <returns>Returns a string literal which will be usable in C#.</returns>
+        public static string ToCSharpLiteral(this string input)
+        {
+            using (var writer = new StringWriter(CultureInfo.InvariantCulture))
+            {
+                using (var provider = CodeDomProvider.CreateProvider("CSharp"))
+                {
+                    provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
+                    return writer.ToString();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convert a string to literal which will be usable in PowerShell. (See also: https://stackoverflow.com/questions/15245119/escape-characters-when-generating-powershell-scripts-using-c-sharp).
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        /// <returns>Returns a string literal which will be usable in PowerShell.</returns>
+        public static string ToPowerShellLiteral(this string input)
+        {
+            /*
+            PowerShell Special Escape Sequences
+
+            Escape Sequence         Special Character
+            `n                      New line
+            `r                      Carriage Return
+            `t                      Tab
+            `a                      Alert
+            `b                      Backspace
+            `"                      Double Quote
+            `'                      Single Quote
+            ``                      Back Quote
+            `0                      Null
+            */
+
+            // Extend the character set as required
+            var charactersToEscape = new Regex(@"['""]"); 
+
+            // $& is the characters that were matched
+            return charactersToEscape.Replace(input, "`$&");
         }
     }
 }

@@ -63,6 +63,13 @@
                         <ComboBoxItem Content="Lower"></ComboBoxItem>
                         <ComboBoxItem Content="Substring"></ComboBoxItem>
                         <ComboBoxItem Content="ToBase64"></ComboBoxItem>
+                        <ComboBoxItem Content="FromBase64"></ComboBoxItem>
+                        <ComboBoxItem Content="EncodeURL"></ComboBoxItem>
+                        <ComboBoxItem Content="DecodeURL"></ComboBoxItem>
+                        <ComboBoxItem Content="EscapeRegEx"></ComboBoxItem>
+                        <ComboBoxItem Content="UnescapeRegEx"></ComboBoxItem>
+                        <ComboBoxItem Content="EscapeCSharp"></ComboBoxItem>
+                        <ComboBoxItem Content="EscapePowerShell"></ComboBoxItem>
                     </ComboBox>
                     <TextBox x:Name="StringOutput" Height="75" Margin="5,145,0,5" VerticalAlignment="Top" AcceptsReturn="True"></TextBox>
                     <Button x:Name="CalculateString" Content="Calculate" Height="30" Width="150" Margin="5,230,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="CalculateString_Click"></Button>

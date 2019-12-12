@@ -8,6 +8,8 @@ namespace SoluiNet.DevTools.Utils.General
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Web;
     using System.Windows;
     using System.Windows.Controls;
     using SoluiNet.DevTools.Core.Tools.String;
@@ -224,6 +226,27 @@ namespace SoluiNet.DevTools.Utils.General
                     break;
                 case "ToBase64":
                     outputValue = inputValue.ToBase64();
+                    break;
+                case "FromBase64":
+                    outputValue = inputValue.FromBase64();
+                    break;
+                case "EncodeURL":
+                    outputValue = HttpUtility.UrlEncode(inputValue);
+                    break;
+                case "DecodeURL":
+                    outputValue = HttpUtility.UrlDecode(inputValue);
+                    break;
+                case "EscapeRegEx":
+                    outputValue = Regex.Escape(inputValue);
+                    break;
+                case "UnescapeRegEx":
+                    outputValue = Regex.Unescape(inputValue);
+                    break;
+                case "EscapeCSharp":
+                    outputValue = inputValue.ToCSharpLiteral();
+                    break;
+                case "EscapePowerShell":
+                    outputValue = inputValue.ToPowerShellLiteral();
                     break;
                 default:
                     outputValue = string.Format(CultureInfo.InvariantCulture, "no change ({0})", inputValue);
