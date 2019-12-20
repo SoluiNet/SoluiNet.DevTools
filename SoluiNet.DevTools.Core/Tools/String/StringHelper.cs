@@ -282,7 +282,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
             */
 
             // Extend the character set as required
-            var charactersToEscape = new Regex(@"['""]"); 
+            var charactersToEscape = new Regex(@"['""]");
 
             // $& is the characters that were matched
             return charactersToEscape.Replace(input, "`$&");

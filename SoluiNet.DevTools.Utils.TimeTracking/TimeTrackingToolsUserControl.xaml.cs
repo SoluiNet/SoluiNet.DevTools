@@ -777,14 +777,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         Background = !string.IsNullOrEmpty(application.ExtendedConfiguration)
                             ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
                                 ?.SoluiNetBrushDefinition?.ToBrush()
-                            : new SolidColorBrush(Colors.WhiteSmoke)
+                            : new SolidColorBrush(Colors.WhiteSmoke),
                     },
                     Tag = application,
-                    AllowDrop = true
+                    AllowDrop = true,
                 };
-
-
-
 
                 applicationAreaTarget.Drop += dropApplicationAreaDelegate;
 
@@ -1064,6 +1061,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         private void StartQuery_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1478,7 +1476,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     searchValues.Contains(x.Category.CategoryName)).
                     Select(x => new { Category = x.Category.CategoryName, x.Duration, x.UsageTime.StartTime }).
                     ToList().
-                    GroupBy(x => new {x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
+                    GroupBy(x => new { x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
                     ToList();
 
                 var clipboardContent = string.Empty;
@@ -1548,6 +1546,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         private void TimespanQuery_Click(object sender, RoutedEventArgs e)
         {
             try

@@ -99,6 +99,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// <param name="newElement">The new element which should be added.</param>
         public void AddElement(T newElement)
         {
+            if (newElement == null)
+            {
+                throw new ArgumentNullException(nameof(newElement));
+            }
+
             this.RowDefinitions.Add(new RowDefinition());
 
             newElement.SetValue(Grid.RowProperty, this.RowDefinitions.Count - 1);

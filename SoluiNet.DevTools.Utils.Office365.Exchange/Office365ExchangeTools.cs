@@ -21,6 +21,7 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
         /// Get mails from exchange server.
         /// </summary>
         /// <returns>Returns a list of mails.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         public static List<string> GetMails()
         {
             var service = Connect();
@@ -47,6 +48,7 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
             return emailList;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         private static ExchangeService Connect()
         {
             var settings = PluginHelper.GetSettingsAsDictionary(PluginHelper.GetPluginByName<Office365ExchangePlugin>("Office365ExchangePlugin"));
