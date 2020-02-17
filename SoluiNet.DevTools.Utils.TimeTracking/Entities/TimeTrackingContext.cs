@@ -617,6 +617,46 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                         appliedVersion = new Version("1.0.0.12");
                     }
+
+                    if (appliedVersion.CompareTo(new Version("1.0.0.13")) < 0)
+                    {
+                        command.CommandText = "CREATE INDEX idx_usage_starttime ON UsageTime(StartTime); ";
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+                        command.CommandText =
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                        command.Parameters.AddWithValue("$versionNo", "1.0.0.13");
+                        command.Parameters.AddWithValue(
+                            "$appliedAt",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+
+                        appliedVersion = new Version("1.0.0.13");
+                    }
+
+                    if (appliedVersion.CompareTo(new Version("1.0.0.14")) < 0)
+                    {
+                        command.CommandText = "CREATE INDEX idx_usage_application ON UsageTime(ApplicationId); ";
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+                        command.CommandText =
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                        command.Parameters.AddWithValue("$versionNo", "1.0.0.14");
+                        command.Parameters.AddWithValue(
+                            "$appliedAt",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+
+                        appliedVersion = new Version("1.0.0.14");
+                    }
                 }
                 finally
                 {

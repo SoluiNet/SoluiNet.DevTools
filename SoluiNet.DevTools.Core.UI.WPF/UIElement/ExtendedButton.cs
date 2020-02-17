@@ -191,6 +191,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
             this.DefaultBackground = this.Background;
         }
 
+        /// <inheritdoc/>
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+
+            this.OnDependencyValueChanged?.Invoke(this, new EventArgs());
+        }
+
         private void AdjustWidthForChangedDependencyValue(object sender, EventArgs eventArgs)
         {
             if (!((sender as ExtendedButton)?.Parent is Grid))

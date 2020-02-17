@@ -904,7 +904,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 var label = $"{timeTarget.Key} ({duration.ToDurationString()})";
 
-                var timeTargetButton = new ExtendedButton() { HorizontalAlignment = HorizontalAlignment.Left };
+                var timeTargetButton = new ExtendedButton(true) { HorizontalAlignment = HorizontalAlignment.Left };
 
                 if (backgroundColourResolveDelegate != null)
                 {
