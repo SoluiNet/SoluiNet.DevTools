@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Window
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Window
                 return;
             }
 
-            this.Title = string.Format(this.TitleFormatString, titleParts.OrderBy(x => x.Key).Select(x => x.Value).ToArray());
+            this.Title = string.Format(CultureInfo.CurrentCulture, this.TitleFormatString, titleParts.OrderBy(x => x.Key).Select(x => x.Value).ToArray());
         }
 
         /// <summary>

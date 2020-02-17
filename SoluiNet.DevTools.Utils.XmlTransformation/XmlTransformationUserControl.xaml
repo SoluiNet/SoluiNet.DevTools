@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              xmlns:local="clr-namespace:SoluiNet.DevTools.Utils.XmlTransformation"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -19,13 +20,13 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition Height="50"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox x:Name="XslInput" Margin="5,5,5,65" TextWrapping="Wrap" Text="XSL Input" Grid.Column="0" Grid.Row="0" AcceptsReturn="True"/>
+                    <avalonedit:TextEditor x:Name="XslInput" Margin="5,5,5,65" Text="XSL Input" Grid.Column="0" Grid.Row="0" SyntaxHighlighting="XML"/>
                     <Button Grid.Row="0" Grid.Column="0" x:Name="LoadXslFromFile" Content="Load XSL from file" VerticalAlignment="Bottom" Height="30" Margin="5,5" Click="LoadXslFromFile_Click"></Button>
                     <Button Grid.Row="0" Grid.Column="0" x:Name="FormatXsl" Content="Format XSL" VerticalAlignment="Bottom" Height="30" Margin="5,35" Click="FormatXsl_Click"></Button>
-                    <TextBox x:Name="XmlInput" Margin="5,5,5,65" TextWrapping="Wrap" Text="XML Input" Grid.Column="1" Grid.Row="0" AcceptsReturn="True"/>
+                    <avalonedit:TextEditor x:Name="XmlInput" Margin="5,5,5,65" Text="XML Input" Grid.Column="1" Grid.Row="0" SyntaxHighlighting="XML"/>
                     <Button Grid.Row="0" Grid.Column="1" x:Name="LoadXmlFromFile" Content="Load XML from file" VerticalAlignment="Bottom" Height="30" Margin="5,5" Click="LoadXmlFromFile_Click"></Button>
                     <Button Grid.Row="0" Grid.Column="1" x:Name="FormatXml" Content="Format XML" VerticalAlignment="Bottom" Height="30" Margin="5,35" Click="FormatXml_Click"></Button>
-                    <TextBox x:Name="Output" Margin="5,5,5,65" TextWrapping="Wrap" Text="Output" Grid.Column="2" Grid.Row="0" AcceptsReturn="True"/>
+                    <avalonedit:TextEditor x:Name="Output" Margin="5,5,5,65" Text="Output" Grid.Column="2" Grid.Row="0" SyntaxHighlighting="XML"/>
                     <WebBrowser x:Name="OutputHtml" Margin="5,5,5,65" Grid.Column="2" Grid.Row="0" Visibility="Hidden"></WebBrowser>
                     <Button Grid.Row="0" Grid.Column="2" x:Name="ShowCode" Content="Show Code" VerticalAlignment="Bottom" Height="30" Margin="5,5" Click="ShowCode_Click"></Button>
                     <Button Grid.Row="0" Grid.Column="2" x:Name="ShowHtml" Content="Show HTML" VerticalAlignment="Bottom" Height="30" Margin="5,35" Click="ShowHtml_Click"></Button>
@@ -43,13 +44,13 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition Height="50"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox x:Name="XsdInput" Margin="5,5,5,65" TextWrapping="Wrap" Text="XSD Input" Grid.Column="0" Grid.Row="0" AcceptsReturn="True"/>
+                    <avalonedit:TextEditor x:Name="XsdInput" Margin="5,5,5,65" Text="XSD Input" Grid.Column="0" Grid.Row="0" SyntaxHighlighting="XML"/>
                     <Button Grid.Row="0" Grid.Column="0" x:Name="LoadXsdFromFile" Content="Load XSD from file" VerticalAlignment="Bottom" Height="30" Margin="5,5" Click="LoadXsdFromFile_Click"></Button>
                     <Button Grid.Row="0" Grid.Column="0" x:Name="FormatXsd" Content="Format XSD" VerticalAlignment="Bottom" Height="30" Margin="5,35" Click="FormatXsd_Click"></Button>
-                    <TextBox x:Name="XmlInputForSchema" Margin="5,5,5,65" TextWrapping="Wrap" Text="XML Input" Grid.Column="1" Grid.Row="0" AcceptsReturn="True"/>
+                    <avalonedit:TextEditor x:Name="XmlInputForSchema" Margin="5,5,5,65" Text="XML Input" Grid.Column="1" Grid.Row="0" SyntaxHighlighting="XML"/>
                     <Button Grid.Row="0" Grid.Column="1" x:Name="LoadXmlForSchemaFromFile" Content="Load XML from file" VerticalAlignment="Bottom" Height="30" Margin="5,5" Click="LoadXmlForSchemaFromFile_Click"></Button>
                     <Button Grid.Row="0" Grid.Column="1" x:Name="FormatXmlForSchema" Content="Format XML" VerticalAlignment="Bottom" Height="30" Margin="5,35" Click="FormatXmlForSchema_Click"></Button>
-                    <TextBox x:Name="OutputXsd" Margin="5,5,5,5" TextWrapping="Wrap" Text="Output" Grid.Column="2" Grid.Row="0" AcceptsReturn="True"/>
+                    <avalonedit:TextEditor x:Name="OutputXsd" Margin="5,5,5,5" Text="Output" Grid.Column="2" Grid.Row="0" SyntaxHighlighting="XML"/>
                     <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="5,5,5,5" x:Name="Validate" Content="Validate XML" Click="ValidateXmlSchema"></Button>
                 </Grid>
             </TabItem>
