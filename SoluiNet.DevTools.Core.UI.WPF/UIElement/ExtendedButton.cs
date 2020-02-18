@@ -146,7 +146,9 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// </summary>
         public ResolveBackgroundColour OnBackgroundColourResolving { get; set; }
 
-        /// <inheritdoc cref="ContentControl" />
+        /// <summary>
+        /// Gets or sets the content of the image. For more information see <see cref="ContentControl" />.
+        /// </summary>
         public new object Content
         {
             get
