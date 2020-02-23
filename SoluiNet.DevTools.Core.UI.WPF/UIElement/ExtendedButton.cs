@@ -210,6 +210,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
             if (!(sender as ExtendedButton).WidthWithDependency)
             {
+                this.Width = ((sender as ExtendedButton)?.Parent as Grid)?.ActualWidth ?? 100;
                 return;
             }
 

@@ -43,6 +43,7 @@
                         <Button x:Name="AutomaticAssignment" Height="25" Width="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220, 5, 0, 0" Click="AutomaticAssignment_Click">
                             <Image Source="/SoluiNet.DevTools.Utils.TimeTracking;component/icons/automatic_assignment.png" />
                         </Button>
+                        <v4:CheckBox x:Name="UseLengthDependency" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250, 10, 0, 0" ToolTip="Generate lengths according to duration" IsChecked="False" />
                         <v4:DatePicker x:Name="AssignmentDate" Height="25" Margin="270, 5, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
                     </Grid>
                     <Grid x:Name="TimeTrackingAssignmentOverview" Grid.Column="0" Grid.Row="1" KeyDown="TimeTrackingAssignmentOverview_KeyDown" />
