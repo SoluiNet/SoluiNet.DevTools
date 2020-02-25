@@ -68,7 +68,7 @@
                     <v4:DatePicker x:Name="QueryDateEnd" Height="25" Margin="140,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
                     <ComboBox x:Name="QueryFilter" Height="25" Margin="5, 40, 5, 0" VerticalAlignment="Top" IsEditable="True" />
                     <Button x:Name="StartQuery" Height="25" Margin="350,5,0,0" Content="Query" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="StartQuery_Click"/>
-                    <DataGrid x:Name="QueryData" Margin="0,80,0,0" />
+                    <DataGrid x:Name="QueryData" Margin="0,80,0,0" IsReadOnly="True" />
                 </Grid>
             </TabItem>
             <TabItem Header="Timespan">
@@ -76,7 +76,7 @@
                     <v4:DatePicker x:Name="TimespanBegin" Height="25" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
                     <v4:DatePicker x:Name="TimespanEnd" Height="25" Margin="140,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
                     <Button x:Name="TimespanQuery" Height="25" Margin="350,5,0,0" Content="Query" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="TimespanQuery_Click"/>
-                    <DataGrid x:Name="TimespanData" Margin="0,40,0,0" />
+                    <DataGrid x:Name="TimespanData" Margin="0,40,0,0" IsReadOnly="True" />
                 </Grid>
             </TabItem>
             <TabItem Header="Summary">
@@ -92,12 +92,12 @@
                         <ComboBoxItem>Category</ComboBoxItem>
                     </ComboBox>
                     <Button x:Name="StartSummary" Height="25" Margin="367.454,5,0,0" Content="Query" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="StartSummary_Click" Grid.Column="1"/>
-                    <DataGrid x:Name="SummaryData" Margin="0,50,0,0" Grid.ColumnSpan="2" />
+                    <DataGrid x:Name="SummaryData" Margin="0,50,0,0" Grid.ColumnSpan="2" IsReadOnly="True" />
                 </Grid>
             </TabItem>
             <TabItem Header="Source Data">
                 <Grid x:Name="TimeTrackingSourceData" Background="#FFE5E5E5">
-                    <DataGrid x:Name="SourceData" />
+                    <DataGrid x:Name="SourceData" IsReadOnly="True" />
                 </Grid>
             </TabItem>
             <TabItem Header="Tasks">
