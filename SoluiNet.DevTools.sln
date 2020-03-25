@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2042
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.UI", "SoluiNet.DevTools.UI\SoluiNet.DevTools.UI.csproj", "{F82C2F56-DCE9-4E4C-856C-1F94291186F4}"
 EndProject
@@ -59,7 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{952F4E3A-A0F6-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.UI.Sql", "SoluiNet.DevTools.UI.Sql\SoluiNet.DevTools.UI.Sql.csproj", "{B6D04A38-C980-4CEF-93F7-A8FB80F4EEAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Utils.Office365.Exchange", "SoluiNet.DevTools.Utils.Office365.Exchange\SoluiNet.DevTools.Utils.Office365.Exchange.csproj", "{F9B19605-4A41-4ECD-961F-7A7DA5A201D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Utils.Office365.Exchange", "SoluiNet.DevTools.Utils.Office365.Exchange\SoluiNet.DevTools.Utils.Office365.Exchange.csproj", "{F9B19605-4A41-4ECD-961F-7A7DA5A201D6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Install", "Install", "{F99C02DD-E20B-4564-85FE-C6DB5BCF57A6}"
 EndProject
@@ -75,11 +75,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Utils.Sca
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E9023139-22F8-4C5D-AC58-37EFC1685961}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.UnitTest", "SoluiNet.DevTools.UnitTest\SoluiNet.DevTools.UnitTest.csproj", "{9F15199F-A333-4096-AD31-00C1D41D56B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.UnitTest", "SoluiNet.DevTools.UnitTest\SoluiNet.DevTools.UnitTest.csproj", "{9F15199F-A333-4096-AD31-00C1D41D56B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Web", "SoluiNet.DevTools.Web\SoluiNet.DevTools.Web.csproj", "{CED664BB-8DAA-44DE-8DB7-977DC0BA84D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Web", "SoluiNet.DevTools.Web\SoluiNet.DevTools.Web.csproj", "{CED664BB-8DAA-44DE-8DB7-977DC0BA84D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Core.Web", "SoluiNet.DevTools.Core.Web\SoluiNet.DevTools.Core.Web.csproj", "{A3D93824-3C6B-4A32-9615-6035B7D343F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Core.Web", "SoluiNet.DevTools.Core.Web\SoluiNet.DevTools.Core.Web.csproj", "{A3D93824-3C6B-4A32-9615-6035B7D343F3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Utils.Certificate", "SoluiNet.DevTools.Utils.Certificate\SoluiNet.DevTools.Utils.Certificate.csproj", "{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -445,6 +447,18 @@ Global
 		{A3D93824-3C6B-4A32-9615-6035B7D343F3}.Release|x64.Build.0 = Release|Any CPU
 		{A3D93824-3C6B-4A32-9615-6035B7D343F3}.Release|x86.ActiveCfg = Release|Any CPU
 		{A3D93824-3C6B-4A32-9615-6035B7D343F3}.Release|x86.Build.0 = Release|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Debug|x64.Build.0 = Debug|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Debug|x86.Build.0 = Debug|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Release|x64.ActiveCfg = Release|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Release|x64.Build.0 = Release|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Release|x86.ActiveCfg = Release|Any CPU
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -482,6 +496,7 @@ Global
 		{5B8B927E-0ACE-4AA1-9D0D-D1E7AB0A3AB3} = {8F059608-19DA-4E57-8792-C272CA5D3EA6}
 		{9F15199F-A333-4096-AD31-00C1D41D56B3} = {E9023139-22F8-4C5D-AC58-37EFC1685961}
 		{A3D93824-3C6B-4A32-9615-6035B7D343F3} = {A8A6170C-6952-4985-8317-D765DB05FE47}
+		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4} = {8F059608-19DA-4E57-8792-C272CA5D3EA6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8F61C6A5-176D-49B1-99D0-6BDBD8E0168A}
