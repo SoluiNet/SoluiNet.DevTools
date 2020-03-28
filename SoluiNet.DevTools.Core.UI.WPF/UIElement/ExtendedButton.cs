@@ -193,7 +193,9 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
             this.DefaultBackground = this.Background;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Render the button.
+        /// </summary>
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
