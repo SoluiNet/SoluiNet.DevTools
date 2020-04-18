@@ -68,6 +68,16 @@
                     <Button x:Name="CalculateString" Content="Calculate" Height="30" Width="150" Margin="5,230,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="CalculateString_Click"></Button>
                 </Grid>
             </TabItem>
+            <TabItem Header="Guid">
+                <Grid Background="#FFE5E5E5">
+                    <Button x:Name="GenerateGuid" Height="25" Width="150" Margin="5,5, 0, 5" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Generate GUID" Click="GenerateGuid_Click" />
+                    <ComboBox x:Name="GuidOptions" Height="25" Width="150" Margin="170,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <ComboBoxItem Content="Upper"></ComboBoxItem>
+                        <ComboBoxItem Content="Lower"></ComboBoxItem>
+                    </ComboBox>
+                    <TextBox x:Name="GuidContent" Height="75" Margin="5,40,0,5" VerticalAlignment="Top" AcceptsReturn="True" />
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

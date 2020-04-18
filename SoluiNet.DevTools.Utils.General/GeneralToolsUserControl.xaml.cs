@@ -232,5 +232,30 @@ namespace SoluiNet.DevTools.Utils.General
 
             this.StringOutput.Text = outputValue;
         }
+
+        private void GenerateGuid_Click(object sender, RoutedEventArgs e)
+        {
+            var guid = Guid.NewGuid();
+
+            this.GuidContent.Text = guid.ToString();
+
+            if (this.GuidOptions.SelectedValue != null
+                && (this.GuidOptions.SelectedValue is ComboBoxItem)
+                && !string.IsNullOrEmpty((this.GuidOptions.SelectedValue as ComboBoxItem).Content.ToString())
+                && (this.GuidOptions.SelectedValue as ComboBoxItem).Content.ToString() == "Upper")
+            {
+                this.GuidContent.Text = guid.ToString().ToUpperInvariant();
+            }
+
+            if (this.GuidOptions.SelectedValue != null
+                && (this.GuidOptions.SelectedValue is ComboBoxItem)
+                && !string.IsNullOrEmpty((this.GuidOptions.SelectedValue as ComboBoxItem).Content.ToString())
+                && (this.GuidOptions.SelectedValue as ComboBoxItem).Content.ToString() == "Lower")
+            {
+#pragma warning disable CA1308 // A change to lower case is intended
+                this.GuidContent.Text = guid.ToString().ToLowerInvariant();
+#pragma warning restore CA1308 // A change to lower case is intended
+            }
+        }
     }
 }
