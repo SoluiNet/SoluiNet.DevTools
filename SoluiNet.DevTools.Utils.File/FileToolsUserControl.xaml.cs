@@ -2,6 +2,8 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using System.Globalization;
+
 namespace SoluiNet.DevTools.Utils.File
 {
     using System;
@@ -69,6 +71,7 @@ namespace SoluiNet.DevTools.Utils.File
             foreach (var line in extractedLines)
             {
                 this.Output.Text += string.Format(
+                    CultureInfo.InvariantCulture,
                     "{0}{1}\r\n",
                     prefix + (string.IsNullOrEmpty(prefix) ? string.Empty : " - "),
                     formatLine != null ? formatLine(line) : line);
@@ -91,10 +94,7 @@ namespace SoluiNet.DevTools.Utils.File
                     this.SetContentForFile(
                         item,
                         this.SearchPattern.Text,
-                        (line) =>
-                        {
-                            return line.Trim();
-                        },
+                        (line) => line.Trim(),
                         item);
                 }
             }
@@ -116,10 +116,22 @@ namespace SoluiNet.DevTools.Utils.File
                 RootFolder = Environment.SpecialFolder.MyComputer,
             };
 
-            if (folderDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                this.FolderPath.Text = folderDialog.SelectedPath;
+                if (folderDialog.ShowDialog() == DialogResult.OK)
+                {
+                    this.FolderPath.Text = folderDialog.SelectedPath;
+                }
             }
+            finally
+            {
+                folderDialog.Dispose();
+            }
+        }
+
+        private void FindFiles_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
