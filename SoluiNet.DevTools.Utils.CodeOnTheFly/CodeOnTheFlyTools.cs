@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -29,6 +30,7 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
         /// <param name="languageProvider">The programming language in which the source code has been delivered.</param>
         /// <param name="methodParameters">A list of parameters which should be overgiven to the executing method.</param>
         /// <returns>Returns the returned value from the executing method (casted to string, will be converted to JSON if returned value isn't a primitive one).</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "To improve readability allow multiple lines for this method")]
         public static string RunDynamicCode(string code, bool sourceCodeComplete = false, string executingMethod = "main", string languageProvider = "CSharp", params object[] methodParameters)
         {
             var compiler = CodeDomProvider.CreateProvider(languageProvider);
@@ -41,6 +43,7 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
             if (!sourceCodeComplete)
             {
                 generatedCode = string.Format(
+                    CultureInfo.InvariantCulture,
                     @"using System; " +
                     "namespace DynamicCode {{ " +
                     "public class DynamicCodeClass {{ " +

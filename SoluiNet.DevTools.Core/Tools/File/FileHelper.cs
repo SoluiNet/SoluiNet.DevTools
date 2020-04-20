@@ -7,10 +7,12 @@ namespace SoluiNet.DevTools.Core.Tools.File
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Tools.String;
 
     /// <summary>
     /// Provides a collection of methods which help with working with files.
@@ -78,6 +80,25 @@ namespace SoluiNet.DevTools.Core.Tools.File
         public static Bitmap GetBitmapFromPath(this string filePath)
         {
             return FileHelper.ConvertToBitmap(filePath);
+        }
+
+        /// <summary>
+        /// Get a temporary file path.
+        /// </summary>
+        /// <returns>Returns a temporary file path.</returns>
+        public static string GetTemporaryFilePath()
+        {
+            var temporaryFileName = string.Format(
+                CultureInfo.InvariantCulture,
+                "{0}_{1}.tmp",
+                StringHelper.GetRandomString(8),
+                DateTime.UtcNow.ToString("yyyyMMdd_HHmmss", CultureInfo.InvariantCulture));
+
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "{0}\\SoluiNet.DevTools\\temp\\{1}",
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                temporaryFileName);
         }
     }
 }

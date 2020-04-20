@@ -777,14 +777,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         Background = !string.IsNullOrEmpty(application.ExtendedConfiguration)
                             ? application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>()
                                 ?.SoluiNetBrushDefinition?.ToBrush()
-                            : new SolidColorBrush(Colors.WhiteSmoke)
+                            : new SolidColorBrush(Colors.WhiteSmoke),
                     },
                     Tag = application,
-                    AllowDrop = true
+                    AllowDrop = true,
                 };
-
-
-
 
                 applicationAreaTarget.Drop += dropApplicationAreaDelegate;
 

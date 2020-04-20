@@ -21,7 +21,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         {
             this.GotFocus += (sender, eventArgs) =>
             {
-                if (this.Text == this.PlaceholderText)
+                if (base.Text == this.PlaceholderText)
                 {
                     this.Text = string.Empty;
                 }
@@ -29,7 +29,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
             this.LostFocus += (sender, eventArgs) =>
             {
-                if (string.IsNullOrWhiteSpace(this.Text))
+                if (string.IsNullOrWhiteSpace(base.Text))
                 {
                     this.Text = this.PlaceholderText;
                 }
@@ -37,7 +37,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
             this.PlaceholderTextChanged += (sender, eventArgs) =>
             {
-                if (this.Text == eventArgs.OldPlaceholderText)
+                if (base.Text == eventArgs.OldPlaceholderText)
                 {
                     this.Text = eventArgs.NewPlaceholderText;
                 }
@@ -45,7 +45,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
             this.TextChanged += (sender, eventArgs) =>
             {
-                this.Foreground = this.Text == this.PlaceholderText ? new SolidColorBrush(Colors.DimGray) : new SolidColorBrush(Colors.Black);
+                this.Foreground = base.Text == this.PlaceholderText ? new SolidColorBrush(Colors.DimGray) : new SolidColorBrush(Colors.Black);
             };
         }
 
@@ -77,6 +77,22 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
                 this.placeholderText = value;
                 this.PlaceholderTextChanged?.Invoke(this, new PlaceholderTextChangedEventArgs(oldValue, value));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        public new string Text
+        {
+            get
+            {
+                return (base.Text == this.PlaceholderText) ? string.Empty : base.Text;
+            }
+
+            set
+            {
+                base.Text = value;
             }
         }
     }

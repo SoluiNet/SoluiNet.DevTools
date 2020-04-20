@@ -240,5 +240,19 @@ namespace SoluiNet.DevTools.Core.Tools.String
 
             return false;
         }
+
+        /// <summary>
+        /// Generate a random string (taken from https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings).
+        /// </summary>
+        /// <param name="length">The length of the string.</param>
+        /// <returns>Returns a random string.</returns>
+        public static string GetRandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
     }
 }

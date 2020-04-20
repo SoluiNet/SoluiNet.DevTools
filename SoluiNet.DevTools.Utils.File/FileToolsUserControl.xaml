@@ -9,20 +9,51 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBox x:Name="FilePath" Text="File" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
-        <Button x:Name="OpenFile" Content="..." HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenFile_Click"/>
-        <TextBox x:Name="FolderPath" Text="Folder" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Height="25" Margin="10,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
-        <Button x:Name="OpenFolder" Content="..." HorizontalAlignment="Left" Margin="265,45,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenFolder_Click"/>
-        <TextBox x:Name="Filter" Text="*.*" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Height="25" Margin="330,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="40"/>
-        <ComboBox x:Name="ChecksumType" HorizontalAlignment="Right" Margin="0,10,145,0" VerticalAlignment="Top" Width="120" Height="25">
-            <ComboBoxItem Content="MD5" />
-        </ComboBox>
-        <Button x:Name="CalculateChecksum" Content="Calculate Checksum" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="25" Click="CalculateChecksum_Click"/>
-        <Button x:Name="FindFiles" Content="Find Files" HorizontalAlignment="Right" Margin="0,45,10,0" VerticalAlignment="Top" Width="125" Height="25" Click="FindFiles_Click"/>
-        <soluinet:PlaceholderTextBox x:Name="SearchPattern" PlaceholderText="Search Pattern" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="25" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
-        <CheckBox x:Name="IsRegEx" Content="Is RegEx" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="SearchLines" Content="Extract Lines For Search Pattern" HorizontalAlignment="Left" Margin="265,80,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="SearchLines_Click"/>
-        <avalonedit:TextEditor x:Name="Output" Margin="5,130,6,5" VerticalAlignment="Bottom" Height="300" ShowLineNumbers="True"/>
-
+        <TabControl>
+            <TabItem Header="Search">
+                <Grid x:Name="FileGrid">
+                    <TextBox x:Name="FilePath" Text="File" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+                    <Button x:Name="OpenFile" Content="..." HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenFile_Click"/>
+                    <soluinet:PlaceholderTextBox x:Name="FileFilter" PlaceholderText="File Filter" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="300,10,0,0" VerticalContentAlignment="Center" />
+                    <TextBox x:Name="FolderPath" Text="Folder" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Height="25" Margin="10,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+                    <Button x:Name="OpenFolder" Content="..." HorizontalAlignment="Left" Margin="265,45,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenFolder_Click"/>
+                    <TextBox x:Name="Filter" Text="*.*" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Height="25" Margin="300,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="40"/>
+                    <ComboBox x:Name="ChecksumType" HorizontalAlignment="Right" Margin="0,10,145,0" VerticalAlignment="Top" Width="120" Height="25">
+                        <ComboBoxItem Content="MD5" />
+                    </ComboBox>
+                    <Button x:Name="CalculateChecksum" Content="Calculate Checksum" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="25" Click="CalculateChecksum_Click"/>
+                    <CheckBox x:Name="WriteToLog" HorizontalAlignment="Right" Margin="0,45,145,0" VerticalAlignment="Top" Width="120" Height="25" VerticalContentAlignment="Center" Content="Write to Log" />
+                    <Button x:Name="FindFiles" Content="Find Files" HorizontalAlignment="Right" Margin="0,45,10,0" VerticalAlignment="Top" Width="125" Height="25" Click="FindFiles_Click"/>
+                    <soluinet:PlaceholderTextBox x:Name="SearchPattern" PlaceholderText="Search Pattern" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="25" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+                    <soluinet:PlaceholderTextBox x:Name="ReplacePattern" PlaceholderText="Replace Pattern" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="25" Margin="445,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+                    <CheckBox x:Name="IsRegEx" Content="Is RegEx" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="OmmitPrefix" Content="Ommit Prefix" HorizontalAlignment="Left" Margin="90,110,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="SearchLines" Content="Extract Lines For Search Pattern" HorizontalAlignment="Left" Margin="265,80,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="SearchLines_Click"/>
+                    <avalonedit:TextEditor x:Name="Output" Margin="5,140,6,5" VerticalAlignment="Bottom" ShowLineNumbers="True"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Compression">
+                <Grid>
+                    <soluinet:PlaceholderTextBox x:Name="FileSeparator" PlaceholderText="File Separator" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" Height="25" Width="100" VerticalContentAlignment="Center" />
+                    <soluinet:PlaceholderTextBox x:Name="CompressionFilePath" PlaceholderText="File Path" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0" Height="25" Width="250" VerticalContentAlignment="Center" />
+                    <Button x:Name="ExtractFiles" VerticalAlignment="Top" HorizontalAlignment="Right" Height="25" VerticalContentAlignment="Center" Content="Extract All Files" Width="150" Margin="0,5,5,0" Click="ExtractFiles_Click" />
+                    <Button x:Name="CompressFiles" VerticalAlignment="Top" HorizontalAlignment="Right" Height="25" VerticalContentAlignment="Center" Content="Compress All Files" Width="150" Margin="0,35,5,0" />
+                    <TabControl x:Name="CompressionTabs" Margin="5,70,6,5" VerticalAlignment="Bottom">
+                        <TabItem Header="Input">
+                            <avalonedit:TextEditor x:Name="CompressionFiles" ShowLineNumbers="True">
+                                <avalonedit:TextEditor.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem x:Name="CopyFromSearchResults" Header="Copy from Search Results" Click="CopyFromSearchResults_Click" />
+                                    </ContextMenu>
+                                </avalonedit:TextEditor.ContextMenu>
+                            </avalonedit:TextEditor>
+                        </TabItem>
+                        <TabItem Header="Log">
+                            <avalonedit:TextEditor x:Name="CompressionLog" ShowLineNumbers="True"/>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

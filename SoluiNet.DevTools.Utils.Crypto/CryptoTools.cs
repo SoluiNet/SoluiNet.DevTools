@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Utils.Crypto
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
@@ -23,14 +24,21 @@ namespace SoluiNet.DevTools.Utils.Crypto
         /// <param name="plainText">The plain text.</param>
         /// <param name="options">The encryption options.</param>
         /// <returns>Returns the encrypted text.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms", Justification = "We want to support broken crypto algorithms")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5350:Do Not Use Weak Cryptographic Algorithms", Justification = "We want to support weak crypto algorithms")]
         public static string Encrypt(string plainText, IDictionary<string, object> options)
         {
             var toEncrypt = plainText;
             var encryptedText = string.Empty;
 
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var decodeFromBase64 = options.ContainsKey("DecodeFromBase64") &&
-                                   Convert.ToBoolean(options["DecodeFromBase64"]);
-            var encodeToBase64 = options.ContainsKey("EncodeToBase64") && Convert.ToBoolean(options["EncodeToBase64"]);
+                                   Convert.ToBoolean(options["DecodeFromBase64"], CultureInfo.InvariantCulture);
+            var encodeToBase64 = options.ContainsKey("EncodeToBase64") && Convert.ToBoolean(options["EncodeToBase64"], CultureInfo.InvariantCulture);
 
             var method = options.ContainsKey("Method") ? options["Method"].ToString() : string.Empty;
 
@@ -40,12 +48,12 @@ namespace SoluiNet.DevTools.Utils.Crypto
                 case "RSA":
                     var publicKeyPath = options["PublicKeyPath"].ToString();
 
-                    if (publicKeyPath.StartsWith("\""))
+                    if (publicKeyPath.StartsWith("\"", StringComparison.InvariantCulture))
                     {
                         publicKeyPath = publicKeyPath.Substring(1, publicKeyPath.Length - 1);
                     }
 
-                    if (publicKeyPath.EndsWith("\""))
+                    if (publicKeyPath.EndsWith("\"", StringComparison.InvariantCulture))
                     {
                         publicKeyPath = publicKeyPath.Substring(0, publicKeyPath.Length - 1);
                     }
@@ -79,32 +87,65 @@ namespace SoluiNet.DevTools.Utils.Crypto
                             // create new instance of MD5
                             var md5 = MD5.Create();
 
-                            // convert the input text to array of bytes
-                            var hashDataMd5 = md5.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
+                            try
+                            {
+                                // convert the input text to array of bytes
+                                var hashDataMd5 = md5.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
 
-                            // return hexadecimal string
-                            encryptedText = BitConverter.ToString(hashDataMd5).Replace("-", string.Empty);
+                                // return hexadecimal string
+                                encryptedText = BitConverter.ToString(hashDataMd5).Replace("-", string.Empty);
+                            }
+                            finally
+                            {
+                                if (md5 != null)
+                                {
+                                    md5.Dispose();
+                                }
+                            }
+
                             break;
                         case "SHA1":
                             // create new instance of SHA1
                             var sha1 = SHA1.Create();
 
-                            // convert the input text to array of bytes
-                            var hashDataSha1 = sha1.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
+                            try
+                            {
+                                // convert the input text to array of bytes
+                                var hashDataSha1 = sha1.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
 
-                            // return hexadecimal string
-                            encryptedText = BitConverter.ToString(hashDataSha1).Replace("-", string.Empty);
+                                // return hexadecimal string
+                                encryptedText = BitConverter.ToString(hashDataSha1).Replace("-", string.Empty);
+                            }
+                            finally
+                            {
+                                if (sha1 != null)
+                                {
+                                    sha1.Dispose();
+                                }
+                            }
+
                             break;
                         case "SHA2":
                         case "SHA256":
                             // create new instance of SHA256
                             var sha2 = SHA256.Create();
 
-                            // convert the input text to array of bytes
-                            var hashDataSha2 = sha2.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
+                            try
+                            {
+                                // convert the input text to array of bytes
+                                var hashDataSha2 = sha2.ComputeHash(Encoding.Default.GetBytes(toEncrypt));
 
-                            // return hexadecimal string
-                            encryptedText = BitConverter.ToString(hashDataSha2).Replace("-", string.Empty);
+                                // return hexadecimal string
+                                encryptedText = BitConverter.ToString(hashDataSha2).Replace("-", string.Empty);
+                            }
+                            finally
+                            {
+                                if (sha2 != null)
+                                {
+                                    sha2.Dispose();
+                                }
+                            }
+
                             break;
                     }
 
@@ -125,9 +166,14 @@ namespace SoluiNet.DevTools.Utils.Crypto
             var toDecrypt = encryptedText;
             var decryptedText = string.Empty;
 
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var decodeFromBase64 = options.ContainsKey("DecodeFromBase64") &&
-                                   Convert.ToBoolean(options["DecodeFromBase64"]);
-            var encodeToBase64 = options.ContainsKey("EncodeToBase64") && Convert.ToBoolean(options["EncodeToBase64"]);
+                                   Convert.ToBoolean(options["DecodeFromBase64"], CultureInfo.InvariantCulture);
+            var encodeToBase64 = options.ContainsKey("EncodeToBase64") && Convert.ToBoolean(options["EncodeToBase64"], CultureInfo.InvariantCulture);
 
             var method = options.ContainsKey("Method") ? options["Method"].ToString() : string.Empty;
 
@@ -137,12 +183,12 @@ namespace SoluiNet.DevTools.Utils.Crypto
                 case "RSA":
                     var privateKeyPath = options["PrivateKeyPath"].ToString();
 
-                    if (privateKeyPath.StartsWith("\""))
+                    if (privateKeyPath.StartsWith("\"", StringComparison.InvariantCulture))
                     {
                         privateKeyPath = privateKeyPath.Substring(1, privateKeyPath.Length - 1);
                     }
 
-                    if (privateKeyPath.EndsWith("\""))
+                    if (privateKeyPath.EndsWith("\"", StringComparison.InvariantCulture))
                     {
                         privateKeyPath = privateKeyPath.Substring(0, privateKeyPath.Length - 1);
                     }
