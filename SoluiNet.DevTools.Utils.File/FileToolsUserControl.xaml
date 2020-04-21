@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:SoluiNet.DevTools.Utils.File"
              xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              xmlns:soluinet="clr-namespace:SoluiNet.DevTools.Core.UI.WPF.UIElement;assembly=SoluiNet.DevTools.Core.UI.WPF"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -36,6 +37,7 @@
                 <Grid>
                     <soluinet:PlaceholderTextBox x:Name="FileSeparator" PlaceholderText="File Separator" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" Height="25" Width="100" VerticalContentAlignment="Center" />
                     <soluinet:PlaceholderTextBox x:Name="CompressionFilePath" PlaceholderText="File Path" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0" Height="25" Width="250" VerticalContentAlignment="Center" />
+                    <Button x:Name="OpenCompressionFile" Content="..." HorizontalAlignment="Left" Margin="265,35,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenCompressionFile_Click" />
                     <Button x:Name="ExtractFiles" VerticalAlignment="Top" HorizontalAlignment="Right" Height="25" VerticalContentAlignment="Center" Content="Extract All Files" Width="150" Margin="0,5,5,0" Click="ExtractFiles_Click" />
                     <Button x:Name="CompressFiles" VerticalAlignment="Top" HorizontalAlignment="Right" Height="25" VerticalContentAlignment="Center" Content="Compress All Files" Width="150" Margin="0,35,5,0" />
                     <TabControl x:Name="CompressionTabs" Margin="5,70,6,5" VerticalAlignment="Bottom">
@@ -52,6 +54,17 @@
                             <avalonedit:TextEditor x:Name="CompressionLog" ShowLineNumbers="True"/>
                         </TabItem>
                     </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Split">
+                <Grid>
+                    <xctk:IntegerUpDown x:Name="NumberOfLines" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" Height="25" Width="150" VerticalContentAlignment="Center" />
+                    <soluinet:PlaceholderTextBox x:Name="SplitFilePath" PlaceholderText="File Path" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0" Height="25" Width="250" VerticalContentAlignment="Center" />
+                    <Button x:Name="OpenSplitFile" Content="..." HorizontalAlignment="Left" Margin="265,35,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="OpenSplitFile_Click" />
+                    <soluinet:PlaceholderTextBox x:Name="SplitCondition" PlaceholderText="Condition" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,65,0,0" Height="25" Width="250" VerticalContentAlignment="Center" />
+                    <CheckBox x:Name="SplitIsRegEx" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="265, 65, 0, 0" Height="25" Content="Is RegEx" VerticalContentAlignment="Center" />
+                    <Button x:Name="SplitFiles" VerticalAlignment="Top" HorizontalAlignment="Right" Height="25" VerticalContentAlignment="Center" Content="Split File" Width="150" Margin="0,5,5,0" Click="SplitFiles_Click" />
+                    <avalonedit:TextEditor x:Name="SplitOutput" Margin="5,100,6,5" VerticalAlignment="Bottom" ShowLineNumbers="True"/>
                 </Grid>
             </TabItem>
         </TabControl>

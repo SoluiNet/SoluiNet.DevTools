@@ -24,6 +24,7 @@ namespace SoluiNet.DevTools.Utils.File
     using System.Windows.Navigation;
     using System.Windows.Shapes;
     using Microsoft.Win32;
+    using NLog;
     using SoluiNet.DevTools.Core.Tools.File;
     using SoluiNet.DevTools.Core.UI.WPF.General;
 
@@ -41,6 +42,14 @@ namespace SoluiNet.DevTools.Utils.File
         }
 
         private delegate string FormatSearchResultLine(string line);
+
+        private Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
@@ -126,6 +135,17 @@ namespace SoluiNet.DevTools.Utils.File
             {
                 if (isFolderSet)
                 {
+                    this.Logger.Info(
+                        CultureInfo.InvariantCulture,
+                        "Search for lines in folder '{0}' (filter: '{2}') with the search pattern '{1}' (RegEx: {3}) and replace pattern '{4}' (Ommit Prefix: {5}, temporary file path. '{6}')",
+                        this.FolderPath.Text,
+                        this.SearchPattern.Text,
+                        this.Filter.Text,
+                        this.IsRegEx.IsChecked ?? false,
+                        this.ReplacePattern.Text,
+                        this.OmmitPrefix.IsChecked ?? false,
+                        temporaryFilePath);
+
                     var foundFiles = FileHelper.GetFilesInDirectory(this.FolderPath.Text, this.Filter.Text, true);
 
                     foreach (var item in foundFiles.AsParallel())
@@ -140,6 +160,17 @@ namespace SoluiNet.DevTools.Utils.File
                 }
                 else if (isFileSet)
                 {
+                    this.Logger.Info(
+                        CultureInfo.InvariantCulture,
+                        "Search for lines in file '{0}' (filter: '{2}') with the search pattern '{1}' (RegEx: {3}) and replace pattern '{4}' (Ommit Prefix: {5}, temporary file path. '{6}')",
+                        this.FilePath.Text,
+                        this.SearchPattern.Text,
+                        this.Filter.Text,
+                        this.IsRegEx.IsChecked ?? false,
+                        this.ReplacePattern.Text,
+                        this.OmmitPrefix.IsChecked ?? false,
+                        temporaryFilePath);
+
                     this.SetContentForFile(this.FilePath.Text, this.SearchPattern.Text, null, string.Empty, logFile);
                 }
             }
@@ -211,6 +242,14 @@ namespace SoluiNet.DevTools.Utils.File
                 logFile = File.AppendText(temporaryFilePath);
             }
 
+            this.Logger.Info(
+                CultureInfo.InvariantCulture,
+                "Find files with the search pattern '{1}' (RegEx: {2}) in folder '{0}' (temporary file path: '{3}')",
+                this.FolderPath.Text,
+                this.SearchPattern.Text,
+                this.IsRegEx.IsChecked ?? false,
+                temporaryFilePath);
+
             try
             {
                 foreach (var item in foundFiles.AsParallel())
@@ -266,6 +305,141 @@ namespace SoluiNet.DevTools.Utils.File
         private void CopyFromSearchResults_Click(object sender, RoutedEventArgs e)
         {
             this.CompressionFiles.Text = this.Output.Text;
+        }
+
+        private void SplitFiles_Click(object sender, RoutedEventArgs e)
+        {
+            var originalFilePath = this.SplitFilePath.Text;
+            var originalExtension = System.IO.Path.GetExtension(originalFilePath);
+
+            var lines = File.ReadLines(originalFilePath);
+
+            var i = 0;
+            var offset = 0;
+            var numberOfSplits = 0;
+
+            var lastMatchingLine = 0;
+
+            var conditionExisting = !string.IsNullOrEmpty(this.SplitCondition.Text);
+
+            Regex splitRegex = null;
+            var splitCondition = this.SplitCondition.Text;
+
+            this.Logger.Info(
+                CultureInfo.InvariantCulture,
+                "Split file '{0}' (Condition: '{1}' - RegEx: {3}) at {2} lines",
+                this.SplitFilePath.Text,
+                this.SplitCondition.Text,
+                this.NumberOfLines.Value ?? 0,
+                this.SplitIsRegEx.IsChecked ?? false);
+
+            if (this.SplitIsRegEx.IsChecked ?? false)
+            {
+                splitRegex = new Regex(splitCondition);
+            }
+
+            foreach (var line in lines)
+            {
+                if (conditionExisting)
+                {
+                    if (this.SplitIsRegEx.IsChecked ?? false)
+                    {
+                        if (splitRegex.IsMatch(line))
+                        {
+                            lastMatchingLine = i;
+                        }
+                    }
+                    else
+                    {
+                        if (line.Contains(splitCondition))
+                        {
+                            lastMatchingLine = i;
+                        }
+                    }
+                }
+
+                if (i - offset == (this.NumberOfLines.Value ?? 0) - 1)
+                {
+                    var beginningOfSplit = offset;
+                    var endOfSplit = i;
+
+                    if (lastMatchingLine > 0)
+                    {
+                        endOfSplit = lastMatchingLine;
+                    }
+
+                    var splitFile = new StreamWriter(originalFilePath.Replace(originalExtension, string.Format(CultureInfo.InvariantCulture, ".{0:D8}{1}", ++numberOfSplits, originalExtension)));
+
+                    try
+                    {
+                        var splitLines = File.ReadLines(originalFilePath).Skip(beginningOfSplit).Take(endOfSplit - beginningOfSplit);
+
+                        foreach (var splitLine in splitLines)
+                        {
+                            splitFile.WriteLine(splitLine);
+                        }
+
+                        lastMatchingLine = 0;
+                        offset = endOfSplit;
+                    }
+                    finally
+                    {
+                        splitFile.Flush();
+                        splitFile.Close();
+                        splitFile.Dispose();
+                    }
+                }
+
+                i++;
+            }
+
+            var lastSplitFile = new StreamWriter(originalFilePath.Replace(originalExtension, string.Format(CultureInfo.InvariantCulture, ".{0:D8}{1}", ++numberOfSplits, originalExtension)));
+
+            try
+            {
+                var splitLines = File.ReadLines(originalFilePath).Skip(offset).Take(i - offset);
+
+                foreach (var splitLine in splitLines)
+                {
+                    lastSplitFile.WriteLine(splitLine);
+                }
+            }
+            finally
+            {
+                lastSplitFile.Flush();
+                lastSplitFile.Close();
+                lastSplitFile.Dispose();
+            }
+        }
+
+        private void OpenSplitFile_Click(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                RestoreDirectory = true,
+                Filter = "All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            };
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                this.SplitFilePath.Text = fileDialog.FileName;
+            }
+        }
+
+        private void OpenCompressionFile_Click(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                RestoreDirectory = true,
+                Filter = "All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            };
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                this.CompressionFilePath.Text = fileDialog.FileName;
+            }
         }
     }
 }
