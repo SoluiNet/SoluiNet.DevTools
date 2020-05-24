@@ -79,7 +79,8 @@ namespace SoluiNet.DevTools.Utils.File
                 extractedLines = FileTools.ExtractLinesContainingSearchPattern(filePath, searchPattern);
             }
 
-            var ommitPrefix = this.OmmitPrefix.IsChecked ?? false;
+            var omitPrefix = this.OmitPrefix.IsChecked ?? false;
+            var omitLineBreak = this.OmitLineBreak.IsChecked ?? false;
 
             var searchRegex = new Regex(searchPattern);
             var replacePattern = this.ReplacePattern.Text;
@@ -98,17 +99,19 @@ namespace SoluiNet.DevTools.Utils.File
                     logWriter.WriteLine(
                         string.Format(
                             CultureInfo.InvariantCulture,
-                            "{0}{1}\r\n",
-                            ommitPrefix ? string.Empty : prefix + (string.IsNullOrEmpty(prefix) ? string.Empty : " - "),
-                            formatLine != null ? formatLine(lineContent) : lineContent));
+                            "{0}{1}{2}",
+                            omitPrefix ? string.Empty : prefix + (string.IsNullOrEmpty(prefix) ? string.Empty : " - "),
+                            formatLine != null ? formatLine(lineContent) : lineContent,
+                            omitLineBreak ? string.Empty : "\r\n"));
                 }
                 else
                 {
                     this.Output.Text += string.Format(
                         CultureInfo.InvariantCulture,
-                        "{0}{1}\r\n",
-                        ommitPrefix ? string.Empty : prefix + (string.IsNullOrEmpty(prefix) ? string.Empty : " - "),
-                        formatLine != null ? formatLine(lineContent) : lineContent);
+                        "{0}{1}{2}",
+                        omitPrefix ? string.Empty : prefix + (string.IsNullOrEmpty(prefix) ? string.Empty : " - "),
+                        formatLine != null ? formatLine(lineContent) : lineContent,
+                        omitLineBreak ? string.Empty : "\r\n");
                 }
             }
         }

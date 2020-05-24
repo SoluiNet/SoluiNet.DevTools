@@ -28,7 +28,8 @@
                     <soluinet:PlaceholderTextBox x:Name="SearchPattern" PlaceholderText="Search Pattern" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="25" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
                     <soluinet:PlaceholderTextBox x:Name="ReplacePattern" PlaceholderText="Replace Pattern" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="25" Margin="445,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
                     <CheckBox x:Name="IsRegEx" Content="Is RegEx" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="OmmitPrefix" Content="Ommit Prefix" HorizontalAlignment="Left" Margin="90,110,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="OmitPrefix" Content="Omit Prefix" HorizontalAlignment="Left" Margin="90,110,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="OmitLineBreak" Content="Omit Line Break" HorizontalAlignment="Left" Margin="195,110,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="SearchLines" Content="Extract Lines For Search Pattern" HorizontalAlignment="Left" Margin="265,80,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="SearchLines_Click"/>
                     <avalonedit:TextEditor x:Name="Output" Margin="5,140,6,5" VerticalAlignment="Bottom" ShowLineNumbers="True"/>
                 </Grid>
