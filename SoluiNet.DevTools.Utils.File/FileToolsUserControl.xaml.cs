@@ -146,7 +146,7 @@ namespace SoluiNet.DevTools.Utils.File
                         this.Filter.Text,
                         this.IsRegEx.IsChecked ?? false,
                         this.ReplacePattern.Text,
-                        this.OmmitPrefix.IsChecked ?? false,
+                        this.OmitPrefix.IsChecked ?? false,
                         temporaryFilePath);
 
                     var foundFiles = FileHelper.GetFilesInDirectory(this.FolderPath.Text, this.Filter.Text, true);
@@ -171,7 +171,7 @@ namespace SoluiNet.DevTools.Utils.File
                         this.Filter.Text,
                         this.IsRegEx.IsChecked ?? false,
                         this.ReplacePattern.Text,
-                        this.OmmitPrefix.IsChecked ?? false,
+                        this.OmitPrefix.IsChecked ?? false,
                         temporaryFilePath);
 
                     this.SetContentForFile(this.FilePath.Text, this.SearchPattern.Text, null, string.Empty, logFile);
@@ -261,7 +261,18 @@ namespace SoluiNet.DevTools.Utils.File
                     {
                         if (this.WriteToLog.IsChecked ?? false)
                         {
-                            logFile.WriteLine(item);
+                            var trimmedText = item.TrimEnd();
+
+                            if ((trimmedText.EndsWith("\r\n", false, CultureInfo.InvariantCulture)
+                                || trimmedText.EndsWith("\n", false, CultureInfo.InvariantCulture))
+                                && (this.OmitLineBreak.IsChecked ?? false))
+                            {
+                                logFile?.Write(item);
+                            }
+                            else
+                            {
+                                logFile?.WriteLine(item);
+                            }
                         }
                         else
                         {
@@ -347,7 +358,7 @@ namespace SoluiNet.DevTools.Utils.File
                 {
                     if (this.SplitIsRegEx.IsChecked ?? false)
                     {
-                        if (splitRegex.IsMatch(line))
+                        if (splitRegex != null && splitRegex.IsMatch(line))
                         {
                             lastMatchingLine = i;
                         }
