@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Utils.ScanImage
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -67,7 +68,7 @@ namespace SoluiNet.DevTools.Utils.ScanImage
 
             if (barcodeResult != null)
             {
-                this.ScanResult.Text = string.Format("Type: {0}\r\nText: {1}", barcodeResult.BarcodeFormat.ToString(), barcodeResult.Text);
+                this.ScanResult.Text = string.Format(CultureInfo.InvariantCulture, "Type: {0}\r\nText: {1}", barcodeResult.BarcodeFormat.ToString(), barcodeResult.Text);
             }
             else
             {
@@ -81,21 +82,32 @@ namespace SoluiNet.DevTools.Utils.ScanImage
 
             this.ImageThumbnail.Source = this.GetThumbnail();
 
-            using (var ocrEngine = new TesseractEngine(string.Format("{0}\\tessdata", System.IO.Path.GetDirectoryName(this.GetType().Assembly.Location)), "eng", EngineMode.Default))
+            using (var ocrEngine = new TesseractEngine(string.Format(CultureInfo.InvariantCulture, "{0}\\tessdata", System.IO.Path.GetDirectoryName(this.GetType().Assembly.Location)), "eng", EngineMode.Default))
             {
                 var scannableImage = this.GetScannableImage();
 
-                var image = new MagickImage(scannableImage);
-                /* TextCleanerScript cleaner = new TextCleanerScript(); */
-
-                // have to load Pix via a bitmap since Pix doesn't support loading a stream.
-                using (var pix = PixConverter.ToPix(scannableImage))
+                var image = new MagickImage(scannableImage.ConvertToByteArray());
+                try
                 {
-                    using (var page = ocrEngine.Process(pix))
+                    /* TextCleanerScript cleaner = new TextCleanerScript(); */
+
+                    // have to load Pix via a bitmap since Pix doesn't support loading a stream.
+                    using (var pix = PixConverter.ToPix(scannableImage))
                     {
-                        // Console.WriteLine(page.GetMeanConfidence() + " : " + page.GetText());
-                        this.ScanResult.Text += string.Format("Confidence {0} - #\"{1}\"#", page.GetMeanConfidence(), page.GetText());
+                        using (var page = ocrEngine.Process(pix))
+                        {
+                            // Console.WriteLine(page.GetMeanConfidence() + " : " + page.GetText());
+                            this.ScanResult.Text += string.Format(
+                                CultureInfo.InvariantCulture,
+                                "Confidence {0} - #\"{1}\"#",
+                                page.GetMeanConfidence(),
+                                page.GetText());
+                        }
                     }
+                }
+                finally
+                {
+                    image?.Dispose();
                 }
             }
         }
@@ -107,10 +119,10 @@ namespace SoluiNet.DevTools.Utils.ScanImage
                 return this.ImageThumbnail.Source = this.ImageFilePath.Text.GetBitmapFromPath().DrawRectangle(
                     new System.Drawing.Rectangle()
                     {
-                        Height = Convert.ToInt32(this.RectangleHeight.Text),
-                        Width = Convert.ToInt32(this.RectangleWidth.Text),
-                        X = Convert.ToInt32(this.RectangleX.Text),
-                        Y = Convert.ToInt32(this.RectangleY.Text),
+                        Height = Convert.ToInt32(this.RectangleHeight.Text, CultureInfo.InvariantCulture),
+                        Width = Convert.ToInt32(this.RectangleWidth.Text, CultureInfo.InvariantCulture),
+                        X = Convert.ToInt32(this.RectangleX.Text, CultureInfo.InvariantCulture),
+                        Y = Convert.ToInt32(this.RectangleY.Text, CultureInfo.InvariantCulture),
                     },
                     System.Drawing.Color.Red)
                     .ConvertToBitmapImage();
@@ -127,10 +139,10 @@ namespace SoluiNet.DevTools.Utils.ScanImage
             {
                 return this.ImageFilePath.Text.GetBitmapFromPath().CropImage(new System.Drawing.Rectangle()
                 {
-                    Height = Convert.ToInt32(this.RectangleHeight.Text),
-                    Width = Convert.ToInt32(this.RectangleWidth.Text),
-                    X = Convert.ToInt32(this.RectangleX.Text),
-                    Y = Convert.ToInt32(this.RectangleY.Text),
+                    Height = Convert.ToInt32(this.RectangleHeight.Text, CultureInfo.InvariantCulture),
+                    Width = Convert.ToInt32(this.RectangleWidth.Text, CultureInfo.InvariantCulture),
+                    X = Convert.ToInt32(this.RectangleX.Text, CultureInfo.InvariantCulture),
+                    Y = Convert.ToInt32(this.RectangleY.Text, CultureInfo.InvariantCulture),
                 });
             }
             else

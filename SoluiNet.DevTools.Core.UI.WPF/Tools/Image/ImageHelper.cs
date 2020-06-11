@@ -50,5 +50,16 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.Image
         {
             return ImageHelper.BitmapToImageSource(bitmap);
         }
+
+        /// <summary>
+        /// Converts a bitmap object to a byte array.
+        /// </summary>
+        /// <param name="image">The bitmap object.</param>
+        /// <returns>Returns a bitmap as byte array.</returns>
+        public static byte[] ConvertToByteArray(this Image image)
+        {
+            var converter = new ImageConverter();
+            return converter.ConvertTo(image, typeof(byte[])) as byte[];
+        }
     }
 }
