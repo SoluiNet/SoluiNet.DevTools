@@ -81,6 +81,26 @@ namespace SoluiNet.DevTools.Utils.File
 
             var omitPrefix = this.OmitPrefix.IsChecked ?? false;
             var omitLineBreak = this.OmitLineBreak.IsChecked ?? false;
+            var removeDuplicates = this.RemoveDuplicates.IsChecked ?? false;
+
+            if (removeDuplicates)
+            {
+                extractedLines = extractedLines.Distinct().ToList();
+            }
+
+            var sorting = this.Sorting.SelectedValue.ToString();
+
+            switch (sorting)
+            {
+                case "Content ASC":
+                    extractedLines.Sort();
+                    break;
+                case "Content DESC":
+                    extractedLines = extractedLines.OrderByDescending(x => x).ToList();
+                    break;
+                default:
+                    break;
+            }
 
             var searchRegex = new Regex(searchPattern);
             var replacePattern = this.ReplacePattern.Text;
@@ -140,14 +160,15 @@ namespace SoluiNet.DevTools.Utils.File
                 {
                     this.Logger.Info(
                         CultureInfo.InvariantCulture,
-                        "Search for lines in folder '{0}' (filter: '{2}') with the search pattern '{1}' (RegEx: {3}) and replace pattern '{4}' (Ommit Prefix: {5}, temporary file path. '{6}')",
+                        "Search for lines in folder '{0}' (filter: '{2}') with the search pattern '{1}' (RegEx: {3}) and replace pattern '{4}' (Ommit Prefix: {5}, Remove duplicates: {7}, temporary file path. '{6}')",
                         this.FolderPath.Text,
                         this.SearchPattern.Text,
                         this.Filter.Text,
                         this.IsRegEx.IsChecked ?? false,
                         this.ReplacePattern.Text,
                         this.OmitPrefix.IsChecked ?? false,
-                        temporaryFilePath);
+                        temporaryFilePath,
+                        this.RemoveDuplicates.IsChecked ?? false);
 
                     var foundFiles = FileHelper.GetFilesInDirectory(this.FolderPath.Text, this.Filter.Text, true);
 
