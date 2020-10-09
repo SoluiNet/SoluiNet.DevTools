@@ -32,7 +32,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Tesseract" Version="3.3.0" />
-    <PackageReference Include="ZXing.Net" Version="0.16.5" />
+    <PackageReference Include="ZXing.Net" Version="0.16.6" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
