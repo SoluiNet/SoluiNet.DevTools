@@ -24,7 +24,7 @@ namespace SoluiNet.DevTools.Web
         private readonly TcpListener webListener;
         private Thread webCommunicationHandlerThread;
 
-        private bool started = false;
+        private bool started;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SoluiNetWebServer"/> class.

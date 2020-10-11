@@ -19,6 +19,10 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
         private static readonly List<char> Specials;
         private static readonly List<string> Tags;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Performance",
+            "CA1810:Initialize reference type static fields inline",
+            Justification = "For readability we're staying with the static constructor")]
         static SqlSyntaxProvider()
         {
             Specials = new List<char>();
