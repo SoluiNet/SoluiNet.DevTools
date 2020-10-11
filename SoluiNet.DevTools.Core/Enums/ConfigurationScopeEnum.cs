@@ -43,7 +43,7 @@ namespace SoluiNet.DevTools.Core.Enums
         /// <summary>
         /// A configuration entry which is related to the system.
         /// </summary>
-        PerSystem = 20,
+        PerSystem = 30,
 
         /// <summary>
         /// A configuration entry for a general purpose.
