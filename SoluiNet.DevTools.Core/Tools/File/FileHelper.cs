@@ -6,7 +6,11 @@ namespace SoluiNet.DevTools.Core.Tools.File
 {
     using System;
     using System.Collections.Generic;
+#if COMPILED_FOR_NETCORE
     using System.Drawing;
+#else
+    using System.Drawing;
+#endif
     using System.Globalization;
     using System.IO;
     using System.Linq;
