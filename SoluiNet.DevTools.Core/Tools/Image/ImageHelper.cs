@@ -5,7 +5,11 @@
 namespace SoluiNet.DevTools.Core.Tools.Image
 {
     using System;
+#if COMPILED_FOR_NETCORE
     using System.Drawing;
+#else
+    using System.Drawing;
+#endif
     using SoluiNet.DevTools.Core.Tools.Resources;
 
     /// <summary>
