@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{DDC0B05A-0D22-4883-81C5-CF70A8BF3AF1}</ProjectGuid>
-    <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
+    <!--<TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>-->
+    <TargetFramework>net461</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Core</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core</Product>
