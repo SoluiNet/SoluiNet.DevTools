@@ -119,7 +119,7 @@ namespace SoluiNet.DevTools.UI
                     }
                     catch (Exception exception)
                     {
-                        this.Logger.Error(exception);
+                        MainWindow.Logger.Error(exception);
 
                         throw;
                     }
@@ -149,6 +149,8 @@ namespace SoluiNet.DevTools.UI
                 return LogManager.GetCurrentClassLogger();
             }
         }
+
+        public string LoggingPath { get; }
 
         private void FileCloseMenuItem_Click(object sender, RoutedEventArgs e)
         {

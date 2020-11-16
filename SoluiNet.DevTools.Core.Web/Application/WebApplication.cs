@@ -164,13 +164,13 @@ namespace SoluiNet.DevTools.Core.Web.Application
         }
 
         /// <inheritdoc/>
-        public ICollection<IProvidesWebCommunication> WebPlugins { get; private set; }
+        public ICollection<IProvidesWebCommunication> WebPlugins { get; set; }
 
         /// <inheritdoc/>
-        public ICollection<IBasePlugin> Plugins { get; private set; }
+        public ICollection<IBasePlugin> Plugins { get; set; }
 
         /// <inheritdoc/>
-        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; private set; }
+        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; set; }
 
         private Logger Logger
         {

@@ -62,7 +62,7 @@ namespace SoluiNet.DevTools.UI.Sql
                     }
                     catch (Exception exception)
                     {
-                        this.Logger.Error(exception);
+                        SqlUiElement.Logger.Error(exception);
                         throw;
                     }
                 }
@@ -331,7 +331,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 ? this.SqlCommandText.Text
                 : this.SqlCommandText.SelectedText;
 
-            this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] Executing SQL command: {0}", sqlCommand, this.Project.Text, plugin.Environment));
+            SqlUiElement.Logger.Info(string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] Executing SQL command: {0}", sqlCommand, this.Project.Text, plugin.Environment));
 
             var data = plugin.ExecuteSqlScript(sqlCommand);
 
@@ -715,7 +715,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
+            SqlUiElement.Logger.Info(string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
 
             var dialog = new ShowText
             {

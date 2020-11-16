@@ -72,11 +72,11 @@ namespace SoluiNet.DevTools.Utils.File
 
             if (this.IsRegEx.IsChecked ?? false)
             {
-                extractedLines = FileTools.ExtractLinesMatchingRegEx(filePath, searchPattern);
+                extractedLines = FileTools.ExtractLinesMatchingRegEx(filePath, searchPattern) as List<string>;
             }
             else
             {
-                extractedLines = FileTools.ExtractLinesContainingSearchPattern(filePath, searchPattern);
+                extractedLines = FileTools.ExtractLinesContainingSearchPattern(filePath, searchPattern) as List<string>;
             }
 
             var omitPrefix = this.OmitPrefix.IsChecked ?? false;
@@ -158,7 +158,7 @@ namespace SoluiNet.DevTools.Utils.File
             {
                 if (isFolderSet)
                 {
-                    this.Logger.Info(
+                    FileToolsUserControl.Logger.Info(
                         CultureInfo.InvariantCulture,
                         "Search for lines in folder '{0}' (filter: '{2}') with the search pattern '{1}' (RegEx: {3}) and replace pattern '{4}' (Ommit Prefix: {5}, Remove duplicates: {7}, temporary file path. '{6}')",
                         this.FolderPath.Text,
@@ -184,7 +184,7 @@ namespace SoluiNet.DevTools.Utils.File
                 }
                 else if (isFileSet)
                 {
-                    this.Logger.Info(
+                    FileToolsUserControl.Logger.Info(
                         CultureInfo.InvariantCulture,
                         "Search for lines in file '{0}' (filter: '{2}') with the search pattern '{1}' (RegEx: {3}) and replace pattern '{4}' (Ommit Prefix: {5}, temporary file path. '{6}')",
                         this.FilePath.Text,
@@ -266,7 +266,7 @@ namespace SoluiNet.DevTools.Utils.File
                 logFile = File.AppendText(temporaryFilePath);
             }
 
-            this.Logger.Info(
+            FileToolsUserControl.Logger.Info(
                 CultureInfo.InvariantCulture,
                 "Find files with the search pattern '{1}' (RegEx: {2}) in folder '{0}' (temporary file path: '{3}')",
                 this.FolderPath.Text,
@@ -360,7 +360,7 @@ namespace SoluiNet.DevTools.Utils.File
             Regex splitRegex = null;
             var splitCondition = this.SplitCondition.Text;
 
-            this.Logger.Info(
+            FileToolsUserControl.Logger.Info(
                 CultureInfo.InvariantCulture,
                 "Split file '{0}' (Condition: '{1}' - RegEx: {3}) at {2} lines",
                 this.SplitFilePath.Text,

@@ -167,7 +167,7 @@ namespace SoluiNet.DevTools.Utils.General
                     this.AsciiTable.Items.Add(tempArray);
                 }
 
-                asciiRow[i % 16] = this.MapCharToReadableString((char)i);
+                asciiRow[i % 16] = GeneralToolsUserControl.MapCharToReadableString((char)i);
             }
 
             this.AsciiTable.Items.Add(asciiRow);
