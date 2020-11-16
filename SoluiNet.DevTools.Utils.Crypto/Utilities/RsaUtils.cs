@@ -126,14 +126,19 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns an encrypted text.</returns>
         public string Encrypt(string plainText, IDictionary<string, object> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var publicKeyPath = options["PublicKeyPath"].ToString();
 
-            if (publicKeyPath.StartsWith("\""))
+            if (publicKeyPath.StartsWith("\"", StringComparison.InvariantCulture))
             {
                 publicKeyPath = publicKeyPath.Substring(1, publicKeyPath.Length - 1);
             }
 
-            if (publicKeyPath.EndsWith("\""))
+            if (publicKeyPath.EndsWith("\"", StringComparison.InvariantCulture))
             {
                 publicKeyPath = publicKeyPath.Substring(0, publicKeyPath.Length - 1);
             }
@@ -149,14 +154,19 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns an encrypted and base64 encoded text.</returns>
         public string EncryptAndBase64Encode(string plainText, IDictionary<string, object> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var publicKeyPath = options["PublicKeyPath"].ToString();
 
-            if (publicKeyPath.StartsWith("\""))
+            if (publicKeyPath.StartsWith("\"", StringComparison.InvariantCulture))
             {
                 publicKeyPath = publicKeyPath.Substring(1, publicKeyPath.Length - 1);
             }
 
-            if (publicKeyPath.EndsWith("\""))
+            if (publicKeyPath.EndsWith("\"", StringComparison.InvariantCulture))
             {
                 publicKeyPath = publicKeyPath.Substring(0, publicKeyPath.Length - 1);
             }
@@ -172,14 +182,19 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns a decrypted text.</returns>
         public string Decrypt(string encryptedText, IDictionary<string, object> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var privateKeyPath = options["PrivateKeyPath"].ToString();
 
-            if (privateKeyPath.StartsWith("\""))
+            if (privateKeyPath.StartsWith("\"", StringComparison.InvariantCulture))
             {
                 privateKeyPath = privateKeyPath.Substring(1, privateKeyPath.Length - 1);
             }
 
-            if (privateKeyPath.EndsWith("\""))
+            if (privateKeyPath.EndsWith("\"", StringComparison.InvariantCulture))
             {
                 privateKeyPath = privateKeyPath.Substring(0, privateKeyPath.Length - 1);
             }
@@ -195,14 +210,19 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns a base64 decoded and decrypted text.</returns>
         public string Base64DecodeAndDecrypt(string encryptedText, IDictionary<string, object> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var privateKeyPath = options["PrivateKeyPath"].ToString();
 
-            if (privateKeyPath.StartsWith("\""))
+            if (privateKeyPath.StartsWith("\"", StringComparison.InvariantCulture))
             {
                 privateKeyPath = privateKeyPath.Substring(1, privateKeyPath.Length - 1);
             }
 
-            if (privateKeyPath.EndsWith("\""))
+            if (privateKeyPath.EndsWith("\"", StringComparison.InvariantCulture))
             {
                 privateKeyPath = privateKeyPath.Substring(0, privateKeyPath.Length - 1);
             }

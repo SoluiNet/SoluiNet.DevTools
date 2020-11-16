@@ -39,6 +39,11 @@ namespace SoluiNet.DevTools.Utils.ScanImage
         /// <param name="displayInPluginContainer">The delegate which should be called for displaying the plugin.</param>
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
+            if (displayInPluginContainer == null)
+            {
+                throw new ArgumentNullException(nameof(displayInPluginContainer));
+            }
+
             displayInPluginContainer(new ScanImageUserControl());
         }
     }

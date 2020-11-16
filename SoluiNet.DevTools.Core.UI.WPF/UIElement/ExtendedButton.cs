@@ -196,6 +196,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// <summary>
         /// Render the button.
         /// </summary>
+        /// <param name="drawingContext">The drawing context.</param>
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);

@@ -42,8 +42,59 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
         private bool RequestShowAdditionalOptions { get; set; }
 
+        /// <summary>
+        /// Extract SSL protocol from stream (taken from https://stackoverflow.com/questions/48589590/which-tls-version-was-negotiated/48675492).
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>Returns the SSL protocol.</returns>
+        private static SslProtocols ExtractSslProtocol(Stream stream)
+        {
+            if (stream is null)
+            {
+                return SslProtocols.None;
+            }
+
+            var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var metaStream = stream;
+
+            if (stream.GetType().BaseType == typeof(GZipStream))
+            {
+                metaStream = (stream as GZipStream).BaseStream;
+            }
+            else if (stream.GetType().BaseType == typeof(DeflateStream))
+            {
+                metaStream = (stream as DeflateStream).BaseStream;
+            }
+
+            var connection = metaStream?.GetType().GetProperty("Connection", bindingFlags)?.GetValue(metaStream);
+
+            if (connection == null)
+            {
+                return SslProtocols.None;
+            }
+
+            var usingSecureStream = connection.GetType().GetProperty("UsingSecureStream", bindingFlags);
+
+            if (usingSecureStream != null && !(bool)usingSecureStream.GetValue(connection))
+            {
+                // Not a Https connection
+                return SslProtocols.None;
+            }
+
+            var tlsStream = connection.GetType().GetProperty("NetworkStream", bindingFlags)?.GetValue(connection);
+            var tlsState = tlsStream?.GetType().GetField("m_Worker", bindingFlags)?.GetValue(tlsStream);
+            if (tlsState != null)
+            {
+                return (SslProtocols)tlsState.GetType()?.GetProperty("SslProtocol", bindingFlags)?.GetValue(tlsState);
+            }
+
+            return SslProtocols.None;
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5397:Do not use deprecated SslProtocols values", Justification = "Even older protocols should be supported by this method")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5398:Avoid hardcoded SslProtocols values", Justification = "We want to identify protocols by ther versio no.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5386:Avoid hardcoding SecurityProtocolType value", Justification = "We want to use TLS 1.2 explicitly")]
         private void Execute_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -283,55 +334,6 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
                 this.RequestShowAdditionalOptions = false;
             }
-        }
-
-        /// <summary>
-        /// Extract SSL protocol from stream (taken from https://stackoverflow.com/questions/48589590/which-tls-version-was-negotiated/48675492).
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>Returns the SSL protocol.</returns>
-        private SslProtocols ExtractSslProtocol(Stream stream)
-        {
-            if (stream is null)
-            {
-                return SslProtocols.None;
-            }
-
-            var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
-            var metaStream = stream;
-
-            if (stream.GetType().BaseType == typeof(GZipStream))
-            {
-                metaStream = (stream as GZipStream)?.BaseStream;
-            }
-            else if (stream.GetType().BaseType == typeof(DeflateStream))
-            {
-                metaStream = (stream as DeflateStream)?.BaseStream;
-            }
-
-            var connection = metaStream?.GetType().GetProperty("Connection", bindingFlags)?.GetValue(metaStream);
-
-            if (connection == null)
-            {
-                return SslProtocols.None;
-            }
-
-            var usingSecureStream = connection.GetType().GetProperty("UsingSecureStream", bindingFlags);
-
-            if (usingSecureStream != null && !(bool)usingSecureStream.GetValue(connection))
-            {
-                // Not a Https connection
-                return SslProtocols.None;
-            }
-
-            var tlsStream = connection.GetType().GetProperty("NetworkStream", bindingFlags)?.GetValue(connection);
-            var tlsState = tlsStream?.GetType().GetField("m_Worker", bindingFlags)?.GetValue(tlsStream);
-            if (tlsState != null)
-            {
-                return (SslProtocols)tlsState.GetType()?.GetProperty("SslProtocol", bindingFlags)?.GetValue(tlsState);
-            }
-
-            return SslProtocols.None;
         }
     }
 }

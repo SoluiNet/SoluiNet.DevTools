@@ -27,7 +27,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// <summary>
         /// A value which indicates if the database has already been created.
         /// </summary>
-        private static bool created = false;
+        private static bool created;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
@@ -111,7 +111,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             foreach (Match match in connectionStringRegex.Matches(connectionString))
             {
-                if (match.Groups["key"].Value.ToUpperInvariant().Equals("DATA SOURCE", StringComparison.InvariantCulture))
+                if (match.Groups["key"].Value.Equals("DATA SOURCE", StringComparison.OrdinalIgnoreCase))
                 {
                     filePath = match.Groups["val"].Value;
                 }

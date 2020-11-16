@@ -49,6 +49,11 @@ namespace SoluiNet.DevTools.Transform.Uml
         /// <inheritdoc/>
         public object Transform(string inputFile, string preferedOutputFormat)
         {
+            if (preferedOutputFormat == null)
+            {
+                throw new ArgumentNullException(nameof(preferedOutputFormat));
+            }
+
             var extension = Path.GetExtension(inputFile);
 
             object result = null;
@@ -58,7 +63,7 @@ namespace SoluiNet.DevTools.Transform.Uml
                 case "cs":
                     var cSharpTransform = new CSharpTransform(inputFile);
 
-                    if (preferedOutputFormat.Equals("xml"))
+                    if (preferedOutputFormat.Equals("xml", StringComparison.Ordinal))
                     {
                         result = cSharpTransform.TransformToXml();
                     }

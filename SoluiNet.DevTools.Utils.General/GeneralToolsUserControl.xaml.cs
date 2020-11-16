@@ -74,6 +74,11 @@ namespace SoluiNet.DevTools.Utils.General
             }
         }
 
+        private static string MapCharToReadableString(char c)
+        {
+            return ReadableCharacters.ContainsKey(c) ? ReadableCharacters[c] : c.ToString(CultureInfo.InvariantCulture);
+        }
+
         private void Calculate_Click(object sender, RoutedEventArgs e)
         {
             var selectedDirection = (this.Direction.SelectedItem as ComboBoxItem).Content;
@@ -146,11 +151,6 @@ namespace SoluiNet.DevTools.Utils.General
 
                 this.NumberOutput.Text = decimalValue.ToString(CultureInfo.InvariantCulture);
             }
-        }
-
-        private string MapCharToReadableString(char c)
-        {
-            return ReadableCharacters.ContainsKey(c) ? ReadableCharacters[c] : c.ToString(CultureInfo.InvariantCulture);
         }
 
         private void TabControl_Initialized(object sender, EventArgs e)

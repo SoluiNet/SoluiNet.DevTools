@@ -24,7 +24,7 @@ namespace SoluiNet.DevTools.UI
     /// </summary>
     public partial class MainWindow : SoluiNetWindow
     {
-        private readonly GlobalHotKey hotKey = null;
+        private readonly GlobalHotKey hotKey;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -142,9 +142,7 @@ namespace SoluiNet.DevTools.UI
             this.LoggingPath = string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
         }
 
-        private string LoggingPath { get; }
-
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {

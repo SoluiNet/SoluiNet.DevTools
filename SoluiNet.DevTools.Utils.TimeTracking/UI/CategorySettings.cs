@@ -17,7 +17,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
     {
         private readonly Category categoryElement;
 
-        private CheckBox distributeEvenlyTarget = null;
+        private CheckBox distributeEvenlyTarget;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CategorySettings"/> class.

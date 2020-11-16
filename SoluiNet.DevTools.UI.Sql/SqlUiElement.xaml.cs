@@ -92,15 +92,15 @@ namespace SoluiNet.DevTools.UI.Sql
             }
         }
 
-        private string LoggingPath { get; }
-
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {
                 return LogManager.GetCurrentClassLogger();
             }
         }
+
+        private string LoggingPath { get; }
 
         private static void PopulateGridContextMenu(DataGrid dataGrid)
         {
@@ -119,9 +119,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             copyToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
-
-                if (containingGrid == null)
+                if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is DataGrid containingGrid))
                 {
                     return;
                 }

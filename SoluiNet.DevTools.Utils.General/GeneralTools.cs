@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Utils.General
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace SoluiNet.DevTools.Utils.General
     /// <summary>
     /// Provides a collection of methods for general purposes.
     /// </summary>
-    public class GeneralTools
+    public static class GeneralTools
     {
         /// <summary>
         /// Calculate an array of numbers for the overgiven number and base.
@@ -40,7 +41,7 @@ namespace SoluiNet.DevTools.Utils.General
                 var valence = Convert.ToInt64(Math.Pow(baseNumber, i));
 
                 result.Add(originalNumber / valence);
-                originalNumber = originalNumber % valence;
+                originalNumber %= valence;
             }
 
             return result.ToArray();
@@ -55,7 +56,7 @@ namespace SoluiNet.DevTools.Utils.General
         {
             if (number < 10)
             {
-                return number.ToString();
+                return number.ToString(CultureInfo.InvariantCulture);
             }
 
             switch (number)
@@ -84,9 +85,13 @@ namespace SoluiNet.DevTools.Utils.General
         /// <returns>Returns the decimal value as long.</returns>
         public static long GetDecimalValueForHex(string hexValue)
         {
+            if (hexValue == null)
+            {
+                throw new ArgumentNullException(nameof(hexValue));
+            }
+
             hexValue = hexValue.Replace("x", string.Empty);
-            long result = 0;
-            long.TryParse(hexValue, System.Globalization.NumberStyles.HexNumber, null, out result);
+            long.TryParse(hexValue, System.Globalization.NumberStyles.HexNumber, null, out long result);
             return result;
         }
 

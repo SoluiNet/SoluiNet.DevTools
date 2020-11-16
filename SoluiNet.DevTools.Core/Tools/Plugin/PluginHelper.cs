@@ -329,7 +329,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <param name="plugin">The plugin.</param>
         /// <returns>Returns a <see cref="List{T}"/> of all available environments for the overgiven plugin.</returns>
-        public static List<string> GetEnvironments(IProvidesDatabaseConnectivity plugin)
+        public static IList<string> GetEnvironments(IProvidesDatabaseConnectivity plugin)
         {
             var environmentList = new List<string>();
 
@@ -350,6 +350,11 @@ namespace SoluiNet.DevTools.Core.Tools
         /// <returns>Returns an instance of <see cref="Assembly"/> which contains the assembly for which the event was looking for.</returns>
         public static Assembly LoadAssembly(object sender, ResolveEventArgs args)
         {
+            if (sender == null)
+            {
+                throw new ArgumentNullException(nameof(sender));
+            }
+
             if (args == null)
             {
                 throw new ArgumentNullException(nameof(args));
@@ -389,7 +394,7 @@ namespace SoluiNet.DevTools.Core.Tools
         /// </summary>
         /// <typeparam name="T">The plugin type.</typeparam>
         /// <returns>Returns a <see cref="List{T}"/> of all available plugins which are castable to the overgiven plugin type.</returns>
-        public static List<T> GetPlugins<T>()
+        public static IList<T> GetPlugins<T>()
         {
             string[] dllFileNames = null;
             if (Directory.Exists("Plugins"))
@@ -496,7 +501,7 @@ namespace SoluiNet.DevTools.Core.Tools
 
             foreach (var plugin in pluginList)
             {
-                if (plugin.Name.Equals(name, StringComparison.InvariantCulture))
+                if (plugin.Name.Equals(name, StringComparison.Ordinal))
                 {
                     return plugin;
                 }

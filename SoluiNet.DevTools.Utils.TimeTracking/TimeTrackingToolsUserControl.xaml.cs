@@ -48,7 +48,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// <summary>
         /// A value which indicates if the overview has already been loaded.
         /// </summary>
-        private bool overviewLoaded = false;
+        private bool overviewLoaded;
 
         /// <summary>
         /// The database context where time tracking will be stored.
@@ -58,7 +58,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// <summary>
         /// A value which indicates if this instance has been disposed already.
         /// </summary>
-        private bool disposed = false;
+        private bool disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTrackingToolsUserControl"/> class.
@@ -321,7 +321,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 }
             }
 
-            if ((dropSender as UI.AssignmentTargetExtended).Label.Equals("Distribute evenly", StringComparison.InvariantCulture))
+            if ((dropSender as UI.AssignmentTargetExtended).Label.Equals("Distribute evenly", StringComparison.Ordinal))
             {
                 var assignableCategories = categories.ToList().Where(x => x.DistributeEvenlyTarget.GetValueOrDefault(false));
 
@@ -1475,7 +1475,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     searchValues.Contains(x.Category.CategoryName)).
                     Select(x => new { Category = x.Category.CategoryName, x.Duration, x.UsageTime.StartTime }).
                     ToList().
-                    GroupBy(x => new {x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
+                    GroupBy(x => new { x.Category, StartTime = x.StartTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }).
                     ToList();
 
                 var clipboardContent = string.Empty;

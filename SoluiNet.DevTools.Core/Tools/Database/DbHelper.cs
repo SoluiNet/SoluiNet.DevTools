@@ -119,7 +119,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'environment' parameter has been added for future implementations")]
-        public static List<DataTable> ExecuteSqlScript<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
+        public static IList<DataTable> ExecuteSqlScript<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
            where TConnection : IDbConnection
            where TCommand : IDbCommand
         {
@@ -278,7 +278,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <param name="sqlCommand">The SQL command.</param>
         /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command.</returns>
-        public static List<DataTable> ExecuteSqlServerScript(string connectionString, string sqlCommand, string environment = "Default")
+        public static IList<DataTable> ExecuteSqlServerScript(string connectionString, string sqlCommand, string environment = "Default")
         {
             return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
         }
@@ -314,7 +314,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <param name="impersonation">The impersonation which can be used for executing the SQL script.</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'impersonation' parameter has been added for future implementations")]
-        public static List<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsImpersonationContext impersonation = null)
+        public static IList<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsImpersonationContext impersonation = null)
         {
             switch (providerType)
             {

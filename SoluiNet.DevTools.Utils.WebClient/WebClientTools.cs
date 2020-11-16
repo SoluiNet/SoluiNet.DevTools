@@ -25,6 +25,16 @@ namespace SoluiNet.DevTools.Utils.WebClient
         /// <param name="webRequest">The web request.</param>
         public static void InsertSoapEnvelope(XmlDocument soapEnvelope, HttpWebRequest webRequest)
         {
+            if (webRequest == null)
+            {
+                throw new ArgumentNullException(nameof(webRequest));
+            }
+
+            if (soapEnvelope == null)
+            {
+                throw new ArgumentNullException(nameof(soapEnvelope));
+            }
+
             using (var stream = webRequest.GetRequestStream())
             {
                 soapEnvelope.Save(stream);
