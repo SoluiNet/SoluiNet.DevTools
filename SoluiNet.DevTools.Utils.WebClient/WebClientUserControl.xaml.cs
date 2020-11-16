@@ -178,7 +178,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
                 using (var response = request.EndGetResponse(asyncResult))
                 {
-                    var sslProtocols = this.ExtractSslProtocol(response.GetResponseStream());
+                    var sslProtocols = WebClientUserControl.ExtractSslProtocol(response.GetResponseStream());
 
                     if (sslProtocols >= SslProtocols.Tls12)
                     {
@@ -286,7 +286,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
             var window = new Window
             {
                 Title = "Select Web Method from plugin list",
-                Content = new WebClientPluginSelection(plugins)
+                Content = new WebClientPluginSelection(plugins as List<ISupportsWebClient>)
                 {
                     ReturnChosenMethod = (endpoints, content, methods, contentTypes, options, chosenPlugin) =>
                     {

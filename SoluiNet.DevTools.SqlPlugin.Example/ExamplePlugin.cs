@@ -151,7 +151,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
                 return DbHelper.ExecuteSqlScript(
                     ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName,
                     ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString,
-                    sqlCommand);
+                    sqlCommand) as List<DataTable>;
             }
             finally
             {
