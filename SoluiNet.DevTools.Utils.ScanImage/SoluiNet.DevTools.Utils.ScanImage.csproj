@@ -31,7 +31,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Tesseract" Version="3.3.0" />
+    <PackageReference Include="Tesseract" Version="4.1.1" />
     <PackageReference Include="ZXing.Net" Version="0.16.6" />
   </ItemGroup>
   <ItemGroup>
