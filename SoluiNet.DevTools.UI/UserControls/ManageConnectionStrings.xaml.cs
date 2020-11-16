@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.UI.UserControls
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -40,10 +41,12 @@ namespace SoluiNet.DevTools.UI.UserControls
             {
                 this.MainContent.RowDefinitions.Add(new RowDefinition());
 
-                var connectionStringView = new ConnectionString();
-                connectionStringView.Value = connectionString.ConnectionString;
-                connectionStringView.NameKey = connectionString.Name;
-                connectionStringView.ProviderName = connectionString.ProviderName;
+                var connectionStringView = new ConnectionString
+                {
+                    Value = connectionString.ConnectionString,
+                    NameKey = connectionString.Name,
+                    ProviderName = connectionString.ProviderName,
+                };
 
                 this.MainContent.Children.Add(connectionStringView);
                 Grid.SetRow(connectionStringView, this.MainContent.RowDefinitions.Count - 1);
@@ -85,6 +88,7 @@ namespace SoluiNet.DevTools.UI.UserControls
                 }
 
                 data += string.Format(
+                    CultureInfo.InvariantCulture,
                     @"<add name=""{0}"" connectionString=""{1}"" providerName=""{2}"" />",
                     connectionString.NameKey,
                     connectionString.Value,
@@ -93,7 +97,7 @@ namespace SoluiNet.DevTools.UI.UserControls
 
             data += "</connectionStrings>";
 
-            File.Move("./ConnectionStrings.config", string.Format("./ConnectionStrings.{0:yyyy-MM-ddTHH-mm-ss}.config", DateTime.Now));
+            File.Move("./ConnectionStrings.config", string.Format(CultureInfo.InvariantCulture, "./ConnectionStrings.{0:yyyy-MM-ddTHH-mm-ss}.config", DateTime.Now));
 
             File.WriteAllText("./ConnectionStrings.config", data);
 

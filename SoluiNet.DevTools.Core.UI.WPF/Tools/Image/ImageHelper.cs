@@ -27,6 +27,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.Image
         /// <returns>Returns a bitmap image object.</returns>
         public static BitmapImage BitmapToImageSource(Bitmap bitmap)
         {
+            if (bitmap == null)
+            {
+                throw new ArgumentNullException(nameof(bitmap));
+            }
+
             using (MemoryStream memory = new MemoryStream())
             {
                 bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);

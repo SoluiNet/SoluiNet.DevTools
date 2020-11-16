@@ -31,7 +31,7 @@ namespace SoluiNet.DevTools.Utils.Clipboard
     /// </summary>
     public partial class ClipboardUserControl : UserControl
     {
-        IntPtr nextClipboardViewer;
+        private IntPtr nextClipboardViewer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClipboardUserControl"/> class.

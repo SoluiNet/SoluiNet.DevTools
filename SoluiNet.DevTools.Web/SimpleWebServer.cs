@@ -36,7 +36,7 @@ namespace SoluiNet.DevTools.Web
             // "http://localhost:8080/index/".
             if (prefixes == null || prefixes.Length == 0)
             {
-                throw new ArgumentException("prefixes");
+                throw new ArgumentException(nameof(prefixes));
             }
 
             foreach (string s in prefixes)
@@ -44,7 +44,7 @@ namespace SoluiNet.DevTools.Web
                 this.listener.Prefixes.Add(s);
             }
 
-            this.responderMethod = method ?? throw new ArgumentException("method");
+            this.responderMethod = method ?? throw new ArgumentNullException(nameof(method));
             this.listener.Start();
         }
 
@@ -113,7 +113,8 @@ namespace SoluiNet.DevTools.Web
         /// </summary>
         public void Dispose()
         {
-            ((IDisposable)this.listener)?.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);  // Violates rule
         }
 
         /// <summary>
@@ -123,6 +124,21 @@ namespace SoluiNet.DevTools.Web
         {
             this.listener.Stop();
             this.listener.Close();
+        }
+
+        /// <summary>
+        /// Dispose the SimpleWebServer instance.
+        /// </summary>
+        /// <param name="disposing">A value indicating whether the object is being disposed.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.listener != null)
+                {
+                    ((IDisposable)this.listener).Dispose();
+                }
+            }
         }
     }
 }

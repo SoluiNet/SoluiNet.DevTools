@@ -16,7 +16,7 @@ namespace SoluiNet.DevTools.Utils.Crypto
     /// <summary>
     /// Provides a collection of methods for cryptography and hashing.
     /// </summary>
-    public class CryptoTools
+    public static class CryptoTools
     {
         /// <summary>
         /// Encrypt a plain text.
@@ -97,10 +97,7 @@ namespace SoluiNet.DevTools.Utils.Crypto
                             }
                             finally
                             {
-                                if (md5 != null)
-                                {
-                                    md5.Dispose();
-                                }
+                                md5.Dispose();
                             }
 
                             break;
@@ -118,10 +115,7 @@ namespace SoluiNet.DevTools.Utils.Crypto
                             }
                             finally
                             {
-                                if (sha1 != null)
-                                {
-                                    sha1.Dispose();
-                                }
+                                sha1.Dispose();
                             }
 
                             break;
@@ -140,10 +134,7 @@ namespace SoluiNet.DevTools.Utils.Crypto
                             }
                             finally
                             {
-                                if (sha2 != null)
-                                {
-                                    sha2.Dispose();
-                                }
+                                sha2.Dispose();
                             }
 
                             break;

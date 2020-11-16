@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.UI.UserControls
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -211,7 +212,7 @@ namespace SoluiNet.DevTools.UI.UserControls
 
                 if (useWindowsAuthenticationMatch.Success)
                 {
-                    useWindowsAuthenticationTextBox.IsChecked = useWindowsAuthenticationMatch.Groups[1].Value == "SSPI" || Convert.ToBoolean(useWindowsAuthenticationMatch.Groups[1].Value);
+                    useWindowsAuthenticationTextBox.IsChecked = useWindowsAuthenticationMatch.Groups[1].Value == "SSPI" || Convert.ToBoolean(useWindowsAuthenticationMatch.Groups[1].Value, CultureInfo.InvariantCulture);
                 }
 
                 this.ContentGrid.Children.Add(useWindowsAuthenticationTextBox);
@@ -232,15 +233,15 @@ namespace SoluiNet.DevTools.UI.UserControls
                 {
                     if (this.ProviderName == "System.Data.SqlClient")
                     {
-                        var connectionStringBuilder = new SqlConnectionStringBuilder();
-
-                        connectionStringBuilder.DataSource = (this.ContentGrid.FindName("Server") as TextBox)?.Text ?? string.Empty;
-                        connectionStringBuilder.InitialCatalog = (this.ContentGrid.FindName("Database") as TextBox)?.Text ?? string.Empty;
-                        connectionStringBuilder.UserID = (this.ContentGrid.FindName("Username") as TextBox)?.Text ?? string.Empty;
-                        connectionStringBuilder.Password = (this.ContentGrid.FindName("Password") as TextBox)?.Text ?? string.Empty;
-                        connectionStringBuilder.IntegratedSecurity = (this.ContentGrid.FindName("UseWindowsSecurity") as CheckBox)?.IsChecked ?? false;
-
-                        connectionStringBuilder.ApplicationName = "SoluiNet.DevTools";
+                        var connectionStringBuilder = new SqlConnectionStringBuilder
+                        {
+                            DataSource = (this.ContentGrid.FindName("Server") as TextBox)?.Text ?? string.Empty,
+                            InitialCatalog = (this.ContentGrid.FindName("Database") as TextBox)?.Text ?? string.Empty,
+                            UserID = (this.ContentGrid.FindName("Username") as TextBox)?.Text ?? string.Empty,
+                            Password = (this.ContentGrid.FindName("Password") as TextBox)?.Text ?? string.Empty,
+                            IntegratedSecurity = (this.ContentGrid.FindName("UseWindowsSecurity") as CheckBox)?.IsChecked ?? false,
+                            ApplicationName = "SoluiNet.DevTools",
+                        };
 
                         this.Value = connectionStringBuilder.ConnectionString;
                     }

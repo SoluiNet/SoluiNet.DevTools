@@ -24,6 +24,7 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <param name="key">The key.</param>
         /// <param name="initializationValue">The initialization value.</param>
         /// <returns>Returns an encrypted text.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5401:Do not use CreateEncryptor with non-default IV", Justification = "Initialization Value has to be overgivable")]
         public static string Encrypt(string plainText, string key, string initializationValue)
         {
             var bytesToEncrypt = Encoding.UTF8.GetBytes(plainText);
@@ -57,6 +58,7 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <param name="key">The key.</param>
         /// <param name="initializationValue">The initialization value.</param>
         /// <returns>Returns an encrypted and base64 encoded text.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5401:Do not use CreateEncryptor with non-default IV", Justification = "Initialization Value will be overgiven")]
         public static string EncryptAndBase64Encode(string clearText, string key, string initializationValue)
         {
             var bytesToEncrypt = Encoding.UTF8.GetBytes(clearText);
@@ -133,6 +135,11 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns an encrypted text.</returns>
         public string Encrypt(string plainText, IDictionary<string, object> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var key = options["key"].ToString();
             var initializationValue = options["iniValue"].ToString();
 
@@ -147,6 +154,11 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns an encrypted and base64 encoded text.</returns>
         public string EncryptAndBase64Encode(string plainText, IDictionary<string, object> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var key = options["key"].ToString();
             var initializationValue = options["iniValue"].ToString();
 
@@ -161,6 +173,11 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns a decrypted text.</returns>
         public string Decrypt(string encryptedText, IDictionary<string, object> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var key = options["key"].ToString();
             var initializationValue = options["iniValue"].ToString();
 
@@ -175,6 +192,11 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns a base64 decoded and decrypted text.</returns>
         public string Base64DecodeAndDecrypt(string encryptedText, IDictionary<string, object> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var key = options["key"].ToString();
             var initializationValue = options["iniValue"].ToString();
 

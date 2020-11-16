@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Utils.File
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -14,7 +15,7 @@ namespace SoluiNet.DevTools.Utils.File
     /// <summary>
     /// Provides a collection of methods for files.
     /// </summary>
-    public class FileTools
+    public static class FileTools
     {
         /// <summary>
         /// Extract lines which contains the search pattern.
@@ -22,7 +23,7 @@ namespace SoluiNet.DevTools.Utils.File
         /// <param name="filePath">The file path.</param>
         /// <param name="searchPattern">The search pattern.</param>
         /// <returns>Returns every line which contains the search pattern.</returns>
-        public static List<string> ExtractLinesContainingSearchPattern(string filePath, string searchPattern)
+        public static IList<string> ExtractLinesContainingSearchPattern(string filePath, string searchPattern)
         {
             var result = new List<string>();
 
@@ -38,7 +39,7 @@ namespace SoluiNet.DevTools.Utils.File
             }
             catch (Exception exception)
             {
-                result.Add(string.Format("##ERROR## Couldn't extract lines from file {0} - {1} ##ERROR##", filePath, exception.Message));
+                result.Add(string.Format(CultureInfo.InvariantCulture, "##ERROR## Couldn't extract lines from file {0} - {1} ##ERROR##", filePath, exception.Message));
             }
 
             return result;
@@ -50,7 +51,7 @@ namespace SoluiNet.DevTools.Utils.File
         /// <param name="filePath">The file path.</param>
         /// <param name="regExPattern">The RegEx search pattern.</param>
         /// <returns>Returns every line which matches the RegEx search pattern.</returns>
-        public static List<string> ExtractLinesMatchingRegEx(string filePath, string regExPattern)
+        public static IList<string> ExtractLinesMatchingRegEx(string filePath, string regExPattern)
         {
             var result = new List<string>();
             var regEx = new Regex(regExPattern);
@@ -72,16 +73,23 @@ namespace SoluiNet.DevTools.Utils.File
         /// <param name="hashType">The hash type which should be used to calculate the hash.</param>
         /// <param name="filePath">The file path.</param>
         /// <returns>Returns the hash of a file into a string.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms", Justification = "We want to use MD5 here.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "We want to receive the result in lower case.")]
         public static string CalculateChecksum(string hashType, string filePath)
         {
             //// todo: get hash type from enumeration
+
+            if (string.IsNullOrEmpty(hashType))
+            {
+                throw new ArgumentNullException(nameof(hashType));
+            }
 
             if (!System.IO.File.Exists(filePath))
             {
                 return string.Empty;
             }
 
-            if (hashType.ToLowerInvariant() == "md5")
+            if (hashType.ToUpperInvariant() == "MD5")
             {
                 using (var md5 = System.Security.Cryptography.MD5.Create())
                 {

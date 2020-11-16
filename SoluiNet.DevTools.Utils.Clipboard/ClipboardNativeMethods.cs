@@ -12,7 +12,7 @@ namespace SoluiNet.DevTools.Utils.Clipboard
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Provides native methods for clipboard handling. (see https://stackoverflow.com/questions/15333746/clipboardinterop-content-changed-fires-twice)
+    /// Provides native methods for clipboard handling. (see https://stackoverflow.com/questions/15333746/clipboardinterop-content-changed-fires-twice).
     /// </summary>
     public static class ClipboardNativeMethods
     {

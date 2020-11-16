@@ -27,7 +27,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
     /// </summary>
     public partial class TwoActionButton : UserControl
     {
-        private bool hasEnteredUserControl = false;
+        private bool hasEnteredUserControl;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TwoActionButton"/> class.

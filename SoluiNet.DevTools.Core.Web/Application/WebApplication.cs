@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.Web.Application
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -52,7 +53,7 @@ namespace SoluiNet.DevTools.Core.Web.Application
                 {
                     Debug.WriteLine(JsonTools.Serialize(exception));
 
-                    this.Logger.Debug(exception, string.Format("Couldn't load assembly '{0}'", dllFile));
+                    this.Logger.Debug(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't load assembly '{0}'", dllFile));
                 }
             }
 
@@ -127,12 +128,12 @@ namespace SoluiNet.DevTools.Core.Web.Application
 
                 if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
                 {
-                    this.Logger.Info(string.Format("Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
+                    this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
 
                     continue;
                 }
 
-                this.Logger.Info(string.Format("Load plugin '{0}'.", assemblyName));
+                this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Load plugin '{0}'.", assemblyName));
 
                 if (type.Value.Contains("PluginDev"))
                 {
@@ -163,13 +164,13 @@ namespace SoluiNet.DevTools.Core.Web.Application
         }
 
         /// <inheritdoc/>
-        public ICollection<IProvidesWebCommunication> WebPlugins { get; set; }
+        public ICollection<IProvidesWebCommunication> WebPlugins { get; private set; }
 
         /// <inheritdoc/>
-        public ICollection<IBasePlugin> Plugins { get; set; }
+        public ICollection<IBasePlugin> Plugins { get; private set; }
 
         /// <inheritdoc/>
-        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; set; }
+        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; private set; }
 
         private Logger Logger
         {

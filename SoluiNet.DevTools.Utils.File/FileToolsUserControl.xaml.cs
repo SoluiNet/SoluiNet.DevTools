@@ -43,7 +43,7 @@ namespace SoluiNet.DevTools.Utils.File
 
         private delegate string FormatSearchResultLine(string line);
 
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {

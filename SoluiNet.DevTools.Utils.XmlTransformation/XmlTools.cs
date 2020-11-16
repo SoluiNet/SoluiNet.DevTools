@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -18,7 +19,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
     /// <summary>
     /// Provides a collection of methods for XML.
     /// </summary>
-    public class XmlTools
+    public static class XmlTools
     {
         /// <summary>
         /// Format the overgiven XML string
@@ -73,12 +74,15 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
             var xsdSchemas = new XmlSchemaSet();
             xsdSchemas.Add(xmlSchema);
 
-            var settings = new XmlReaderSettings();
-            settings.ValidationType = ValidationType.Schema;
-            settings.Schemas = xsdSchemas;
-            settings.ValidationFlags =
+            var settings = new XmlReaderSettings
+            {
+                ValidationType = ValidationType.Schema,
+                Schemas = xsdSchemas,
+                ValidationFlags =
                 XmlSchemaValidationFlags.ProcessIdentityConstraints |
-                XmlSchemaValidationFlags.ReportValidationWarnings;
+                XmlSchemaValidationFlags.ReportValidationWarnings,
+            };
+
             settings.ValidationEventHandler += (validationSender, eventArg) =>
             {
                 if (eventArg.Severity == XmlSeverityType.Warning)
@@ -104,7 +108,7 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
             }
             catch (XmlException xmlException)
             {
-                result += string.Format("XML-Exception: {0}", xmlException.Message + "\r\n" + xmlException.InnerException?.Message);
+                result += string.Format(CultureInfo.InvariantCulture, "XML-Exception: {0}", xmlException.Message + "\r\n" + xmlException.InnerException?.Message);
             }
 
             return result;

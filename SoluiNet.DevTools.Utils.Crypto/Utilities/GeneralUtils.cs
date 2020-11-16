@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
@@ -16,7 +17,7 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
     /// <summary>
     /// Provides a collection of methods for general purposes.
     /// </summary>
-    public class GeneralUtils
+    public static class GeneralUtils
     {
         /// <summary>
         /// A delegate to get a processed byte array.
@@ -34,6 +35,11 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>Returns an encoded string.</returns>
         public static string Encode(byte[] originalByteArray, GetProcessedByteArray getProcessedByteArrayDelegate, string chosenEncoding = "UTF8")
         {
+            if (getProcessedByteArrayDelegate == null)
+            {
+                throw new ArgumentNullException(nameof(getProcessedByteArrayDelegate));
+            }
+
             string result;
 
             switch (chosenEncoding)
@@ -75,10 +81,15 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         /// <returns>The string which represents the byte array.</returns>
         public static string ByteArrayToString(byte[] byteArray)
         {
+            if (byteArray == null)
+            {
+                throw new ArgumentNullException(nameof(byteArray));
+            }
+
             StringBuilder hex = new StringBuilder(byteArray.Length * 2);
             foreach (byte b in byteArray)
             {
-                hex.AppendFormat("{0:x2}", b);
+                hex.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
             }
 
             return hex.ToString();
