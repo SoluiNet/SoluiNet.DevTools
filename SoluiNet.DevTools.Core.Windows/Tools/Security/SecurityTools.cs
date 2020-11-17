@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
     using System;
     using System.Runtime.InteropServices;
     using System.Security.Principal;
+    using SoluiNet.DevTools.Core.Windows.Application;
 
     /// <summary>
     /// A collection of security methods.
@@ -29,19 +30,19 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
             var token = IntPtr.Zero;
             var tokenDuplicate = IntPtr.Zero;
 
-            if (RevertToSelf())
+            if (NativeMethods.RevertToSelf())
             {
-                if (LogonUserA(user, domain, password, Logon32LogonInteractive, Logon32ProviderDefault, ref token) != 0)
+                if (NativeMethods.LogonUserW(user, domain, password, Logon32LogonInteractive, Logon32ProviderDefault, ref token))
                 {
-                    if (DuplicateToken(token, 2, ref tokenDuplicate) != 0)
+                    if (NativeMethods.DuplicateToken(token, 2, ref tokenDuplicate))
                     {
                         var tempWindowsIdentity = new WindowsIdentity(tokenDuplicate);
                         var impersonationContext = tempWindowsIdentity.Impersonate();
 
                         if (impersonationContext != null)
                         {
-                            CloseHandle(token);
-                            CloseHandle(tokenDuplicate);
+                            NativeMethods.CloseHandle(token);
+                            NativeMethods.CloseHandle(tokenDuplicate);
                             return impersonationContext;
                         }
                     }
@@ -60,26 +61,5 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 
             return null;
         }
-
-        [DllImport("advapi32.dll")]
-        private static extern int LogonUserA(
-            string lpszUserName,
-            string lpszDomain,
-            string lpszPassword,
-            int dwLogonType,
-            int dwLogonProvider,
-            ref IntPtr phToken);
-
-        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern int DuplicateToken(
-            IntPtr hToken,
-            int impersonationLevel,
-            ref IntPtr hNewToken);
-
-        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool RevertToSelf();
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern bool CloseHandle(IntPtr handle);
     }
 }

@@ -133,12 +133,6 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
             return this.hotKeys.Remove(kvPair.Key);
         }
 
-        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern int RegisterHotKey(IntPtr hwnd, int id, int modifiers, int key);
-
-        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern int UnregisterHotKey(IntPtr hwnd, int id);
-
         /// <summary>
         /// Disposes of the global hot key host.
         /// </summary>
