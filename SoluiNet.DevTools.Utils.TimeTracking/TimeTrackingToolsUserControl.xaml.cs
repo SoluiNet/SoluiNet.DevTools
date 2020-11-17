@@ -43,7 +43,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// <summary>
         /// A value which indicates if a mouse is moving or not.
         /// </summary>
-        private bool mouseMoving = false;
+        private bool mouseMoving;
 
         /// <summary>
         /// A value which indicates if the overview has already been loaded.

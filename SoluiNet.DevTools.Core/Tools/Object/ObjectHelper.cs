@@ -22,7 +22,7 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// </summary>
         /// <param name="instance">The object instance.</param>
         /// <returns>Returns a <see cref="List{T}"/> of property names.</returns>
-        public static List<string> GetPrimitiveProperties(this object instance)
+        public static IList<string> GetPrimitiveProperties(this object instance)
         {
             if (instance == null)
             {
@@ -39,7 +39,7 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// </summary>
         /// <param name="instance">The object instance.</param>
         /// <returns>Returns a <see cref="List{T}"/> of property names.</returns>
-        public static List<string> GetObjectProperties(this object instance)
+        public static IList<string> GetObjectProperties(this object instance)
         {
             if (instance == null)
             {
@@ -56,7 +56,7 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// </summary>
         /// <param name="instance">The object instance.</param>
         /// <returns>Returns a <see cref="List{T}"/> of property names.</returns>
-        public static List<string> GetEmbeddedResourceNames(this object instance)
+        public static IList<string> GetEmbeddedResourceNames(this object instance)
         {
             if (instance == null)
             {
@@ -71,7 +71,7 @@ namespace SoluiNet.DevTools.Core.Tools.Object
         /// </summary>
         /// <param name="type">The object instance.</param>
         /// <returns>Returns a <see cref="List{T}"/> of property names.</returns>
-        public static List<string> GetEmbeddedResourceNames(this Type type)
+        public static IList<string> GetEmbeddedResourceNames(this Type type)
         {
             if (type == null)
             {

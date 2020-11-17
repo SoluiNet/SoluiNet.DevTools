@@ -25,6 +25,7 @@ namespace SoluiNet.DevTools.Utils.Clipboard
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+    using SoluiNet.DevTools.Utils.Clipboard.Application;
 
     /// <summary>
     /// Interaction logic for ClipboardUserControl.xaml.
@@ -45,19 +46,19 @@ namespace SoluiNet.DevTools.Utils.Clipboard
         {
             switch (msg)
             {
-                case ClipboardNativeMethods.WM_DRAWCLIPBOARD:
+                case NativeMethods.WM_DRAWCLIPBOARD:
                     this.ClipboardDataGrid.Items.Add(new { Timepoint = DateTime.UtcNow, Type = string.Empty, ClipboardContent = Clipboard.GetText() });
-                    ClipboardNativeMethods.SendMessage(this.nextClipboardViewer, (uint)msg, wParam, lParam);
+                    NativeMethods.SendMessage(this.nextClipboardViewer, (uint)msg, wParam, lParam);
                     break;
 
-                case ClipboardNativeMethods.WM_CHANGECBCHAIN:
+                case NativeMethods.WM_CHANGECBCHAIN:
                     if (wParam == this.nextClipboardViewer)
                     {
                         this.nextClipboardViewer = lParam;
                     }
                     else
                     {
-                        ClipboardNativeMethods.SendMessage(this.nextClipboardViewer, (uint)msg, wParam, lParam);
+                        NativeMethods.SendMessage(this.nextClipboardViewer, (uint)msg, wParam, lParam);
                     }
 
                     break;
@@ -71,7 +72,7 @@ namespace SoluiNet.DevTools.Utils.Clipboard
             HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(Window.GetWindow(this)).Handle);
             source.AddHook(new HwndSourceHook(this.WndProc));
 
-            this.nextClipboardViewer = ClipboardNativeMethods.SetClipboardViewer(new WindowInteropHelper(Window.GetWindow(this)).Handle);
+            this.nextClipboardViewer = NativeMethods.SetClipboardViewer(new WindowInteropHelper(Window.GetWindow(this)).Handle);
         }
     }
 }

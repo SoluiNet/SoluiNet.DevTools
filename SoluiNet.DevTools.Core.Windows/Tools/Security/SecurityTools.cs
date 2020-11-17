@@ -37,13 +37,20 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                     if (NativeMethods.DuplicateToken(token, 2, ref tokenDuplicate))
                     {
                         var tempWindowsIdentity = new WindowsIdentity(tokenDuplicate);
-                        var impersonationContext = tempWindowsIdentity.Impersonate();
-
-                        if (impersonationContext != null)
+                        try
                         {
-                            NativeMethods.CloseHandle(token);
-                            NativeMethods.CloseHandle(tokenDuplicate);
-                            return impersonationContext;
+                            var impersonationContext = tempWindowsIdentity.Impersonate();
+
+                            if (impersonationContext != null)
+                            {
+                                NativeMethods.CloseHandle(token);
+                                NativeMethods.CloseHandle(tokenDuplicate);
+                                return impersonationContext;
+                            }
+                        }
+                        finally
+                        {
+                            tempWindowsIdentity.Dispose();
                         }
                     }
                 }
@@ -51,12 +58,12 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 
             if (token != IntPtr.Zero)
             {
-                CloseHandle(token);
+                NativeMethods.CloseHandle(token);
             }
 
             if (tokenDuplicate != IntPtr.Zero)
             {
-                CloseHandle(tokenDuplicate);
+                NativeMethods.CloseHandle(tokenDuplicate);
             }
 
             return null;

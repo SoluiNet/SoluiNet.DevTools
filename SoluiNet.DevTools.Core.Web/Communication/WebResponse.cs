@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -172,6 +173,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
             return result;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Allow multi-line parameters for readability")]
         private string AddHttpHeaders(int contentLength, string mimeType = "text/html", Encoding encoding = null)
         {
             if (encoding == null)
@@ -180,6 +182,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
             }
 
             string headers = string.Format(
+                CultureInfo.InvariantCulture,
                 "HTTP/1.1 {2} {3}\r\n"
                 + "Server: SoluiNet.WebServer\r\n"
                 + "Content-Type: {1}\r\n"

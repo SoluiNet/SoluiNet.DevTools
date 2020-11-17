@@ -45,7 +45,12 @@ namespace SoluiNet.DevTools.Core.Web.Context
         {
             get
             {
-                if (routeName.StartsWith("/"))
+                if (routeName == null)
+                {
+                    throw new ArgumentNullException(nameof(routeName));
+                }
+
+                if (routeName.StartsWith("/", StringComparison.Ordinal))
                 {
                     routeName = routeName.Remove(0, 1);
                 }
@@ -58,7 +63,12 @@ namespace SoluiNet.DevTools.Core.Web.Context
 
             set
             {
-                if (routeName.StartsWith("/"))
+                if (routeName == null)
+                {
+                    throw new ArgumentNullException(nameof(routeName));
+                }
+
+                if (routeName.StartsWith("/", StringComparison.Ordinal))
                 {
                     routeName = routeName.Remove(0, 1);
                 }

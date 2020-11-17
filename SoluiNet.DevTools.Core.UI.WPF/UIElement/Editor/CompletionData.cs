@@ -75,6 +75,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement.Editor
         /// <param name="insertionRequestEventArgs">Arguments for insertion request.</param>
         public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
         {
+            if (textArea == null)
+            {
+                throw new ArgumentNullException(nameof(textArea));
+            }
+
             textArea.Document.Replace(completionSegment, this.Text);
         }
 
@@ -86,6 +91,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement.Editor
         /// <param name="insertionRequestEventArgs">Arguments for insertion request.</param>
         public void Complete(TextEditor textEditor, ISegment completionSegment, EventArgs insertionRequestEventArgs)
         {
+            if (textEditor == null)
+            {
+                throw new ArgumentNullException(nameof(textEditor));
+            }
+
             textEditor.TextArea.Document.Replace(completionSegment, this.Text);
         }
     }
