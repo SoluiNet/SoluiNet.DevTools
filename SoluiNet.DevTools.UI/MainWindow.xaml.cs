@@ -142,6 +142,11 @@ namespace SoluiNet.DevTools.UI
             this.LoggingPath = string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");
         }
 
+        /// <summary>
+        /// Gets the Logging Path.
+        /// </summary>
+        public string LoggingPath { get; }
+
         private static Logger Logger
         {
             get
@@ -149,8 +154,6 @@ namespace SoluiNet.DevTools.UI
                 return LogManager.GetCurrentClassLogger();
             }
         }
-
-        public string LoggingPath { get; }
 
         private void FileCloseMenuItem_Click(object sender, RoutedEventArgs e)
         {

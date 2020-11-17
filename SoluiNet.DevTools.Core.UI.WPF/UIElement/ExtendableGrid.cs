@@ -66,15 +66,15 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
 
             this.RowDefinitions.Add(new RowDefinition() { Height = (GridLength)gridLengthConverter.ConvertFrom(35) });
 
-            var button = new Button();
-
-            button.Content = "+";
-
-            button.HorizontalAlignment = HorizontalAlignment.Right;
-            button.VerticalAlignment = VerticalAlignment.Top;
-            button.Width = 25;
-            button.Height = 25;
-            button.Margin = new Thickness(5);
+            var button = new Button
+            {
+                Content = "+",
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top,
+                Width = 25,
+                Height = 25,
+                Margin = new Thickness(5),
+            };
 
             button.SetValue(Grid.RowProperty, 0);
 
@@ -99,6 +99,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// <param name="newElement">The new element which should be added.</param>
         public void AddElement(T newElement)
         {
+            if (newElement == null)
+            {
+                throw new ArgumentNullException(nameof(newElement));
+            }
+
             this.RowDefinitions.Add(new RowDefinition());
 
             newElement.SetValue(Grid.RowProperty, this.RowDefinitions.Count - 1);

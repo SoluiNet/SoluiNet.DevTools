@@ -98,9 +98,12 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
             Duration duration = new Duration(TimeSpan.FromMilliseconds(2000));
             CubicEase ease = new CubicEase { EasingMode = EasingMode.EaseOut };
 
-            DoubleAnimation animation = new DoubleAnimation();
-            animation.EasingFunction = ease;
-            animation.Duration = duration;
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                EasingFunction = ease,
+                Duration = duration,
+            };
+
             storyboard.Children.Add(animation);
             animation.From = 0;
             animation.To = this.TwoActionButtonGrid.ActualWidth;

@@ -17,7 +17,7 @@ namespace SoluiNet.DevTools.Web
     /// </summary>
     public partial class SoluiNetService : ServiceBase
     {
-        private SoluiNetWebServer webServer = null;
+        private SoluiNetWebServer webServer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SoluiNetService"/> class.

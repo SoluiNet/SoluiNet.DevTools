@@ -41,8 +41,8 @@ namespace SoluiNet.DevTools.Utils.Clipboard.Application
         /// Removes a specified window from the chain of clipboard viewers.
         /// </summary>
         /// <param name="hWndRemove">The handle to be removed from the chain.</param>
-        /// <param name="hWndNewNext">The handle which follows the handle that should be removed</param>
-        /// <returns>Returns true if successful</returns>
+        /// <param name="hWndNewNext">The handle which follows the handle that should be removed.</param>
+        /// <returns>Returns true if successful.</returns>
         [DllImport("user32.dll")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -60,10 +60,21 @@ namespace SoluiNet.DevTools.Utils.Clipboard.Application
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         internal static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
+        /// <summary>
+        /// Sets the last-error code for the calling thread.
+        /// </summary>
+        /// <param name="errorCode">The last-error code for the thread.</param>
         [DllImport("kernel32.dll")]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         internal static extern void SetLastError(uint errorCode);
 
+        /// <summary>
+        /// Retrieves the calling thread's last-error code value.
+        /// </summary>
+        /// <returns>Returns the last-error code.</returns>
         [DllImport("kernel32.dll")]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        [return: MarshalAs(UnmanagedType.SysUInt)]
         internal static extern uint GetLastError();
     }
 }

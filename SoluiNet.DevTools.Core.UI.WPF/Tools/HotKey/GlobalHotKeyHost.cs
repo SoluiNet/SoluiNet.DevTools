@@ -4,6 +4,7 @@
 
 namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
 {
+    using SoluiNet.DevTools.Core.UI.WPF.Application;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -161,7 +162,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         {
             if ((int)this.handleSource.Handle != 0)
             {
-                RegisterHotKey(this.handleSource.Handle, id, (int)hotKey.Modifiers, KeyInterop.VirtualKeyFromKey(hotKey.Key));
+                NativeMethods.RegisterHotKey(this.handleSource.Handle, id, (int)hotKey.Modifiers, KeyInterop.VirtualKeyFromKey(hotKey.Key));
                 var error = Marshal.GetLastWin32Error();
                 if (error != 0)
                 {
@@ -187,7 +188,8 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         {
             if ((int)this.handleSource.Handle != 0)
             {
-                UnregisterHotKey(this.handleSource.Handle, id);
+                NativeMethods.UnregisterHotKey(this.handleSource.Handle, id);
+
                 int error = Marshal.GetLastWin32Error();
                 if (error != 0)
                 {

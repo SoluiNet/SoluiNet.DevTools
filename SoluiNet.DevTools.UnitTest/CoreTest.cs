@@ -112,17 +112,41 @@ namespace SoluiNet.DevTools.UnitTest
             var utf8Bytes = Encoding.UTF8.GetBytes(simpleString);
             var streamUtf8 = new MemoryStream(utf8Bytes);
 
-            Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamUtf8));
+            try
+            {
+                Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamUtf8));
+            }
+            finally
+            {
+                streamUtf8.Close();
+                streamUtf8.Dispose();
+            }
 
             var utf32Bytes = Encoding.UTF32.GetBytes(simpleString);
             var streamUtf32 = new MemoryStream(utf32Bytes);
 
-            Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamUtf32, Encoding.UTF32));
+            try
+            {
+                Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamUtf32, Encoding.UTF32));
+            }
+            finally
+            {
+                streamUtf32.Close();
+                streamUtf32.Dispose();
+            }
 
             var iso88591Bytes = Encoding.GetEncoding("ISO-8859-15").GetBytes(simpleString);
             var streamIso88591 = new MemoryStream(iso88591Bytes);
 
-            Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamIso88591, Encoding.GetEncoding("ISO-8859-15")));
+            try
+            {
+                Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamIso88591, Encoding.GetEncoding("ISO-8859-15")));
+            }
+            finally
+            {
+                streamIso88591.Close();
+                streamIso88591.Dispose();
+            }
         }
     }
 }

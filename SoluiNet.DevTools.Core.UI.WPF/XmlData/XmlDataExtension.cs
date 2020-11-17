@@ -25,6 +25,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.XmlData
         /// <returns>Returns a <see cref="Brush"/> object which represents the overgiven SoluiNet.BrushDefinition.</returns>
         public static Brush ToBrush(this SoluiNetBrushDefinitionType soluiNetBrush)
         {
+            if (soluiNetBrush == null)
+            {
+                throw new ArgumentNullException(nameof(soluiNetBrush));
+            }
+
             Brush brush = null;
 
             switch (soluiNetBrush.type)

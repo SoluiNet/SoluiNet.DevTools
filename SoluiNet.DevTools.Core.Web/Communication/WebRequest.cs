@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Net.Http;
     using System.Text;
@@ -29,10 +30,10 @@ namespace SoluiNet.DevTools.Core.Web.Communication
 
             if (!regExMatch.Success)
             {
-                throw new Exception(string.Format("no valid HTTP request\r\nRequest String: {0}", webRequestString));
+                throw new Exception(string.Format(CultureInfo.InvariantCulture, "no valid HTTP request\r\nRequest String: {0}", webRequestString));
             }
 
-            if (regExMatch.Groups[1].Success && regExMatch.Groups[1].Value.Equals("GET"))
+            if (regExMatch.Groups[1].Success && regExMatch.Groups[1].Value.Equals("GET", StringComparison.Ordinal))
             {
                 this.Method = HttpMethod.Get;
             }

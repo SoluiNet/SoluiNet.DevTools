@@ -43,6 +43,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// <param name="brushDefinition">The brush definition.</param>
         public void ReadFromBrushDefinition(SoluiNetBrushDefinitionType brushDefinition)
         {
+            if (brushDefinition == null)
+            {
+                throw new ArgumentNullException(nameof(brushDefinition));
+            }
+
             if (!brushDefinition.typeSpecified)
             {
                 return;
@@ -75,7 +80,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
                 brushDefinition.endColour = this.EndColour.SelectedColor.HasValue ? this.EndColour.SelectedColor.Value.ToHexValue() : "#FFFFFF";
 
                 brushDefinition.angleSpecified = true;
-                brushDefinition.angle = this.Angle.Value.HasValue ? this.Angle.Value.Value : 0.75;
+                brushDefinition.angle = this.Angle.Value ?? 0.75;
             }
             else if (this.BrushDefinitionTypeTabs.SelectedIndex == 1)
             {
