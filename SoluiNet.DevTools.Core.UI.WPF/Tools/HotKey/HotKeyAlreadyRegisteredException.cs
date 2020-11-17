@@ -16,6 +16,32 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         /// <summary>
         /// Initializes a new instance of the <see cref="HotKeyAlreadyRegisteredException"/> class.
         /// </summary>
+        public HotKeyAlreadyRegisteredException()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotKeyAlreadyRegisteredException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public HotKeyAlreadyRegisteredException(string message)
+            : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotKeyAlreadyRegisteredException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public HotKeyAlreadyRegisteredException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotKeyAlreadyRegisteredException"/> class.
+        /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="hotKey">The hot key.</param>
         public HotKeyAlreadyRegisteredException(string message, GlobalHotKey hotKey)

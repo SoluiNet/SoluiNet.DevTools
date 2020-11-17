@@ -42,11 +42,10 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
         /// </summary>
         public const int Win = 0x0008;
 
-        // windows message id for hot key
-
         /// <summary>
         /// Windows message ID for hot key.
         /// </summary>
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "We want to use the original name.")]
         public const int WM_HOTKEY_MSG_ID = 0x0312;
     }
 }

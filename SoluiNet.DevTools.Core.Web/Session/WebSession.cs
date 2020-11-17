@@ -24,8 +24,8 @@ namespace SoluiNet.DevTools.Core.Web.Session
         }
 
         /// <summary>
-        /// Gets or sets the storage.
+        /// Gets the storage.
         /// </summary>
-        public Dictionary<string, object> Storage { get; set; }
+        public Dictionary<string, object> Storage { get; private set; }
     }
 }
