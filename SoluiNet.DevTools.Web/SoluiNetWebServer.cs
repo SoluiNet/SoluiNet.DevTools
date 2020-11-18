@@ -51,7 +51,7 @@ namespace SoluiNet.DevTools.Web
         /// <param name="webRequest">The web request.</param>
         /// <param name="arguments">The arguments.</param>
         /// <returns>Returns a <see cref="Core.Web.Communication.WebResponse"/>.</returns>
-        public delegate Core.Web.Communication.WebResponse HandleWebRequest(Core.Web.Communication.WebRequest webRequest, Core.Web.Communication.WebArguments arguments);
+        public delegate Core.Web.Communication.WebResponse HandleWebRequest(Core.Web.Communication.WebRequest webRequest, Core.Web.Communication.WebEventArgs arguments);
 
         /// <summary>
         /// The handling of a web request.

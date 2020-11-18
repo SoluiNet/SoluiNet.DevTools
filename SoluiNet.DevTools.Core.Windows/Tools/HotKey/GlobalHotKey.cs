@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
     using System;
     using System.Runtime.InteropServices;
     using System.Windows.Forms;
+    using SoluiNet.DevTools.Core.Windows.Application;
 
     /// <summary>
     /// Provides a class to set up a global hot key. (See also https://www.dreamincode.net/forums/topic/180436-global-hotkeys/).
@@ -47,7 +48,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
         /// <returns>Returns true if successful.</returns>
         public bool Register()
         {
-            return RegisterHotKey(this.hWnd, this.id, this.modifier, this.key);
+            return NativeMethods.RegisterHotKey(this.hWnd, this.id, this.modifier, this.key);
         }
 
         /// <summary>
@@ -56,13 +57,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
         /// <returns>Returns true if successful.</returns>
         public bool Unregister()
         {
-            return UnregisterHotKey(this.hWnd, this.id);
+            return NativeMethods.UnregisterHotKey(this.hWnd, this.id);
         }
-
-        [DllImport("user32.dll")]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vk);
-
-        [DllImport("user32.dll")]
-        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
     }
 }

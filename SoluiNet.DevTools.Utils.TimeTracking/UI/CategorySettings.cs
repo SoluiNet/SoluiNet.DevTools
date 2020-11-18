@@ -45,20 +45,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
 
                 if (this.distributeEvenlyTarget == null)
                 {
-                    this.distributeEvenlyTarget = new CheckBox();
-
-                    this.distributeEvenlyTarget.Height = 25.0;
-                    this.distributeEvenlyTarget.Width = 200.0;
-
-                    this.distributeEvenlyTarget.VerticalContentAlignment = VerticalAlignment.Center;
-
-                    this.distributeEvenlyTarget.HorizontalAlignment = HorizontalAlignment.Left;
-                    this.distributeEvenlyTarget.VerticalAlignment = VerticalAlignment.Top;
-                    this.distributeEvenlyTarget.Margin = new Thickness(260, 35, 0, 0);
-
-                    this.distributeEvenlyTarget.Content = "Distribute Evenly Target";
-
-                    this.distributeEvenlyTarget.IsChecked = categoryElement.DistributeEvenlyTarget;
+                    this.distributeEvenlyTarget = new CheckBox
+                    {
+                        Height = 25.0,
+                        Width = 200.0,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Margin = new Thickness(260, 35, 0, 0),
+                        Content = "Distribute Evenly Target",
+                        IsChecked = categoryElement.DistributeEvenlyTarget,
+                    };
 
                     mainGrid.Children.Add(this.distributeEvenlyTarget);
                 }

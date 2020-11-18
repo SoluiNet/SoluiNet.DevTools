@@ -12,6 +12,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Web.Exceptions;
 
     /// <summary>
     /// A class which represents a web request.
@@ -30,7 +31,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
 
             if (!regExMatch.Success)
             {
-                throw new Exception(string.Format(CultureInfo.InvariantCulture, "no valid HTTP request\r\nRequest String: {0}", webRequestString));
+                throw new SoluiNetWebException(string.Format(CultureInfo.InvariantCulture, "no valid HTTP request\r\nRequest String: {0}", webRequestString));
             }
 
             if (regExMatch.Groups[1].Success && regExMatch.Groups[1].Value.Equals("GET", StringComparison.Ordinal))

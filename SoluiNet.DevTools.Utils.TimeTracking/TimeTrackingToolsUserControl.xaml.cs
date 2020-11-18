@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.Entity;
     using System.Globalization;
     using System.Linq;
@@ -1114,7 +1115,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 this.context.SaveChanges();
             }
-            catch (Exception exception)
+            catch (DataException exception)
             {
                 Logger.Error(exception, "Error while executing query '{0}'", !string.IsNullOrEmpty(this.QueryFilter.Text) ? this.QueryFilter.Text : "no filter");
 
@@ -1533,7 +1534,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 var firstItem = item.OrderBy(x => x.StartTime).FirstOrDefault();
                 var lastItem = item.OrderByDescending(x => x.StartTime).FirstOrDefault();
 
-                var endTime = lastItem?.StartTime.AddSeconds(lastItem?.Duration ?? 0);
+                var endTime = lastItem?.StartTime.AddSeconds(lastItem.Duration);
 
                 this.TimespanData.Items.Add(new
                 {
@@ -1563,7 +1564,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 this.FillTimespanResults(queryResults);
             }
-            catch (Exception exception)
+            catch (DataException exception)
             {
                 Logger.Error(exception, "Error while executing time span query");
 

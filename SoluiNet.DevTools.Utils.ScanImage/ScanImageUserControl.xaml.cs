@@ -107,7 +107,7 @@ namespace SoluiNet.DevTools.Utils.ScanImage
                 }
                 finally
                 {
-                    image?.Dispose();
+                    image.Dispose();
                 }
             }
         }

@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Utils.TimeTracking.Application;
 
     /// <summary>
     /// Provides a collection of methods for time tracking.
@@ -24,15 +25,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         {
             const int countOfCharacters = 256;
             var buffer = new StringBuilder(countOfCharacters);
-            var windowInForeground = GetForegroundWindow();
+            var windowInForeground = NativeMethods.GetForegroundWindow();
 
-            return GetWindowText(windowInForeground, buffer, countOfCharacters) > 0 ? buffer.ToString() : null;
+            return NativeMethods.GetWindowText(windowInForeground, buffer, countOfCharacters) > 0 ? buffer.ToString() : null;
         }
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
     }
 }

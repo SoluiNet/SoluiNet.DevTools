@@ -146,11 +146,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         /// <summary>
         /// Check if this hot key is equal to the overgiven hot key instance.
         /// </summary>
-        /// <param name="hotKeyInstance">The hot key instance.</param>
+        /// <param name="obj">The hot key instance.</param>
         /// <returns>Returns true if both objects are equal.</returns>
-        public override bool Equals(object hotKeyInstance)
+        public override bool Equals(object obj)
         {
-            if (hotKeyInstance is GlobalHotKey hotKey)
+            if (obj is GlobalHotKey hotKey)
             {
                 return this.Equals(hotKey);
             }
@@ -163,11 +163,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         /// <summary>
         /// Check if this hot key is equal to the overgiven hot key instance.
         /// </summary>
-        /// <param name="hotKeyInstance">The hot key instance.</param>
+        /// <param name="other">The hot key instance.</param>
         /// <returns>Returns true if both objects are equal.</returns>
-        public bool Equals(GlobalHotKey hotKeyInstance)
+        public bool Equals(GlobalHotKey other)
         {
-            return this.Key == hotKeyInstance?.Key && this.Modifiers == hotKeyInstance.Modifiers;
+            return this.Key == other?.Key && this.Modifiers == other.Modifiers;
         }
 
         /// <summary>
