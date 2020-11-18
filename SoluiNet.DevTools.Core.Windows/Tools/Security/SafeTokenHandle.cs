@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
     using System.Runtime.InteropServices;
     using System.Security;
     using Microsoft.Win32.SafeHandles;
+    using SoluiNet.DevTools.Core.Windows.Application;
 
     /// <summary>
     /// The safe token handle.
@@ -26,13 +27,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <returns>Returns true if handle has been released.</returns>
         protected override bool ReleaseHandle()
         {
-            return CloseHandle(this.handle);
+            return NativeMethods.CloseHandle(this.handle);
         }
-
-        [DllImport("kernel32.dll")]
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        [SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool CloseHandle(IntPtr handle);
     }
 }

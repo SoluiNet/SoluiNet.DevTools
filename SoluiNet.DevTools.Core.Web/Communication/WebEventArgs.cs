@@ -1,4 +1,4 @@
-﻿// <copyright file="WebArguments.cs" company="SoluiNet">
+﻿// <copyright file="WebEventArgs.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
     /// <summary>
     /// A class which represents arguments for handling a web communication.
     /// </summary>
-    public class WebArguments : EventArgs
+    public class WebEventArgs : EventArgs
     {
         /// <summary>
         /// Gets or sets a value indicating whether the event has been handled or not.

@@ -81,7 +81,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <param name="dataGrid">The data grid.</param>
         /// <param name="columnNames">A list of column names which should be exported. If not provided all columns will be exported.</param>
         /// <returns>The contents of the <see cref="DataGrid"/> as <see cref="DataTable"/>.</returns>
-        public static DataTable GetDataGridData(DataGrid dataGrid, List<string> columnNames = null)
+        public static DataTable GetDataGridData(DataGrid dataGrid, IList<string> columnNames = null)
         {
             if (dataGrid == null)
             {
@@ -149,7 +149,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <param name="dataGrid">The data grid.</param>
         /// <param name="columnNames">A list of column names which should be exported. If not provided all columns will be exported.</param>
         /// <returns>The contents of the selected rows in the <see cref="DataGrid"/> as <see cref="DataTable"/>.</returns>
-        public static DataTable GetDataGridSelectedRowsData(DataGrid dataGrid, List<string> columnNames = null)
+        public static DataTable GetDataGridSelectedRowsData(DataGrid dataGrid, IList<string> columnNames = null)
         {
             if (dataGrid == null)
             {

@@ -36,7 +36,7 @@ namespace SoluiNet.DevTools.Web
             // "http://localhost:8080/index/".
             if (prefixes == null || prefixes.Length == 0)
             {
-                throw new ArgumentException(nameof(prefixes));
+                throw new ArgumentException("Invalid prefixes", nameof(prefixes));
             }
 
             foreach (string s in prefixes)

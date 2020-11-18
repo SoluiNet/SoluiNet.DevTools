@@ -95,12 +95,23 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         {
             using (MemoryStream ms = new MemoryStream(System.Convert.FromBase64String(encryptedText)))
             {
-                using (CryptoStream cs = new CryptoStream(ms, new AesCryptoServiceProvider().CreateDecryptor(Encoding.ASCII.GetBytes(key), Encoding.ASCII.GetBytes(initializationValue)), CryptoStreamMode.Read))
+                var aesCryptoProvider = new AesCryptoServiceProvider();
+
+                try
                 {
-                    using (StreamReader sr = new StreamReader(cs))
+                    var aesDecryptor = aesCryptoProvider.CreateDecryptor(Encoding.ASCII.GetBytes(key), Encoding.ASCII.GetBytes(initializationValue));
+
+                    using (CryptoStream cs = new CryptoStream(ms, aesDecryptor, CryptoStreamMode.Read))
                     {
-                        return sr.ReadToEnd();
+                        using (StreamReader sr = new StreamReader(cs))
+                        {
+                            return sr.ReadToEnd();
+                        }
                     }
+                }
+                finally
+                {
+                    aesCryptoProvider.Dispose();
                 }
             }
         }
@@ -117,12 +128,23 @@ namespace SoluiNet.DevTools.Utils.Crypto.Utilities
         {
             using (MemoryStream ms = new MemoryStream(Encoding.GetEncoding(chosenEncoding).GetBytes(encryptedText)))
             {
-                using (CryptoStream cs = new CryptoStream(ms, new AesCryptoServiceProvider().CreateDecryptor(Encoding.ASCII.GetBytes(key), Encoding.ASCII.GetBytes(initializationValue)), CryptoStreamMode.Read))
+                var aesCryptoProvider = new AesCryptoServiceProvider();
+
+                try
                 {
-                    using (StreamReader sr = new StreamReader(cs))
+                    var aesDecryptor = aesCryptoProvider.CreateDecryptor(Encoding.ASCII.GetBytes(key), Encoding.ASCII.GetBytes(initializationValue));
+
+                    using (CryptoStream cs = new CryptoStream(ms, aesDecryptor, CryptoStreamMode.Read))
                     {
-                        return sr.ReadToEnd();
+                        using (StreamReader sr = new StreamReader(cs))
+                        {
+                            return sr.ReadToEnd();
+                        }
                     }
+                }
+                finally
+                {
+                    aesCryptoProvider.Dispose();
                 }
             }
         }

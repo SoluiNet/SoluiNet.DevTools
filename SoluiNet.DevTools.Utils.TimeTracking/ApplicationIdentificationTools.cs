@@ -245,35 +245,35 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 return new SolidColorBrush(Colors.White);
             }
 
-            if (applicationName.Equals(VisualStudio, StringComparison.InvariantCulture))
+            if (applicationName.Equals(VisualStudio, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.BlueViolet, Color.FromRgb(50, 50, 50), 0.75);
             }
-            else if (applicationName.Equals(Outlook, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(Outlook, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.DodgerBlue, Colors.WhiteSmoke, 0.75);
             }
-            else if (applicationName.Equals(Teams, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(Teams, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.DarkViolet, Colors.WhiteSmoke, 0.75);
             }
-            else if (applicationName.Equals(RemoteDesktopManager, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(RemoteDesktopManager, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.WhiteSmoke, Colors.DeepSkyBlue, 0.75);
             }
-            else if (applicationName.Equals(Excel, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(Excel, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.DarkGreen, Colors.WhiteSmoke, 0.75);
             }
-            else if (applicationName.Equals(NotepadPlusPlus, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(NotepadPlusPlus, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.Lime, Colors.WhiteSmoke, 0.75);
             }
-            else if (applicationName.Equals(Editor, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(Editor, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.LightBlue, Colors.WhiteSmoke, 0.75);
             }
-            else if (applicationName.Equals(Chrome, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(Chrome, StringComparison.Ordinal))
             {
                 var linearGradient = new LinearGradientBrush();
 
@@ -287,11 +287,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 return linearGradient;
             }
-            else if (applicationName.Equals(TortoiseGit, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(TortoiseGit, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.DarkGray, Colors.LightBlue, 0.75);
             }
-            else if (applicationName.Equals(KeePass, StringComparison.InvariantCulture))
+            else if (applicationName.Equals(KeePass, StringComparison.Ordinal))
             {
                 return new LinearGradientBrush(Colors.DarkBlue, Colors.LightBlue, 0.75);
             }

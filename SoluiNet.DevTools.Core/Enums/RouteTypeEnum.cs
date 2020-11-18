@@ -13,7 +13,8 @@ namespace SoluiNet.DevTools.Core.Enums
     /// <summary>
     /// An enumeration of route types.
     /// </summary>
-    public enum RouteTypeEnum
+    [Flags]
+    public enum RouteTypes
     {
         /// <summary>
         /// A route which is based on controller.

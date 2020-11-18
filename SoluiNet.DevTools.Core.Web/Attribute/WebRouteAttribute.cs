@@ -14,26 +14,28 @@ namespace SoluiNet.DevTools.Core.Web.Attribute
     /// <summary>
     /// The web route attribute.
     /// </summary>
-    public class WebRouteAttribute : Attribute
+    [AttributeUsage(AttributeTargets.All)]
+    public sealed class WebRouteAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRouteAttribute"/> class.
         /// </summary>
-        /// <param name="routeType">The route type.</param>
+        /// <param name="routeTypes">The route type.</param>
         /// <param name="route">The route.</param>
-        public WebRouteAttribute(RouteTypeEnum routeType, string route)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1019:Define accessors for attribute arguments", Justification = "Parameters will be mapped to different properties")]
+        public WebRouteAttribute(RouteTypes routeTypes, string route)
         {
-            if (routeType == RouteTypeEnum.ControllerAndAction)
+            if (routeTypes == RouteTypes.ControllerAndAction)
             {
                 throw new ArgumentException("Can't set up a route with route type 'ControllerAndAction' without two route parameters");
             }
 
-            if (routeType.HasFlag(RouteTypeEnum.Controller))
+            if (routeTypes.HasFlag(RouteTypes.Controller))
             {
                 this.ControllerRoute = route;
             }
 
-            if (routeType.HasFlag(RouteTypeEnum.Action))
+            if (routeTypes.HasFlag(RouteTypes.Action))
             {
                 this.ActionRoute = route;
             }
@@ -42,12 +44,12 @@ namespace SoluiNet.DevTools.Core.Web.Attribute
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRouteAttribute"/> class.
         /// </summary>
-        /// <param name="routeType">The route type.</param>
+        /// <param name="routeTypes">The route type.</param>
         /// <param name="controllerRoute">The controller route.</param>
         /// <param name="actionRoute">The action route.</param>
-        public WebRouteAttribute(RouteTypeEnum routeType, string controllerRoute, string actionRoute)
+        public WebRouteAttribute(RouteTypes routeTypes, string controllerRoute, string actionRoute)
         {
-            if (routeType != RouteTypeEnum.ControllerAndAction)
+            if (routeTypes != RouteTypes.ControllerAndAction)
             {
                 throw new ArgumentException("Too many route parameters");
             }
@@ -57,13 +59,13 @@ namespace SoluiNet.DevTools.Core.Web.Attribute
         }
 
         /// <summary>
-        /// Gets or sets the controller route.
+        /// Gets the controller route.
         /// </summary>
-        public string ControllerRoute { get; set; }
+        public string ControllerRoute { get; private set; }
 
         /// <summary>
-        /// Gets or sets the action route.
+        /// Gets the action route.
         /// </summary>
-        public string ActionRoute { get; set; }
+        public string ActionRoute { get; private set; }
     }
 }

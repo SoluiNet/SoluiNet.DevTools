@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     using RestSharp;
     using RestSharp.Authenticators;
     using SoluiNet.DevTools.Core;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.String;
@@ -101,21 +102,21 @@ namespace SoluiNet.DevTools.DataExchange.Jira
                     switch (authenticationMethod)
                     {
                         case JiraAuthentication.JwtAuthentication:
-                            if (!string.IsNullOrEmpty(settings.ContainsKey("Default.AccessToken") ? settings["Default.AccessToken"]?.ToString() : string.Empty))
+                            if (settings.ContainsKey("Default.AccessToken") && !string.IsNullOrEmpty(settings["Default.AccessToken"]?.ToString()))
                             {
                                 request.AddHeader("Bearer", settings["Default.AccessToken"].ToString());
                             }
 
                             break;
                         case JiraAuthentication.BasicAuthentication:
-                            if (string.IsNullOrEmpty(settings.ContainsKey("Default.JiraUser") ? settings["Default.JiraUser"]?.ToString() : string.Empty))
+                            if (settings.ContainsKey("Default.JiraUser") && string.IsNullOrEmpty(settings["Default.JiraUser"]?.ToString()))
                             {
-                                throw new Exception("No JIRA user found in settings");
+                                throw new SoluiNetPluginException("No JIRA user found in settings", this);
                             }
 
-                            if (string.IsNullOrEmpty(settings.ContainsKey("Default.JiraApiToken") ? settings["Default.JiraApiToken"]?.ToString() : string.Empty))
+                            if (settings.ContainsKey("Default.JiraApiToken") && string.IsNullOrEmpty(settings["Default.JiraApiToken"]?.ToString()))
                             {
-                                throw new Exception("No JIRA API token found in settings");
+                                throw new SoluiNetPluginException("No JIRA API token found in settings", this);
                             }
 
                             var jiraUser = settings["Default.JiraUser"]?.ToString();

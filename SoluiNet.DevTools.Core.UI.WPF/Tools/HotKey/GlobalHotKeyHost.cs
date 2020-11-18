@@ -4,7 +4,6 @@
 
 namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
 {
-    using SoluiNet.DevTools.Core.UI.WPF.Application;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -13,6 +12,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
     using System.Runtime.InteropServices;
     using System.Windows.Input;
     using System.Windows.Interop;
+    using SoluiNet.DevTools.Core.UI.WPF.Application;
 
     /// <summary>
     /// The HotKeyHost needed for working with hot keys (taken from https://www.codeproject.com/Tips/274003/Global-Hotkeys-in-WPF).
@@ -188,7 +188,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         {
             if ((int)this.handleSource.Handle != 0)
             {
-                NativeMethods.UnregisterHotKey(this.handleSource.Handle, id);
+                var result = NativeMethods.UnregisterHotKey(this.handleSource.Handle, id);
 
                 int error = Marshal.GetLastWin32Error();
                 if (error != 0)
