@@ -25,7 +25,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Application
         internal static extern IntPtr GetForegroundWindow();
 
         /// <summary>
-        /// Copies the text of the specified window's title bar (if it has one) into a buffer. 
+        /// Copies the text of the specified window's title bar (if it has one) into a buffer.
         /// </summary>
         /// <param name="hWnd">A handle to the window or control containing the text.</param>
         /// <param name="text">The buffer that will receive the text. If the string is as long or longer than the buffer, the string is truncated and terminated with a null character.</param>

@@ -10,7 +10,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Data.Entity;
     using System.Globalization;
     using System.Linq;
-    using System.Linq.Dynamic;
+    using System.Linq.Dynamic.Core;
     using System.Reflection;
     using System.Resources;
     using System.Windows;
@@ -1080,7 +1080,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 if (!string.IsNullOrEmpty(this.QueryFilter.Text))
                 {
-                    queryResults = queryResults.Where(this.QueryFilter.Text).ToList();
+                    queryResults = queryResults.AsQueryable().Where(this.QueryFilter.Text).ToList();
                 }
 
                 this.FillQueryResults(queryResults);
