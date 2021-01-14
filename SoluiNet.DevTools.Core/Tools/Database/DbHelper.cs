@@ -303,5 +303,26 @@ namespace SoluiNet.DevTools.Core.Tools.Database
                     return null;
             }
         }
+
+        /// <summary>
+        /// Execute a SQL command on a database which can be connected to with the overgiven provider type. Only a single script is allowed.
+        /// </summary>
+        /// <param name="providerType">The provider type.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="environment">The environment on which the SQL command should be executed. If not provided it will default to "Default".</param>
+        /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
+        public static IList<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default")
+        {
+            switch (providerType)
+            {
+                case "System.Data.SqlClient":
+                    return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                case "System.Data.SQLite":
+                    return ExecuteSqlScript<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+                default:
+                    return null;
+            }
+        }
     }
 }
