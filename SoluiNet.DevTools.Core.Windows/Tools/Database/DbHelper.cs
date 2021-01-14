@@ -2,8 +2,6 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using SoluiNet.DevTools.Core.Windows.Tools.Security;
-
 namespace SoluiNet.DevTools.Core.Windows.Tools.Database
 {
     using System;
@@ -13,6 +11,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
     using System.Data.SQLite;
     using System.Security.Principal;
     using SoluiNet.DevTools.Core.Tools.Database;
+    using SoluiNet.DevTools.Core.Windows.Tools.Security;
 
     /// <summary>
     /// Provides a collection of methods to work with databases.
