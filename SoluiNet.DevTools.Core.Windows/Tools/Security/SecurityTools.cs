@@ -70,22 +70,17 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
             {
                 var impersonationContext = impersonationIdentity.Impersonate();
 
-                if (impersonationContext != null)
+                foreach (var token in tokens)
                 {
-                    foreach (var token in tokens)
-                    {
-                        NativeMethods.CloseHandle(token);
-                    }
-
-                    return impersonationContext;
+                    NativeMethods.CloseHandle(token);
                 }
+
+                return impersonationContext;
             }
             finally
             {
                 impersonationIdentity.Dispose();
             }
-
-            return null;
         }
 
         /// <summary>
@@ -96,13 +91,13 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <returns>Returns a WindowsIdentity-object. It will return the object for the logged in user if there are no parameters.</returns>
         public static WindowsIdentity GetIdentityByName(string userName = "", string domainName = "")
         {
-            string accountName = string.Format(
-                @"{0}\{1}",
-                string.IsNullOrWhiteSpace(domainName) ? Environment.UserDomainName : domainName,
-                string.IsNullOrWhiteSpace(userName) ? Environment.UserName : userName);
+            domainName = string.IsNullOrWhiteSpace(domainName) ? Environment.UserDomainName : domainName;
+            userName = string.IsNullOrWhiteSpace(userName) ? Environment.UserName : userName;
+
+            var accountName = $@"{domainName}\{userName}";
 
             // cannot create WindowsIdentity because it requires username in form user@domain.com but the passed value will be DOMAIN\user.
-            using (var context = new PrincipalContext(System.DirectoryServices.AccountManagement.ContextType.Domain, Environment.UserDomainName))
+            using (var context = new PrincipalContext(ContextType.Domain, domainName))
             {
                 using (var user = UserPrincipal.FindByIdentity(context, accountName))
                 {
