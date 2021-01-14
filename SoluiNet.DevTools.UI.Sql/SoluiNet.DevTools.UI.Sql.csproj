@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{B6D04A38-C980-4CEF-93F7-A8FB80F4EEAB}</ProjectGuid>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.UI.Sql</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.UI.Sql</Product>

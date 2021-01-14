@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{776ABB02-B14F-48C6-B78E-11B66C020F1E}</ProjectGuid>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.CodeOnTheFly</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Utils.CodeOnTheFly</Product>

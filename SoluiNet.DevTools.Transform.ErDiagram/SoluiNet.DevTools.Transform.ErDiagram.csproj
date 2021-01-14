@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{A1191A59-437E-460F-9F75-B6E302FF20D4}</ProjectGuid>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <AssemblyTitle>SoluiNet.DevTools.Transform.ErDiagram</AssemblyTitle>
     <Product>SoluiNet.DevTools.Transform.ErDiagram</Product>
     <Copyright>Copyright ©  2019</Copyright>

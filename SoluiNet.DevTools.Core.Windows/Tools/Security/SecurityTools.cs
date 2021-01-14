@@ -2,6 +2,8 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using System.Security.Cryptography.X509Certificates;
+
 namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 {
     using System;
@@ -37,21 +39,8 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                     if (NativeMethods.DuplicateToken(token, 2, ref tokenDuplicate))
                     {
                         var tempWindowsIdentity = new WindowsIdentity(tokenDuplicate);
-                        try
-                        {
-                            var impersonationContext = tempWindowsIdentity.Impersonate();
 
-                            if (impersonationContext != null)
-                            {
-                                NativeMethods.CloseHandle(token);
-                                NativeMethods.CloseHandle(tokenDuplicate);
-                                return impersonationContext;
-                            }
-                        }
-                        finally
-                        {
-                            tempWindowsIdentity.Dispose();
-                        }
+                        Impersonate(tempWindowsIdentity, token, tokenDuplicate);
                     }
                 }
             }
@@ -64,6 +53,36 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
             if (tokenDuplicate != IntPtr.Zero)
             {
                 NativeMethods.CloseHandle(tokenDuplicate);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Impersonate to a specific identity.
+        /// </summary>
+        /// <param name="impersonationIdentity">The impersonation identity.</param>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>Returns an impersonation context.</returns>
+        public static WindowsImpersonationContext Impersonate(WindowsIdentity impersonationIdentity, params IntPtr[] tokens)
+        {
+            try
+            {
+                var impersonationContext = impersonationIdentity.Impersonate();
+
+                if (impersonationContext != null)
+                {
+                    foreach (var token in tokens)
+                    {
+                        NativeMethods.CloseHandle(token);
+                    }
+
+                    return impersonationContext;
+                }
+            }
+            finally
+            {
+                impersonationIdentity.Dispose();
             }
 
             return null;

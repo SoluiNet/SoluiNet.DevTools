@@ -17,7 +17,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
     /// <summary>
     /// Provides a collection of methods to work with databases.
     /// </summary>
-    public static class DbHelper
+    public class DbHelper
     {
         /// <summary>
         /// Execute a SQL command on the database. Only a single script is allowed.
