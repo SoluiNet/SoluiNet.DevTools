@@ -14,7 +14,7 @@ cache:
   - '%LocalAppData%\NuGet\v3-cache' # NuGet v3
 
 after_build:
-  - 7z a SoluiNet.DevTools-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\SoluiNet.DevTools.UI\bin\net461\AnyCPU\Debug\*
+  - 7z a SoluiNet.DevTools-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\SoluiNet.DevTools.UI\bin\net472\AnyCPU\Debug\*
 
 # the following assembly info patching might be replaced with this: https://www.arthurrump.com/2017/03/17/visual-studio-2017-csproj-version-patching-in-appveyor/
 
