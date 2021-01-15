@@ -126,17 +126,23 @@ namespace SoluiNet.DevTools.UI
                 }
             }
 
-            foreach (var uiElement in (System.Windows.Application.Current as ISoluiNetUiApp).UiElements)
+            if (Application.Current != null &&
+                (Application.Current is ISoluiNetUiApp) &&
+                ((ISoluiNetUiApp)Application.Current).UiElements != null)
             {
-                var tabItem = new TabItem() { Header = uiElement.Label, Name = uiElement.TechnicalName + "_TabItem" };
-
-                this.UiElements.Items.Add(tabItem);
-
-                tabItem.Content = uiElement;
-                uiElement.TitleChanged += (sender, titleParts) =>
+                foreach (var uiElement in ((ISoluiNetUiApp)Application.Current).UiElements)
                 {
-                    this.SetTitleParts(titleParts);
-                };
+                    var tabItem = new TabItem() { Header = uiElement.Label, Name = uiElement.TechnicalName + "_TabItem" };
+
+                    this.UiElements.Items.Add(tabItem);
+
+                    tabItem.Content = uiElement;
+                    uiElement.TitleChanged += (sender, titleParts) => { this.SetTitleParts(titleParts); };
+                }
+            }
+            else
+            {
+                Logger.Warn("No UI Elements defined.");
             }
 
             this.LoggingPath = string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI");

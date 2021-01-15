@@ -156,69 +156,83 @@ namespace SoluiNet.DevTools.UI
 
             IDictionary<Type, List<string>> pluginTypes = new Dictionary<Type, List<string>>();
 
-            foreach (var assembly in assemblies)
+            try
             {
-                if (assembly == null)
+                foreach (var assembly in assemblies)
                 {
-                    continue;
-                }
-
-                var types = assembly.GetTypes();
-                foreach (var type in types)
-                {
-                    if (type.IsInterface || type.IsAbstract)
+                    if (assembly == null)
                     {
                         continue;
                     }
 
-                    if (type.GetInterface(pluginType.FullName) != null)
+                    try
                     {
-                        if (pluginTypes.ContainsKey(type))
+                        var types = assembly.GetTypes();
+                        foreach (var type in types)
                         {
-                            pluginTypes[type].Add("PluginDev");
-                        }
-                        else
-                        {
-                            pluginTypes.Add(type, new List<string>() { "PluginDev" });
+                            if (type.IsInterface || type.IsAbstract)
+                            {
+                                continue;
+                            }
+
+                            if (type.GetInterface(pluginType.FullName) != null)
+                            {
+                                if (pluginTypes.ContainsKey(type))
+                                {
+                                    pluginTypes[type].Add("PluginDev");
+                                }
+                                else
+                                {
+                                    pluginTypes.Add(type, new List<string>() { "PluginDev" });
+                                }
+                            }
+
+                            if (type.GetInterface(sqlPluginType.FullName) != null)
+                            {
+                                if (pluginTypes.ContainsKey(type))
+                                {
+                                    pluginTypes[type].Add("SqlDev");
+                                }
+                                else
+                                {
+                                    pluginTypes.Add(type, new List<string>() { "SqlDev" });
+                                }
+                            }
+
+                            if (type.GetInterface(utilityPluginType.FullName) != null)
+                            {
+                                if (pluginTypes.ContainsKey(type))
+                                {
+                                    pluginTypes[type].Add("UtilityDev");
+                                }
+                                else
+                                {
+                                    pluginTypes.Add(type, new List<string>() { "UtilityDev" });
+                                }
+                            }
+
+                            if (type.GetInterface(backgroundTaskType.FullName) != null)
+                            {
+                                if (pluginTypes.ContainsKey(type))
+                                {
+                                    pluginTypes[type].Add("BackgroundTask");
+                                }
+                                else
+                                {
+                                    pluginTypes.Add(type, new List<string>() { "BackgroundTask" });
+                                }
+                            }
                         }
                     }
-
-                    if (type.GetInterface(sqlPluginType.FullName) != null)
+                    catch (Exception assignmentException)
                     {
-                        if (pluginTypes.ContainsKey(type))
-                        {
-                            pluginTypes[type].Add("SqlDev");
-                        }
-                        else
-                        {
-                            pluginTypes.Add(type, new List<string>() { "SqlDev" });
-                        }
-                    }
-
-                    if (type.GetInterface(utilityPluginType.FullName) != null)
-                    {
-                        if (pluginTypes.ContainsKey(type))
-                        {
-                            pluginTypes[type].Add("UtilityDev");
-                        }
-                        else
-                        {
-                            pluginTypes.Add(type, new List<string>() { "UtilityDev" });
-                        }
-                    }
-
-                    if (type.GetInterface(backgroundTaskType.FullName) != null)
-                    {
-                        if (pluginTypes.ContainsKey(type))
-                        {
-                            pluginTypes[type].Add("BackgroundTask");
-                        }
-                        else
-                        {
-                            pluginTypes.Add(type, new List<string>() { "BackgroundTask" });
-                        }
+                        this.Logger.Fatal(assignmentException, "Error while assigning plugin types for assembly '{0}'", assembly.FullName);
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                this.Logger.Fatal(exception, "Error while assigning plugin types");
             }
 
             this.Plugins = new List<IBasePlugin>();
