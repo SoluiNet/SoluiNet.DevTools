@@ -12,6 +12,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Security.Principal;
     using System.Text;
     using System.Windows;
     using System.Windows.Controls;
@@ -22,6 +23,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using NLog;
     using SoluiNet.DevTools.Core.Formatter;
     using SoluiNet.DevTools.Core.Models;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.ScriptEngine;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Sql;
@@ -30,6 +32,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement.Editor;
+    using SoluiNet.DevTools.Core.Windows.Tools.Security;
 
     /// <summary>
     /// An UI element which can be used to provide database and SQL related functions.
@@ -480,122 +483,151 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+            var plugin =
+                (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
 
             if (plugin == null)
             {
                 return;
             }
 
-            this.DatabaseSchema.Items.Clear();
+            WindowsImpersonationContext impersonationContext = null;
 
-            var tablesNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Tables" });
-            var tablesNode = (TreeViewItem)this.DatabaseSchema.Items[tablesNodeIndex];
-
-            foreach (var entity in dataEntities)
+            if (plugin.GetType().IsAssignableFrom(typeof(IContainsSettings)))
             {
-                var entityNodeIndex = tablesNode.Items.Add(new TreeViewItem() { Header = entity.Name, Tag = entity });
+                var settings = (plugin as IContainsSettings).RetrieveSettingsAsDictionary();
 
-                var fields = this.GetEntityFields(chosenProject, entity.Name);
-
-                foreach (var field in fields)
+                if (settings.TryGetValue($"{chosenEnvironment}.Impersonation@{plugin.Name}.User", out var user) &&
+                    settings.TryGetValue($"{chosenEnvironment}.Impersonation@{plugin.Name}.Password", out var password))
                 {
-                    ((TreeViewItem)tablesNode.Items[entityNodeIndex]).Items.Add(field);
+                    impersonationContext =
+                        settings.TryGetValue($"{chosenEnvironment}.Impersonation@{plugin.Name}.Domain", out var domain)
+                            ? SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString())
+                            : SecurityTools.Impersonate(user.ToString(), password.ToString());
                 }
             }
 
-            var storedProceduresNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Procedures" });
-            var storedProceduresNode = (TreeViewItem)this.DatabaseSchema.Items[storedProceduresNodeIndex];
-
-            if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
+            try
             {
-                // this works only for Microsoft SQL Server
-                var sqlCommand = "SELECT OBJECT_NAME(OBJECT_ID) AS name, " +
-                                 "definition " +
-                                 "FROM sys.sql_modules " +
-                                 "WHERE objectproperty(OBJECT_ID, 'IsProcedure') = 1 " +
-                                 "ORDER BY OBJECT_NAME(OBJECT_ID)";
+                this.DatabaseSchema.Items.Clear();
 
-                var data = plugin.ExecuteSql(sqlCommand);
+                var tablesNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Tables" });
+                var tablesNode = (TreeViewItem)this.DatabaseSchema.Items[tablesNodeIndex];
 
-                foreach (DataRowView record in data.DefaultView)
+                foreach (var entity in dataEntities)
                 {
-                    storedProceduresNode.Items.Add(new TreeViewItem()
+                    var entityNodeIndex = tablesNode.Items.Add(new TreeViewItem() { Header = entity.Name, Tag = entity });
+
+                    var fields = this.GetEntityFields(chosenProject, entity.Name);
+
+                    foreach (var field in fields)
                     {
-                        Header = record.Row["name"],
-                        Tag = new StoredProcedure
-                        {
-                            Name = record.Row["name"].ToString(),
-                            BodyDefinition = record.Row["definition"].ToString(),
-                        },
-                    });
+                        ((TreeViewItem)tablesNode.Items[entityNodeIndex]).Items.Add(field);
+                    }
                 }
-            }
 
-            var storedFunctionsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Functions" });
-            var storedFunctionsNode = (TreeViewItem)this.DatabaseSchema.Items[storedFunctionsNodeIndex];
+                var storedProceduresNodeIndex =
+                    this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Procedures" });
+                var storedProceduresNode = (TreeViewItem)this.DatabaseSchema.Items[storedProceduresNodeIndex];
 
-            if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
-            {
-                // this works only for Microsoft SQL Server
-                var sqlCommand = "SELECT DISTINCT " +
-                    "s.name + '.' + o.name AS object_name, " +
-                    "o.type_desc, " +
-                    "m.definition " +
-                    "FROM sys.sql_modules m " +
-                    "INNER JOIN sys.objects o ON m.object_id = o.object_id " +
-                    "INNER JOIN sys.schemas s ON o.schema_id = s.schema_id " +
-                    "WHERE o.type_desc = 'SQL_SCALAR_FUNCTION'";
-
-                var data = plugin.ExecuteSql(sqlCommand);
-
-                foreach (DataRowView record in data.DefaultView)
+                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName ==
+                    "System.Data.SqlClient")
                 {
-                    storedFunctionsNode.Items.Add(new TreeViewItem()
+                    // this works only for Microsoft SQL Server
+                    var sqlCommand = "SELECT OBJECT_NAME(OBJECT_ID) AS name, " +
+                                     "definition " +
+                                     "FROM sys.sql_modules " +
+                                     "WHERE objectproperty(OBJECT_ID, 'IsProcedure') = 1 " +
+                                     "ORDER BY OBJECT_NAME(OBJECT_ID)";
+
+                    var data = plugin.ExecuteSql(sqlCommand);
+
+                    foreach (DataRowView record in data.DefaultView)
                     {
-                        Header = record.Row["object_name"],
-                        Tag = new StoredFunction
+                        storedProceduresNode.Items.Add(new TreeViewItem()
                         {
-                            Name = record.Row["object_name"].ToString(),
-                            BodyDefinition = record.Row["definition"].ToString(),
-                        },
-                    });
+                            Header = record.Row["name"],
+                            Tag = new StoredProcedure
+                            {
+                                Name = record.Row["name"].ToString(),
+                                BodyDefinition = record.Row["definition"].ToString(),
+                            },
+                        });
+                    }
                 }
-            }
 
-            var viewsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Views" });
-            var viewsNode = (TreeViewItem)this.DatabaseSchema.Items[viewsNodeIndex];
+                var storedFunctionsNodeIndex =
+                    this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Functions" });
+                var storedFunctionsNode = (TreeViewItem)this.DatabaseSchema.Items[storedFunctionsNodeIndex];
 
-            if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
-            {
-                // this works only for Microsoft SQL Server
-                var sqlCommand = "SELECT name, definition " +
-                                 "FROM sys.objects obj " +
-                                 "JOIN sys.sql_modules mod ON mod.object_id = obj.object_id " +
-                                 "WHERE obj.type = 'V'";
-
-                var data = plugin.ExecuteSql(sqlCommand);
-
-                foreach (DataRowView record in data.DefaultView)
+                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName ==
+                    "System.Data.SqlClient")
                 {
-                    viewsNode.Items.Add(new TreeViewItem()
+                    // this works only for Microsoft SQL Server
+                    var sqlCommand = "SELECT DISTINCT " +
+                                     "s.name + '.' + o.name AS object_name, " +
+                                     "o.type_desc, " +
+                                     "m.definition " +
+                                     "FROM sys.sql_modules m " +
+                                     "INNER JOIN sys.objects o ON m.object_id = o.object_id " +
+                                     "INNER JOIN sys.schemas s ON o.schema_id = s.schema_id " +
+                                     "WHERE o.type_desc = 'SQL_SCALAR_FUNCTION'";
+
+                    var data = plugin.ExecuteSql(sqlCommand);
+
+                    foreach (DataRowView record in data.DefaultView)
                     {
-                        Header = record.Row["name"],
-                        Tag = new View
+                        storedFunctionsNode.Items.Add(new TreeViewItem()
                         {
-                            Name = record.Row["name"].ToString(),
-                            BodyDefinition = record.Row["definition"].ToString(),
-                        },
-                    });
+                            Header = record.Row["object_name"],
+                            Tag = new StoredFunction
+                            {
+                                Name = record.Row["object_name"].ToString(),
+                                BodyDefinition = record.Row["definition"].ToString(),
+                            },
+                        });
+                    }
+                }
+
+                var viewsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Views" });
+                var viewsNode = (TreeViewItem)this.DatabaseSchema.Items[viewsNodeIndex];
+
+                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName ==
+                    "System.Data.SqlClient")
+                {
+                    // this works only for Microsoft SQL Server
+                    var sqlCommand = "SELECT name, definition " +
+                                     "FROM sys.objects obj " +
+                                     "JOIN sys.sql_modules mod ON mod.object_id = obj.object_id " +
+                                     "WHERE obj.type = 'V'";
+
+                    var data = plugin.ExecuteSql(sqlCommand);
+
+                    foreach (DataRowView record in data.DefaultView)
+                    {
+                        viewsNode.Items.Add(new TreeViewItem()
+                        {
+                            Header = record.Row["name"],
+                            Tag = new View
+                            {
+                                Name = record.Row["name"].ToString(),
+                                BodyDefinition = record.Row["definition"].ToString(),
+                            },
+                        });
+                    }
+                }
+
+                var scriptsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Scripts" });
+                var scriptsNode = (TreeViewItem)this.DatabaseSchema.Items[scriptsNodeIndex];
+
+                foreach (var sqlScript in sqlScripts)
+                {
+                    scriptsNode.Items.Add(new TreeViewItem() { Header = sqlScript.Name, Tag = sqlScript });
                 }
             }
-
-            var scriptsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Scripts" });
-            var scriptsNode = (TreeViewItem)this.DatabaseSchema.Items[scriptsNodeIndex];
-
-            foreach (var sqlScript in sqlScripts)
+            finally
             {
-                scriptsNode.Items.Add(new TreeViewItem() { Header = sqlScript.Name, Tag = sqlScript });
+                impersonationContext?.Undo();
             }
         }
 

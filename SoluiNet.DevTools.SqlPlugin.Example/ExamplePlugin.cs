@@ -113,10 +113,10 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
             var settings = this.RetrieveSettingsAsDictionary();
 
-            if (settings.TryGetValue($"Impersonation@{this.Environment}.User", out var user) &&
-                settings.TryGetValue($"Impersonation@{this.Environment}.Password", out var password))
+            if (settings.TryGetValue($"{this.Environment}.Impersonation@{this.Name}.User", out var user) &&
+                settings.TryGetValue($"{this.Environment}.Impersonation@{this.Name}.Password", out var password))
             {
-                impersonationContext = settings.TryGetValue($"Impersonation@{this.Environment}.Domain", out var domain) ?
+                impersonationContext = settings.TryGetValue($"{this.Environment}.Impersonation@{this.Name}.Domain", out var domain) ?
                     SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString()) :
                     SecurityTools.Impersonate(user.ToString(), password.ToString());
             }
@@ -138,10 +138,10 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
             var settings = this.RetrieveSettingsAsDictionary();
 
-            if (settings.TryGetValue($"Impersonation@{this.Environment}.User", out var user) &&
-                settings.TryGetValue($"Impersonation@{this.Environment}.Password", out var password))
+            if (settings.TryGetValue($"{this.Environment}.Impersonation@{this.Name}.User", out var user) &&
+                settings.TryGetValue($"{this.Environment}.Impersonation@{this.Name}.Password", out var password))
             {
-                impersonationContext = settings.TryGetValue($"Impersonation@{this.Environment}.Domain", out var domain) ?
+                impersonationContext = settings.TryGetValue($"{this.Environment}.Impersonation@{this.Name}.Domain", out var domain) ?
                     SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString()) :
                     SecurityTools.Impersonate(user.ToString(), password.ToString());
             }
