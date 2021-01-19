@@ -2,8 +2,6 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using SoluiNet.DevTools.Core.Exceptions;
-
 namespace SoluiNet.DevTools.UI.Sql
 {
     using System;
@@ -23,6 +21,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using ICSharpCode.AvalonEdit.CodeCompletion;
     using Microsoft.Win32;
     using NLog;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Formatter;
     using SoluiNet.DevTools.Core.Models;
     using SoluiNet.DevTools.Core.Plugin;
