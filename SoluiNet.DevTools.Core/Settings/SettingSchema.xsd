@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="ConfigurationSchema"
+<xs:schema id="SettingSchema"
     targetNamespace="http://solui.net/SettingSchema.xsd"
     elementFormDefault="qualified"
     xmlns="http://solui.net/SettingSchema.xsd"

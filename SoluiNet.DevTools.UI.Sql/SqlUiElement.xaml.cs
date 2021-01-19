@@ -2,6 +2,8 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using SoluiNet.DevTools.Core.Exceptions;
+
 namespace SoluiNet.DevTools.UI.Sql
 {
     using System;
@@ -493,15 +495,15 @@ namespace SoluiNet.DevTools.UI.Sql
 
             WindowsImpersonationContext impersonationContext = null;
 
-            if (plugin.GetType().IsAssignableFrom(typeof(IContainsSettings)))
+            if (plugin is IContainsSettings)
             {
                 var settings = (plugin as IContainsSettings).RetrieveSettingsAsDictionary();
 
-                if (settings.TryGetValue($"{chosenEnvironment}.Impersonation@{plugin.Name}.User", out var user) &&
-                    settings.TryGetValue($"{chosenEnvironment}.Impersonation@{plugin.Name}.Password", out var password))
+                if (settings.TryGetValue($"{chosenEnvironment ?? "Default"}.Impersonation@{plugin.Name}.User", out var user) &&
+                    settings.TryGetValue($"{chosenEnvironment ?? "Default"}.Impersonation@{plugin.Name}.Password", out var password))
                 {
                     impersonationContext =
-                        settings.TryGetValue($"{chosenEnvironment}.Impersonation@{plugin.Name}.Domain", out var domain)
+                        settings.TryGetValue($"{chosenEnvironment ?? "Default"}.Impersonation@{plugin.Name}.Domain", out var domain)
                             ? SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString())
                             : SecurityTools.Impersonate(user.ToString(), password.ToString());
                 }
@@ -530,8 +532,7 @@ namespace SoluiNet.DevTools.UI.Sql
                     this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Procedures" });
                 var storedProceduresNode = (TreeViewItem)this.DatabaseSchema.Items[storedProceduresNodeIndex];
 
-                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName ==
-                    "System.Data.SqlClient")
+                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
                 {
                     // this works only for Microsoft SQL Server
                     var sqlCommand = "SELECT OBJECT_NAME(OBJECT_ID) AS name, " +
@@ -541,6 +542,11 @@ namespace SoluiNet.DevTools.UI.Sql
                                      "ORDER BY OBJECT_NAME(OBJECT_ID)";
 
                     var data = plugin.ExecuteSql(sqlCommand);
+
+                    if (data.TableName == "Error")
+                    {
+                        throw new SoluiNetPluginException($"Couldn't select Stored Procedures for plugin '{plugin.Name}': {data.DefaultView[0].Row[0]}");
+                    }
 
                     foreach (DataRowView record in data.DefaultView)
                     {
@@ -560,8 +566,7 @@ namespace SoluiNet.DevTools.UI.Sql
                     this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Stored Functions" });
                 var storedFunctionsNode = (TreeViewItem)this.DatabaseSchema.Items[storedFunctionsNodeIndex];
 
-                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName ==
-                    "System.Data.SqlClient")
+                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
                 {
                     // this works only for Microsoft SQL Server
                     var sqlCommand = "SELECT DISTINCT " +
@@ -574,6 +579,11 @@ namespace SoluiNet.DevTools.UI.Sql
                                      "WHERE o.type_desc = 'SQL_SCALAR_FUNCTION'";
 
                     var data = plugin.ExecuteSql(sqlCommand);
+
+                    if (data.TableName == "Error")
+                    {
+                        throw new SoluiNetPluginException($"Couldn't select Stored Functions for plugin '{plugin.Name}': {data.DefaultView[0].Row[0]}");
+                    }
 
                     foreach (DataRowView record in data.DefaultView)
                     {
@@ -592,8 +602,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 var viewsNodeIndex = this.DatabaseSchema.Items.Add(new TreeViewItem() { Header = "Views" });
                 var viewsNode = (TreeViewItem)this.DatabaseSchema.Items[viewsNodeIndex];
 
-                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName ==
-                    "System.Data.SqlClient")
+                if (System.Configuration.ConfigurationManager.ConnectionStrings[plugin.ConnectionStringName].ProviderName == "System.Data.SqlClient")
                 {
                     // this works only for Microsoft SQL Server
                     var sqlCommand = "SELECT name, definition " +
@@ -602,6 +611,11 @@ namespace SoluiNet.DevTools.UI.Sql
                                      "WHERE obj.type = 'V'";
 
                     var data = plugin.ExecuteSql(sqlCommand);
+
+                    if (data.TableName == "Error")
+                    {
+                        throw new SoluiNetPluginException($"Couldn't select Views for plugin '{plugin.Name}': {data.DefaultView[0].Row[0]}");
+                    }
 
                     foreach (DataRowView record in data.DefaultView)
                     {

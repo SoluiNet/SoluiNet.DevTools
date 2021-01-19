@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SoluiNet.Settings
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://solui.net/SettingsSchema.xsd">
+  xmlns="http://solui.net/SettingSchema.xsd">
   <SoluiNet.Environment name="Default">
     <SoluiNet.SettingEntry name="ExampleKey">ExampleValue</SoluiNet.SettingEntry>
   </SoluiNet.Environment>
