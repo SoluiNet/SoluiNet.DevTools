@@ -76,6 +76,16 @@ namespace SoluiNet.DevTools.Core.Windows.Application
         internal static extern bool CloseHandle(IntPtr handle);
 
         /// <summary>
+        /// Retrieves the calling thread's last-error code value. The last-error code is maintained on a per-thread basis. Multiple threads do not overwrite each other's last-error code.
+        /// </summary>
+        /// <returns>Returns true if successful.</returns>
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        [SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.SysUInt)]
+        internal static extern bool GetLastError();
+
+        /// <summary>
         /// Register the HotKey.
         /// </summary>
         /// <param name="hWnd">The handle to the window that will receive hot key messages.</param>

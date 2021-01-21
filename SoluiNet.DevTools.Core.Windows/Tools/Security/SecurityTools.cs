@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
     using System.Runtime.InteropServices;
     using System.Security.Cryptography.X509Certificates;
     using System.Security.Principal;
+    using NLog;
     using SoluiNet.DevTools.Core.Windows.Application;
 
     /// <summary>
@@ -47,12 +48,30 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 
             if (token != IntPtr.Zero)
             {
-                NativeMethods.CloseHandle(token);
+                try
+                {
+                    NativeMethods.CloseHandle(token);
+                }
+                catch (Exception exception)
+                {
+                    var logger = LogManager.GetCurrentClassLogger();
+
+                    logger.Error(exception, "Error while closing handle: {0}", Marshal.GetLastWin32Error());
+                }
             }
 
             if (tokenDuplicate != IntPtr.Zero)
             {
-                NativeMethods.CloseHandle(tokenDuplicate);
+                try
+                {
+                    NativeMethods.CloseHandle(tokenDuplicate);
+                }
+                catch (Exception exception)
+                {
+                    var logger = LogManager.GetCurrentClassLogger();
+
+                    logger.Error(exception, "Error while closing handle: {0}", Marshal.GetLastWin32Error());
+                }
             }
 
             return null;
@@ -72,7 +91,16 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 
                 foreach (var token in tokens)
                 {
-                    NativeMethods.CloseHandle(token);
+                    try
+                    {
+                        NativeMethods.CloseHandle(token);
+                    }
+                    catch (Exception exception)
+                    {
+                        var logger = LogManager.GetCurrentClassLogger();
+
+                        logger.Error(exception, "Error while closing handle: {0}", NativeMethods.GetLastError());
+                    }
                 }
 
                 return impersonationContext;
