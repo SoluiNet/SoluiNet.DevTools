@@ -28,7 +28,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
         /// <param name="impersonation">The impersonation which can be used for executing the SQL command.</param>
         /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'impersonation' parameter has been added for future implementations")]
-        public static DataTable ExecuteSqlCommand(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsImpersonationContext impersonation = null)
+        public static DataTable ExecuteSqlCommand(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsLogin impersonation = null)
         {
             switch (providerType)
             {
@@ -51,7 +51,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
         /// <param name="impersonation">The impersonation which can be used for executing the SQL script.</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'impersonation' parameter has been added for future implementations")]
-        public static IList<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsImpersonationContext impersonation = null)
+        public static IList<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsLogin impersonation = null)
         {
             switch (providerType)
             {
@@ -74,6 +74,8 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
         /// <param name="impersonationIdentity">The impersonation identity which can be used for executing the SQL command.</param>
         /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'impersonationIdentity' parameter has been added for future implementations")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1111:Closing parenthesis should be on line of last parameter", Justification = "Couldn't format closing parenthesis correctly with compiler switch.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:Closing parenthesis should be spaced correctly", Justification = "Couldn't format closing parenthesis correctly with compiler switch.")]
         public static DataTable ExecuteSqlCommand(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsIdentity impersonationIdentity = null)
         {
             if (impersonationIdentity == null)
@@ -81,18 +83,36 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
                 throw new ArgumentNullException(nameof(impersonationIdentity));
             }
 
+            DataTable result = null;
+
+#if COMPILED_FOR_NETSTANDARD
+            WindowsIdentity.RunImpersonated(impersonationIdentity.AccessToken, () =>
+#else
             using (var context = impersonationIdentity.Impersonate())
+#endif
             {
                 switch (providerType)
                 {
                     case "System.Data.SqlClient":
-                        return ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                        result = ExecuteSqlCommand<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                        break;
                     case "System.Data.SQLite":
-                        return ExecuteSqlCommand<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+                        result = ExecuteSqlCommand<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+                        break;
                     default:
-                        return null;
+                        result = null;
+                        break;
                 }
+
+#if COMPILED_FOR_NETSTANDARD
+                return;
+#endif
             }
+#if COMPILED_FOR_NETSTANDARD
+            );
+#endif
+
+            return result;
         }
 
         /// <summary>
@@ -105,6 +125,8 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
         /// <param name="impersonationIdentity">The impersonation identity which can be used for executing the SQL script.</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'impersonationIdentity' parameter has been added for future implementations")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1111:Closing parenthesis should be on line of last parameter", Justification = "Couldn't format closing parenthesis correctly with compiler switch.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:Closing parenthesis should be spaced correctly", Justification = "Couldn't format closing parenthesis correctly with compiler switch.")]
         public static IList<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsIdentity impersonationIdentity = null)
         {
             if (impersonationIdentity == null)
@@ -112,18 +134,36 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
                 throw new ArgumentNullException(nameof(impersonationIdentity));
             }
 
+            IList<DataTable> result = null;
+
+#if COMPILED_FOR_NETSTANDARD
+            WindowsIdentity.RunImpersonated(impersonationIdentity.AccessToken, () =>
+#else
             using (var context = impersonationIdentity.Impersonate())
+#endif
             {
                 switch (providerType)
                 {
                     case "System.Data.SqlClient":
-                        return ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                        result = ExecuteSqlScript<SqlConnection, SqlCommand>(connectionString, sqlCommand, environment);
+                        break;
                     case "System.Data.SQLite":
-                        return ExecuteSqlScript<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+                        result = ExecuteSqlScript<SQLiteConnection, SQLiteCommand>(connectionString, sqlCommand, environment);
+                        break;
                     default:
-                        return null;
+                        result = null;
+                        break;
                 }
+
+#if COMPILED_FOR_NETSTANDARD
+                return;
+#endif
             }
+#if COMPILED_FOR_NETSTANDARD
+            );
+#endif
+
+            return result;
         }
     }
 }
