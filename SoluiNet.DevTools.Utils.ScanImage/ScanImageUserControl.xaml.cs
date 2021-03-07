@@ -6,7 +6,11 @@ namespace SoluiNet.DevTools.Utils.ScanImage
 {
     using System;
     using System.Collections.Generic;
+#if COMPILED_FOR_NETSTANDARD
+    using System.Common.Drawing;
+#else
     using System.Drawing;
+#endif
     using System.Globalization;
     using System.Linq;
     using System.Text;

@@ -33,6 +33,8 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
             var token = IntPtr.Zero;
             var tokenDuplicate = IntPtr.Zero;
 
+            WindowsImpersonationContext impersonationContext = null;
+
             if (NativeMethods.RevertToSelf())
             {
                 if (NativeMethods.LogonUserW(user, domain, password, Logon32LogonInteractive, Logon32ProviderDefault, ref token))
@@ -41,7 +43,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                     {
                         var tempWindowsIdentity = new WindowsIdentity(tokenDuplicate);
 
-                        Impersonate(tempWindowsIdentity, token, tokenDuplicate);
+                        impersonationContext = Impersonate(tempWindowsIdentity, token, tokenDuplicate);
                     }
                 }
             }
@@ -74,7 +76,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                 }
             }
 
-            return null;
+            return impersonationContext;
         }
 
         /// <summary>
