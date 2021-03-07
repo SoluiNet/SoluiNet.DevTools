@@ -2,10 +2,12 @@
   <PropertyGroup>
     <ProjectGuid>{64B47EED-3674-47F1-80FE-969339A8D34C}</ProjectGuid>
     <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
     <AssemblyTitle>SoluiNet.DevTools.Core.Windows</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core.Windows</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -23,6 +25,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="WindowsBase" Version="4.6.1055" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
@@ -35,6 +40,11 @@
   <ItemGroup>
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Windows" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <Reference Include="System.Windows.Input" />
   </ItemGroup>
 </Project>
