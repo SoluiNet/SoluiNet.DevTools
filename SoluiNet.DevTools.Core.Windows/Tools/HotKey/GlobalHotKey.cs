@@ -6,7 +6,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
 {
     using System;
     using System.Runtime.InteropServices;
+#if COMPILED_FOR_NETSTANDARD
+    using System.Windows.Input;
+#else
     using System.Windows.Forms;
+#endif
     using SoluiNet.DevTools.Core.Windows.Application;
 
     /// <summary>
@@ -25,10 +29,12 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
         /// <param name="modifier">The modifier.</param>
         /// <param name="key">The key.</param>
         /// <param name="windowHandle">The window handle.</param>
-        public GlobalHotKey(int modifier, Keys key, IntPtr windowHandle)
+        public GlobalHotKey(int modifier, Key key, IntPtr windowHandle)
         {
+            var virtualKey = KeyInterop.VirtualKeyFromKey(key);
+
             this.modifier = modifier;
-            this.key = (int)key;
+            this.key = virtualKey;
             this.hWnd = windowHandle;
             this.id = this.GetHashCode();
         }

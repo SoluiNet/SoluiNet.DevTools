@@ -5,10 +5,13 @@
 namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 {
     using System;
+#if !COMPILED_FOR_NETSTANDARD
     using System.DirectoryServices.AccountManagement;
+#endif
     using System.Runtime.InteropServices;
     using System.Security.Cryptography.X509Certificates;
     using System.Security.Principal;
+    using System.Threading.Tasks;
     using NLog;
     using SoluiNet.DevTools.Core.Windows.Application;
 
@@ -21,6 +24,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 
         private const int Logon32ProviderDefault = 0;
 
+#if !COMPILED_FOR_NETSTANDARD
         /// <summary>
         /// Impersonate to a specific user.
         /// </summary>
@@ -112,15 +116,94 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                 impersonationIdentity.Dispose();
             }
         }
+#endif
+
+        /// <summary>
+        /// Run a task under impersonated context.
+        /// </summary>
+        /// <param name="identity">The identity which should be used for impersonation.</param>
+        /// <param name="task">The task which should be executed.</param>
+        public static void RunImpersonated(WindowsIdentity identity, Action task)
+        {
+#if COMPILED_FOR_NETSTANDARD
+            WindowsIdentity.RunImpersonated(identity.AccessToken, task);
+#else
+            var impersonationContext = identity.Impersonate();
+
+            try
+            {
+                task.Invoke();
+            }
+            finally
+            {
+                impersonationContext.Dispose();
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Run a task under impersonated context.
+        /// </summary>
+        /// <param name="identity">The identity which should be used for impersonation.</param>
+        /// <param name="task">The task which should be executed.</param>
+        /// <returns>Returns the tasks result.</returns>
+        public static object RunImpersonated(WindowsIdentity identity, Func<object> task)
+        {
+#if COMPILED_FOR_NETSTANDARD
+            return WindowsIdentity.RunImpersonated(identity.AccessToken, task);
+#else
+            var impersonationContext = identity.Impersonate();
+
+            try
+            {
+                return task.Invoke();
+            }
+            finally
+            {
+                impersonationContext.Dispose();
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Run a task under impersonated context.
+        /// </summary>
+        /// <param name="identity">The identity which should be used for impersonation.</param>
+        /// <param name="task">The task which should be executed.</param>
+        /// <typeparam name="T">The return type of the task.</typeparam>
+        /// <returns>Returns the tasks result.</returns>
+        public static T RunImpersonated<T>(WindowsIdentity identity, Func<T> task)
+        {
+#if COMPILED_FOR_NETSTANDARD
+            return WindowsIdentity.RunImpersonated<T>(identity.AccessToken, task);
+#else
+            var impersonationContext = identity.Impersonate();
+
+            try
+            {
+                return task.Invoke();
+            }
+            finally
+            {
+                impersonationContext.Dispose();
+            }
+#endif
+        }
 
         /// <summary>
         /// Get a WindowsIdentity-object.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="domainName">The domain name.</param>
+        /// <param name="password">The password.</param>
         /// <returns>Returns a WindowsIdentity-object. It will return the object for the logged in user if there are no parameters.</returns>
-        public static WindowsIdentity GetIdentityByName(string userName = "", string domainName = "")
+        public static WindowsIdentity GetIdentityByName(string userName = "", string domainName = "", string password = "")
         {
+#if COMPILED_FOR_NETSTANDARD
+            var windowsIdentity = new WindowsLogin(userName, domainName, password);
+
+            return windowsIdentity.Identity;
+#else
             domainName = string.IsNullOrWhiteSpace(domainName) ? Environment.UserDomainName : domainName;
             userName = string.IsNullOrWhiteSpace(userName) ? Environment.UserName : userName;
 
@@ -134,6 +217,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                     return user == null ? null : new WindowsIdentity(user.UserPrincipalName);
                 }
             }
+#endif
         }
     }
 }

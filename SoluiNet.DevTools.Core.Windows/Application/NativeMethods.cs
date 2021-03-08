@@ -21,6 +21,27 @@ namespace SoluiNet.DevTools.Core.Windows.Application
         /// <summary>
         /// Log a user on to the local computer.
         /// </summary>
+        /// <param name="lpszUsername">The user name.</param>
+        /// <param name="lpszDomain">The domain.</param>
+        /// <param name="lpszPassword">The password.</param>
+        /// <param name="dwLogonType">The logon type.</param>
+        /// <param name="dwLogonProvider">The logon provider.</param>
+        /// <param name="phToken">A pointer to handle variable that receives a handle to a token that represents the specified user.</param>
+        /// <returns>Returns true if successful.</returns>
+        [DllImport("advapi32.dll", SetLastError = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool LogonUser(
+            [MarshalAs(UnmanagedType.LPStr)]string lpszUsername,
+            [MarshalAs(UnmanagedType.LPStr)]string lpszDomain,
+            [MarshalAs(UnmanagedType.LPStr)]string lpszPassword,
+            int dwLogonType,
+            int dwLogonProvider,
+            ref IntPtr phToken);
+
+        /// <summary>
+        /// Log a user on to the local computer.
+        /// </summary>
         /// <param name="lpszUserName">The user name.</param>
         /// <param name="lpszDomain">The domain.</param>
         /// <param name="lpszPassword">The password.</param>

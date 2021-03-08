@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{64B47EED-3674-47F1-80FE-969339A8D34C}</ProjectGuid>
-    <TargetFramework>net472</TargetFramework>
-    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Core.Windows</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core.Windows</Product>
@@ -26,6 +26,9 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Data.SqlClient" Version="4.3.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.113.7" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.7" />
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
   <ItemGroup>
