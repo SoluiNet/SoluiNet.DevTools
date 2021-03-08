@@ -18,6 +18,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using SoluiNet.DevTools.Core.Tools.Database;
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Core.Windows.Tools.Database;
     using SoluiNet.DevTools.Core.Windows.Tools.Security;
 
     /// <summary>
@@ -107,56 +108,51 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         private Grid MainGrid { get; set; }
 
         /// <inheritdoc/>
-        public DataTable ExecuteSql(string sqlCommand)
+        public DataTable ExecuteSql(string sqlCommand, WindowsIdentity identity = null)
         {
-            WindowsImpersonationContext impersonationContext = null;
-
-            var settings = this.RetrieveSettingsAsDictionary();
-
-            if (settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.User", out var user) &&
-                settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.Password", out var password))
+            if (identity == null)
             {
-                impersonationContext = settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.Domain", out var domain) ?
-                    SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString()) :
-                    SecurityTools.Impersonate(user.ToString(), password.ToString());
+                // even if identity hasn't been passed there is a possibility that settings will be available.
+                var settings = this.RetrieveSettingsAsDictionary();
+
+                if (settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.User", out var user) &&
+                    settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.Password", out var password))
+                {
+                    identity = settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.Domain", out var domain)
+                            ? SecurityTools.GetIdentityByName(userName: user.ToString(), password: password.ToString(), domainName: domain.ToString())
+                            : SecurityTools.GetIdentityByName(userName: user.ToString(), password: password.ToString());
+                }
             }
 
-            try
-            {
-                return DbHelper.ExecuteSqlCommand(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName, ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString, sqlCommand);
-            }
-            finally
-            {
-                impersonationContext?.Undo();
-            }
+            return Core.Windows.Tools.Database.DbHelper.ExecuteSqlCommand(
+                ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName,
+                ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString,
+                sqlCommand,
+                impersonationIdentity: identity);
         }
 
         /// <inheritdoc/>
-        public List<DataTable> ExecuteSqlScript(string sqlCommand)
+        public List<DataTable> ExecuteSqlScript(string sqlCommand, WindowsIdentity identity = null)
         {
-            WindowsImpersonationContext impersonationContext = null;
-
-            var settings = this.RetrieveSettingsAsDictionary();
-
-            if (settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.User", out var user) &&
-                settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.Password", out var password))
+            if (identity == null)
             {
-                impersonationContext = settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.Domain", out var domain) ?
-                    SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString()) :
-                    SecurityTools.Impersonate(user.ToString(), password.ToString());
+                // even if identity hasn't been passed there is a possibility that settings will be available.
+                var settings = this.RetrieveSettingsAsDictionary();
+
+                if (settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.User", out var user) &&
+                    settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.Password", out var password))
+                {
+                    identity = settings.TryGetValue($"{this.Environment ?? "Default"}.Impersonation@{this.Name}.Domain", out var domain)
+                        ? SecurityTools.GetIdentityByName(userName: user.ToString(), password: password.ToString(), domainName: domain.ToString())
+                        : SecurityTools.GetIdentityByName(userName: user.ToString(), password: password.ToString());
+                }
             }
 
-            try
-            {
-                return DbHelper.ExecuteSqlScript(
-                    ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName,
-                    ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString,
-                    sqlCommand) as List<DataTable>;
-            }
-            finally
-            {
-                impersonationContext?.Undo();
-            }
+            return Core.Windows.Tools.Database.DbHelper.ExecuteSqlScript(
+                ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ProviderName,
+                ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString,
+                sqlCommand,
+                impersonationIdentity: identity) as List<DataTable>;
         }
 
         /// <inheritdoc/>

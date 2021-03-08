@@ -199,14 +199,14 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <returns>Returns a WindowsIdentity-object. It will return the object for the logged in user if there are no parameters.</returns>
         public static WindowsIdentity GetIdentityByName(string userName = "", string domainName = "", string password = "")
         {
+            domainName = string.IsNullOrWhiteSpace(domainName) ? Environment.UserDomainName : domainName;
+            userName = string.IsNullOrWhiteSpace(userName) ? Environment.UserName : userName;
+
 #if COMPILED_FOR_NETSTANDARD
             var windowsIdentity = new WindowsLogin(userName, domainName, password);
 
             return windowsIdentity.Identity;
 #else
-            domainName = string.IsNullOrWhiteSpace(domainName) ? Environment.UserDomainName : domainName;
-            userName = string.IsNullOrWhiteSpace(userName) ? Environment.UserName : userName;
-
             var accountName = $@"{domainName}\{userName}";
 
             // cannot create WindowsIdentity because it requires username in form user@domain.com but the passed value will be DOMAIN\user.

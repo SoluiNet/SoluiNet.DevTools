@@ -492,7 +492,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 return;
             }
 
-            WindowsImpersonationContext impersonationContext = null;
+            WindowsIdentity identity = null;
 
             if (plugin is IContainsSettings)
             {
@@ -501,10 +501,10 @@ namespace SoluiNet.DevTools.UI.Sql
                 if (settings.TryGetValue($"{chosenEnvironment ?? "Default"}.Impersonation@{plugin.Name}.User", out var user) &&
                     settings.TryGetValue($"{chosenEnvironment ?? "Default"}.Impersonation@{plugin.Name}.Password", out var password))
                 {
-                    impersonationContext =
+                    identity =
                         settings.TryGetValue($"{chosenEnvironment ?? "Default"}.Impersonation@{plugin.Name}.Domain", out var domain)
-                            ? SecurityTools.Impersonate(user.ToString(), password.ToString(), domain.ToString())
-                            : SecurityTools.Impersonate(user.ToString(), password.ToString());
+                            ? SecurityTools.GetIdentityByName(userName: user.ToString(), password: password.ToString(), domainName: domain.ToString())
+                            : SecurityTools.GetIdentityByName(userName: user.ToString(), password: password.ToString());
                 }
             }
 
@@ -540,7 +540,7 @@ namespace SoluiNet.DevTools.UI.Sql
                                      "WHERE objectproperty(OBJECT_ID, 'IsProcedure') = 1 " +
                                      "ORDER BY OBJECT_NAME(OBJECT_ID)";
 
-                    var data = plugin.ExecuteSql(sqlCommand);
+                    var data = identity != null ? plugin.ExecuteSql(sqlCommand, identity) : plugin.ExecuteSql(sqlCommand);
 
                     if (data.TableName == "Error")
                     {
@@ -577,7 +577,7 @@ namespace SoluiNet.DevTools.UI.Sql
                                      "INNER JOIN sys.schemas s ON o.schema_id = s.schema_id " +
                                      "WHERE o.type_desc = 'SQL_SCALAR_FUNCTION'";
 
-                    var data = plugin.ExecuteSql(sqlCommand);
+                    var data = identity != null ? plugin.ExecuteSql(sqlCommand, identity) : plugin.ExecuteSql(sqlCommand);
 
                     if (data.TableName == "Error")
                     {
@@ -609,7 +609,7 @@ namespace SoluiNet.DevTools.UI.Sql
                                      "JOIN sys.sql_modules mod ON mod.object_id = obj.object_id " +
                                      "WHERE obj.type = 'V'";
 
-                    var data = plugin.ExecuteSql(sqlCommand);
+                    var data = identity != null ? plugin.ExecuteSql(sqlCommand, identity) : plugin.ExecuteSql(sqlCommand);
 
                     if (data.TableName == "Error")
                     {
@@ -640,7 +640,7 @@ namespace SoluiNet.DevTools.UI.Sql
             }
             finally
             {
-                impersonationContext?.Undo();
+                identity?.Dispose();
             }
         }
 

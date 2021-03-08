@@ -8,6 +8,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
+    using System.Security.Principal;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -35,14 +36,16 @@ namespace SoluiNet.DevTools.Core.Plugin
         /// Execute a custom SQL command. Working only with single commands.
         /// </summary>
         /// <param name="sqlCommand">The SQL command text.</param>
+        /// <param name="identity">The impersonation identity.</param>
         /// <returns>A <see cref="DataTable"/> which has the results.</returns>
-        DataTable ExecuteSql(string sqlCommand);
+        DataTable ExecuteSql(string sqlCommand, WindowsIdentity identity = null);
 
         /// <summary>
         /// Execute a custom SQL command. May contain multiple commands.
         /// </summary>
         /// <param name="sqlCommand">The SQL command text.</param>
+        /// <param name="identity">The impersonation identity.</param>
         /// <returns>A <see cref="DataTable"/> which has the results.</returns>
-        List<DataTable> ExecuteSqlScript(string sqlCommand);
+        List<DataTable> ExecuteSqlScript(string sqlCommand, WindowsIdentity identity = null);
     }
 }
