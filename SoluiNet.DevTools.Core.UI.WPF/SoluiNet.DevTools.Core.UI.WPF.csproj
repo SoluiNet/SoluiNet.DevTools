@@ -2,10 +2,12 @@
   <PropertyGroup>
     <ProjectGuid>{CB1DB5BC-9DD8-4050-919E-720B35DF882B}</ProjectGuid>
     <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
     <AssemblyTitle>SoluiNet.DevTools.Core.UI.WPF</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core.UI.WPF</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -31,7 +33,7 @@
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.1.0" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -39,6 +41,8 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />

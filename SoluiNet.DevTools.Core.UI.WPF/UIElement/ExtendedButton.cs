@@ -9,9 +9,13 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+#if !COMPILED_FOR_NETSTANDARD
     using System.Windows.Controls;
+#endif
     using System.Windows.Input;
+#if !COMPILED_FOR_NETSTANDARD
     using System.Windows.Media;
+#endif
 
     /// <summary>
     /// Provides a button width additional features.

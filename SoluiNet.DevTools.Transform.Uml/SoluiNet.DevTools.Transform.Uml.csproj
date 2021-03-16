@@ -3,8 +3,10 @@
     <ProjectGuid>{FDEDA2F7-611B-4E77-9D84-1BB8802E27B5}</ProjectGuid>
     <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <AssemblyTitle>SoluiNet.DevTools.Transform.Uml</AssemblyTitle>
+    <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Transform.Uml</Product>
-    <Copyright>Copyright ©  2019</Copyright>
+    <Copyright>Copyright © SoluiNet 2019</Copyright>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

@@ -13,10 +13,12 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
     using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Windows;
+#if !COMPILED_FOR_NETSTANDARD
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Media;
+#endif
     using System.Xml;
     using ICSharpCode.AvalonEdit.Highlighting;
     using ICSharpCode.AvalonEdit.Highlighting.Xshd;

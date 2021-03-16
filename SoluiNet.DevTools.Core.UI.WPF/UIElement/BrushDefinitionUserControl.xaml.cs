@@ -10,14 +10,18 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
+#if !COMPILED_FOR_NETSTANDARD
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Documents;
+#endif
     using System.Windows.Input;
+#if !COMPILED_FOR_NETSTANDARD
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+#endif
     using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.UI.WPF.Tools;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.String;
