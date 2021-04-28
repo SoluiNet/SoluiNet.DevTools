@@ -1,0 +1,24 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: docfx.console
+    versions:
+    - 2.57.0
+  - dependency-name: Quartz
+    versions:
+    - 3.3.1
+  - dependency-name: MSTest.TestAdapter
+    versions:
+    - 2.2.2
+  - dependency-name: Microsoft.EntityFrameworkCore
+    versions:
+    - 5.0.4
+  - dependency-name: Microsoft.EntityFrameworkCore.Sqlite
+    versions:
+    - 5.0.4
