@@ -21,6 +21,9 @@
             <MenuItem Header="Settings" Click="CategorySettings_Click" />
             <MenuItem Header="Delete" Click="CategoryDelete_Click" />
         </ContextMenu>
+        <ContextMenu x:Key="AutomaticAssignmentContextMenu">
+            <MenuItem Header="Automatic Assign All" Click="AutomaticAssignAll_Click" />
+        </ContextMenu>
     </UserControl.Resources>
     <Grid>
         <TabControl x:Name="TimeTrackingTabs" SelectionChanged="TimeTrackingTabs_SelectionChanged">

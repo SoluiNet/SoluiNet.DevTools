@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Linq.Dynamic.Core;
     using System.Reflection;
     using System.Resources;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -1352,6 +1353,58 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     }
                 }
             }
+        }
+
+        private void AutomaticAssignAll_Click(object sender, RoutedEventArgs e)
+        {
+            var unassignedUsagesTimesForApplications = this.context.UsageTime.Where(x => x.Application == null);
+
+            Parallel.ForEach(unassignedUsagesTimesForApplications, unassigned =>
+            {
+                var content = unassigned.ApplicationIdentification;
+
+                foreach (var application in this.context.Application)
+                {
+                    if (string.IsNullOrEmpty(application.ExtendedConfiguration))
+                    {
+                        continue;
+                    }
+
+                    if (content.MatchesRegEx(application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                    {
+                        unassigned.Application = application;
+                    }
+                }
+            });
+
+            this.context.SaveChanges();
+
+            var unassignedUsagesTimesForCategories = this.context.UsageTime.Where(x => x.CategoryUsageTime == null);
+
+            Parallel.ForEach(unassignedUsagesTimesForCategories, unassigned =>
+            {
+                var content = unassigned.ApplicationIdentification;
+
+                foreach (var category in this.context.Category)
+                {
+                    if (string.IsNullOrEmpty(category.ExtendedConfiguration))
+                    {
+                        continue;
+                    }
+
+                    if (content.MatchesRegEx(category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                    {
+                        this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                        {
+                            UsageTimeId = unassigned.UsageTimeId,
+                            Duration = unassigned.Duration,
+                            CategoryId = category.CategoryId,
+                        });
+                    }
+                }
+            });
+
+            this.context.SaveChanges();
         }
 
         private void AutomaticAssignment_Click(object sender, RoutedEventArgs e)
