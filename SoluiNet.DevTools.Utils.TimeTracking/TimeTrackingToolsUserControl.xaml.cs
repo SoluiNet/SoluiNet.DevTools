@@ -426,6 +426,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             categoryContextMenu.IsOpen = true;
         }
 
+        private void RightClickAutoAssignment(object sender, MouseButtonEventArgs eventArgs)
+        {
+            if (!(this.FindResource("AutomaticAssignmentContextMenu") is ContextMenu categoryContextMenu))
+            {
+                return;
+            }
+
+            categoryContextMenu.PlacementTarget = sender as Button;
+            categoryContextMenu.IsOpen = true;
+        }
+
         private void SelectCategory(object sender, EventArgs eventArgs)
         {
             var categoryTarget = sender as UI.AssignmentTargetExtended;
@@ -1357,9 +1368,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void AutomaticAssignAll_Click(object sender, RoutedEventArgs e)
         {
-            var unassignedUsagesTimesForApplications = this.context.UsageTime.Where(x => x.Application == null);
+            var unassignedUsagesTimesForApplications = this.context.UsageTime.Local.Where(x => x.Application == null);
 
-            Parallel.ForEach(unassignedUsagesTimesForApplications, unassigned =>
+            foreach (var unassigned in unassignedUsagesTimesForApplications)
             {
                 var content = unassigned.ApplicationIdentification;
 
@@ -1372,16 +1383,18 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                     if (content.MatchesRegEx(application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
                     {
-                        unassigned.Application = application;
+                        Logger.Info("automatic assign '{0}' to application '{1}'", content, application.ApplicationName);
+
+                        unassigned.ApplicationId = application.ApplicationId;
                     }
                 }
-            });
+            }
 
             this.context.SaveChanges();
 
-            var unassignedUsagesTimesForCategories = this.context.UsageTime.Where(x => x.CategoryUsageTime == null);
+            var unassignedUsagesTimesForCategories = this.context.UsageTime.Local.Where(x => x.CategoryUsageTime == null);
 
-            Parallel.ForEach(unassignedUsagesTimesForCategories, unassigned =>
+            foreach (var unassigned in unassignedUsagesTimesForCategories)
             {
                 var content = unassigned.ApplicationIdentification;
 
@@ -1394,6 +1407,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                     if (content.MatchesRegEx(category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
                     {
+                        Logger.Info("automatic assign '{0}' to category '{1}'", content, category.CategoryName);
+
                         this.context.CategoryUsageTime.Add(new CategoryUsageTime()
                         {
                             UsageTimeId = unassigned.UsageTimeId,
@@ -1402,7 +1417,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         });
                     }
                 }
-            });
+            }
 
             this.context.SaveChanges();
         }
