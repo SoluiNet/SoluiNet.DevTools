@@ -1370,27 +1370,39 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         {
             var unassignedUsagesTimesForApplications = this.context.UsageTime.Local.Where(x => x.Application == null);
 
-            foreach (var unassigned in unassignedUsagesTimesForApplications)
+            var batch = unassignedUsagesTimesForApplications.Take(1000);
+            var iteration = 1;
+
+            do
             {
-                var content = unassigned.ApplicationIdentification;
-
-                foreach (var application in this.context.Application)
+                foreach (var unassigned in batch)
                 {
-                    if (string.IsNullOrEmpty(application.ExtendedConfiguration))
-                    {
-                        continue;
-                    }
+                    var content = unassigned.ApplicationIdentification;
 
-                    if (content.MatchesRegEx(application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                    foreach (var application in this.context.Application)
                     {
-                        Logger.Info("automatic assign '{0}' to application '{1}'", content, application.ApplicationName);
+                        if (string.IsNullOrEmpty(application.ExtendedConfiguration))
+                        {
+                            continue;
+                        }
 
-                        unassigned.ApplicationId = application.ApplicationId;
+                        if (content.MatchesRegEx(application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                        {
+                            Logger.Info("automatic assign '{0}' to application '{1}'", content, application.ApplicationName);
+
+                            unassigned.ApplicationId = application.ApplicationId;
+                        }
                     }
                 }
-            }
 
-            this.context.SaveChanges();
+                Logger.Info("Persist changes");
+                this.context.SaveChanges();
+
+                Logger.Info("Get next batch ({1}) of 1000, {0} already done", iteration * 1000, iteration);
+                batch = unassignedUsagesTimesForApplications.Skip(iteration * 1000).Take(1000);
+                iteration++;
+            }
+            while (batch.Any());
 
             var unassignedUsagesTimesForCategories = this.context.UsageTime.Local.Where(x => x.CategoryUsageTime == null);
 
