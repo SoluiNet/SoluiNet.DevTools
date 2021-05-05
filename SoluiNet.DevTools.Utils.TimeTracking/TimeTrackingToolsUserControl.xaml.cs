@@ -1368,8 +1368,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void AutomaticAssignAll_Click(object sender, RoutedEventArgs e)
         {
-            // var unassignedUsagesTimesForApplications = this.context.UsageTime.Local.Where(x => x.Application == null);
-
             var batch = this.context.UsageTime.Where(x => x.Application == null).Take(1000);
             var iteration = 1;
 
