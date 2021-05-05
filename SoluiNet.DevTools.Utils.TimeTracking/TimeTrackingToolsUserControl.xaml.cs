@@ -1368,9 +1368,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void AutomaticAssignAll_Click(object sender, RoutedEventArgs e)
         {
-            var unassignedUsagesTimesForApplications = this.context.UsageTime.Local.Where(x => x.Application == null);
+            // var unassignedUsagesTimesForApplications = this.context.UsageTime.Local.Where(x => x.Application == null);
 
-            var batch = unassignedUsagesTimesForApplications.Take(1000);
+            var batch = this.context.UsageTime.Take(1000);
             var iteration = 1;
 
             do
@@ -1399,7 +1399,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 this.context.SaveChanges();
 
                 Logger.Info("Get next batch ({1}) of 1000, {0} already done", iteration * 1000, iteration);
-                batch = unassignedUsagesTimesForApplications.Skip(iteration * 1000).Take(1000);
+                batch = this.context.UsageTime.Skip(iteration * 1000).Take(1000);
                 iteration++;
             }
             while (batch.Any());
