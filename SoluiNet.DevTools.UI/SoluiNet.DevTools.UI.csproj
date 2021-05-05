@@ -181,6 +181,7 @@
     </Compile>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" />
+    <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="cp &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Unix'" />
   </Target>
 </Project>

@@ -123,6 +123,7 @@
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties stylecop_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" />
+    <Exec Command="copy &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="cp &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" Condition="'$(OS)' == 'Unix'" />
   </Target>
 </Project>
