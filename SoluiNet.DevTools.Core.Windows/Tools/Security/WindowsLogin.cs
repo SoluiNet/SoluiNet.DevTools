@@ -21,12 +21,14 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// Constant for default login.
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Use underscores for better readability")]
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Use underscores for better readability")]
         protected const int LOGON32_PROVIDER_DEFAULT = 0;
 
         /// <summary>
         /// Constant for interactive login.
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Use underscores for better readability")]
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Use underscores for better readability")]
         protected const int LOGON32_LOGON_INTERACTIVE = 2;
 
         private System.IntPtr accessToken;
