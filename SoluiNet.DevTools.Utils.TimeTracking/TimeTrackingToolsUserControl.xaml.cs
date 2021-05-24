@@ -1374,12 +1374,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Ignore for better readability")]
         private void AutomaticAssignAll_Click(object sender, RoutedEventArgs e)
         {
             const int batchSize = 1000;
 
             var unassignedApplicationBatch = this.context.UsageTime
-                .Where(x => x.Application == null && !x.ApplicationAutomaticAssigned.GetValueOrDefault())
+                .Where(x => x.Application == null && !(x.ApplicationAutomaticAssigned == null || x.ApplicationAutomaticAssigned.Value))
+                .OrderBy(x => x.UsageTimeId)
                 .Take(batchSize);
             var iteration = 1;
 
@@ -1410,16 +1412,23 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 Logger.Info("Persist changes");
                 this.context.SaveChanges();
 
-                Logger.Info("Get next batch ({1}) of 1000, {0} already done", iteration * batchSize, iteration);
+                Logger.Info(
+                    "Get next batch ({1}) of 1000, {0} already done",
+                    unassignedApplicationBatch.Count() < 1000
+                        ? ((iteration - 1) * batchSize) + unassignedApplicationBatch.Count()
+                        : iteration * batchSize,
+                    iteration);
                 unassignedApplicationBatch = this.context.UsageTime
-                    .Where(x => x.Application == null && !x.ApplicationAutomaticAssigned.GetValueOrDefault())
+                    .Where(x => x.Application == null && !(x.ApplicationAutomaticAssigned == null || x.ApplicationAutomaticAssigned.Value))
+                    .OrderBy(x => x.UsageTimeId)
                     .Skip(iteration * batchSize).Take(batchSize);
                 iteration++;
             }
             while (unassignedApplicationBatch.Any());
 
             var unassignedCategoryBatch = this.context.UsageTime
-                .Where(x => x.CategoryUsageTime == null || !x.CategoryAutomaticAssigned.GetValueOrDefault())
+                .Where(x => !x.CategoryUsageTime.Any() || !(x.CategoryAutomaticAssigned == null || x.CategoryAutomaticAssigned.Value))
+                .OrderBy(x => x.UsageTimeId)
                 .Take(batchSize);
             iteration = 1;
 
@@ -1455,9 +1464,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 Logger.Info("Persist changes");
                 this.context.SaveChanges();
 
-                Logger.Info("Get next batch ({1}) of 1000, {0} already done", iteration * batchSize, iteration);
+                Logger.Info(
+                    "Get next batch ({1}) of 1000, {0} already done",
+                    unassignedCategoryBatch.Count() < 1000
+                        ? ((iteration - 1) * batchSize) + unassignedCategoryBatch.Count()
+                        : iteration * batchSize,
+                    iteration);
                 unassignedCategoryBatch = this.context.UsageTime
-                    .Where(x => x.CategoryUsageTime == null && !x.CategoryAutomaticAssigned.GetValueOrDefault())
+                    .Where(x => !x.CategoryUsageTime.Any() && !(x.CategoryAutomaticAssigned == null || x.CategoryAutomaticAssigned.Value))
+                    .OrderBy(x => x.UsageTimeId)
                     .Skip(iteration * batchSize).Take(batchSize);
                 iteration++;
             }
