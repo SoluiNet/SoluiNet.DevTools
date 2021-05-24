@@ -683,7 +683,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.16")) < 0)
                     {
-                        command.CommandText = "ALTER TABLE CategoryUsageTime ADD DistributedEvenly BOOLEAN;";
+                        command.CommandText = "ALTER TABLE Category_UsageTime ADD DistributedEvenly BOOLEAN;";
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
