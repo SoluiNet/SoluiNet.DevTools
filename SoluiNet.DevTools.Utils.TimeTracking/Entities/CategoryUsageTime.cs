@@ -40,6 +40,11 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         public virtual double Duration { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this record was distributed evenly or has been manually assigned.
+        /// </summary>
+        public virtual bool? DistributedEvenly { get; set; }
+
+        /// <summary>
         /// Gets or sets the category.
         /// </summary>
         public virtual Category Category { get; set; }

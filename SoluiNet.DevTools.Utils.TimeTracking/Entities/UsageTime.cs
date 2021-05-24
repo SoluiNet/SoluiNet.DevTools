@@ -70,6 +70,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         public virtual ApplicationArea ApplicationArea { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the record has already been processed by automatic assignment for applications.
+        /// </summary>
+        public virtual bool? ApplicationAutomaticAssigned { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the record has already been processed by automatic assignment for categories.
+        /// </summary>
+        public virtual bool? CategoryAutomaticAssigned { get; set; }
+
+        /// <summary>
         /// Gets or sets the category usage time links.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage(

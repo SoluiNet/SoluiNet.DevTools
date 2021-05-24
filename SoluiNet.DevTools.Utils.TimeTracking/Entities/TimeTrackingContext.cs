@@ -620,7 +620,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.13")) < 0)
                     {
-                        command.CommandText = "CREATE INDEX idx_usage_starttime ON UsageTime(StartTime); ";
+                        command.CommandText = "CREATE INDEX idx_usage_starttime ON UsageTime(StartTime);";
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
@@ -640,7 +640,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.14")) < 0)
                     {
-                        command.CommandText = "CREATE INDEX idx_usage_application ON UsageTime(ApplicationId); ";
+                        command.CommandText = "CREATE INDEX idx_usage_application ON UsageTime(ApplicationId);";
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
@@ -656,6 +656,49 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.Parameters.Clear();
 
                         appliedVersion = new Version("1.0.0.14");
+                    }
+
+                    if (appliedVersion.CompareTo(new Version("1.0.0.15")) < 0)
+                    {
+                        command.CommandText = "ALTER TABLE UsageTime ADD ApplicationAutomaticAssigned BOOLEAN;";
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = "ALTER TABLE UsageTime ADD CategoryAutomaticAssigned BOOLEAN;";
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+                        command.CommandText =
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                        command.Parameters.AddWithValue("$versionNo", "1.0.0.15");
+                        command.Parameters.AddWithValue(
+                            "$appliedAt",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+
+                        appliedVersion = new Version("1.0.0.15");
+                    }
+
+                    if (appliedVersion.CompareTo(new Version("1.0.0.16")) < 0)
+                    {
+                        command.CommandText = "ALTER TABLE CategoryUsageTime ADD DistributedEvenly BOOLEAN;";
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+                        command.CommandText =
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                        command.Parameters.AddWithValue("$versionNo", "1.0.0.16");
+                        command.Parameters.AddWithValue(
+                            "$appliedAt",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+
+                        appliedVersion = new Version("1.0.0.16");
                     }
                 }
                 finally
