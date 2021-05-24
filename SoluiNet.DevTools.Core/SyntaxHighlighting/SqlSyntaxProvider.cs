@@ -66,14 +66,14 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
         public static bool IsKnownTag(string tag)
         {
             return Tags.Exists(s =>
-                s.ToUpperInvariant().Equals(tag.ToUpperInvariant(), StringComparison.InvariantCulture));
+                s.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
         /// Get the JS provider.
         /// </summary>
         /// <param name="tag">The tag name.</param>
-        /// <returns>Returns true if a known tag contains the overgiven tag.</returns>
+        /// <returns>Returns the JavaScript providers.</returns>
         public static List<string> GetJSProvider(string tag)
         {
             return Tags.FindAll(s =>

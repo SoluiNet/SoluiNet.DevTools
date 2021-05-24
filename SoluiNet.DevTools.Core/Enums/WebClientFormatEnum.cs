@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Core.Enums
     /// <summary>
     /// An enumeration for possible web client formats.
     /// </summary>
+    [Flags]
     public enum WebClientFormatEnum
     {
         /// <summary>
