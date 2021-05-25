@@ -1704,5 +1704,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 MessageBox.Show(exception.Message, Resources.GetString("QueryError", CultureInfo.CurrentCulture));
             }
         }
+
+        private void Optimize_Click(object sender, RoutedEventArgs e)
+        {
+            TimeTrackingContext.Optimize();
+        }
+
+        private void CleanUp_Click(object sender, RoutedEventArgs e)
+        {
+            TimeTrackingContext.CleanUp();
+        }
     }
 }

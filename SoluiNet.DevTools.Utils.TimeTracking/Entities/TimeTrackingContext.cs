@@ -43,6 +43,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                 CreateIfNotExists();
             }
+
+            RunPerformanceTweaks();
         }
 
         /// <summary>
@@ -92,10 +94,160 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         }
 
         /// <summary>
+        /// Run database clean up.
+        /// See also: https://phiresky.github.io/blog/2020/sqlite-performance-tuning/.
+        /// </summary>
+        /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1031:Do not catch general exception types",
+            Justification = "All exceptions should be catched and written to log")]
+        public static void CleanUp(string nameOrConnectionString = "name=TimeTrackingContext")
+        {
+            if (nameOrConnectionString == null)
+            {
+                throw new ArgumentNullException(nameof(nameOrConnectionString));
+            }
+
+            var connectionString = GetConnectionString(nameOrConnectionString);
+
+            var connection = new SQLiteConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+
+                var command = new SQLiteCommand("pragma vacuum;", connection);
+
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    command.Dispose();
+                }
+
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "Couldn't run database clean up.");
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Run database optimization.
+        /// See also: https://phiresky.github.io/blog/2020/sqlite-performance-tuning/.
+        /// </summary>
+        /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1031:Do not catch general exception types",
+            Justification = "All exceptions should be catched and written to log")]
+        public static void Optimize(string nameOrConnectionString = "name=TimeTrackingContext")
+        {
+            if (nameOrConnectionString == null)
+            {
+                throw new ArgumentNullException(nameof(nameOrConnectionString));
+            }
+
+            var connectionString = GetConnectionString(nameOrConnectionString);
+
+            var connection = new SQLiteConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+
+                var command = new SQLiteCommand("pragma optimize;", connection);
+
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    command.Dispose();
+                }
+
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "Couldn't run database optimization.");
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Run performance tweaking scripts.
+        /// See also: https://phiresky.github.io/blog/2020/sqlite-performance-tuning/.
+        /// </summary>
+        /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1031:Do not catch general exception types",
+            Justification = "All exceptions should be catched and written to log")]
+        public static void RunPerformanceTweaks(string nameOrConnectionString = "name=TimeTrackingContext")
+        {
+            if (nameOrConnectionString == null)
+            {
+                throw new ArgumentNullException(nameof(nameOrConnectionString));
+            }
+
+            var connectionString = GetConnectionString(nameOrConnectionString);
+
+            var connection = new SQLiteConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+
+                var command = new SQLiteCommand("pragma journal_mode = WAL;", connection);
+
+                try
+                {
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "pragma synchronous = normal;";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "pragma temp_store = memory;";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "pragma mmap_size = 30000000000;";
+                    command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    command.Dispose();
+                }
+
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "Couldn't run database performance tweaks.");
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        /// <summary>
         /// Create the database if it doesn't exist.
         /// </summary>
         /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1031:Do not catch general exception types",
+            Justification = "All exceptions should be catched and written to log")]
         public static void CreateIfNotExists(string nameOrConnectionString = "name=TimeTrackingContext")
         {
             if (nameOrConnectionString == null)

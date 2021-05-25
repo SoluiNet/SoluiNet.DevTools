@@ -121,6 +121,12 @@
                     <Button x:Name="CopyMonthToClipboard" Content="Copy Month To Clipboard" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,80" Click="CopyMonthToClipboard_Click" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Administration">
+                <Grid x:Name="TimeTrackingAdministration" Background="#FFE5E5E5">
+                    <Button x:Name="Optimize" Content="Optimize Database" Height="25" Margin="5, 5, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="Optimize_Click" />
+                    <Button x:Name="CleanUp" Content="Clean Up Database" Height="25" Margin="5, 35, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="CleanUp_Click" />
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>
