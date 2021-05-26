@@ -28,7 +28,7 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.113.7" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.7" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.114" />
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
   <ItemGroup>
