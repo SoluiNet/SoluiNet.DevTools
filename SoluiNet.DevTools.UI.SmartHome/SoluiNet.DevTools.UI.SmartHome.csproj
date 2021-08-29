@@ -1,28 +1,59 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProjectGuid>{B6D04A38-C980-4CEF-93F7-A8FB80F4EEAB}</ProjectGuid>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyTitle>SoluiNet.DevTools.UI.SmartHome</AssemblyTitle>
+    <Company>SoluiNet</Company>
+    <Product>SoluiNet.DevTools.UI.SmartHome</Product>
+    <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\SoluiNet.DevTools.UI\bin\$(TargetFramework)\$(Platform)\$(Configuration)\UI\</OutputPath>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>$(NoWarn),SA1123</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  </PropertyGroup>
   <ItemGroup>
-    <None Remove="SqlUiElement.xaml" />
+    <None Remove="SmartHomeUiElement.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.11" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
-
   <ItemGroup>
-    <Page Include="SqlUiElement.xaml">
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.Windows\SoluiNet.DevTools.Core.Windows.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="SmartHomeUiElement.xaml.cs">
+      <DependentUpon>SmartHomeUiElement.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="SmartHomeUiElement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
-    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
-    <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-
 </Project>

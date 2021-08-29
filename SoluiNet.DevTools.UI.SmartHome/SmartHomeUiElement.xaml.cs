@@ -32,7 +32,6 @@ namespace SoluiNet.DevTools.UI.SmartHome
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
     using SoluiNet.DevTools.Core.UI.WPF.UIElement.Editor;
-    using SoluiNet.DevTools.Core.Windows.Tools.Security;
 
     /// <summary>
     /// An UI element which can be used to provide database and SQL related functions.
@@ -54,9 +53,7 @@ namespace SoluiNet.DevTools.UI.SmartHome
                 {
                     try
                     {
-                        plugin.Display(this.SqlUiGrid);
-
-                        this.Project.Items.Add(plugin.Name);
+                        plugin.Display(this.SmartHomeUiGrid);
                     }
                     catch (Exception exception)
                     {
