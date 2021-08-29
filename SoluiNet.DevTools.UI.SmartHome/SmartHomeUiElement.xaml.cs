@@ -18,7 +18,6 @@ namespace SoluiNet.DevTools.UI.SmartHome
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
-    using ICSharpCode.AvalonEdit.CodeCompletion;
     using Microsoft.Win32;
     using NLog;
     using SoluiNet.DevTools.Core.Exceptions;
