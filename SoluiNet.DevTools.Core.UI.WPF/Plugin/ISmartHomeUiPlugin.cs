@@ -17,7 +17,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Plugin
     /// <summary>
     /// Provides the interface for a plugin which will provide UI elements for Smart Home functions.
     /// </summary>
-    public interface ISmartHomeUiPlugin : IProvidesDatabaseConnectivity, IThemable
+    public interface ISmartHomeUiPlugin
     {
         /// <summary>
         /// Method which should be executed to display the plugin in an WPF application.

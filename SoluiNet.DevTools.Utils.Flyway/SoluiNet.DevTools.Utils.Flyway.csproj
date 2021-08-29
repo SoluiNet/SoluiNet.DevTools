@@ -3,7 +3,7 @@
     <TargetFramework>net472</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.Flyway</AssemblyTitle>
     <Product>SoluiNet.DevTools.Utils.Flyway</Product>
-    <Copyright>Copyright ©  2019</Copyright>
+    <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
