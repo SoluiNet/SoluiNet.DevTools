@@ -16,3 +16,7 @@ packages/**
 *tmp.csproj
 /SoluiNet.DevTools.Core/log.txt
 /api_documentation/**
+*.upgrade-assistant
+/SoluiNet.DevTools.UI.backup
+/log.txt
+*.backup
