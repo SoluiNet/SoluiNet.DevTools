@@ -394,6 +394,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             duration -= categoryDuration;
                             workingDistributionDictionary[categoryDistribution.Key] -= categoryDuration;
                         }
+
+                        // usageTime.CategoryAutomaticAssigned = true;
                     }
                 }
             }
@@ -1377,178 +1379,204 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Ignore for better readability")]
         private void AutomaticAssignAll_Click(object sender, RoutedEventArgs e)
         {
-            const int batchSize = 1000;
-
-            var unassignedApplicationBatch = this.context.UsageTime
-                .Where(x => x.ApplicationId == null && (x.ApplicationAutomaticAssigned == null || !x.ApplicationAutomaticAssigned.Value))
-                .OrderBy(x => x.UsageTimeId)
-                .Take(batchSize);
-            var iteration = 1;
-
-            do
+            try
             {
-                foreach (var unassigned in unassignedApplicationBatch)
-                {
-                    var content = unassigned.ApplicationIdentification;
+                const int batchSize = 1000;
 
-                    foreach (var application in this.context.Application)
-                    {
-                        if (string.IsNullOrEmpty(application.ExtendedConfiguration))
-                        {
-                            continue;
-                        }
-
-                        if (content.MatchesRegEx(application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
-                        {
-                            Logger.Info("automatic assign '{0}' to application '{1}'", content, application.ApplicationName);
-
-                            unassigned.ApplicationId = application.ApplicationId;
-                        }
-                    }
-
-                    unassigned.ApplicationAutomaticAssigned = true;
-                }
-
-                Logger.Info("[Automatic Assign Application] Persist changes");
-                this.context.SaveChanges();
-
-                Logger.Info(
-                    "[Automatic Assign Application] Get next batch ({1}) of {2}, {0} already done",
-                    unassignedApplicationBatch.Count() < 1000
-                        ? ((iteration - 1) * batchSize) + unassignedApplicationBatch.Count()
-                        : iteration * batchSize,
-                    iteration,
-                    batchSize);
-                unassignedApplicationBatch = this.context.UsageTime
-                    .Where(x => x.ApplicationId == null && (x.ApplicationAutomaticAssigned == null || !x.ApplicationAutomaticAssigned.Value))
+                var unassignedApplicationBatch = this.context.UsageTime
+                    .Where(x => x.ApplicationId == null &&
+                                (x.ApplicationAutomaticAssigned == null || !x.ApplicationAutomaticAssigned.Value))
                     .OrderBy(x => x.UsageTimeId)
-                    .Skip(iteration * batchSize).Take(batchSize);
-                iteration++;
-            }
-            while (unassignedApplicationBatch.Any());
+                    .Take(batchSize);
+                var iteration = 1;
 
-            var unassignedCategoryBatch = this.context.UsageTime
-                .Where(x => !x.CategoryUsageTime.Any() || (x.CategoryAutomaticAssigned == null || !x.CategoryAutomaticAssigned.Value))
-                .OrderBy(x => x.UsageTimeId)
-                .Take(batchSize);
-            iteration = 1;
-
-            do
-            {
-                foreach (var unassigned in unassignedCategoryBatch)
+                do
                 {
-                    var content = unassigned.ApplicationIdentification;
-
-                    foreach (var category in this.context.Category)
+                    foreach (var unassigned in unassignedApplicationBatch)
                     {
-                        if (string.IsNullOrEmpty(category.ExtendedConfiguration))
-                        {
-                            continue;
-                        }
+                        var content = unassigned.ApplicationIdentification;
 
-                        if (content.MatchesRegEx(category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                        foreach (var application in this.context.Application)
                         {
-                            Logger.Info("automatic assign '{0}' to category '{1}'", content, category.CategoryName);
-
-                            this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                            if (string.IsNullOrEmpty(application.ExtendedConfiguration))
                             {
-                                UsageTimeId = unassigned.UsageTimeId,
-                                Duration = unassigned.Duration,
-                                CategoryId = category.CategoryId,
-                            });
+                                continue;
+                            }
+
+                            if (content.MatchesRegEx(application.ExtendedConfiguration
+                                .DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                            {
+                                Logger.Info("automatic assign '{0}' to application '{1}'", content,
+                                    application.ApplicationName);
+
+                                unassigned.ApplicationId = application.ApplicationId;
+                            }
                         }
+
+                        unassigned.ApplicationAutomaticAssigned = true;
                     }
 
-                    unassigned.CategoryAutomaticAssigned = true;
-                }
+                    Logger.Info("[Automatic Assign Application] Persist changes");
+                    this.context.SaveChanges();
 
-                Logger.Info("[Automatic Assign Category] Persist changes");
-                this.context.SaveChanges();
+                    Logger.Info(
+                        "[Automatic Assign Application] Get next batch ({1}) of {2}, {0} already done",
+                        unassignedApplicationBatch.Count() < 1000
+                            ? ((iteration - 1) * batchSize) + unassignedApplicationBatch.Count()
+                            : iteration * batchSize,
+                        iteration,
+                        batchSize);
+                    unassignedApplicationBatch = this.context.UsageTime
+                        .Where(x => x.ApplicationId == null &&
+                                    (x.ApplicationAutomaticAssigned == null || !x.ApplicationAutomaticAssigned.Value))
+                        .OrderBy(x => x.UsageTimeId)
+                        .Skip(iteration * batchSize).Take(batchSize);
+                    iteration++;
+                } while (unassignedApplicationBatch.Any());
 
-                Logger.Info(
-                    "[Automatic Assign Category] Get next batch ({1}) of {2}, {0} already done",
-                    unassignedCategoryBatch.Count() < 1000
-                        ? ((iteration - 1) * batchSize) + unassignedCategoryBatch.Count()
-                        : iteration * batchSize,
-                    iteration,
-                    batchSize);
-                unassignedCategoryBatch = this.context.UsageTime
-                    .Where(x => !x.CategoryUsageTime.Any() && (x.CategoryAutomaticAssigned == null || !x.CategoryAutomaticAssigned.Value))
+                var unassignedCategoryBatch = this.context.UsageTime
+                    .Where(x => !x.CategoryUsageTime.Any() &&
+                                (x.CategoryAutomaticAssigned == null || !x.CategoryAutomaticAssigned.Value))
                     .OrderBy(x => x.UsageTimeId)
-                    .Skip(iteration * batchSize).Take(batchSize);
-                iteration++;
-            }
-            while (unassignedCategoryBatch.Any());
+                    .Take(batchSize);
+                iteration = 1;
 
-            this.context.SaveChanges();
+                do
+                {
+                    foreach (var unassigned in unassignedCategoryBatch)
+                    {
+                        var content = unassigned.ApplicationIdentification;
+
+                        foreach (var category in this.context.Category)
+                        {
+                            if (string.IsNullOrEmpty(category.ExtendedConfiguration))
+                            {
+                                continue;
+                            }
+
+                            if (content.MatchesRegEx(category.ExtendedConfiguration
+                                .DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                            {
+                                Logger.Info("automatic assign '{0}' to category '{1}'", content, category.CategoryName);
+
+                                this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                                {
+                                    UsageTimeId = unassigned.UsageTimeId,
+                                    Duration = unassigned.Duration,
+                                    CategoryId = category.CategoryId,
+                                });
+                            }
+                        }
+
+                        unassigned.CategoryAutomaticAssigned = true;
+                    }
+
+                    Logger.Info("[Automatic Assign Category] Persist changes");
+                    this.context.SaveChanges();
+
+                    Logger.Info(
+                        "[Automatic Assign Category] Get next batch ({1}) of {2}, {0} already done",
+                        unassignedCategoryBatch.Count() < 1000
+                            ? ((iteration - 1) * batchSize) + unassignedCategoryBatch.Count()
+                            : iteration * batchSize,
+                        iteration,
+                        batchSize);
+
+                    unassignedCategoryBatch = this.context.UsageTime
+                        .Where(x => !x.CategoryUsageTime.Any() &&
+                                    (x.CategoryAutomaticAssigned == null || !x.CategoryAutomaticAssigned.Value))
+                        .OrderBy(x => x.UsageTimeId)
+                        .Skip(iteration * batchSize)
+                        .Take(batchSize);
+                    iteration++;
+                }
+                while (unassignedCategoryBatch.Any());
+
+                this.context.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "Error while processing Automatic Assignment (All)");
+            }
         }
 
         private void AutomaticAssignment_Click(object sender, RoutedEventArgs e)
         {
-            var header = (this.TimeTrackingAssignmentTargetTabs.SelectedItem as TabItem)?.Header?.ToString();
-
-            foreach (var assignment in this.TimeTrackingAssignmentOverview.Children)
+            try
             {
-                var content = string.Empty;
+                var header = (this.TimeTrackingAssignmentTargetTabs.SelectedItem as TabItem)?.Header?.ToString();
 
-                if (assignment is ExtendedButton)
+                foreach (var assignment in this.TimeTrackingAssignmentOverview.Children)
                 {
-                    content = ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Key;
-                }
+                    var content = string.Empty;
 
-                if (string.IsNullOrEmpty(content))
-                {
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(header) || header == "Application")
-                {
-                    foreach (var application in this.context.Application)
+                    if (assignment is ExtendedButton)
                     {
-                        if (string.IsNullOrEmpty(application.ExtendedConfiguration))
-                        {
-                            continue;
-                        }
-
-                        if (content.MatchesRegEx(application.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
-                        {
-                            foreach (var usageTime in ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Select(x => x))
-                            {
-                                usageTime.ApplicationId = application.ApplicationId;
-
-                                usageTime.ApplicationAutomaticAssigned = true;
-                            }
-                        }
+                        content = ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Key;
                     }
-                }
-                else if (header == "Category")
-                {
-                    foreach (var category in this.context.Category)
-                    {
-                        if (string.IsNullOrEmpty(category.ExtendedConfiguration))
-                        {
-                            continue;
-                        }
 
-                        if (content.MatchesRegEx(category.ExtendedConfiguration.DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                    if (string.IsNullOrEmpty(content))
+                    {
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(header) || header == "Application")
+                    {
+                        foreach (var application in this.context.Application)
                         {
-                            foreach (var usageTime in ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Select(x => x))
+                            if (string.IsNullOrEmpty(application.ExtendedConfiguration))
                             {
-                                this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                                continue;
+                            }
+
+                            if (content.MatchesRegEx(application.ExtendedConfiguration
+                                .DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                            {
+                                foreach (var usageTime in
+                                    ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Select(x => x))
                                 {
-                                    UsageTimeId = usageTime.UsageTimeId,
-                                    Duration = usageTime.Duration,
-                                    CategoryId = category.CategoryId,
-                                });
+                                    usageTime.ApplicationId = application.ApplicationId;
 
-                                usageTime.CategoryAutomaticAssigned = true;
+                                    usageTime.ApplicationAutomaticAssigned = true;
+                                }
+                            }
+                        }
+                    }
+                    else if (header == "Category")
+                    {
+                        foreach (var category in this.context.Category)
+                        {
+                            if (string.IsNullOrEmpty(category.ExtendedConfiguration))
+                            {
+                                continue;
+                            }
+
+                            if (content.MatchesRegEx(category.ExtendedConfiguration
+                                .DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
+                            {
+                                foreach (var usageTime in
+                                    ((assignment as ExtendedButton).Tag as IGrouping<string, UsageTime>).Select(x => x))
+                                {
+                                    this.context.CategoryUsageTime.Add(new CategoryUsageTime()
+                                    {
+                                        UsageTimeId = usageTime.UsageTimeId,
+                                        Duration = usageTime.Duration,
+                                        CategoryId = category.CategoryId,
+                                    });
+
+                                    usageTime.CategoryAutomaticAssigned = true;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            this.context.SaveChanges();
+                this.context.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "Error while processing Automatic Assignment (Manual)");
+            }
         }
 
         private void CopyMonthToClipboard_Click(object sender, RoutedEventArgs e)

@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <ProjectGuid>{CB1DB5BC-9DD8-4050-919E-720B35DF882B}</ProjectGuid>
     <TargetFramework>net472</TargetFramework>
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
+    <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.Core.UI.WPF</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core.UI.WPF</Product>
@@ -43,6 +44,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Windows.Compatibility" />
+    <PackageReference Include="Microsoft.DotNet.Wpf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />

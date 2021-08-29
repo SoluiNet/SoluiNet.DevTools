@@ -25,6 +25,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Application
         ICollection<ISqlUiPlugin> SqlPlugins { get; }
 
         /// <summary>
+        /// Gets all available plugins that provide smart home functions.
+        /// </summary>
+        ICollection<ISqlUiPlugin> SmartHomePlugins { get; }
+
+        /// <summary>
         /// Gets all available plugins that provide utility functions.
         /// </summary>
         ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; }

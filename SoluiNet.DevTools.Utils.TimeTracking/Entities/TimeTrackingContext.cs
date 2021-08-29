@@ -852,6 +852,29 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                         appliedVersion = new Version("1.0.0.16");
                     }
+
+                    if (appliedVersion.CompareTo(new Version("1.0.0.17")) < 0)
+                    {
+                        command.CommandText = "ALTER TABLE UsageTime ADD ApplicationManualAssigned BOOLEAN;";
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = "ALTER TABLE UsageTime ADD CategoryManualAssigned BOOLEAN;";
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+                        command.CommandText =
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)";
+                        command.Parameters.AddWithValue("$versionNo", "1.0.0.17");
+                        command.Parameters.AddWithValue(
+                            "$appliedAt",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+
+                        appliedVersion = new Version("1.0.0.17");
+                    }
                 }
                 finally
                 {
