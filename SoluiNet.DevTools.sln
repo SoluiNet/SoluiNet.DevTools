@@ -87,6 +87,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Utils.Jso
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Utils.Clipboard", "SoluiNet.DevTools.Utils.Clipboard\SoluiNet.DevTools.Utils.Clipboard.csproj", "{2D907EB3-679D-4DCC-B92E-C6F8909157B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.UI.SmartHome", "SoluiNet.DevTools.UI.SmartHome\SoluiNet.DevTools.UI.SmartHome.csproj", "{0673086C-9BD1-4F6C-A889-335CFC743A0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -487,6 +489,18 @@ Global
 		{2D907EB3-679D-4DCC-B92E-C6F8909157B5}.Release|x64.Build.0 = Release|Any CPU
 		{2D907EB3-679D-4DCC-B92E-C6F8909157B5}.Release|x86.ActiveCfg = Release|Any CPU
 		{2D907EB3-679D-4DCC-B92E-C6F8909157B5}.Release|x86.Build.0 = Release|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Debug|x64.Build.0 = Debug|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Debug|x86.Build.0 = Debug|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Release|x64.ActiveCfg = Release|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Release|x64.Build.0 = Release|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Release|x86.ActiveCfg = Release|Any CPU
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -527,6 +541,7 @@ Global
 		{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4} = {8F059608-19DA-4E57-8792-C272CA5D3EA6}
 		{03DCCDEE-AA8D-4429-9625-9A84D3D82C0B} = {8F059608-19DA-4E57-8792-C272CA5D3EA6}
 		{2D907EB3-679D-4DCC-B92E-C6F8909157B5} = {8F059608-19DA-4E57-8792-C272CA5D3EA6}
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E} = {952F4E3A-A0F6-4BBC-9C76-B50EDF490743}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8F61C6A5-176D-49B1-99D0-6BDBD8E0168A}
