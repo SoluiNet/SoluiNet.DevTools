@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{CB1DB5BC-9DD8-4050-919E-720B35DF882B}</ProjectGuid>
     <TargetFramework>net472</TargetFramework>
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
-    <UseWPF>true</UseWPF>
+    <!--<UseWPF>true</UseWPF>-->
     <AssemblyTitle>SoluiNet.DevTools.Core.UI.WPF</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core.UI.WPF</Product>

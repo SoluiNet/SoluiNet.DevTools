@@ -179,7 +179,7 @@ namespace SoluiNet.DevTools.Utils.General
             var inputValue = this.StringInput.Text;
             var selectedModification = (this.StringModification.SelectedItem as ComboBoxItem).Content;
 
-            var outputValue = inputValue;
+            string outputValue;
 
             switch (selectedModification.ToString())
             {
