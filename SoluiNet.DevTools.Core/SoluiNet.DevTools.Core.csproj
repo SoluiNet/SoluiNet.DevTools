@@ -63,7 +63,7 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.115" />
-    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.114" />
+    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.115" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PoorMansTSqlFormatterLib35">
