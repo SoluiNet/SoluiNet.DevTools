@@ -37,5 +37,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: SoluiNet.DevTools_v0.9.${{ steps.buildnumber.outputs.build_number }}
+        name: SoluiNet.DevTools_v0.9.0.${{ steps.buildnumber.outputs.build_number }}
         path: SoluiNet.DevTools.UI\bin\net472\AnyCPU\Release
