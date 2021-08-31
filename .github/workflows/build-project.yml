@@ -20,7 +20,12 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore SoluiNet.DevTools.sln
  
-    - name: Build and Publish Web App
+    - name: Prepare Build
+      run: 
+        - cp SoluiNet.DevTools.UI\Settings.Default.xml SoluiNet.DevTools.UI\Settings.xml
+        - cp SoluiNet.DevTools.UI\ConnectionStrings.Default.config SoluiNet.DevTools.UI\ConnectionStrings.config
+ 
+    - name: Build Application
       run: msbuild SoluiNet.DevTools.sln /p:Configuration=Release
  
     - name: Upload Artifact
