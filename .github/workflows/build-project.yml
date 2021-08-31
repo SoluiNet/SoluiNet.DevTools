@@ -12,7 +12,7 @@ jobs:
       name: Checkout Code
      
     - name: Setup MSBuild Path
-      uses: warrenbuckley/Setup-MSBuild@v1
+      uses: microsoft/setup-msbuild@v1.0.3
        
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.2
@@ -26,5 +26,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: published_webapp
+        name: SoluiNet.DevTools
         path: SoluiNet.DevTools.UI\bin\net472\AnyCPU\Release
