@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{B6D04A38-C980-4CEF-93F7-A8FB80F4EEAB}</ProjectGuid>
+    <ProjectGuid>{0673086C-9BD1-4F6C-A889-335CFC743A0E}</ProjectGuid>
     <TargetFramework>net472</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.UI.SmartHome</AssemblyTitle>
     <Company>SoluiNet</Company>
