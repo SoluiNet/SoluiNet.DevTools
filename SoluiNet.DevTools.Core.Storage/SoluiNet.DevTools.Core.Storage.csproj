@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProjectGuid>{DDC0B05A-0D22-4883-81C5-CF70A8BF3AF1}</ProjectGuid>
+    <!--<TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>-->
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyTitle>SoluiNet.DevTools.Core.Storage</AssemblyTitle>
+    <Company>SoluiNet</Company>
+    <Product>SoluiNet.DevTools.Core.Storage</Product>
+    <Copyright>Copyright © SoluiNet 2018</Copyright>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'netcoreapp3.1'">COMPILED_FOR_NETCORE</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\SoluiNet.DevTools.UI\bin\$(TargetFramework)\$(Platform)\$(Configuration)\Plugins\</OutputPath>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>$(NoWarn)</NoWarn>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="docfx.console" Version="2.58.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NLog" Version="4.7.11" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+</Project>
