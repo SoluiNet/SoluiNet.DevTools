@@ -8,9 +8,15 @@ namespace SoluiNet.DevTools.Mobile.Views
     using SoluiNet.DevTools.Mobile.ViewModels;
     using Xamarin.Forms;
 
+    /// <summary>
+    /// The new item page.
+    /// </summary>
     public partial class NewItemPage : ContentPage
     {
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewItemPage"/> class.
+        /// </summary>
         public NewItemPage()
         {
             this.InitializeComponent();

@@ -8,12 +8,18 @@ namespace SoluiNet.DevTools.Mobile.Views
     using Xamarin.Forms;
     using Xamarin.Forms.Xaml;
 
+    /// <summary>
+    /// The login page.
+    /// </summary>
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoginPage"/> class.
+        /// </summary>
         public LoginPage()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.BindingContext = new LoginViewModel();
         }
     }

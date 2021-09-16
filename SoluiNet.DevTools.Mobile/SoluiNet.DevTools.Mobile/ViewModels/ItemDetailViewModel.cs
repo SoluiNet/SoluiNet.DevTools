@@ -8,47 +8,68 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
     using System.Diagnostics;
     using Xamarin.Forms;
 
+    /// <summary>
+    /// The item detail view model.
+    /// </summary>
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public class ItemDetailViewModel : BaseViewModel
     {
         private string itemId;
         private string text;
         private string description;
+
+        /// <summary>
+        /// Gets or sets the ID.
+        /// </summary>
         public string Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
         public string Text
         {
-            get { return text; }
-            set { SetProperty(ref text, value); }
+            get { return this.text; }
+            set { this.SetProperty(ref this.text, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
         public string Description
         {
-            get { return description; }
-            set { SetProperty(ref description, value); }
+            get { return this.description; }
+            set { this.SetProperty(ref this.description, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the item ID.
+        /// </summary>
         public string ItemId
         {
             get
             {
-                return itemId;
+                return this.itemId;
             }
+
             set
             {
-                itemId = value;
-                LoadItemId(value);
+                this.itemId = value;
+                this.LoadItemId(value);
             }
         }
 
+        /// <summary>
+        /// Load item by item ID.
+        /// </summary>
+        /// <param name="itemId">The item ID.</param>
         public async void LoadItemId(string itemId)
         {
             try
             {
-                var item = await DataStore.GetItemAsync(itemId);
-                Id = item.Id;
-                Text = item.Text;
-                Description = item.Description;
+                var item = await this.DataStore.GetItemAsync(itemId);
+                this.Id = item.Id;
+                this.Text = item.Text;
+                this.Description = item.Description;
             }
             catch (Exception)
             {

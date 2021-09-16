@@ -8,11 +8,17 @@ namespace SoluiNet.DevTools.Mobile
     using SoluiNet.DevTools.Mobile.Views;
     using Xamarin.Forms;
 
+    /// <summary>
+    /// Provides an app shell.
+    /// </summary>
     public partial class AppShell : Xamarin.Forms.Shell
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppShell"/> class.
+        /// </summary>
         public AppShell()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
         }
