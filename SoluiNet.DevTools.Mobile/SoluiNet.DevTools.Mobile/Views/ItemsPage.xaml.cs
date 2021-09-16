@@ -1,17 +1,12 @@
-﻿using SoluiNet.DevTools.Mobile.Models;
-using SoluiNet.DevTools.Mobile.ViewModels;
-using SoluiNet.DevTools.Mobile.Views;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿// <copyright file="ItemsPage.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Mobile.Views
 {
+    using SoluiNet.DevTools.Mobile.ViewModels;
+    using Xamarin.Forms;
+
     public partial class ItemsPage : ContentPage
     {
         ItemsViewModel _viewModel;

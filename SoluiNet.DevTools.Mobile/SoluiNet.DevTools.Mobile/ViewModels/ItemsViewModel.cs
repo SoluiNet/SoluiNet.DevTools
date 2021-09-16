@@ -1,13 +1,17 @@
-﻿using SoluiNet.DevTools.Mobile.Models;
-using SoluiNet.DevTools.Mobile.Views;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Xamarin.Forms;
+﻿// <copyright file="ItemsViewModel.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Mobile.ViewModels
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
+    using SoluiNet.DevTools.Mobile.Models;
+    using SoluiNet.DevTools.Mobile.Views;
+    using Xamarin.Forms;
+
     public class ItemsViewModel : BaseViewModel
     {
         private Item _selectedItem;
@@ -17,6 +21,9 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
         public Command AddItemCommand { get; }
         public Command<Item> ItemTapped { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemsViewModel"/> class.
+        /// </summary>
         public ItemsViewModel()
         {
             Title = "Browse";
@@ -59,7 +66,7 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
 
         public Item SelectedItem
         {
-            get => _selectedItem;
+            get { return _selectedItem; }
             set
             {
                 SetProperty(ref _selectedItem, value);

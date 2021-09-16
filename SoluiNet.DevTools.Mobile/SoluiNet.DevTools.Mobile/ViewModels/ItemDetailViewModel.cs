@@ -1,11 +1,13 @@
-﻿using SoluiNet.DevTools.Mobile.Models;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Xamarin.Forms;
+﻿// <copyright file="ItemDetailViewModel.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Mobile.ViewModels
 {
+    using System;
+    using System.Diagnostics;
+    using Xamarin.Forms;
+
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public class ItemDetailViewModel : BaseViewModel
     {
@@ -16,14 +18,14 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
 
         public string Text
         {
-            get => text;
-            set => SetProperty(ref text, value);
+            get { return text; }
+            set { SetProperty(ref text, value); }
         }
 
         public string Description
         {
-            get => description;
-            set => SetProperty(ref description, value);
+            get { return description; }
+            set { SetProperty(ref description, value); }
         }
 
         public string ItemId

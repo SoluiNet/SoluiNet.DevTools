@@ -1,16 +1,23 @@
-﻿using SoluiNet.DevTools.Mobile.Models;
-using SoluiNet.DevTools.Mobile.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Xamarin.Forms;
+﻿// <copyright file="BaseViewModel.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Mobile.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+    using SoluiNet.DevTools.Mobile.Models;
+    using SoluiNet.DevTools.Mobile.Services;
+    using Xamarin.Forms;
+
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public IDataStore<Item> DataStore
+        {
+            get { return DependencyService.Get<IDataStore<Item>>(); }
+        }
 
         bool isBusy = false;
         public bool IsBusy

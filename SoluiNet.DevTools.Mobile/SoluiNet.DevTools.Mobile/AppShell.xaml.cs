@@ -1,11 +1,13 @@
-﻿using SoluiNet.DevTools.Mobile.ViewModels;
-using SoluiNet.DevTools.Mobile.Views;
-using System;
-using System.Collections.Generic;
-using Xamarin.Forms;
+﻿// <copyright file="AppShell.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Mobile
 {
+    using System;
+    using SoluiNet.DevTools.Mobile.Views;
+    using Xamarin.Forms;
+
     public partial class AppShell : Xamarin.Forms.Shell
     {
         public AppShell()

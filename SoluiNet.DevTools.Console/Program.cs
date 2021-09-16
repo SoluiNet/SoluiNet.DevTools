@@ -2,13 +2,12 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using System.Reflection;
-
 namespace SoluiNet.DevTools.Console
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Reflection;
     using CommandLine;
     using SoluiNet.DevTools.Console.Options;
 
@@ -28,10 +27,12 @@ namespace SoluiNet.DevTools.Console
                 .WithNotParsed(Error);
         }
 
+
         /// <summary>
         /// Run with parsed options.
         /// </summary>
         /// <param name="options">The parsed options.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "We want to provide a neutral console tool. So there won't be any localizations for now.")]
         internal static void Run(RunOptions options)
         {
             Console.WriteLine($@"SoluiNet.DevTools.Console v{Assembly.GetEntryAssembly()?.GetName().Version.ToString()}");

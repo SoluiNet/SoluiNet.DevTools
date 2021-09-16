@@ -1,10 +1,13 @@
-﻿using System;
-using System.Windows.Input;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+﻿// <copyright file="AboutViewModel.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Mobile.ViewModels
 {
+    using System.Windows.Input;
+    using Xamarin.Essentials;
+    using Xamarin.Forms;
+
     public class AboutViewModel : BaseViewModel
     {
         public AboutViewModel()

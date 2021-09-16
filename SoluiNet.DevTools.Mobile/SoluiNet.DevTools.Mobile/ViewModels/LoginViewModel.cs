@@ -1,11 +1,12 @@
-﻿using SoluiNet.DevTools.Mobile.Views;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
+﻿// <copyright file="LoginViewModel.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Mobile.ViewModels
 {
+    using SoluiNet.DevTools.Mobile.Views;
+    using Xamarin.Forms;
+
     public class LoginViewModel : BaseViewModel
     {
         public Command LoginCommand { get; }

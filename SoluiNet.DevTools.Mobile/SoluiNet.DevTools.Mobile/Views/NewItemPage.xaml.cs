@@ -1,21 +1,25 @@
-﻿using SoluiNet.DevTools.Mobile.Models;
-using SoluiNet.DevTools.Mobile.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿// <copyright file="NewItemPage.xaml.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Mobile.Views
 {
+    using SoluiNet.DevTools.Mobile.Models;
+    using SoluiNet.DevTools.Mobile.ViewModels;
+    using Xamarin.Forms;
+
     public partial class NewItemPage : ContentPage
     {
-        public Item Item { get; set; }
 
         public NewItemPage()
         {
-            InitializeComponent();
-            BindingContext = new NewItemViewModel();
+            this.InitializeComponent();
+            this.BindingContext = new NewItemViewModel();
         }
+
+        /// <summary>
+        /// Gets or sets the item.
+        /// </summary>
+        public Item Item { get; set; }
     }
 }
