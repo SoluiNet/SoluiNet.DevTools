@@ -19,8 +19,8 @@ namespace SoluiNet.DevTools.Core.Web
     public interface ISoluiNetWebApp : ISoluiNetApp
     {
         /// <summary>
-        /// Gets or sets all available web plugins.
+        /// Gets all available web plugins.
         /// </summary>
-        ICollection<IProvidesWebCommunication> WebPlugins { get; set; }
+        ICollection<IProvidesWebCommunication> WebPlugins { get; }
     }
 }

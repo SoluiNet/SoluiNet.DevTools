@@ -52,8 +52,8 @@ namespace SoluiNet.DevTools.Core.Tools.Sql
         /// Get a list of all identifiable single SQL scripts.
         /// </summary>
         /// <param name="sqlCommand">The string which may contain multiple scripts.</param>
-        /// <returns>A <see cref="List{T}"/> where each entry represents a single SQL script.</returns>
-        public static List<string> GetSingleScripts(this string sqlCommand)
+        /// <returns>A <see cref="ICollection{T}"/> where each entry represents a single SQL script.</returns>
+        public static ICollection<string> GetSingleScripts(this string sqlCommand)
         {
             if (sqlCommand == null)
             {

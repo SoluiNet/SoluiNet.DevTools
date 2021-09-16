@@ -18,12 +18,12 @@ namespace SoluiNet.DevTools.Core.Plugin
         /// <summary>
         /// Gets the list of supported file extensions.
         /// </summary>
-        List<string> SupportedFileExtensions { get; }
+        ICollection<string> SupportedFileExtensions { get; }
 
         /// <summary>
         /// Gets the list of supported types.
         /// </summary>
-        List<string> SupportedTypes { get; }
+        ICollection<string> SupportedTypes { get; }
 
         /// <summary>
         /// Open the editor plugin for a string.

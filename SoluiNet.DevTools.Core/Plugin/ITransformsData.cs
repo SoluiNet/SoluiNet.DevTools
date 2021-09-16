@@ -18,12 +18,12 @@ namespace SoluiNet.DevTools.Core.Plugin
         /// <summary>
         /// Gets a list of all supported input formats.
         /// </summary>
-        List<string> SupportedInputFormats { get; }
+        ICollection<string> SupportedInputFormats { get; }
 
         /// <summary>
         /// Gets a list of all supported output formats.
         /// </summary>
-        List<string> SupportedOutputFormats { get; }
+        ICollection<string> SupportedOutputFormats { get; }
 
         /// <summary>
         /// Transform an input file to the overgiven output format.
