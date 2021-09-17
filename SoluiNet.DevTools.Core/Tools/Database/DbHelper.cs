@@ -14,9 +14,11 @@ namespace SoluiNet.DevTools.Core.Tools.Database
     using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Tools.Sql;
 
+
     /// <summary>
     /// Provides a collection of methods to work with databases.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1052:Static holder types should be Static or NotInheritable", Justification = "The DB helper can be inherited in OS specific libraries.")]
     public class DbHelper
     {
         /// <summary>

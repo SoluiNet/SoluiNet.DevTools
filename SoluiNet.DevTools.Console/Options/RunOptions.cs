@@ -17,7 +17,7 @@ namespace SoluiNet.DevTools.Console.Options
     public class RunOptions
     {
         /// <summary>
-        /// Gets or sets whether the application should be verbose or not.
+        /// Gets or sets a value indicating whether the application should be verbose or not.
         /// </summary>
         [Option(
             'v',
@@ -27,7 +27,7 @@ namespace SoluiNet.DevTools.Console.Options
         public bool Verbose { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the application should be showing the help or not.
+        /// Gets or sets a value indicating whether the application should be showing the help or not.
         /// </summary>
         [Option(
             'h',

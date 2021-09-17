@@ -12,6 +12,9 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
     using SoluiNet.DevTools.Mobile.Views;
     using Xamarin.Forms;
 
+    /// <summary>
+    /// The items view model.
+    /// </summary>
     public class ItemsViewModel : BaseViewModel
     {
         private Item _selectedItem;
@@ -26,26 +29,26 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
         /// </summary>
         public ItemsViewModel()
         {
-            Title = "Browse";
-            Items = new ObservableCollection<Item>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            this.Title = "Browse";
+            this.Items = new ObservableCollection<Item>();
+            this.LoadItemsCommand = new Command(async () => await this.ExecuteLoadItemsCommand());
 
-            ItemTapped = new Command<Item>(OnItemSelected);
+            this.ItemTapped = new Command<Item>(this.OnItemSelected);
 
-            AddItemCommand = new Command(OnAddItem);
+            this.AddItemCommand = new Command(this.OnAddItem);
         }
 
         async Task ExecuteLoadItemsCommand()
         {
-            IsBusy = true;
+            this.IsBusy = true;
 
             try
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                this.Items.Clear();
+                var items = await this.DataStore.GetItemsAsync(true);
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    this.Items.Add(item);
                 }
             }
             catch (Exception ex)
@@ -54,23 +57,23 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
             }
             finally
             {
-                IsBusy = false;
+                this.IsBusy = false;
             }
         }
 
         public void OnAppearing()
         {
-            IsBusy = true;
-            SelectedItem = null;
+            this.IsBusy = true;
+            this.SelectedItem = null;
         }
 
         public Item SelectedItem
         {
-            get { return _selectedItem; }
+            get { return this._selectedItem; }
             set
             {
-                SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
+                this.SetProperty(ref this._selectedItem, value);
+                this.OnItemSelected(value);
             }
         }
 

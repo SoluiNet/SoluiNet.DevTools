@@ -1406,7 +1406,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             if (content.MatchesRegEx(application.ExtendedConfiguration
                                 .DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
                             {
-                                Logger.Info("automatic assign '{0}' to application '{1}'", content,
+                                Logger.Info(
+                                    "automatic assign '{0}' to application '{1}'",
+                                    content,
                                     application.ApplicationName);
 
                                 unassigned.ApplicationId = application.ApplicationId;
