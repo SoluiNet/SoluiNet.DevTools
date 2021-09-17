@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Editor.Default
         /// <summary>
         /// Gets a list of supported file extensions.
         /// </summary>
-        public List<string> SupportedFileExtensions
+        public ICollection<string> SupportedFileExtensions
         {
             get { return new List<string> { Core.Constants.GeneralConstants.AllElementsPlaceholder }; }
         }
@@ -28,7 +28,7 @@ namespace SoluiNet.DevTools.Editor.Default
         /// <summary>
         /// Gets a list of supported types.
         /// </summary>
-        public List<string> SupportedTypes
+        public ICollection<string> SupportedTypes
         {
             get { return new List<string> { Core.Constants.GeneralConstants.AllElementsPlaceholder }; }
         }

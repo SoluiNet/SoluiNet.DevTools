@@ -15,6 +15,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     /// <summary>
     /// The entity Application.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1724:Type names should not match namespaces", Justification = "We want to use keywords for better unterstanding of the purpose.")]
     [Table("Application")]
     public class Application : IContainsExtendedConfiguration
     {
@@ -43,11 +44,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// <summary>
         /// Gets or sets the usage times.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Setter may be needed for ORM.")]
         public virtual ICollection<UsageTime> UsageTime { get; set; }
 
         /// <summary>
         /// Gets or sets the application areas.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Setter may be needed for ORM.")]
         public virtual ICollection<ApplicationArea> ApplicationArea { get; set; }
     }
 }

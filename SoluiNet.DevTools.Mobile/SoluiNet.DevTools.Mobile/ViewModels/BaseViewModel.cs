@@ -55,13 +55,13 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
         /// Set a property value.
         /// </summary>
         /// <typeparam name="T">The data type.</typeparam>
-        /// <param name="backingStore">The data store which holds the data</param>
+        /// <param name="backingStore">The data store which holds the data.</param>
         /// <param name="value">The value.</param>
         /// <param name="propertyName">The property name.</param>
         /// <param name="onChanged">The on change event handler.</param>
         /// <returns>Returns true if the property value has been successfully changed.</returns>
         protected bool SetProperty<T>(
-            ref T backingStore, 
+            ref T backingStore,
             T value,
             [CallerMemberName] string propertyName = "",
             Action onChanged = null)

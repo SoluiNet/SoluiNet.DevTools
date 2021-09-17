@@ -814,6 +814,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "'showOnlyUnassigned' reserved for later use")]
         private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext localContext, bool showOnlyUnassigned = false)
         {
             var timeTargets = localContext.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
@@ -1434,7 +1435,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         .OrderBy(x => x.UsageTimeId)
                         .Skip(iteration * batchSize).Take(batchSize);
                     iteration++;
-                } while (unassignedApplicationBatch.Any());
+                }
+                while (unassignedApplicationBatch.Any());
 
                 var unassignedCategoryBatch = this.context.UsageTime
                     .Where(x => !x.CategoryUsageTime.Any() &&

@@ -16,6 +16,11 @@ namespace SoluiNet.DevTools.Core.Enums
     public enum WebClientType
     {
         /// <summary>
+        /// Represents a unknown client.
+        /// </summary>
+        Unknown = 0,
+
+        /// <summary>
         /// Represents a REST-client
         /// </summary>
         Rest = 1,

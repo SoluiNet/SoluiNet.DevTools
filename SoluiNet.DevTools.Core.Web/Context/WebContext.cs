@@ -28,9 +28,9 @@ namespace SoluiNet.DevTools.Core.Web.Context
         public static string LayoutTemplate { get; set; }
 
         /// <summary>
-        /// Gets or sets the session list.
+        /// Gets the session list.
         /// </summary>
-        public static Dictionary<string, WebSession> SessionList { get; set; }
+        public static Dictionary<string, WebSession> SessionList { get; }
 
         /// <summary>
         /// Gets or sets the session.
@@ -38,8 +38,8 @@ namespace SoluiNet.DevTools.Core.Web.Context
         public static WebSession Session { get; set; }
 
         /// <summary>
-        /// Gets or sets the routes.
+        /// Gets the routes.
         /// </summary>
-        public static RouteRegistry Routes { get; set; }
+        public static RouteRegistry Routes { get; }
     }
 }

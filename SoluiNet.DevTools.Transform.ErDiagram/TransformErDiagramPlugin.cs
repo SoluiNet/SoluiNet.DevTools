@@ -18,7 +18,7 @@ namespace SoluiNet.DevTools.Transform.ErDiagram
     public class TransformErDiagramPlugin : ITransformsData
     {
         /// <inheritdoc/>
-        public List<string> SupportedInputFormats
+        public ICollection<string> SupportedInputFormats
         {
             get
             {
@@ -27,7 +27,7 @@ namespace SoluiNet.DevTools.Transform.ErDiagram
         }
 
         /// <inheritdoc/>
-        public List<string> SupportedOutputFormats
+        public ICollection<string> SupportedOutputFormats
         {
             get
             {

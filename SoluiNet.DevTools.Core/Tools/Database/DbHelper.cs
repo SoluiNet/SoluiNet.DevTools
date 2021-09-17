@@ -14,7 +14,6 @@ namespace SoluiNet.DevTools.Core.Tools.Database
     using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Tools.Sql;
 
-
     /// <summary>
     /// Provides a collection of methods to work with databases.
     /// </summary>
@@ -32,6 +31,7 @@ namespace SoluiNet.DevTools.Core.Tools.Database
         /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'environment' parameter has been added for future implementations")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "'environment' parameter has been added for future implementations")]
         public static DataTable ExecuteSqlCommand<TConnection, TCommand>(string connectionString, string sqlCommand, string environment = "Default")
             where TConnection : IDbConnection
             where TCommand : IDbCommand

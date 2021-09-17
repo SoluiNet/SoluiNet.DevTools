@@ -17,12 +17,7 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
     /// </summary>
     public class ItemsViewModel : BaseViewModel
     {
-        private Item _selectedItem;
-
-        public ObservableCollection<Item> Items { get; }
-        public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get; }
-        public Command<Item> ItemTapped { get; }
+        private Item selectedItem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemsViewModel"/> class.
@@ -38,7 +33,57 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
             this.AddItemCommand = new Command(this.OnAddItem);
         }
 
-        async Task ExecuteLoadItemsCommand()
+        /// <summary>
+        /// Gets the items collection.
+        /// </summary>
+        public ObservableCollection<Item> Items { get; }
+
+        /// <summary>
+        /// Gets the load items command.
+        /// </summary>
+        public Command LoadItemsCommand { get; }
+
+        /// <summary>
+        /// Gets the add item command.
+        /// </summary>
+        public Command AddItemCommand { get; }
+
+        /// <summary>
+        /// Gets the item which has been tapped.
+        /// </summary>
+        public Command<Item> ItemTapped { get; }
+
+        /// <summary>
+        /// Gets or sets the selected item.
+        /// </summary>
+        public Item SelectedItem
+        {
+            get
+            {
+                return this.selectedItem;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.selectedItem, value);
+                this.OnItemSelected(value);
+            }
+        }
+
+        /// <summary>
+        /// The on appearing event handler.
+        /// </summary>
+        public void OnAppearing()
+        {
+            this.IsBusy = true;
+            this.SelectedItem = null;
+        }
+
+        /// <summary>
+        /// The execute load items command.
+        /// </summary>
+        /// <returns>Returns an asynchronous task which will load the items.</returns>
+        private async Task ExecuteLoadItemsCommand()
         {
             this.IsBusy = true;
 
@@ -61,31 +106,25 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
             }
         }
 
-        public void OnAppearing()
-        {
-            this.IsBusy = true;
-            this.SelectedItem = null;
-        }
-
-        public Item SelectedItem
-        {
-            get { return this._selectedItem; }
-            set
-            {
-                this.SetProperty(ref this._selectedItem, value);
-                this.OnItemSelected(value);
-            }
-        }
-
+        /// <summary>
+        /// The add item event handler.
+        /// </summary>
+        /// <param name="obj">The object.</param>
         private async void OnAddItem(object obj)
         {
             await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
 
-        async void OnItemSelected(Item item)
+        /// <summary>
+        /// The item selected event handler.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        private async void OnItemSelected(Item item)
         {
             if (item == null)
+            {
                 return;
+            }
 
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");

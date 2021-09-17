@@ -132,7 +132,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         }
 
         /// <inheritdoc/>
-        public List<DataTable> ExecuteSqlScript(string sqlCommand, WindowsIdentity identity = null)
+        public ICollection<DataTable> ExecuteSqlScript(string sqlCommand, WindowsIdentity identity = null)
         {
             if (identity == null)
             {

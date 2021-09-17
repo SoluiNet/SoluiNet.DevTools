@@ -49,7 +49,6 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
             };
         }
 
-
         /// <summary>
         /// The event handler type which will be called if the placeholder text changed.
         /// </summary>
