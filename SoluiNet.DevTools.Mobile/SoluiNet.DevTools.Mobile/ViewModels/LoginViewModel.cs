@@ -12,8 +12,6 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
     /// </summary>
     public class LoginViewModel : BaseViewModel
     {
-        public Command LoginCommand { get; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
         /// </summary>
@@ -22,6 +20,15 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
             this.LoginCommand = new Command(this.OnLoginClicked);
         }
 
+        /// <summary>
+        /// Gets the login command.
+        /// </summary>
+        public Command LoginCommand { get; }
+
+        /// <summary>
+        /// The event handler for the click of the login element.
+        /// </summary>
+        /// <param name="obj">The object.</param>
         private async void OnLoginClicked(object obj)
         {
             // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
