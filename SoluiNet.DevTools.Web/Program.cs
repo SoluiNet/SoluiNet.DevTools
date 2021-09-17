@@ -64,10 +64,11 @@ namespace SoluiNet.DevTools.Web
         /// <summary>
         /// Run services in interactive mode.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "The service will use english as default language.")]
         private static void RunInteractiveServices(ServiceBase[] servicesToRun)
         {
             Console.WriteLine();
-            Console.WriteLine("Start the services in interactive mode.");
+            Console.WriteLine(@"Start the services in interactive mode.");
             Console.WriteLine();
 
             // Get the method to invoke on each service to start it
@@ -76,16 +77,16 @@ namespace SoluiNet.DevTools.Web
             // Start services loop
             foreach (var service in servicesToRun)
             {
-                Console.WriteLine("Starting {0} ... ", service.ServiceName);
+                Console.WriteLine(@"Starting {0} ... ", service.ServiceName);
                 onStartMethod?.Invoke(service, new object[] { Array.Empty<string>() });
-                Console.WriteLine("{0} started successfully", service.ServiceName);
+                Console.WriteLine(@"{0} started successfully", service.ServiceName);
             }
 
             // Waiting the end
             Console.WriteLine();
-            Console.WriteLine("All services are started.");
+            Console.WriteLine(@"All services are started.");
             Console.WriteLine();
-            Console.WriteLine("Press a key to stop services...");
+            Console.WriteLine(@"Press a key to stop services...");
             Console.ReadKey();
             Console.WriteLine();
 
@@ -95,19 +96,19 @@ namespace SoluiNet.DevTools.Web
             // Stop loop
             foreach (var service in servicesToRun)
             {
-                Console.WriteLine("Stopping {0} ... ", service.ServiceName);
+                Console.WriteLine(@"Stopping {0} ... ", service.ServiceName);
                 onStopMethod?.Invoke(service, null);
-                Console.WriteLine("{0} stopped succesfully", service.ServiceName);
+                Console.WriteLine(@"{0} stopped successfully", service.ServiceName);
             }
 
             Console.WriteLine();
-            Console.WriteLine("All services are stopped.");
+            Console.WriteLine(@"All services are stopped.");
 
             // Waiting a key press to not return to VS directly
             if (System.Diagnostics.Debugger.IsAttached)
             {
                 Console.WriteLine();
-                Console.Write("=== Press a key to quit ===");
+                Console.Write(@"=== Press a key to quit ===");
                 Console.ReadKey();
             }
         }

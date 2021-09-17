@@ -24,6 +24,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.String
         /// <returns>Returns a <see cref="Color"/>-object which has been converted from the overgiven string.</returns>
         public static Color ToColour(this string colourString)
         {
+            if (string.IsNullOrEmpty(colourString))
+            {
+                throw new ArgumentNullException(nameof(colourString));
+            }
+
             return (Color)ColorConverter.ConvertFromString(colourString);
         }
     }

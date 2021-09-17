@@ -28,6 +28,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
         /// <param name="impersonation">The impersonation which can be used for executing the SQL command.</param>
         /// <returns>Returns a <see cref="DataTable"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'impersonation' parameter has been added for future implementations")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Remove unused parameter", Justification = "'impersonation' parameter has been added for future implementations")]
         public static DataTable ExecuteSqlCommand(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsLogin impersonation = null)
         {
             switch (providerType)
@@ -51,6 +52,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
         /// <param name="impersonation">The impersonation which can be used for executing the SQL script.</param>
         /// <returns>Returns a <see cref="List{DataTable}"/> with the results of the SQL command. If provider type isn't supported it returns null.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "'impersonation' parameter has been added for future implementations")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Remove unused parameter", Justification = "'impersonation' parameter has been added for future implementations")]
         public static IList<DataTable> ExecuteSqlScript(string providerType, string connectionString, string sqlCommand, string environment = "Default", WindowsLogin impersonation = null)
         {
             switch (providerType)
