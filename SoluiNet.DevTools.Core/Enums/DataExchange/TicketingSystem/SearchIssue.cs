@@ -1,4 +1,4 @@
-﻿// <copyright file="SearchIssueEnum.cs" company="SoluiNet">
+﻿// <copyright file="SearchIssue.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Enums.DataExchange.TicketingSystem
     /// <summary>
     /// An enumeration which provides a list of all possible searches in ticketing systems.
     /// </summary>
-    public enum SearchIssueEnum
+    public enum SearchIssue
     {
         /// <summary>
         /// All assigned tickets to current user

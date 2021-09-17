@@ -1,4 +1,4 @@
-﻿// <copyright file="SearchCommitEnum.cs" company="SoluiNet">
+﻿// <copyright file="SearchCommit.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Enums.DataExchange.SourceCodeRepository
     /// <summary>
     /// An enumeration which provides a list of all possible searches in source code repositories.
     /// </summary>
-    public enum SearchCommitEnum
+    public enum SearchCommit
     {
         /// <summary>
         /// All commits

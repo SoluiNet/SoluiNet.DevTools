@@ -86,15 +86,15 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         }
 
         /// <inheritdoc/>
-        public WebClientFormatEnum Format
+        public WebClientFormat Format
         {
-            get { return WebClientFormatEnum.Xml; }
+            get { return WebClientFormat.Xml; }
         }
 
         /// <inheritdoc/>
-        public WebClientTypeEnum Type
+        public WebClientType Type
         {
-            get { return WebClientTypeEnum.Soap; }
+            get { return WebClientType.Soap; }
         }
 
         /// <summary>

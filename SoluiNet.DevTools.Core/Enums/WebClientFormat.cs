@@ -1,4 +1,4 @@
-﻿// <copyright file="WebClientFormatEnum.cs" company="SoluiNet">
+﻿// <copyright file="WebClientFormat.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Core.Enums
     /// An enumeration for possible web client formats.
     /// </summary>
     [Flags]
-    public enum WebClientFormatEnum
+    public enum WebClientFormat
     {
         /// <summary>
         /// Working on XML-basis

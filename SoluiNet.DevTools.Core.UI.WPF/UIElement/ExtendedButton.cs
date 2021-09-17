@@ -82,11 +82,13 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// <summary>
         /// The dependency value changed event.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "We prefer the current naming.")]
         public event DependencyValueChangedHandler OnDependencyValueChanged;
 
         /// <summary>
         /// The element selected event.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "We prefer the current naming.")]
         public event ElementSelectedHandler OnElementSelected;
 
         /// <summary>

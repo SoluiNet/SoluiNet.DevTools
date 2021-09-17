@@ -49,11 +49,13 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
             };
         }
 
+
         /// <summary>
         /// The event handler type which will be called if the placeholder text changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The event arguments.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "For better readability use EventHandler as suffix.")]
         public delegate void PlaceholderTextChangedEventHandler(object sender, PlaceholderTextChangedEventArgs eventArgs);
 
         /// <summary>
