@@ -28,7 +28,7 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
         /// <summary>
         /// Gets the data store.
         /// </summary>
-        public IDataStore<Item> DataStore
+        public static IDataStore<Item> DataStore
         {
             get { return DependencyService.Get<IDataStore<Item>>(); }
         }

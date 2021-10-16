@@ -86,7 +86,7 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
                 Description = this.Description,
             };
 
-            await this.DataStore.AddItemAsync(newItem);
+            await DataStore.AddItemAsync(newItem);
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");

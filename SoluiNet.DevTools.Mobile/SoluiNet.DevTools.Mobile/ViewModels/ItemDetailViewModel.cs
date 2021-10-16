@@ -66,7 +66,7 @@ namespace SoluiNet.DevTools.Mobile.ViewModels
         {
             try
             {
-                var item = await this.DataStore.GetItemAsync(itemId);
+                var item = await DataStore.GetItemAsync(itemId);
                 this.Id = item.Id;
                 this.Text = item.Text;
                 this.Description = item.Description;
