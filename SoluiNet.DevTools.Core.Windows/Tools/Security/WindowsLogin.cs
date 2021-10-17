@@ -33,6 +33,8 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 
         private System.IntPtr accessToken;
 
+        private bool disposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowsLogin"/> class.
         /// </summary>
@@ -119,9 +121,25 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         }
 
         /// <inheritdoc/>
-        void System.IDisposable.Dispose()
+        public void Dispose()
         {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
             this.Logout();
+        }
+
+        /// <summary>
+        /// Dispose the object.
+        /// </summary>
+        /// <param name="disposing">Is disposing?</param>
+        protected void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            this.disposed = true;
         }
     }
 }
