@@ -62,7 +62,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
 
         private void ChoosePluginMethod_Click(object sender, RoutedEventArgs e)
         {
-            if (!((this.Method.SelectedItem as ComboBoxItem)?.Tag is SoluiNetWebMethodType chosenMethod) 
+            if (!((this.Method.SelectedItem as ComboBoxItem)?.Tag is SoluiNetWebMethodType chosenMethod)
                 || !((this.Plugin.SelectedItem as ComboBoxItem)?.Tag is SoluiNetWebClientDefinition chosenWebClient))
             {
                 return;

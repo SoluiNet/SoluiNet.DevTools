@@ -130,7 +130,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <summary>
         /// Dispose the object.
         /// </summary>
-        /// <param name="disposing">Is disposing?</param>
+        /// <param name="disposing">Set to true if object is disposing.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (this.disposed)

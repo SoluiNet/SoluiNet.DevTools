@@ -2,6 +2,8 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using SoluiNet.DevTools.Core.Exceptions;
+
 namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 {
     using System;
@@ -968,7 +970,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                 if (connectionStringSetting == null)
                 {
-                    throw new NullReferenceException("connectionStringSetting is null");
+                    throw new SoluiNetException("connectionStringSetting is null");
                 }
 
                 connectionString = connectionStringSetting.ConnectionString;

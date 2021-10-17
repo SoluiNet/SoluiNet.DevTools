@@ -15,21 +15,22 @@ namespace SoluiNet.DevTools.Core.Exceptions
     /// An exception type for SoluiNet Plugins.
     /// </summary>
     [Serializable]
-    public class SoluiNetPluginException : Exception
+    public class SoluiNetPluginException : SoluiNetException
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoluiNetPluginException"/> class.
-        /// </summary>
-        public SoluiNetPluginException()
+        /// <inheritdoc cref="SoluiNetException"/>
+        public SoluiNetPluginException(string message)
+            : base(message)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoluiNetPluginException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public SoluiNetPluginException(string message)
-            : base(message)
+        /// <inheritdoc cref="SoluiNetException"/>
+        public SoluiNetPluginException(string message, System.Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        /// <inheritdoc cref="SoluiNetException"/>
+        public SoluiNetPluginException()
         {
         }
 
@@ -65,16 +66,6 @@ namespace SoluiNet.DevTools.Core.Exceptions
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
-        public SoluiNetPluginException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoluiNetPluginException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
         /// <param name="plugin">The plugin.</param>
         public SoluiNetPluginException(string message, Exception innerException, string plugin)
             : base(message, innerException)
@@ -97,16 +88,6 @@ namespace SoluiNet.DevTools.Core.Exceptions
             }
 
             this.Plugin = plugin.Name;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoluiNetPluginException"/> class.
-        /// </summary>
-        /// <param name="serializationInfo">The serialization info.</param>
-        /// <param name="streamingContext">The streaming context.</param>
-        protected SoluiNetPluginException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -2,6 +2,8 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using SoluiNet.DevTools.Web.Exceptions;
+
 namespace SoluiNet.DevTools.Web
 {
     using System;
@@ -84,7 +86,7 @@ namespace SoluiNet.DevTools.Web
         {
             if (this.started)
             {
-                throw new Exception(this.GetResourceString("SoluiNetServerAlreadyStarted"));
+                throw new SoluiNetWebException(this.GetResourceString("SoluiNetServerAlreadyStarted"));
             }
 
             try
@@ -112,7 +114,7 @@ namespace SoluiNet.DevTools.Web
         {
             if (!this.started)
             {
-                throw new Exception(this.GetResourceString("SoluiNetServerHasNotBeenStarted"));
+                throw new SoluiNetWebException(this.GetResourceString("SoluiNetServerHasNotBeenStarted"));
             }
 
             try
