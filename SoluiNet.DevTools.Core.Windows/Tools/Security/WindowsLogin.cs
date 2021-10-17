@@ -125,19 +125,20 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
-            this.Logout();
         }
 
         /// <summary>
         /// Dispose the object.
         /// </summary>
         /// <param name="disposing">Is disposing?</param>
-        protected void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (this.disposed)
             {
                 return;
             }
+
+            this.Logout();
 
             this.disposed = true;
         }
