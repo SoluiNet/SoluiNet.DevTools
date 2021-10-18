@@ -35,8 +35,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.UI
 
                 this.CategorySettingsGrid.Children.Add(extendedConfigurationUserControl);
 
-                // var mainGrid = extendedConfigurationUserControl.FindChild<Grid>("ExtendedConfigurationGrid");
-
                 if (!(extendedConfigurationUserControl.Content is Grid mainGrid))
                 {
                     return;
