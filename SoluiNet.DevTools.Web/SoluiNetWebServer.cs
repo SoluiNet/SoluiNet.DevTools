@@ -2,8 +2,6 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using SoluiNet.DevTools.Web.Exceptions;
-
 namespace SoluiNet.DevTools.Web
 {
     using System;
@@ -17,6 +15,7 @@ namespace SoluiNet.DevTools.Web
     using NLog;
     using SoluiNet.DevTools.Core.Tools.Resources;
     using SoluiNet.DevTools.Core.Tools.Stream;
+    using SoluiNet.DevTools.Web.Exceptions;
 
     /// <summary>
     /// The SoluiNet Web Server.
