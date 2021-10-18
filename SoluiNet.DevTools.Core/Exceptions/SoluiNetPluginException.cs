@@ -91,6 +91,16 @@ namespace SoluiNet.DevTools.Core.Exceptions
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SoluiNetPluginException"/> class.
+        /// </summary>
+        /// <param name="serializationInfo">The serialization info.</param>
+        /// <param name="streamingContext">The streaming context.</param>
+        protected SoluiNetPluginException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Gets or sets the plugin name.
         /// </summary>
         private string Plugin { get; set; }
