@@ -2,6 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -13,3 +14,5 @@ using System.Runtime.InteropServices;
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
 [assembly: Guid("e2e807b1-e623-424c-9622-a254b4190ac3")]
+
+[assembly: CLSCompliant(true)]
