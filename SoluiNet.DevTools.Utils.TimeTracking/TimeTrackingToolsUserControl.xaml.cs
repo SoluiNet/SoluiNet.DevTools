@@ -19,6 +19,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Windows.Data;
     using System.Windows.Input;
     using System.Windows.Media;
+    using System.Xml.Linq;
     using LiveCharts;
     using LiveCharts.Wpf;
     using NLog;
@@ -90,6 +91,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             {
                 return new ResourceManager("SoluiNet.DevTools.Utils.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
             }
+        }
+
+        private static IEnumerable<XElement> GetApplicationAreas(Entities.Application application)
+        {
+            return application.ApplicationArea.Select(a => new XElement(
+                        "Area",
+                        new XAttribute("Id", a.ApplicationAreaId),
+                        new XAttribute("Name", a.ApplicationName),
+                        new XText(a.ExtendedConfiguration)));
         }
 
         /// <summary>
@@ -1741,6 +1751,73 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         private void CleanUp_Click(object sender, RoutedEventArgs e)
         {
             TimeTrackingContext.CleanUp();
+        }
+
+        private void ExportAssignmentConfig_Click(object sender, RoutedEventArgs e)
+        {
+            var categories = this.context.Category.Select(x => new XElement(
+                "Categories",
+                new XElement(
+                    "Category",
+                    new XAttribute("Id", x.CategoryId),
+                    new XAttribute("Name", x.CategoryName),
+                    new XAttribute("DistributeEvenlyTarget", x.DistributeEvenlyTarget),
+                    new XText(x.ExtendedConfiguration))));
+
+            var application = this.context.Application.Select(x => new XElement(
+                "Applications",
+                new XElement(
+                    "Application",
+                    new XAttribute("Id", x.ApplicationId),
+                    new XAttribute("Name", x.ApplicationName),
+                    new XText(x.ExtendedConfiguration),
+                    new XElement("Areas", GetApplicationAreas(x)))));
+
+            var assignmentConfig = new XElement(
+                "AssignmentConfig",
+                categories,
+                application);
+
+            Clipboard.SetText(assignmentConfig.ToString());
+            this.AssignmentConfig.Text = assignmentConfig.ToString();
+        }
+
+        private void ImportAssignmentConfig_Click(object sender, RoutedEventArgs e)
+        {
+            using (var assignmentConfigStream = this.AssignmentConfig.Text.GetStreamForString())
+            {
+                var assignmentConfig = XElement.Load(assignmentConfigStream);
+
+                foreach (var category in assignmentConfig.Descendants("Category"))
+                {
+                    if (!this.context.Category.Any(x => x.CategoryName == category.Attribute("Name").Value))
+                    {
+                        this.context.Category.Add(new Category()
+                        {
+                            CategoryName = category.Attribute("Name").Value,
+                            DistributeEvenlyTarget = category.Attribute("DistributeEvenlyTarget").Value.IsAffirmative(),
+                            ExtendedConfiguration = category.Value,
+                        });
+                    }
+                }
+
+                foreach (var application in assignmentConfig.Descendants("Application"))
+                {
+                    if (!this.context.Application.Any(x => x.ApplicationName == application.Attribute("Name").Value))
+                    {
+                        this.context.Application.Add(new Entities.Application()
+                        {
+                            ApplicationName = application.Attribute("Name").Value,
+                            ApplicationArea = application.Descendants("Area").Select(a => new ApplicationArea()
+                            {
+                                ApplicationName = a.Attribute("Name").Value,
+                                ExtendedConfiguration = a.Value,
+                            }).ToList(),
+                            ExtendedConfiguration = application.Value,
+                        });
+                    }
+                }
+            }
         }
     }
 }
