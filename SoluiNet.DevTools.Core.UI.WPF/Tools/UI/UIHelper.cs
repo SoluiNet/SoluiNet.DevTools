@@ -520,7 +520,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
             // The EventHandlersStore class is declared as internal.
             var eventHandlersStoreProperty = typeof(UIElement).GetProperty(
                 "EventHandlersStore", BindingFlags.Instance | BindingFlags.NonPublic);
-            object eventHandlersStore = eventHandlersStoreProperty.GetValue(element, null);
+            var eventHandlersStore = eventHandlersStoreProperty?.GetValue(element, null);
 
             if (eventHandlersStore == null)
             {
@@ -531,7 +531,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
             // for getting an array of the subscribed event handlers.
             var getRoutedEventHandlers = eventHandlersStore.GetType().GetMethod(
                 "GetRoutedEventHandlers", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            var routedEventHandlers = (RoutedEventHandlerInfo[])getRoutedEventHandlers.Invoke(
+            var routedEventHandlers = (RoutedEventHandlerInfo[])getRoutedEventHandlers?.Invoke(
                 eventHandlersStore, new object[] { routedEvent });
 
             return routedEventHandlers;
@@ -577,6 +577,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
         /// <returns>Returns a colour for the hex string.</returns>
         public static Color ColourFromHexValue(this string colour)
         {
+            if (string.IsNullOrWhiteSpace(colour))
+            {
+                throw new ArgumentNullException(nameof(colour));
+            }
+
             return (Color)ColorConverter.ConvertFromString(colour);
         }
 

@@ -162,4 +162,7 @@
       <Name>SoluiNet.DevTools.Mobile</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\solui_logo_long.png" />
+  </ItemGroup>
 </Project>

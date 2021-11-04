@@ -54,7 +54,14 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The event arguments.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "For better readability use EventHandler as suffix.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Naming",
+            "CA1711:Identifiers should not have incorrect suffix",
+            Justification = "For better readability use EventHandler as suffix.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1003:Use generic event handler instances",
+            Justification = "We need the custom event handler for the additional parameters that could be delivered.")]
         public delegate void PlaceholderTextChangedEventHandler(object sender, PlaceholderTextChangedEventArgs eventArgs);
 
         /// <summary>

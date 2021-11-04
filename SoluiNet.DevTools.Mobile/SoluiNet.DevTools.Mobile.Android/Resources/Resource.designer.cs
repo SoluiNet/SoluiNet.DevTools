@@ -11785,16 +11785,19 @@ namespace SoluiNet.DevTools.Mobile.Droid
 			public const int notify_panel_notification_icon_bg = 2131165326;
 			
 			// aapt resource value: 0x7F07008F
-			public const int test_custom_background = 2131165327;
+			public const int solui_logo_long = 2131165327;
 			
 			// aapt resource value: 0x7F070090
-			public const int tooltip_frame_dark = 2131165328;
+			public const int test_custom_background = 2131165328;
 			
 			// aapt resource value: 0x7F070091
-			public const int tooltip_frame_light = 2131165329;
+			public const int tooltip_frame_dark = 2131165329;
 			
 			// aapt resource value: 0x7F070092
-			public const int xamarin_logo = 2131165330;
+			public const int tooltip_frame_light = 2131165330;
+			
+			// aapt resource value: 0x7F070093
+			public const int xamarin_logo = 2131165331;
 			
 			static Drawable()
 			{
@@ -13253,14 +13256,23 @@ namespace SoluiNet.DevTools.Mobile.Droid
 		public partial class Mipmap
 		{
 			
-			// aapt resource value: 0x7F0C0000
-			public const int icon = 2131492864;
-			
 			// aapt resource value: 0x7F0C0001
-			public const int icon_round = 2131492865;
+			public const int icon = 2131492865;
 			
 			// aapt resource value: 0x7F0C0002
-			public const int launcher_foreground = 2131492866;
+			public const int icon_round = 2131492866;
+			
+			// aapt resource value: 0x7F0C0000
+			public const int ic_launcher = 2131492864;
+			
+			// aapt resource value: 0x7F0C0003
+			public const int launcher_foreground = 2131492867;
+			
+			// aapt resource value: 0x7F0C0004
+			public const int launcher_foreground_adaptive_back = 2131492868;
+			
+			// aapt resource value: 0x7F0C0005
+			public const int launcher_foreground_adaptive_fore = 2131492869;
 			
 			static Mipmap()
 			{
