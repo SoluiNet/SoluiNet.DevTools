@@ -93,15 +93,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
-        private static IEnumerable<XElement> GetApplicationAreas(Entities.Application application)
-        {
-            return application.ApplicationArea.Select(a => new XElement(
-                        "Area",
-                        new XAttribute("Id", a.ApplicationAreaId),
-                        new XAttribute("Name", a.ApplicationName),
-                        new XText(a.ExtendedConfiguration)));
-        }
-
         /// <summary>
         /// Dispose time tracking tool user control.
         /// </summary>
@@ -129,6 +120,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
 
             this.disposed = true;
+        }
+
+        private static IEnumerable<XElement> GetApplicationAreas(Entities.Application application)
+        {
+            return application.ApplicationArea.Select(a => new XElement(
+                        "Area",
+                        new XAttribute("Id", a.ApplicationAreaId),
+                        new XAttribute("Name", a.ApplicationName),
+                        new XText(a.ExtendedConfiguration)));
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -824,6 +824,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "showOnlyAssigned is reserved for future use")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "showOnlyAssigned is reserved for future use")]
         private void PrepareAssignmentView(DateTime lowerDayLimit, DateTime upperDayLimit, TimeTrackingContext localContext, bool showOnlyUnassigned = false)
         {
             var timeTargets = localContext.UsageTime.Where(x => x.StartTime >= lowerDayLimit && x.StartTime < upperDayLimit)
@@ -1387,6 +1389,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Ignore for better readability")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Don't abort automatic assignment for any exception.")]
         private void AutomaticAssignAll_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1416,7 +1419,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                             if (content.MatchesRegEx(application.ExtendedConfiguration
                                 .DeserializeString<SoluiNetExtendedConfigurationType>().regEx))
                             {
-                                Logger.Info("automatic assign '{0}' to application '{1}'", content,
+                                Logger.Info(
+                                    "automatic assign '{0}' to application '{1}'",
+                                    content,
                                     application.ApplicationName);
 
                                 unassigned.ApplicationId = application.ApplicationId;
@@ -1442,7 +1447,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         .OrderBy(x => x.UsageTimeId)
                         .Skip(iteration * batchSize).Take(batchSize);
                     iteration++;
-                } while (unassignedApplicationBatch.Any());
+                }
+                while (unassignedApplicationBatch.Any());
 
                 var unassignedCategoryBatch = this.context.UsageTime
                     .Where(x => !x.CategoryUsageTime.Any() &&
@@ -1510,6 +1516,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Don't abort automatic assignment for any exception.")]
         private void AutomaticAssignment_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1755,28 +1762,38 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private void ExportAssignmentConfig_Click(object sender, RoutedEventArgs e)
         {
-            var categories = this.context.Category.Select(x => new XElement(
-                "Categories",
-                new XElement(
-                    "Category",
-                    new XAttribute("Id", x.CategoryId),
-                    new XAttribute("Name", x.CategoryName),
-                    new XAttribute("DistributeEvenlyTarget", x.DistributeEvenlyTarget),
-                    new XText(x.ExtendedConfiguration))));
+            var categories = new List<XElement>();
 
-            var application = this.context.Application.Select(x => new XElement(
-                "Applications",
-                new XElement(
-                    "Application",
-                    new XAttribute("Id", x.ApplicationId),
-                    new XAttribute("Name", x.ApplicationName),
-                    new XText(x.ExtendedConfiguration),
-                    new XElement("Areas", GetApplicationAreas(x)))));
+            foreach (var category in this.context.Category)
+            {
+                categories.Add(new XElement(
+                    "Categories",
+                    new XElement(
+                        "Category",
+                        new XAttribute("Id", category.CategoryId),
+                        new XAttribute("Name", category.CategoryName),
+                        new XAttribute("DistributeEvenlyTarget", category.DistributeEvenlyTarget ?? false),
+                        new XText(category.ExtendedConfiguration))));
+            }
+
+            var applications = new List<XElement>();
+
+            foreach (var application in this.context.Application)
+            {
+                applications.Add(new XElement(
+                    "Applications",
+                    new XElement(
+                        "Application",
+                        new XAttribute("Id", application.ApplicationId),
+                        new XAttribute("Name", application.ApplicationName),
+                        new XText(application.ExtendedConfiguration),
+                        new XElement("Areas", GetApplicationAreas(application)))));
+            }
 
             var assignmentConfig = new XElement(
                 "AssignmentConfig",
                 categories,
-                application);
+                applications);
 
             Clipboard.SetText(assignmentConfig.ToString());
             this.AssignmentConfig.Text = assignmentConfig.ToString();
