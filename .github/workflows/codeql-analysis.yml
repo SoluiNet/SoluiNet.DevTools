@@ -84,7 +84,7 @@ jobs:
         cp SoluiNet.DevTools.UI\ConnectionStrings.Default.config SoluiNet.DevTools.UI\ConnectionStrings.config
  
     - name: Build Application
-      run: msbuild SoluiNet.DevTools.sln /p:Configuration=Release
+      run: msbuild SoluiNet.DevTools.sln /p:Configuration=Release /p:UseSharedCompilation=false
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
