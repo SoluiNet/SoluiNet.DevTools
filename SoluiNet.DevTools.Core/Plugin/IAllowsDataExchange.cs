@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Core.Plugin
         /// </summary>
         /// <param name="whereClause">The filter string.</param>
         /// <returns>Returns a <see cref="List{T}">List</see> which matches the filter string.</returns>
-        List<object> GetData(string whereClause); // use dynamic LINQ?
+        ICollection<object> GetData(string whereClause); // use dynamic LINQ?
 
         /// <summary>
         /// Get data via a predefined filter dictionary.
@@ -28,7 +28,7 @@ namespace SoluiNet.DevTools.Core.Plugin
         /// <param name="entityName">The entity which should be filtered.</param>
         /// <param name="searchData">The filter dictionary.</param>
         /// <returns>Returns a <see cref="List{T}"/> which matches the filter dictionary and entity.</returns>
-        List<object> GetData(string entityName, IDictionary<string, object> searchData);
+        ICollection<object> GetData(string entityName, IDictionary<string, object> searchData);
 
         /// <summary>
         /// Set data for an identifiable element.

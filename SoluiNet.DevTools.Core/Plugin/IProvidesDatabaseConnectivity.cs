@@ -46,6 +46,6 @@ namespace SoluiNet.DevTools.Core.Plugin
         /// <param name="sqlCommand">The SQL command text.</param>
         /// <param name="identity">The impersonation identity.</param>
         /// <returns>A <see cref="DataTable"/> which has the results.</returns>
-        List<DataTable> ExecuteSqlScript(string sqlCommand, WindowsIdentity identity = null);
+        ICollection<DataTable> ExecuteSqlScript(string sqlCommand, WindowsIdentity identity = null);
     }
 }

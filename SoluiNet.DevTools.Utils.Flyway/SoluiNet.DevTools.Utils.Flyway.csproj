@@ -3,11 +3,11 @@
     <TargetFramework>net472</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.Flyway</AssemblyTitle>
     <Product>SoluiNet.DevTools.Utils.Flyway</Product>
-    <Copyright>Copyright ©  2019</Copyright>
+    <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\SoluiNet.DevTools.UI\bin\$(TargetFramework)\$(Platform)\$(Configuration)\Plugins\</OutputPath>
+    <OutputPath>..\build\$(TargetFramework)\$(Platform)\$(Configuration)\Plugins\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn)</NoWarn>
   </PropertyGroup>

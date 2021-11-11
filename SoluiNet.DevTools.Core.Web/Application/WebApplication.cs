@@ -9,9 +9,7 @@ namespace SoluiNet.DevTools.Core.Web.Application
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
-    using System.Text;
     using System.Threading.Tasks;
     using NLog;
     using SoluiNet.DevTools.Core.Plugin;
@@ -53,7 +51,7 @@ namespace SoluiNet.DevTools.Core.Web.Application
                 {
                     Debug.WriteLine(JsonTools.Serialize(exception));
 
-                    this.Logger.Debug(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't load assembly '{0}'", dllFile));
+                    Logger.Debug(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't load assembly '{0}'", dllFile));
                 }
             }
 
@@ -128,12 +126,12 @@ namespace SoluiNet.DevTools.Core.Web.Application
 
                 if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
                 {
-                    this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
+                    Logger.Info(string.Format(CultureInfo.InvariantCulture, "Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
 
                     continue;
                 }
 
-                this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Load plugin '{0}'.", assemblyName));
+                Logger.Info(string.Format(CultureInfo.InvariantCulture, "Load plugin '{0}'.", assemblyName));
 
                 if (type.Value.Contains("PluginDev"))
                 {
@@ -148,7 +146,7 @@ namespace SoluiNet.DevTools.Core.Web.Application
 
                     Task.Run(() =>
                     {
-                        (plugin as IRunsBackgroundTask).ExecuteBackgroundTask();
+                        plugin.ExecuteBackgroundTask();
                     });
                 }
 
@@ -160,19 +158,19 @@ namespace SoluiNet.DevTools.Core.Web.Application
             }
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.AssemblyResolve += new ResolveEventHandler(PluginHelper.LoadAssembly);
+            currentDomain.AssemblyResolve += PluginHelper.LoadAssembly;
         }
 
         /// <inheritdoc/>
-        public ICollection<IProvidesWebCommunication> WebPlugins { get; set; }
+        public ICollection<IProvidesWebCommunication> WebPlugins { get; }
 
         /// <inheritdoc/>
-        public ICollection<IBasePlugin> Plugins { get; set; }
+        public ICollection<IBasePlugin> Plugins { get; }
 
         /// <inheritdoc/>
-        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; set; }
+        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; }
 
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {

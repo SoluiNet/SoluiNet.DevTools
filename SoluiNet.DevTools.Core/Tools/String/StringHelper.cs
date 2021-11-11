@@ -247,6 +247,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// </summary>
         /// <param name="length">The length of the string.</param>
         /// <returns>Returns a random string.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5394:Do not use insecure randomness", Justification = "We don't need cryptographic secureness.")]
         public static string GetRandomString(int length)
         {
             Random random = new Random();

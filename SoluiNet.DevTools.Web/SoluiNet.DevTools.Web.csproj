@@ -15,7 +15,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <OutputPath>bin\$(TargetFramework)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>..\build\$(TargetFramework)\$(Platform)\$(Configuration)\</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn),SA1123</NoWarn>

@@ -74,7 +74,7 @@ namespace SoluiNet.DevTools.Core.SyntaxHighlighting
         /// </summary>
         /// <param name="tag">The tag name.</param>
         /// <returns>Returns the JavaScript providers.</returns>
-        public static List<string> GetJSProvider(string tag)
+        public static ICollection<string> GetJSProvider(string tag)
         {
             return Tags.FindAll(s =>
                 s.ToUpperInvariant().StartsWith(tag.ToUpperInvariant(), StringComparison.InvariantCulture));

@@ -45,8 +45,8 @@ namespace SoluiNet.DevTools.Core.Tools.File
         /// <param name="directoryPath">The directory path.</param>
         /// <param name="filter">The filter.</param>
         /// <param name="searchRecursively">Search recursively in sub folders.</param>
-        /// <returns>A <see cref="List{T}"/> of all file paths which matches the filter.</returns>
-        public static List<string> GetFilesInDirectory(string directoryPath, string filter = "*.*", bool searchRecursively = false)
+        /// <returns>A <see cref="ICollection{T}"/> of all file paths which matches the filter.</returns>
+        public static ICollection<string> GetFilesInDirectory(string directoryPath, string filter = "*.*", bool searchRecursively = false)
         {
             var fileList = new List<string>();
 
