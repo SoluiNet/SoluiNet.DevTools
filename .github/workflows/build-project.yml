@@ -10,6 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       name: Checkout Code
+      
+    - name: Prepare Build Environment
+      run: powershell https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.ps1
      
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.0.3
