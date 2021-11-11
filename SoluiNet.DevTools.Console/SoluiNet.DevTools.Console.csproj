@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Console</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Console</Product>
@@ -28,6 +28,7 @@
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AssemblyName>sndt</AssemblyName>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
@@ -39,7 +40,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NLog" Version="4.7.11" />
+    <PackageReference Include="NLog" Version="4.7.12" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

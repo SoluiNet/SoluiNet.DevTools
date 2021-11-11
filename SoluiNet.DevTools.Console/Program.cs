@@ -2,13 +2,12 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-using System.Reflection;
-
 namespace SoluiNet.DevTools.Console
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Reflection;
     using CommandLine;
     using SoluiNet.DevTools.Console.Options;
 

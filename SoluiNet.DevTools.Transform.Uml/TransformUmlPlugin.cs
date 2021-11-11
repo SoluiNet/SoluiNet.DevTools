@@ -17,7 +17,7 @@ namespace SoluiNet.DevTools.Transform.Uml
     public class TransformUmlPlugin : ITransformsData
     {
         /// <inheritdoc/>
-        public List<string> SupportedInputFormats
+        public ICollection<string> SupportedInputFormats
         {
             get
             {
@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.Transform.Uml
         }
 
         /// <inheritdoc/>
-        public List<string> SupportedOutputFormats
+        public ICollection<string> SupportedOutputFormats
         {
             get
             {

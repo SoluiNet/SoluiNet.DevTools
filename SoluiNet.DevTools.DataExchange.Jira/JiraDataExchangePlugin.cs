@@ -64,7 +64,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
         /// <param name="entityName">The type of the issue (bug, feature, ...)</param>
         /// <param name="searchData">The search parameters in a dictionary. All parameters will be combined via AND.</param>
         /// <returns>Returns a list of issues that are matching the overgiven parameters.</returns>
-        public List<object> GetData(string entityName, IDictionary<string, object> searchData)
+        public ICollection<object> GetData(string entityName, IDictionary<string, object> searchData)
         {
             if (searchData == null)
             {
@@ -146,7 +146,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
         /// </summary>
         /// <param name="whereClause">The JQL-statement.</param>
         /// <returns>Returns a list of issues that are matching the overgiven parameters.</returns>
-        public List<object> GetData(string whereClause)
+        public ICollection<object> GetData(string whereClause)
         {
             throw new NotImplementedException();
         }

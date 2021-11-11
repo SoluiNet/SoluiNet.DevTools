@@ -127,7 +127,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 {
                     command.Dispose();
                 }
-
             }
             catch (Exception exception)
             {
@@ -173,7 +172,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 {
                     command.Dispose();
                 }
-
             }
             catch (Exception exception)
             {
@@ -228,7 +226,6 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 {
                     command.Dispose();
                 }
-
             }
             catch (Exception exception)
             {

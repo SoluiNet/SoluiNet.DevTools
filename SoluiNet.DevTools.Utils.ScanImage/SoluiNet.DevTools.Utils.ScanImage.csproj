@@ -16,6 +16,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="stylecop.json" />
@@ -25,7 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FredsImageMagickScripts.TextCleaner" Version="2.2020.822.858" />
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="8.2.1" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="8.4.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
