@@ -15,6 +15,7 @@ namespace SoluiNet.DevTools.Web
     using NLog;
     using SoluiNet.DevTools.Core.Tools.Resources;
     using SoluiNet.DevTools.Core.Tools.Stream;
+    using SoluiNet.DevTools.Web.Exceptions;
 
     /// <summary>
     /// The SoluiNet Web Server.
@@ -84,7 +85,7 @@ namespace SoluiNet.DevTools.Web
         {
             if (this.started)
             {
-                throw new Exception(this.GetResourceString("SoluiNetServerAlreadyStarted"));
+                throw new SoluiNetWebException(this.GetResourceString("SoluiNetServerAlreadyStarted"));
             }
 
             try
@@ -112,7 +113,7 @@ namespace SoluiNet.DevTools.Web
         {
             if (!this.started)
             {
-                throw new Exception(this.GetResourceString("SoluiNetServerHasNotBeenStarted"));
+                throw new SoluiNetWebException(this.GetResourceString("SoluiNetServerHasNotBeenStarted"));
             }
 
             try

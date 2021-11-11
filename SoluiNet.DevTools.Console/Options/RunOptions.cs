@@ -17,20 +17,18 @@ namespace SoluiNet.DevTools.Console.Options
     public class RunOptions
     {
         /// <summary>
-        /// Gets or sets whether the application should be verbose or not.
+        /// Gets or sets a value indicating whether the application should be verbose or not.
         /// </summary>
-        [Option(
-            'v',
+        [Option('v',
             "verbose",
             Default = false,
             HelpText = "Prints all messages to standard output.")]
         public bool Verbose { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the application should be showing the help or not.
+        /// Gets or sets a value indicating whether the application should be showing the help or not.
         /// </summary>
-        [Option(
-            'h',
+        [Option('h',
             "help",
             Default = false,
             HelpText = "Show help information.")]
