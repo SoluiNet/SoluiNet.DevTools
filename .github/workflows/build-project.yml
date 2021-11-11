@@ -12,7 +12,9 @@ jobs:
       name: Checkout Code
       
     - name: Prepare Build Environment
-      run: powershell Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -Proxy $env:HTTP_PROXY -ProxyUseDefaultCredentials -OutFile 'dotnet-install.ps1'; powershell ./dotnet-install.ps1;
+      run: |
+        powershell Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile dotnet-install.ps1
+        powershell ./dotnet-install.ps1;
      
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.0.3
