@@ -16,6 +16,7 @@
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <NeutralLanguage>en</NeutralLanguage>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="icons\automatic_assignment.png" />

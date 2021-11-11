@@ -28,6 +28,7 @@
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AssemblyName>sndt</AssemblyName>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
