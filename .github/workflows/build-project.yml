@@ -26,11 +26,11 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore SoluiNet.DevTools.sln
       
-    - name: Generate build number
-      id: buildnumber
-      uses: einaregilsson/build-number@v3
-      with:
-        token: ${{secrets.github_token}}        
+#    - name: Generate build number
+#      id: buildnumber
+#      uses: einaregilsson/build-number@v3
+#      with:
+#        token: ${{secrets.github_token}}        
  
     - name: Prepare Build
       run: |
@@ -43,5 +43,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: SoluiNet.DevTools_v0.9.0.${{ steps.buildnumber.outputs.build_number }}
+        name: SoluiNet.DevTools_v0.9.0.$GITHUB_RUN_NUMBER
         path: build\net472\AnyCPU\Release
