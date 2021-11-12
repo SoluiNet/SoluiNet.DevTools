@@ -131,7 +131,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                             {
                                 foreach (var pluginEntry in (entry.Item as SoluiNetInstallationType).SoluiNetPlugin)
                                 {
-                                    pluginEntry.Scope = Enums.ConfigurationScopeEnum.PerInstallation;
+                                    pluginEntry.Scope = Enums.ConfigurationScope.PerInstallation;
 
                                     if (!effectiveConfiguration.ContainsKey(pluginEntry.name))
                                     {
@@ -150,7 +150,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                         if (entry.Item is SoluiNetPluginEntryType)
                         {
                             var pluginEntry = entry.Item as SoluiNetPluginEntryType;
-                            pluginEntry.Scope = Enums.ConfigurationScopeEnum.General;
+                            pluginEntry.Scope = Enums.ConfigurationScope.General;
 
                             if (!effectiveConfiguration.ContainsKey(pluginEntry.name))
                             {

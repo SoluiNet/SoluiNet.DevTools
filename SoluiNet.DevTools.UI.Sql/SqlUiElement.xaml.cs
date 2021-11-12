@@ -143,9 +143,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             copySelectionToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
-
-                if (containingGrid == null)
+                if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is DataGrid containingGrid))
                 {
                     return;
                 }
@@ -164,9 +162,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             copyColumnToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
-
-                if (containingGrid == null)
+                if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is DataGrid containingGrid))
                 {
                     return;
                 }
@@ -185,9 +181,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             copySelectedColumnToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
-
-                if (containingGrid == null)
+                if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is DataGrid containingGrid))
                 {
                     return;
                 }
@@ -206,9 +200,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             copySelectedCellToClipboardMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
-
-                if (containingGrid == null)
+                if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is DataGrid containingGrid))
                 {
                     return;
                 }
@@ -229,9 +221,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             saveAsCsvMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
-
-                if (containingGrid == null)
+                if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is DataGrid containingGrid))
                 {
                     return;
                 }
@@ -260,9 +250,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             saveAsXmlMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
-
-                if (containingGrid == null)
+                if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is DataGrid containingGrid))
                 {
                     return;
                 }
@@ -291,9 +279,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             saveAsSqlMenuItem.Click += (sender, eventInfo) =>
             {
-                var containingGrid = ((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget as DataGrid;
-
-                if (containingGrid == null)
+                if (!(((sender as MenuItem)?.Parent as ContextMenu)?.PlacementTarget is DataGrid containingGrid))
                 {
                     return;
                 }

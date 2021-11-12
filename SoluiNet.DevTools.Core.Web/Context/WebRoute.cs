@@ -28,6 +28,7 @@ namespace SoluiNet.DevTools.Core.Web.Context
         /// <summary>
         /// Gets or sets the parameters.
         /// </summary>
-        public List<WebParameter> Parameters { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Property should be assignable.")]
+        public ICollection<WebParameter> Parameters { get; set; }
     }
 }

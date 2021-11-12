@@ -31,6 +31,7 @@ namespace SoluiNet.DevTools.Utils.CodeOnTheFly
         /// <param name="methodParameters">A list of parameters which should be overgiven to the executing method.</param>
         /// <returns>Returns the returned value from the executing method (casted to string, will be converted to JSON if returned value isn't a primitive one).</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "To improve readability allow multiple lines for this method")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to catch all exception that occur during a dynamic code execution.")]
         public static string RunDynamicCode(string code, bool sourceCodeComplete = false, string executingMethod = "main", string languageProvider = "CSharp", params object[] methodParameters)
         {
             var compiler = CodeDomProvider.CreateProvider(languageProvider);

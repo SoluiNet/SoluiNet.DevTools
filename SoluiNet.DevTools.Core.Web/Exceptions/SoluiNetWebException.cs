@@ -9,37 +9,29 @@ namespace SoluiNet.DevTools.Web.Exceptions
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Plugin;
 
     /// <summary>
     /// An exception type for SoluiNet Plugins.
     /// </summary>
     [Serializable]
-    public class SoluiNetWebException : Exception
+    public class SoluiNetWebException : SoluiNetException
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoluiNetWebException"/> class.
-        /// </summary>
-        public SoluiNetWebException()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoluiNetWebException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
+        /// <inheritdoc cref="SoluiNetException"/>
         public SoluiNetWebException(string message)
             : base(message)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoluiNetWebException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
-        public SoluiNetWebException(string message, Exception innerException)
+        /// <inheritdoc cref="SoluiNetException"/>
+        public SoluiNetWebException(string message, System.Exception innerException)
             : base(message, innerException)
+        {
+        }
+
+        /// <inheritdoc cref="SoluiNetException"/>
+        public SoluiNetWebException()
         {
         }
 

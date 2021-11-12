@@ -1,4 +1,4 @@
-﻿// <copyright file="WebClientTypeEnum.cs" company="SoluiNet">
+﻿// <copyright file="WebClientType.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,8 +13,13 @@ namespace SoluiNet.DevTools.Core.Enums
     /// <summary>
     /// An enumeration which provides a list of all possible web client types.
     /// </summary>
-    public enum WebClientTypeEnum
+    public enum WebClientType
     {
+        /// <summary>
+        /// Represents a unknown client.
+        /// </summary>
+        Unknown = 0,
+
         /// <summary>
         /// Represents a REST-client
         /// </summary>

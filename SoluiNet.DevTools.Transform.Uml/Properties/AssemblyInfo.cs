@@ -2,6 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
+using System;
 using System.Runtime.InteropServices;
 
 // Durch Festlegen von ComVisible auf FALSE werden die Typen in dieser Assembly
@@ -11,3 +12,5 @@ using System.Runtime.InteropServices;
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
 [assembly: Guid("fdeda2f7-611b-4e77-9d84-1bb8802e27b5")]
+
+[assembly: CLSCompliant(true)]

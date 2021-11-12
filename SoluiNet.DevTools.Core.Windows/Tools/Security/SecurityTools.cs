@@ -125,6 +125,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <param name="task">The task which should be executed.</param>
         public static void RunImpersonated(WindowsIdentity identity, Action task)
         {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+
 #if COMPILED_FOR_NETSTANDARD
             WindowsIdentity.RunImpersonated(identity.AccessToken, task);
 #else
@@ -149,6 +154,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <returns>Returns the tasks result.</returns>
         public static object RunImpersonated(WindowsIdentity identity, Func<object> task)
         {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+
 #if COMPILED_FOR_NETSTANDARD
             return WindowsIdentity.RunImpersonated(identity.AccessToken, task);
 #else
@@ -174,6 +184,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <returns>Returns the tasks result.</returns>
         public static T RunImpersonated<T>(WindowsIdentity identity, Func<T> task)
         {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+
 #if COMPILED_FOR_NETSTANDARD
             return WindowsIdentity.RunImpersonated<T>(identity.AccessToken, task);
 #else
@@ -191,12 +206,13 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         }
 
         /// <summary>
-        /// Get a WindowsIdentity-object.
+        /// Get a WindowsIdentity-object. The returned identity must be disposed after it isn't needed anymore.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="domainName">The domain name.</param>
         /// <param name="password">The password.</param>
         /// <returns>Returns a WindowsIdentity-object. It will return the object for the logged in user if there are no parameters.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Dispose should be called from outside scope.")]
         public static WindowsIdentity GetIdentityByName(string userName = "", string domainName = "", string password = "")
         {
             domainName = string.IsNullOrWhiteSpace(domainName) ? Environment.UserDomainName : domainName;

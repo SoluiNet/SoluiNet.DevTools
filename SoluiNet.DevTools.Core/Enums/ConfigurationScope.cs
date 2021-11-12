@@ -1,4 +1,4 @@
-﻿// <copyright file="ConfigurationScopeEnum.cs" company="SoluiNet">
+﻿// <copyright file="ConfigurationScope.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ namespace SoluiNet.DevTools.Core.Enums
     /// <summary>
     /// The configuration scope.
     /// </summary>
-    public enum ConfigurationScopeEnum
+    public enum ConfigurationScope
     {
         /// <summary>
         /// No scope

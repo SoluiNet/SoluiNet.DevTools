@@ -31,6 +31,7 @@ namespace SoluiNet.DevTools.Console
         /// Run with parsed options.
         /// </summary>
         /// <param name="options">The parsed options.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "We want to provide a neutral console tool. So there won't be any localizations for now.")]
         internal static void Run(RunOptions options)
         {
             Console.WriteLine($@"SoluiNet.DevTools.Console v{Assembly.GetEntryAssembly()?.GetName().Version.ToString()}");
@@ -50,7 +51,7 @@ namespace SoluiNet.DevTools.Console
         /// <param name="errors">A enumerable which holds the errors.</param>
         internal static void Error(IEnumerable<Error> errors)
         {
-
+            // todo: implement error handling
         }
     }
 }

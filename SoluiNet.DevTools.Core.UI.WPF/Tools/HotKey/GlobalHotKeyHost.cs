@@ -243,6 +243,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.HotKey
         /// <summary>
         /// A class which allows to use a counter.
         /// </summary>
+        [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "We want to group the necessary classes for global hot keys.")]
         public class SerialCounter
         {
             /// <summary>
