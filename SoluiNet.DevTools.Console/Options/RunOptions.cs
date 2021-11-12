@@ -19,8 +19,7 @@ namespace SoluiNet.DevTools.Console.Options
         /// <summary>
         /// Gets or sets a value indicating whether the application should be verbose or not.
         /// </summary>
-        [Option(
-            'v',
+        [Option('v',
             "verbose",
             Default = false,
             HelpText = "Prints all messages to standard output.")]
@@ -29,8 +28,7 @@ namespace SoluiNet.DevTools.Console.Options
         /// <summary>
         /// Gets or sets a value indicating whether the application should be showing the help or not.
         /// </summary>
-        [Option(
-            'h',
+        [Option('h',
             "help",
             Default = false,
             HelpText = "Show help information.")]

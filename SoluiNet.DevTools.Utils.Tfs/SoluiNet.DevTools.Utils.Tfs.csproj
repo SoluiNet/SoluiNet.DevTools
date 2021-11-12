@@ -15,6 +15,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="SoluiNet.DevTools.Utils.Tfs.csproj~RF2f15b96b.TMP" />

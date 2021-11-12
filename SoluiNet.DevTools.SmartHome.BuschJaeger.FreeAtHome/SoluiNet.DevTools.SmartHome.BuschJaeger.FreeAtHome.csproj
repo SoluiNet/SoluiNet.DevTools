@@ -10,6 +10,7 @@
     <OutputPath>..\build\$(TargetFramework)\$(Platform)\$(Configuration)\Plugins\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn)</NoWarn>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="FreeAtHomeUserControl.xaml" />

@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -256,6 +257,26 @@ namespace SoluiNet.DevTools.Core.Tools.String
 
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        /// <summary>
+        /// Get stream for given string (taken from https://stackoverflow.com/questions/1879395/how-do-i-generate-a-stream-from-a-string).
+        /// The stream must be used via using (i. e. using (var stream = exampleString.GetStreamForString()){ // do something }).
+        /// </summary>
+        /// <param name="originalText">The original text.</param>
+        /// <returns>Returns a stream from the given string.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "The purpose of this method is that the objects will be disposed outside")]
+        public static Stream GetStreamForString(this string originalText)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+
+            writer.Write(originalText);
+            writer.Flush();
+
+            stream.Position = 0;
+
+            return stream;
         }
     }
 }
