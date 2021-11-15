@@ -19,11 +19,11 @@ namespace SoluiNet.DevTools.Core.Plugin
         /// <summary>
         /// Gets the web client format.
         /// </summary>
-        WebClientFormatEnum Format { get; }
+        WebClientFormat Format { get; }
 
         /// <summary>
         /// Gets the web client type.
         /// </summary>
-        WebClientTypeEnum Type { get; }
+        WebClientType Type { get; }
     }
 }

@@ -127,10 +127,10 @@ namespace SoluiNet.DevTools.UI
             }
 
             if (Application.Current != null &&
-                (Application.Current is ISoluiNetUiApp) &&
-                ((ISoluiNetUiApp)Application.Current).UiElements != null)
+                Application.Current is ISoluiNetUiApp app &&
+                app.UiElements != null)
             {
-                foreach (var uiElement in ((ISoluiNetUiApp)Application.Current).UiElements)
+                foreach (var uiElement in app.UiElements)
                 {
                     var tabItem = new TabItem() { Header = uiElement.Label, Name = uiElement.TechnicalName + "_TabItem" };
 

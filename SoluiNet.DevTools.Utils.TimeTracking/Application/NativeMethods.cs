@@ -33,6 +33,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Application
         /// <returns>If the function succeeds, the return value is the length, in characters, of the copied string, not including the terminating null character. Otherwise it will return zero.</returns>
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1838:Avoid 'StringBuilder' parameters for P/Invokes", Justification = "Never change a running system.")]
         internal static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
     }
 }

@@ -206,12 +206,13 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         }
 
         /// <summary>
-        /// Get a WindowsIdentity-object.
+        /// Get a WindowsIdentity-object. The returned identity must be disposed after it isn't needed anymore.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="domainName">The domain name.</param>
         /// <param name="password">The password.</param>
         /// <returns>Returns a WindowsIdentity-object. It will return the object for the logged in user if there are no parameters.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Dispose should be called from outside scope.")]
         public static WindowsIdentity GetIdentityByName(string userName = "", string domainName = "", string password = "")
         {
             domainName = string.IsNullOrWhiteSpace(domainName) ? Environment.UserDomainName : domainName;

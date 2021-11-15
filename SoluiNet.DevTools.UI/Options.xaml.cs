@@ -24,6 +24,7 @@ namespace SoluiNet.DevTools.UI
     /// <summary>
     /// Interaction logic for Options.xaml.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1724:Type names should not match namespaces", Justification = "We want to use keywords for better unterstanding of the purpose.")]
     public partial class Options : SoluiNetWindow
     {
         /// <summary>

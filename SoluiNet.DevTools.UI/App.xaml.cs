@@ -55,8 +55,7 @@ namespace SoluiNet.DevTools.UI
         /// <inheritdoc/>
         public ICollection<ISoluiNetUIElement> UiElements { get; private set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We want to provide a logger for all inheriting objects.")]
-        private Logger Logger
+        private static Logger Logger
         {
             get
             {
@@ -75,7 +74,7 @@ namespace SoluiNet.DevTools.UI
             {
                 base.OnStartup(e);
 
-                this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+                App.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Start SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
                 this.LoadPlugins();
                 this.LoadUiElements();
@@ -84,7 +83,7 @@ namespace SoluiNet.DevTools.UI
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
+                App.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
             }
         }
 
@@ -99,13 +98,13 @@ namespace SoluiNet.DevTools.UI
             {
                 base.OnExit(e);
 
-                this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+                App.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
                 App.CallShutdownEvent();
             }
             catch (Exception exception)
             {
-                this.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
+                App.Logger.Error(exception, "Error in SoluiNet.DevTools.UI");
             }
         }
 
@@ -151,7 +150,7 @@ namespace SoluiNet.DevTools.UI
                 {
                     Debug.WriteLine(JsonTools.Serialize(exception));
 
-                    this.Logger.Debug(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't load assembly '{0}'", dllFile));
+                    App.Logger.Debug(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't load assembly '{0}'", dllFile));
                 }
             }
 
@@ -245,13 +244,13 @@ namespace SoluiNet.DevTools.UI
                     }
                     catch (Exception assignmentException)
                     {
-                        this.Logger.Fatal(assignmentException, "Error while assigning plugin types for assembly '{0}'", assembly.FullName);
+                        App.Logger.Fatal(assignmentException, "Error while assigning plugin types for assembly '{0}'", assembly.FullName);
                     }
                 }
             }
             catch (Exception exception)
             {
-                this.Logger.Fatal(exception, "Error while assigning plugin types");
+                App.Logger.Fatal(exception, "Error while assigning plugin types");
             }
 
             this.Plugins = new List<IBasePlugin>();
@@ -268,12 +267,12 @@ namespace SoluiNet.DevTools.UI
 
                 if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
                 {
-                    this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
+                    App.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Found plugin '{0}' but it will be ignored because it isn't configured as enabled plugin.", assemblyName));
 
                     continue;
                 }
 
-                this.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Load plugin '{0}'.", assemblyName));
+                App.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Load plugin '{0}'.", assemblyName));
 
                 if (type.Value.Contains("PluginDev"))
                 {
@@ -393,7 +392,7 @@ namespace SoluiNet.DevTools.UI
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            this.Logger.Fatal(e.Exception, "Unhandled Exception while executing SoluiNet.DevTools.UI");
+            App.Logger.Fatal(e.Exception, "Unhandled Exception while executing SoluiNet.DevTools.UI");
         }
     }
 }

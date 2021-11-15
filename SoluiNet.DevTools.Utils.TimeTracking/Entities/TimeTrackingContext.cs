@@ -15,6 +15,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.Text.RegularExpressions;
     using System.Windows.Media;
     using NLog;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Tools.XML;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
     using SoluiNet.DevTools.Core.XmlData;
@@ -969,7 +970,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                 if (connectionStringSetting == null)
                 {
-                    throw new ArgumentNullException(nameof(connectionStringSetting));
+                    throw new SoluiNetException("connectionStringSetting is null");
                 }
 
                 connectionString = connectionStringSetting.ConnectionString;

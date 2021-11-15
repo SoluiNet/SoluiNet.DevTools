@@ -24,6 +24,6 @@ namespace SoluiNet.DevTools.Core.Web.Context
         /// <summary>
         /// Gets or sets the allowed methods.
         /// </summary>
-        public HttpMethod[] AllowedMethods { get; set; }
+        public ICollection<HttpMethod> AllowedMethods { get; set; }
     }
 }

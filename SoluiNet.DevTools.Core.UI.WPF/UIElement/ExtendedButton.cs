@@ -63,6 +63,10 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// </summary>
         /// <param name="sender">The sender of the event.</param>
         /// <param name="eventArgs">The event arguments.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1003:Use generic event handler instances",
+            Justification = "We want to implement additional functionality in the future. Therefore we want to stay with a custom event handler.")]
         public delegate void DependencyValueChangedHandler(object sender, EventArgs eventArgs);
 
         /// <summary>
@@ -70,6 +74,10 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// </summary>
         /// <param name="sender">The sender of the event.</param>
         /// <param name="eventArgs">The event arguments.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1003:Use generic event handler instances",
+            Justification = "We want to implement additional functionality in the future. Therefore we want to stay with a custom event handler.")]
         public delegate void ElementSelectedHandler(object sender, EventArgs eventArgs);
 
         /// <summary>
@@ -82,11 +90,13 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
         /// <summary>
         /// The dependency value changed event.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "We prefer the current naming.")]
         public event DependencyValueChangedHandler OnDependencyValueChanged;
 
         /// <summary>
         /// The element selected event.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "We prefer the current naming.")]
         public event ElementSelectedHandler OnElementSelected;
 
         /// <summary>

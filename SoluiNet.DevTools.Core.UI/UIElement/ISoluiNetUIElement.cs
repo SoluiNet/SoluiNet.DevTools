@@ -25,6 +25,10 @@ namespace SoluiNet.DevTools.Core.UI.UIElement
         /// <summary>
         /// The event handler for a title change.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1003:Use generic event handler instances",
+            Justification = "We need the custom event handler for the additional parameters that could be delivered.")]
         event TitleChangedHandler TitleChanged;
 
         /// <summary>

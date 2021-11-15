@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1310:FieldNamesMustNotContainUnderscore",
         Justification = "Use the default windows notification name.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1724:Type names should not match namespaces", Justification = "We want to use keywords for better unterstanding of the purpose.")]
     public static class Constants
     {
         // modifiers
