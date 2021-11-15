@@ -20,13 +20,13 @@ namespace SoluiNet.DevTools.Utils.WebClient
     /// </summary>
     public partial class WebClientPluginSelection : UserControl
     {
-        private readonly List<ISupportsWebClient> plugins;
+        private readonly ICollection<ISupportsWebClient> plugins;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebClientPluginSelection"/> class.
         /// </summary>
         /// <param name="plugins">The plugins which support web client execution.</param>
-        public WebClientPluginSelection(List<ISupportsWebClient> plugins)
+        public WebClientPluginSelection(ICollection<ISupportsWebClient> plugins)
         {
             this.InitializeComponent();
             this.plugins = plugins;

@@ -322,6 +322,34 @@ namespace SoluiNet.DevTools.UI.Sql
             #endregion
         }
 
+        private static IList<Type> GetEntityTypes(string chosenProject)
+        {
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+
+            return PluginHelper.GetEntityTypes(plugin);
+        }
+
+        private static IList<string> GetEntityFields(string chosenProject, string entityName)
+        {
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+
+            return PluginHelper.GetEntityFields(plugin, entityName);
+        }
+
+        private static IList<SqlScript> GetSqlScripts(string chosenProject)
+        {
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+
+            return PluginHelper.GetSqlScripts(plugin);
+        }
+
+        private static IList<string> GetEnvironments(string chosenProject)
+        {
+            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
+
+            return PluginHelper.GetEnvironments(plugin);
+        }
+
         private void ExecuteSqlCommand()
         {
             var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == this.Project.Text);
@@ -446,38 +474,10 @@ namespace SoluiNet.DevTools.UI.Sql
             }
         }
 
-        private IList<Type> GetEntityTypes(string chosenProject)
-        {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
-
-            return PluginHelper.GetEntityTypes(plugin);
-        }
-
-        private IList<string> GetEntityFields(string chosenProject, string entityName)
-        {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
-
-            return PluginHelper.GetEntityFields(plugin, entityName);
-        }
-
-        private IList<SqlScript> GetSqlScripts(string chosenProject)
-        {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
-
-            return PluginHelper.GetSqlScripts(plugin);
-        }
-
-        private IList<string> GetEnvironments(string chosenProject)
-        {
-            var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == chosenProject);
-
-            return PluginHelper.GetEnvironments(plugin);
-        }
-
         private void ChangeProjectConnection(string chosenProject, string chosenEnvironment = "Default")
         {
-            var dataEntities = this.GetEntityTypes(chosenProject);
-            var sqlScripts = this.GetSqlScripts(chosenProject);
+            var dataEntities = GetEntityTypes(chosenProject);
+            var sqlScripts = GetSqlScripts(chosenProject);
 
             if (dataEntities == null)
             {
@@ -519,7 +519,7 @@ namespace SoluiNet.DevTools.UI.Sql
                 {
                     var entityNodeIndex = tablesNode.Items.Add(new TreeViewItem() { Header = entity.Name, Tag = entity });
 
-                    var fields = this.GetEntityFields(chosenProject, entity.Name);
+                    var fields = GetEntityFields(chosenProject, entity.Name);
 
                     foreach (var field in fields)
                     {
@@ -647,7 +647,7 @@ namespace SoluiNet.DevTools.UI.Sql
         private void Project_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var chosenProject = (sender as ComboBox)?.SelectedItem as string ?? string.Empty;
-            var environments = this.GetEnvironments(chosenProject);
+            var environments = GetEnvironments(chosenProject);
 
             this.Environments.Items.Clear();
 
@@ -699,7 +699,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
         private void GetSqlForTable(string chosenProject)
         {
-            var dataEntities = this.GetEntityTypes(chosenProject);
+            var dataEntities = GetEntityTypes(chosenProject);
 
             if (dataEntities == null)
             {
@@ -855,7 +855,7 @@ namespace SoluiNet.DevTools.UI.Sql
 
             IList<ICompletionData> completionData = completionWindow.CompletionList.CompletionData;
 
-            foreach (var databaseElement in this.GetEntityTypes(chosenProject)
+            foreach (var databaseElement in GetEntityTypes(chosenProject)
                 .Where(x => x.Name == table || string.IsNullOrEmpty(table))
                 .SelectMany(x => !string.IsNullOrEmpty(table) ?
                     x.GetProperties().Select(y => y.Name) : new List<string>() { x.Name }))

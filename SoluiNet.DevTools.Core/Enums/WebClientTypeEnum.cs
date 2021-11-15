@@ -13,8 +13,14 @@ namespace SoluiNet.DevTools.Core.Enums
     /// <summary>
     /// An enumeration which provides a list of all possible web client types.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "It should be clear that this type is an enum.")]
     public enum WebClientTypeEnum
     {
+        /// <summary>
+        /// Represents a client without more specifics.
+        /// </summary>
+        None = 0,
+
         /// <summary>
         /// Represents a REST-client
         /// </summary>

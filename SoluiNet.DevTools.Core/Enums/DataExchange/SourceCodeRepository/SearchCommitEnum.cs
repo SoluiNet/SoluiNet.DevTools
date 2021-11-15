@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Core.Enums.DataExchange.SourceCodeRepository
     /// <summary>
     /// An enumeration which provides a list of all possible searches in source code repositories.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "It should be clear that this type is an enum.")]
     public enum SearchCommitEnum
     {
         /// <summary>

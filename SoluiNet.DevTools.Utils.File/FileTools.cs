@@ -51,6 +51,7 @@ namespace SoluiNet.DevTools.Utils.File
         /// <param name="filePath">The file path.</param>
         /// <param name="regExPattern">The RegEx search pattern.</param>
         /// <returns>Returns every line which matches the RegEx search pattern.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "RegEx is a known description.")]
         public static IList<string> ExtractLinesMatchingRegEx(string filePath, string regExPattern)
         {
             var result = new List<string>();

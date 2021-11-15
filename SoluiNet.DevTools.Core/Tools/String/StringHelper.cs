@@ -171,6 +171,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// <param name="searchString">The string which should be checked.</param>
         /// <param name="regExPattern">The regular expression.</param>
         /// <returns>Returns true if the search string matches the regular expression.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "RegEx is a known description.")]
         public static bool MatchesRegEx(this string searchString, string regExPattern)
         {
             if (string.IsNullOrEmpty(regExPattern) || string.IsNullOrEmpty(searchString))
@@ -190,6 +191,7 @@ namespace SoluiNet.DevTools.Core.Tools.String
         /// <param name="regExPattern">The regular expression.</param>
         /// <param name="replacementString">The replacement string.</param>
         /// <returns>The string with replacement.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "RegEx is a known description.")]
         public static string ReplaceRegEx(this string originalString, string regExPattern, string replacementString = "")
         {
             if (string.IsNullOrEmpty(regExPattern) || string.IsNullOrEmpty(originalString))

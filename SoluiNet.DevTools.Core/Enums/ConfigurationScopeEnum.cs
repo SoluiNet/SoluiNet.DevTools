@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Core.Enums
     /// <summary>
     /// The configuration scope.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "It should be clear that this type is an enum.")]
     public enum ConfigurationScopeEnum
     {
         /// <summary>

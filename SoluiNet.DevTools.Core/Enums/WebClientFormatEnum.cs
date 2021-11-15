@@ -14,6 +14,7 @@ namespace SoluiNet.DevTools.Core.Enums
     /// An enumeration for possible web client formats.
     /// </summary>
     [Flags]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "It should be clear that this type is an enum.")]
     public enum WebClientFormatEnum
     {
         /// <summary>

@@ -55,6 +55,7 @@ namespace SoluiNet.DevTools.UI
         /// <inheritdoc/>
         public ICollection<ISoluiNetUIElement> UiElements { get; private set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We want to provide a logger for all inheriting objects.")]
         private Logger Logger
         {
             get

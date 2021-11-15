@@ -125,6 +125,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <param name="task">The task which should be executed.</param>
         public static void RunImpersonated(WindowsIdentity identity, Action task)
         {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+
 #if COMPILED_FOR_NETSTANDARD
             WindowsIdentity.RunImpersonated(identity.AccessToken, task);
 #else
@@ -149,6 +154,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <returns>Returns the tasks result.</returns>
         public static object RunImpersonated(WindowsIdentity identity, Func<object> task)
         {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+
 #if COMPILED_FOR_NETSTANDARD
             return WindowsIdentity.RunImpersonated(identity.AccessToken, task);
 #else
@@ -174,6 +184,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
         /// <returns>Returns the tasks result.</returns>
         public static T RunImpersonated<T>(WindowsIdentity identity, Func<T> task)
         {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+
 #if COMPILED_FOR_NETSTANDARD
             return WindowsIdentity.RunImpersonated<T>(identity.AccessToken, task);
 #else

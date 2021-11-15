@@ -57,6 +57,7 @@ namespace SoluiNet.DevTools.Web
         /// <summary>
         /// The handling of a web request.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1003:Use generic event handler instances", Justification = "The event handler may be extended for future uses.")]
         public event HandleWebRequest HandleRequest;
 
         /// <summary>

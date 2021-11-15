@@ -50,7 +50,7 @@ namespace SoluiNet.DevTools.Console
         /// <param name="errors">A enumerable which holds the errors.</param>
         internal static void Error(IEnumerable<Error> errors)
         {
-
+            // todo: implement error handling
         }
     }
 }

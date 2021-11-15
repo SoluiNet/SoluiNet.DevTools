@@ -28,6 +28,6 @@ namespace SoluiNet.DevTools.Core.Web.Context
         /// <summary>
         /// Gets or sets the parameters.
         /// </summary>
-        public List<WebParameter> Parameters { get; set; }
+        public ICollection<WebParameter> Parameters { get; set; }
     }
 }
