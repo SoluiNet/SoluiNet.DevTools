@@ -95,3 +95,8 @@ jobs:
     - name: Build Application
       run: msbuild SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.Android\SoluiNet.DevTools.Mobile.Android.csproj /p:Configuration=Release /t:PackageForAndroid
       
+    - name: Upload Android App
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: SoluiNet.DevTools.Mobile_v0.9.0.${{ github.run_number }}.aab
+        path: build\mobile\Release\soluinet.devtools.mobile.aab
