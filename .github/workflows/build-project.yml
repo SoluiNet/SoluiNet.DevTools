@@ -39,6 +39,12 @@ jobs:
  
     - name: Build Application
       run: msbuild SoluiNet.DevTools.sln /p:Configuration=Release
+
+    - name: Move Plugins
+      run: |
+        cp -R build\plugins\Release build\windows-client\Release\Plugins
+        cp -R build\plugins\Release build\console\Release\Plugins
+        cp -R build\plugins\Release build\web\Release\Plugins
  
     - name: Upload Windows Client
       uses: actions/upload-artifact@v1.0.0
