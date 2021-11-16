@@ -7,7 +7,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\build\$(TargetFramework)\$(Platform)\$(Configuration)\Plugins\</OutputPath>
+    <OutputPath>..\build\plugins\$(Configuration)\Plugins\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>1701;1702;CA1716</NoWarn>
   </PropertyGroup>

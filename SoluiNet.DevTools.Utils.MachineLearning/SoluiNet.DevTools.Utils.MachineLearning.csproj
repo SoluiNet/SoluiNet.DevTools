@@ -8,7 +8,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\build\$(TargetFramework)\$(Platform)\$(Configuration)\Plugins\</OutputPath>
+    <OutputPath>..\build\plugins\$(Configuration)\Plugins\</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn)</NoWarn>

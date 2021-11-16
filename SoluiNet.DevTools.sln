@@ -101,7 +101,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Mobile.An
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Mobile.iOS", "SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.iOS\SoluiNet.DevTools.Mobile.iOS.csproj", "{9C3B95DD-78BB-4C8B-AEAF-474E97C9886E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Mobile", "SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.csproj", "{8DA1D9D0-C2CD-4283-BDDA-19B2C4B72480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Mobile", "SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.csproj", "{8DA1D9D0-C2CD-4283-BDDA-19B2C4B72480}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SoluiNet.DevTools.Install.Backup", "SoluiNet.DevTools.Install.Backup\SoluiNet.DevTools.Install.Backup.vdproj", "{747803B5-D62D-40F2-87E6-57417EC9F72C}"
 EndProject
@@ -909,22 +909,18 @@ Global
 		{8DA1D9D0-C2CD-4283-BDDA-19B2C4B72480}.Release|x64.Build.0 = Release|Any CPU
 		{8DA1D9D0-C2CD-4283-BDDA-19B2C4B72480}.Release|x86.ActiveCfg = Release|Any CPU
 		{8DA1D9D0-C2CD-4283-BDDA-19B2C4B72480}.Release|x86.Build.0 = Release|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Debug|x64.Build.0 = Debug|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Debug|x86.Build.0 = Debug|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Release|x64.ActiveCfg = Release|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Release|x64.Build.0 = Release|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Release|x86.ActiveCfg = Release|Any CPU
-		{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}.Release|x86.Build.0 = Release|Any CPU
 		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Debug|Any CPU.ActiveCfg = Debug
+		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Debug|iPhone.ActiveCfg = Debug
+		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Debug|iPhone.Build.0 = Debug
+		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Debug|iPhoneSimulator.ActiveCfg = Debug
+		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Debug|iPhoneSimulator.Build.0 = Debug
 		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Debug|x64.ActiveCfg = Debug
 		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Debug|x86.ActiveCfg = Debug
 		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Release|Any CPU.ActiveCfg = Release
+		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Release|iPhone.ActiveCfg = Release
+		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Release|iPhone.Build.0 = Release
+		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Release|iPhoneSimulator.ActiveCfg = Release
+		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Release|iPhoneSimulator.Build.0 = Release
 		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Release|x64.ActiveCfg = Release
 		{747803B5-D62D-40F2-87E6-57417EC9F72C}.Release|x86.ActiveCfg = Release
 	EndGlobalSection

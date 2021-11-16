@@ -336,6 +336,35 @@ namespace SoluiNet.DevTools.UI.Sql
             return PluginHelper.GetEnvironments(plugin);
         }
 
+        private static void ShowDatabaseElementInfo(string type, TreeViewItem selectedItem, ISqlUiPlugin plugin)
+        {
+            if (selectedItem == null)
+            {
+                throw new ArgumentNullException(nameof(selectedItem));
+            }
+
+            var formatter = new SqlFormatter();
+
+            if (!(selectedItem.Tag is IDatabaseElement databaseElement))
+            {
+                return;
+            }
+
+            SqlUiElement.Logger.Info(string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
+
+            var dialog = new ShowText
+            {
+                Text = formatter.FormatString(databaseElement.BodyDefinition),
+            };
+
+            dialog.SetTitleParts(new Dictionary<string, string>()
+            {
+                { "0", string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type) },
+            });
+
+            dialog.Show();
+        }
+
         private void ExecuteSqlCommand()
         {
             var plugin = (Application.Current as ISoluiNetUiWpfApp)?.SqlPlugins.FirstOrDefault(x => x.Name == this.Project.Text);
@@ -732,35 +761,6 @@ namespace SoluiNet.DevTools.UI.Sql
             this.SqlCommandText.Text += string.Format(CultureInfo.InvariantCulture, "\r\n--{2}: {0}\r\n{1}", script.Description, script.CommandText, script.Name);
         }
 
-        private void ShowDatabaseElementInfo(string type, TreeViewItem selectedItem, ISqlUiPlugin plugin)
-        {
-            if (selectedItem == null)
-            {
-                throw new ArgumentNullException(nameof(selectedItem));
-            }
-
-            var formatter = new SqlFormatter();
-
-            if (!(selectedItem.Tag is IDatabaseElement databaseElement))
-            {
-                return;
-            }
-
-            SqlUiElement.Logger.Info(string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] Displaying {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type));
-
-            var dialog = new ShowText
-            {
-                Text = formatter.FormatString(databaseElement.BodyDefinition),
-            };
-
-            dialog.SetTitleParts(new Dictionary<string, string>()
-            {
-                { "0", string.Format(CultureInfo.InvariantCulture, "[{1} ({2})] {3}: {0}", databaseElement.Name, plugin.Name, plugin.Environment, type) },
-            });
-
-            dialog.Show();
-        }
-
         private void ExecuteMainAction()
         {
             var chosenProject = this.Project.Text;
@@ -787,15 +787,15 @@ namespace SoluiNet.DevTools.UI.Sql
             }
             else if (selectedItem.Tag is StoredProcedure)
             {
-                this.ShowDatabaseElementInfo("Stored Procedure", selectedItem, plugin);
+                SqlUiElement.ShowDatabaseElementInfo("Stored Procedure", selectedItem, plugin);
             }
             else if (selectedItem.Tag is StoredFunction)
             {
-                this.ShowDatabaseElementInfo("Stored Function", selectedItem, plugin);
+                SqlUiElement.ShowDatabaseElementInfo("Stored Function", selectedItem, plugin);
             }
             else if (selectedItem.Tag is View)
             {
-                this.ShowDatabaseElementInfo("View", selectedItem, plugin);
+                SqlUiElement.ShowDatabaseElementInfo("View", selectedItem, plugin);
             }
         }
 

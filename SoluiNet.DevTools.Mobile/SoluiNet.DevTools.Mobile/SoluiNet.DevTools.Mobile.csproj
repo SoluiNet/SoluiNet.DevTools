@@ -9,7 +9,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\..\build\$(TargetFramework)\$(Platform)\$(Configuration)</OutputPath>
+    <OutputPath>..\..\build\mobile\$(Configuration)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn)</NoWarn>
     <NeutralLanguage>en</NeutralLanguage>

@@ -28,7 +28,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>..\..\build\mobile\$(Configuration)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn)</NoWarn>
     <NeutralLanguage>en</NeutralLanguage>
@@ -47,7 +47,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>..\..\build\mobile\$(Configuration)</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn)</NoWarn>
     <NeutralLanguage>en</NeutralLanguage>
