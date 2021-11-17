@@ -43,4 +43,9 @@
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Views\StartPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
