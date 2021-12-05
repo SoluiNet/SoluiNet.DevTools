@@ -36,12 +36,85 @@ jobs:
       run: |
         cp SoluiNet.DevTools.UI\Settings.Default.xml SoluiNet.DevTools.UI\Settings.xml
         cp SoluiNet.DevTools.UI\ConnectionStrings.Default.config SoluiNet.DevTools.UI\ConnectionStrings.config
+        
+    - name: Set version
+      uses: dannevesdantas/set-version-assemblyinfo@v.1.0.0
+      with:
+        version: '0.9.${{ github.run_number }}'
  
     - name: Build Application
       run: msbuild SoluiNet.DevTools.sln /p:Configuration=Release
+
+    - name: Move Plugins
+      run: |
+        cp -R build\plugins\Release build\windows-client\Release
+        cp -R build\plugins\Release build\console\Release
+        cp -R build\plugins\Release build\web\Release
  
-    - name: Upload Artifact
+    - name: Upload Windows Client
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: SoluiNet.DevTools_v0.9.0.$GITHUB_RUN_NUMBER
-        path: build\net472\AnyCPU\Release
+        name: SoluiNet.DevTools.UI_v0.9.0.${{ github.run_number }}
+#        path: build\net472\AnyCPU\Release
+        path: build\windows-client\Release
+
+    - name: Upload Console App
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: SoluiNet.DevTools.Console_v0.9.0.${{ github.run_number }}
+#        path: build\net6.0\AnyCPU\Release
+        path: build\console\Release
+
+    - name: Upload Web Server
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: SoluiNet.DevTools.Web_v0.9.0.${{ github.run_number }}
+#        path: build\netstandard2.0\AnyCPU\Release
+        path: build\web\Release
+
+  build_android:
+      
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+      name: Checkout Code
+      
+    - name: Prepare Build Environment
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+        include-prerelease: true
+     
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.0.3
+       
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1.0.5
+     
+    - name: Restore NuGet Packages
+      run: |
+        nuget restore SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.csproj
+        nuget restore SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.Android\SoluiNet.DevTools.Mobile.Android.csproj
+        
+    - name: Set version
+      uses: dannevesdantas/set-version-assemblyinfo@v.1.0.0
+      with:
+        version: '0.9.${{ github.run_number }}'
+        
+    - name: Update AndroidManifest.xml
+      uses: damienaicheh/update-android-version-manifest-action@v1.0.0
+      with:
+        android-manifest-path: './SoluiNet.DevTools.Mobile/SoluiNet.DevTools.Mobile.Android/Properties/AndroidManifest.xml'
+        version-code: 1
+        version-name: '0.9.${{ github.run_number }}'
+        print-file: true
+ 
+    - name: Build Application
+      run: msbuild SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.Android\SoluiNet.DevTools.Mobile.Android.csproj /p:Configuration=Release /t:PackageForAndroid
+      
+    - name: Upload Android App
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: SoluiNet.DevTools.Mobile_v0.9.0.${{ github.run_number }}.aab
+        path: build\mobile\Release\soluinet.devtools.mobile.aab

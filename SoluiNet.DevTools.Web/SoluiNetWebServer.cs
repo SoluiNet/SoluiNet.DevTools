@@ -191,6 +191,7 @@ namespace SoluiNet.DevTools.Web
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Respond should be inheritable.")]
         private void Respond(string returningString, ref Socket respondingSocket, string mimeType = "text/html", Encoding encoding = null)
         {
             try
@@ -216,6 +217,7 @@ namespace SoluiNet.DevTools.Web
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Intended exception handling has been added to method")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Respond should be inheritable.")]
         private void Respond(Stream returningStream, ref Socket respondingSocket, string mimeType = "text/html")
         {
             try

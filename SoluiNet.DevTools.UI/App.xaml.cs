@@ -124,6 +124,7 @@ namespace SoluiNet.DevTools.UI
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to catch any exception that occurs during plugin load. Therefore the base exception type will be catched.")]
         private void LoadPlugins()
         {
             string[] dllFileNames = null;

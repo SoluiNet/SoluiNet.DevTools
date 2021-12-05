@@ -121,7 +121,7 @@
                     <Button x:Name="CopyMonthToClipboard" Content="Copy Month To Clipboard" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,80" Click="CopyMonthToClipboard_Click" />
                     <Button x:Name="ExportAssignmentConfig" Content="Export Assignment Config" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,140" Click="ExportAssignmentConfig_Click" />
                     <Button x:Name="ImportAssignmentConfig" Content="Import Assignment Config" Height="25" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,170" Click="ImportAssignmentConfig_Click" />
-                    <TextBox x:Name="AssignmentConfig" Height="150" Margin="5,200,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" />
+                    <TextBox x:Name="AssignmentConfig" Height="150" Margin="5,200,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" />
                 </Grid>
             </TabItem>
             <TabItem Header="Administration">

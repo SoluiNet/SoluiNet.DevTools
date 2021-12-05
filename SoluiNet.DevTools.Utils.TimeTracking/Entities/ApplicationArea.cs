@@ -36,9 +36,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         public virtual int ApplicationId { get; set; }
 
         /// <summary>
-        /// Gets or sets the ApplicationName.
+        /// Gets or sets the AreaName.
         /// </summary>
-        public virtual string ApplicationName { get; set; }
+        public virtual string AreaName { get; set; }
 
         /// <summary>
         /// Gets or sets the application.

@@ -954,6 +954,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => x.FilterHistoryId);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "We want to know that the setting is empty. The parameter(s) should be fine at this moment.")]
         private static string GetConnectionString(string nameOrConnectionString)
         {
             if (nameOrConnectionString == null)
