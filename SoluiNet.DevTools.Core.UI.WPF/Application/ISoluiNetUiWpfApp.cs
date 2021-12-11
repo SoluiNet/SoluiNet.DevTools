@@ -30,6 +30,11 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Application
         ICollection<ISmartHomeUiPlugin> SmartHomePlugins { get; }
 
         /// <summary>
+        /// Gets all available plugins that provide management functions.
+        /// </summary>
+        ICollection<IManagementUiPlugin> ManagementPlugins { get; }
+
+        /// <summary>
         /// Gets all available plugins that provide utility functions.
         /// </summary>
         ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; }

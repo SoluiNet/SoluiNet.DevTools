@@ -43,6 +43,11 @@ namespace SoluiNet.DevTools.UI
         public ICollection<ISmartHomeUiPlugin> SmartHomePlugins { get; private set; }
 
         /// <summary>
+        /// Gets all available plugins that provide management functions.
+        /// </summary>
+        public ICollection<IManagementUiPlugin> ManagementPlugins { get; private set; }
+
+        /// <summary>
         /// Gets all available plugins that provide utility functions.
         /// </summary>
         public ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; private set; }
@@ -158,6 +163,7 @@ namespace SoluiNet.DevTools.UI
             Type pluginType = typeof(IBasePlugin);
             Type sqlPluginType = typeof(ISqlUiPlugin);
             Type smartHomePluginType = typeof(ISmartHomeUiPlugin);
+            Type managementPluginType = typeof(IManagementUiPlugin);
             Type utilityPluginType = typeof(IUtilitiesDevPlugin);
             Type backgroundTaskType = typeof(IRunsBackgroundTask);
 
@@ -218,6 +224,18 @@ namespace SoluiNet.DevTools.UI
                                 }
                             }
 
+                            if (type.GetInterface(managementPluginType.FullName) != null)
+                            {
+                                if (pluginTypes.ContainsKey(type))
+                                {
+                                    pluginTypes[type].Add("ManagementDev");
+                                }
+                                else
+                                {
+                                    pluginTypes.Add(type, new List<string>() { "ManagementDev" });
+                                }
+                            }
+
                             if (type.GetInterface(utilityPluginType.FullName) != null)
                             {
                                 if (pluginTypes.ContainsKey(type))
@@ -257,6 +275,7 @@ namespace SoluiNet.DevTools.UI
             this.Plugins = new List<IBasePlugin>();
             this.SqlPlugins = new List<ISqlUiPlugin>();
             this.SmartHomePlugins = new List<ISmartHomeUiPlugin>();
+            this.ManagementPlugins = new List<IManagementUiPlugin>();
             this.UtilityPlugins = new List<IUtilitiesDevPlugin>();
             this.BackgroundTaskPlugins = new List<IRunsBackgroundTask>();
 
@@ -291,6 +310,12 @@ namespace SoluiNet.DevTools.UI
                 {
                     var plugin = (ISmartHomeUiPlugin)Activator.CreateInstance(type.Key);
                     this.SmartHomePlugins.Add(plugin);
+                }
+
+                if (type.Value.Contains("ManagementDev"))
+                {
+                    var plugin = (IManagementUiPlugin)Activator.CreateInstance(type.Key);
+                    this.ManagementPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("UtilityDev"))
