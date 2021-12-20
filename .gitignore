@@ -20,3 +20,4 @@ packages/**
 /SoluiNet.DevTools.UI.backup
 /log.txt
 *.backup
+/SoluiNet.DevTools.UI/NHibernate.config

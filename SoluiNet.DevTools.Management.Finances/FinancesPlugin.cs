@@ -1,5 +1,8 @@
-﻿using SoluiNet.DevTools.Core.Plugin;
+﻿using NHibernate;
+using NHibernate.Cfg;
+using SoluiNet.DevTools.Core.Plugin;
 using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+using SoluiNet.DevTools.Management.Finances.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -94,7 +97,55 @@ namespace SoluiNet.DevTools.Management.Finances
         /// <returns>Returns a DataTable for the result.</returns>
         public DataTable ExecuteSql(string sqlCommand, WindowsIdentity identity = null)
         {
-            throw new NotImplementedException();
+            var result = new DataTable();
+
+            try
+            {
+                var session = NHibernateContext.GetCurrentSession();
+
+                using (var transaction = session.BeginTransaction())
+                {
+                    var query = session.CreateSQLQuery(sqlCommand);
+
+                    var sqlResult = query.List();
+
+                    foreach (var row in sqlResult)
+                    {
+                        if (row is object[] rowArray)
+                        {
+                            var i = 0;
+
+                            while (result.Columns.Count < rowArray.Length)
+                            {
+                                result.Columns.Add(new DataColumn());
+                                i++;
+                            }
+
+                            foreach (var item in rowArray)
+                            {
+                                result.Rows.Add(item);
+                            }
+                        }
+                        else
+                        {
+                            if (result.Columns.Count == 0)
+                            {
+                                result.Columns.Add(new DataColumn());
+                            }
+
+                            result.Rows.Add(row);
+                        }
+                    }
+
+                    // transaction.Commit();
+                }
+            }
+            finally
+            {
+                NHibernateContext.CloseSession();
+            }
+
+            return result;
         }
 
         /// <summary>

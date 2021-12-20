@@ -13,7 +13,14 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Data\Entry.hbm.xml" />
     <None Remove="FinancesUserControl.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Entry.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NHibernate" Version="5.3.10" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="FinancesUserControl.xaml">
