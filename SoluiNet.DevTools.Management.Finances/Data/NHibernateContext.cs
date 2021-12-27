@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// <summary>
         /// Get the current session.
         /// </summary>
-        /// <returns>Returns the currently used session.</returns>
+        /// <returns>Returns the currently used session or creates a new one if it doesn't exist until now.</returns>
         public static ISession GetCurrentSession()
         {
             // var context = ApplicationContext.Application;

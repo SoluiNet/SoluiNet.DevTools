@@ -4,6 +4,8 @@
 
 namespace SoluiNet.DevTools.Management.Finances
 {
+    using SoluiNet.DevTools.Management.Finances.Data;
+    using SoluiNet.DevTools.Management.Finances.Data.Repositories;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -30,6 +32,12 @@ namespace SoluiNet.DevTools.Management.Finances
         public FinancesUserControl()
         {
             this.InitializeComponent();
+
+            var repository = new EntryRepository();
+
+            repository.GetAll();
+
+            Entries.ItemsSource = repository.GetAll();
         }
     }
 }
