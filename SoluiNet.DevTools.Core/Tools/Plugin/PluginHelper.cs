@@ -11,6 +11,8 @@ namespace SoluiNet.DevTools.Core.Tools
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using NLog;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.ScriptEngine;
     using SoluiNet.DevTools.Core.Tools.File;
@@ -400,6 +402,14 @@ namespace SoluiNet.DevTools.Core.Tools
             if (Directory.Exists("Plugins"))
             {
                 dllFileNames = Directory.GetFiles("Plugins", "*.dll");
+            }
+            else
+            {
+                var logger = LogManager.GetCurrentClassLogger();
+
+                logger.Error("Missing 'Plugin' folder.");
+
+                throw new SoluiNetException("The 'Plugin' folder is missing. Please create the folder and add the plugins you want to use.");
             }
 
             if (dllFileNames == null)
