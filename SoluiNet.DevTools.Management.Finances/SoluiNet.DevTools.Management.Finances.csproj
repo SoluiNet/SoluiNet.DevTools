@@ -20,6 +20,7 @@
     <EmbeddedResource Include="Data\Entry.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FluentNHibernate" Version="3.1.0" />
     <PackageReference Include="NHibernate" Version="5.3.10" />
   </ItemGroup>
   <ItemGroup>

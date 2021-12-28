@@ -5,9 +5,13 @@
 namespace SoluiNet.DevTools.Management.Finances.Data
 {
     using System;
+    using System.IO;
     using System.Web;
+    using FluentNHibernate.Cfg;
+    using FluentNHibernate.Cfg.Db;
     using NHibernate;
     using NHibernate.Cfg;
+    using NHibernate.Tool.hbm2ddl;
     using SoluiNet.DevTools.Core.Application;
 
     /// <summary>
@@ -18,9 +22,41 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         private const string CurrentSessionKey = "nhibernate.current_session";
         private static readonly ISessionFactory _sessionFactory;
 
+        /// <summary>
+        /// Gets the default database location.
+        /// </summary>
+        private static string DatabaseLocation
+        {
+            get
+            {
+                return string.Format("{0}\\Finance.sqlite", System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData));
+            }
+        }
+
+        /// <summary>
+        /// Construct the NHibernateContext.
+        /// </summary>
         static NHibernateContext()
         {
-            _sessionFactory = new Configuration().Configure().BuildSessionFactory();
+            _sessionFactory = Fluently.Configure()
+                .Database(SQLiteConfiguration.Standard.UsingFile(DatabaseLocation))
+                .Mappings(m => m.HbmMappings.AddFromAssemblyOf<NHibernateContext>())
+                .ExposeConfiguration(GenerateDatabase)
+                .BuildSessionFactory();
+        }
+
+        /// <summary>
+        /// Generate the database if it doesn't exist.
+        /// </summary>
+        /// <param name="config">The configuration.</param>
+        public static void GenerateDatabase(Configuration config)
+        {
+            config.SetProperty(NHibernate.Cfg.Environment.ShowSql, "true");
+
+            if (!File.Exists(DatabaseLocation))
+            {
+                new SchemaExport(config).Create(false, true);
+            }
         }
 
         /// <summary>
