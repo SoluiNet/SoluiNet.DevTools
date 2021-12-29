@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Console
     using System.Collections.Generic;
     using System.Reflection;
     using CommandLine;
+    using NLog;
     using SoluiNet.DevTools.Console.Options;
 
     /// <summary>
@@ -52,6 +53,8 @@ namespace SoluiNet.DevTools.Console
         internal static void Error(IEnumerable<Error> errors)
         {
             // todo: implement error handling
+
+            var logger = LogManager.GetCurrentClassLogger();
         }
     }
 }
