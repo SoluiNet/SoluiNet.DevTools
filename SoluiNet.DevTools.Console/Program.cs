@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Console
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Reflection;
     using CommandLine;
     using NLog;
@@ -23,6 +24,10 @@ namespace SoluiNet.DevTools.Console
         /// <param name="args">The arguments.</param>
         public static void Main(string[] args)
         {
+#if DEBUG
+            Debugger.Launch();
+#endif
+
             CommandLine.Parser.Default.ParseArguments<RunOptions>(args)
                 .WithParsed(Run)
                 .WithNotParsed(Error);
@@ -52,9 +57,15 @@ namespace SoluiNet.DevTools.Console
         /// <param name="errors">A enumerable which holds the errors.</param>
         internal static void Error(IEnumerable<Error> errors)
         {
-            // todo: implement error handling
-
             var logger = LogManager.GetCurrentClassLogger();
+
+            foreach (var error in errors)
+            {
+                logger.Error(string.Format(
+                    "Error while executing SoluiNet.DevTools.Console - {0} (stops processing: {1})",
+                    error.Tag.ToString(),
+                    error.StopsProcessing));
+            }
         }
     }
 }
