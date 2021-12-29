@@ -21,7 +21,7 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
         /// Get mails from exchange server.
         /// </summary>
         /// <returns>Returns a list of mails.</returns>
-        public static List<string> GetMails()
+        public static ICollection<string> GetMails()
         {
             var service = Connect();
             var emailList = new List<string>();
