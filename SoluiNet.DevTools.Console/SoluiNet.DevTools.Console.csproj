@@ -58,4 +58,7 @@
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" />
   </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\Plugins&quot; &quot;$(ProjectDir)&quot; /y /s /e&#xD;&#xA;)" />
+  </Target>
 </Project>
