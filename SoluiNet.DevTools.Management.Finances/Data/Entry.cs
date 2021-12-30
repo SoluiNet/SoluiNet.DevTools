@@ -12,7 +12,7 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// <summary>
         /// Gets or sets the ID.
         /// </summary>
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
