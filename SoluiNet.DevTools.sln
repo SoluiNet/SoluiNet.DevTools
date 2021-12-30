@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.UI", "SoluiNet.DevTools.UI\SoluiNet.DevTools.UI.csproj", "{F82C2F56-DCE9-4E4C-856C-1F94291186F4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3211735-A2DE-4F2C-930D-92CEFB34EC67} = {D3211735-A2DE-4F2C-930D-92CEFB34EC67}
+		{B6D04A38-C980-4CEF-93F7-A8FB80F4EEAB} = {B6D04A38-C980-4CEF-93F7-A8FB80F4EEAB}
+		{0673086C-9BD1-4F6C-A889-335CFC743A0E} = {0673086C-9BD1-4F6C-A889-335CFC743A0E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Core", "SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj", "{DDC0B05A-0D22-4883-81C5-CF70A8BF3AF1}"
 EndProject
@@ -109,7 +114,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.UI.Manage
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management", "Management", "{9623AEC0-FB3C-44BE-A5B5-601F89D02CFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Management.Finances", "SoluiNet.DevTools.Management.Finances\SoluiNet.DevTools.Management.Finances.csproj", "{A3C35828-9C4A-42AD-B196-7D9D1BB59A2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Management.Finances", "SoluiNet.DevTools.Management.Finances\SoluiNet.DevTools.Management.Finances.csproj", "{A3C35828-9C4A-42AD-B196-7D9D1BB59A2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
