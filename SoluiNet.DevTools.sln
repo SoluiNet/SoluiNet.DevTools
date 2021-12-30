@@ -83,6 +83,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.UnitTest", "SoluiNet.DevTools.UnitTest\SoluiNet.DevTools.UnitTest.csproj", "{9F15199F-A333-4096-AD31-00C1D41D56B3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Web", "SoluiNet.DevTools.Web\SoluiNet.DevTools.Web.csproj", "{CED664BB-8DAA-44DE-8DB7-977DC0BA84D7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F82C2F56-DCE9-4E4C-856C-1F94291186F4} = {F82C2F56-DCE9-4E4C-856C-1F94291186F4}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Core.Web", "SoluiNet.DevTools.Core.Web\SoluiNet.DevTools.Core.Web.csproj", "{A3D93824-3C6B-4A32-9615-6035B7D343F3}"
 EndProject
@@ -101,6 +104,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Core.Storage", "SoluiNet.DevTools.Core.Storage\SoluiNet.DevTools.Core.Storage.csproj", "{3D9A8308-34AB-4318-AE20-97BA9BEF1482}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoluiNet.DevTools.Console", "SoluiNet.DevTools.Console\SoluiNet.DevTools.Console.csproj", "{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F82C2F56-DCE9-4E4C-856C-1F94291186F4} = {F82C2F56-DCE9-4E4C-856C-1F94291186F4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoluiNet.DevTools.Mobile.Android", "SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.Android\SoluiNet.DevTools.Mobile.Android.csproj", "{5D64C4FB-5B90-49AC-B761-7D987A31A5AF}"
 EndProject
