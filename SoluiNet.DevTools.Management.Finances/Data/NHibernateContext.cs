@@ -66,7 +66,9 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         public static ISession GetCurrentSession()
         {
             // var context = ApplicationContext.Application;
-            var currentSession = ApplicationContext.Storage[CurrentSessionKey] as ISession;
+            var currentSession = ApplicationContext.Storage.ContainsKey(CurrentSessionKey)
+                ? ApplicationContext.Storage[CurrentSessionKey] as ISession
+                : null;
 
             if (currentSession == null)
             {
