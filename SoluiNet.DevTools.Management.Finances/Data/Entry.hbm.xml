@@ -12,8 +12,8 @@
     </id>
 
     <!-- A cat has to have a name, but it shouldn't be too long. -->
-    <property name="Name">
-      <column name="Name" length="16" not-null="true" />
+    <property name="Description">
+      <column name="Description" length="50" not-null="true" />
     </property>
   </class>
 
