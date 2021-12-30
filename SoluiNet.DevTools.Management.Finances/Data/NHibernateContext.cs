@@ -65,12 +65,16 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// <returns>Returns the currently used session or creates a new one if it doesn't exist until now.</returns>
         public static ISession GetCurrentSession()
         {
-            // var context = ApplicationContext.Application;
             var currentSession = ApplicationContext.Storage.ContainsKey(CurrentSessionKey)
                 ? ApplicationContext.Storage[CurrentSessionKey] as ISession
                 : null;
 
             if (currentSession == null)
+            {
+                currentSession = _sessionFactory.OpenSession();
+                ApplicationContext.Storage[CurrentSessionKey] = currentSession;
+            }
+            else if (!currentSession.IsOpen)
             {
                 currentSession = _sessionFactory.OpenSession();
                 ApplicationContext.Storage[CurrentSessionKey] = currentSession;
@@ -84,7 +88,6 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// </summary>
         public static void CloseSession()
         {
-            // var context = ApplicationContext.Application;
             var currentSession = ApplicationContext.Storage[CurrentSessionKey] as ISession;
 
             if (currentSession == null)
