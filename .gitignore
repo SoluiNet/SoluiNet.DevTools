@@ -21,3 +21,4 @@ packages/**
 /log.txt
 *.backup
 /SoluiNet.DevTools.UI/NHibernate.config
+/SoluiNet.DevTools.Console/SoluiNet - Backup.DevTools.Console.csproj
