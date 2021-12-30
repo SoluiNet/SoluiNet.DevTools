@@ -78,6 +78,6 @@
     <Exec Command="cp &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Unix'" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\Debug\Plugins&quot; &quot;$(ProjectDir)&quot; /y /s /e&#xD;&#xA;)" />
+    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\Debug\Plugins&quot; &quot;$(SolutionDir)build\web\$(ConfigurationName)\Plugins&quot; /y /s /e&#xD;&#xA;)" />
   </Target>
 </Project>
