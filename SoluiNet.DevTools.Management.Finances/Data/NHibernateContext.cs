@@ -29,7 +29,7 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         {
             get
             {
-                return string.Format("{0}\\Finance.sqlite", System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData));
+                return string.Format("{0}\\SoluiNet.DevTools\\Finance.sqlite", System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData));
             }
         }
 
