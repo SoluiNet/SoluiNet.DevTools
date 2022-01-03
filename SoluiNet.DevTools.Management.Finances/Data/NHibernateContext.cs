@@ -71,6 +71,14 @@ namespace SoluiNet.DevTools.Management.Finances.Data
 
                 logger.Warn(exception, string.Format("Schema validation failed. Trying to update. Additional Info: {0}", exception.Message));
 
+                if (exception is SchemaValidationException validationException)
+                {
+                    foreach(var validationError in validationException.ValidationErrors)
+                    {
+                        logger.Warn(validationError);
+                    }
+                }
+
                 try
                 {
                     var updater = new SchemaUpdate(config);
