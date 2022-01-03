@@ -12,6 +12,7 @@ namespace SoluiNet.DevTools.Management.Finances.Data
     using NHibernate;
     using NHibernate.Cfg;
     using NHibernate.Tool.hbm2ddl;
+    using NLog;
     using SoluiNet.DevTools.Core.Application;
 
     /// <summary>
@@ -56,6 +57,28 @@ namespace SoluiNet.DevTools.Management.Finances.Data
             if (!File.Exists(DatabaseLocation))
             {
                 new SchemaExport(config).Create(false, true);
+            }
+
+            try
+            {
+                var validator = new SchemaValidator(config);
+
+                validator.Validate();
+            }
+            catch (Exception exception)
+            {
+                var logger = LogManager.GetCurrentClassLogger();
+
+                logger.Warn(exception, string.Format("Schema validation failed. Trying to update. Additional Info: {0}", exception.Message));
+
+                try
+                {
+                    var updater = new SchemaUpdate(config);
+                }
+                catch (Exception updateException)
+                {
+                    logger.Error(updateException, string.Format("Schema update failed. Additional Info: {0}", exception.Message));
+                }
             }
         }
 

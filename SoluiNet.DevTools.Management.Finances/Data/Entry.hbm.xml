@@ -18,8 +18,8 @@
     <property name="Date">
       <column name="Date" />
     </property>
-    <property name="Date">
-      <column name="Date" />
+    <property name="Type">
+      <column name="Type" />
     </property>    
     <many-to-one not-null="true" name="Category" column="CategoryId" />
     <many-to-one not-null="true" name="Account" column="AccountId" />
