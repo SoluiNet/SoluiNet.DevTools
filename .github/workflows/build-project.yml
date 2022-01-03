@@ -36,7 +36,6 @@ jobs:
       run: |
         cp SoluiNet.DevTools.UI\Settings.Default.xml SoluiNet.DevTools.UI\Settings.xml
         cp SoluiNet.DevTools.UI\ConnectionStrings.Default.config SoluiNet.DevTools.UI\ConnectionStrings.config
-        cp SoluiNet.DevTools.UI\NHibernate.Default.config SoluiNet.DevTools.UI\NHibernate.config
         
     - name: Set version
       uses: dannevesdantas/set-version-assemblyinfo@v.1.0.0
