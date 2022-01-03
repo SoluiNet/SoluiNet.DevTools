@@ -10,11 +10,7 @@
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800">
 	<Grid x:Name="ManagementUiGrid">
-		<TabControl Margin="0,0,0,0" x:Name="MainTabs">
-			<TabItem x:Name="ManagementTab" Header="Management">
-                <Grid>
-                </Grid>
-			</TabItem>
-		</TabControl>
+        <TabControl Margin="0,0,0,0" x:Name="MainTabs">
+        </TabControl>
 	</Grid>
 </UserControl>

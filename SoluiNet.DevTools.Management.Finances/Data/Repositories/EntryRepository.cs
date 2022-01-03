@@ -11,22 +11,15 @@ namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
     /// <summary>
     /// Provides a repository to handle financial entries.
     /// </summary>
-    public class EntryRepository : IRepository<Entry>
+    public class EntryRepository : BaseRepository<Entry>
     {
         /// <summary>
         /// Add a financial entry.
         /// </summary>
         /// <param name="entry">The entry.</param>
-        public void Add(Entry entry)
+        public new void Add(Entry entry)
         {
-            using (ISession session = NHibernateContext.GetCurrentSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    session.Save(entry);
-                    transaction.Commit();
-                }
-            }
+            base.Add(entry);
         }
 
         /// <summary>
@@ -34,56 +27,36 @@ namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
         /// </summary>
         /// <param name="id">The ID.</param>
         /// <returns>The financial entry that has the passed ID.</returns>
-        public Entry Get(int id)
+        public new Entry Get(int id)
         {
-            using (ISession session = NHibernateContext.GetCurrentSession())
-            {
-                return session.Get<Entry>(id);
-            }
+            return base.Get(id);
         }
 
         /// <summary>
         /// Get all finacial entries.
         /// </summary>
         /// <returns>Returns a list of all financial entries.</returns>
-        public ICollection<Entry> GetAll()
+        public new ICollection<Entry> GetAll()
         {
-            using (ISession session = NHibernateContext.GetCurrentSession())
-            {
-                return session.Query<Entry>().ToList();
-            }
+            return base.GetAll();
         }
 
         /// <summary>
         /// Remove a financial entry.
         /// </summary>
         /// <param name="entry">The entry.</param>
-        public void Remove(Entry entry)
+        public new void Remove(Entry entry)
         {
-            using (ISession session = NHibernateContext.GetCurrentSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    session.Delete(entry);
-                    transaction.Commit();
-                }
-            }
+            base.Remove(entry);
         }
 
         /// <summary>
         /// Update a financial entry.
         /// </summary>
         /// <param name="entry">The entry.</param>
-        public void Update(Entry entry)
+        public new void Update(Entry entry)
         {
-            using (ISession session = NHibernateContext.GetCurrentSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    session.Update(entry);
-                    transaction.Commit();
-                }
-            }
+            base.Update(entry);
         }
     }
 }
