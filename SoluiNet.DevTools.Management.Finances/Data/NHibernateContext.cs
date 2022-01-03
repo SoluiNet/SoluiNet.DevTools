@@ -74,6 +74,10 @@ namespace SoluiNet.DevTools.Management.Finances.Data
                 try
                 {
                     var updater = new SchemaUpdate(config);
+
+                    updater.Execute(false, true);
+
+                    logger.Info("Schema update successful");
                 }
                 catch (Exception updateException)
                 {
