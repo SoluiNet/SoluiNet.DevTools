@@ -13,7 +13,8 @@ namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
     /// Basic implementation of a repository.
     /// </summary>
     /// <typeparam name="T">The entity type.</typeparam>
-    public class BaseRepository<T> : IRepository<T>
+    public class BaseRepository<T> : IRepository<T> 
+        where T : BaseEntity
     {
         /// <summary>
         /// Add a record

@@ -18,11 +18,16 @@
     <property name="Date">
       <column name="Date" />
     </property>
+    <property name="ValueDate">
+      <column name="ValueDate" />
+    </property>
     <property name="Type">
       <column name="Type" />
     </property>    
     <many-to-one not-null="true" name="Category" column="CategoryId" />
     <many-to-one not-null="true" name="Account" column="AccountId" />
+    <many-to-one not-null="true" name="Account" column="CounterAccountId" />
+    <many-to-one not-null="true" name="Invoice" column="InvoiceId" />
     <bag name="SubEntries"
          lazy="true"
          inverse="true"

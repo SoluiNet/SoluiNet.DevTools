@@ -10,13 +10,8 @@ namespace SoluiNet.DevTools.Management.Finances.Data
     /// <summary>
     /// The accounting entry.
     /// </summary>
-    public class Entry
+    public class Entry : BaseEntity
     {
-        /// <summary>
-        /// Gets or sets the ID.
-        /// </summary>
-        public virtual int Id { get; set; }
-
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
@@ -31,6 +26,11 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// Gets or sets the date.
         /// </summary>
         public virtual DateTime Date { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value date.
+        /// </summary>
+        public virtual DateTime ValueDate { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
@@ -56,5 +56,15 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// Gets or sets the account.
         /// </summary>
         public virtual Account Account { get; set; }
+
+        /// <summary>
+        /// Gets or sets the counter account.
+        /// </summary>
+        public virtual Account CounterAccount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice.
+        /// </summary>
+        public virtual Invoice Invoice { get; set; }
     }
 }

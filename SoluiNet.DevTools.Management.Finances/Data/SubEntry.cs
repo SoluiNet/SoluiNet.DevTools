@@ -7,13 +7,8 @@ namespace SoluiNet.DevTools.Management.Finances.Data
     /// <summary>
     /// A part of an accounting entry.
     /// </summary>
-    public class SubEntry
+    public class SubEntry : BaseEntity
     {
-        /// <summary>
-        /// Gets or sets the ID.
-        /// </summary>
-        public virtual int Id { get; set; }
-
         /// <summary>
         /// Gets or sets the description.
         /// </summary>

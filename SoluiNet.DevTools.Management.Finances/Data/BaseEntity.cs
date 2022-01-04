@@ -1,17 +1,17 @@
-﻿// <copyright file="Category.cs" company="SoluiNet">
+﻿// <copyright file="BaseEntity.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
 namespace SoluiNet.DevTools.Management.Finances.Data
 {
     /// <summary>
-    /// The category.
+    /// The base entity.
     /// </summary>
-    public class Category : BaseEntity
+    public class BaseEntity
     {
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the ID.
         /// </summary>
-        public virtual string Name { get; set; }
+        public virtual int Id { get; set; }
     }
 }

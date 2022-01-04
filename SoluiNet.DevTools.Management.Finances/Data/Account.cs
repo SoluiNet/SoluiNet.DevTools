@@ -5,15 +5,10 @@
 namespace SoluiNet.DevTools.Management.Finances.Data
 {
     /// <summary>
-    /// The category.
+    /// The account.
     /// </summary>
-    public class Account
+    public class Account : BaseEntity
     {
-        /// <summary>
-        /// Gets or sets the ID.
-        /// </summary>
-        public virtual int Id { get; set; }
-
         /// <summary>
         /// Gets or sets the name.
         /// </summary>

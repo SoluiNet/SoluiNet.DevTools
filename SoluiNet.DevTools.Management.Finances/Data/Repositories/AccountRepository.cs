@@ -51,7 +51,7 @@ namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
         }
 
         /// <summary>
-        /// Update a account.
+        /// Update an account.
         /// </summary>
         /// <param name="account">The account.</param>
         public new void Update(Account account)
