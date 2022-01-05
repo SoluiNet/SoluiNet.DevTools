@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:SoluiNet.DevTools.Management.Finances"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <DataGrid x:Name="Entries" Padding="0, 50, 0, 0"/>
+    <Grid x:Name="FinanceUiGrid">
+        <Button x:Name="ImportFromHibiscus" Content="Import from Hibiscus CSV" Margin="5,5" Height="25" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" Click="ImportFromHibiscus_Click" />
+        <DataGrid x:Name="Entries" Margin="0, 50, 0, 0"/>
     </Grid>
 </UserControl>

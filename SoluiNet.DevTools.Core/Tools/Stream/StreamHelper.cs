@@ -54,6 +54,32 @@ namespace SoluiNet.DevTools.Core.Tools.Stream
         }
 
         /// <summary>
+        /// Convert a string to a stream.
+        /// </summary>
+        /// <param name="stringValue">The stream.</param>
+        /// <returns>Returns a <see cref="Stream"/> for the contents of the <see cref="string"/>.</returns>
+        /// <exception cref="ArgumentNullException">Returns a <see cref="ArgumentNullException"/> if the passed string is empty.</exception>
+        public static Stream AsStream(this string stringValue)
+        {
+            if (string.IsNullOrWhiteSpace(stringValue))
+            {
+                throw new ArgumentNullException(nameof(stringValue));
+            }
+
+            var stream = new MemoryStream();
+
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write(stringValue);
+                writer.Flush();
+
+                stream.Position = 0;
+
+                return stream;
+            }
+        }
+
+        /// <summary>
         /// Convert stream to byte array (taken from: https://stackoverflow.com/questions/221925/creating-a-byte-array-from-a-stream).
         /// </summary>
         /// <param name="stream">The stream.</param>

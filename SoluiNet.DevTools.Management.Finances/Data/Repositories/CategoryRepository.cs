@@ -5,6 +5,8 @@
 namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
 {
     using NHibernate;
+    using NHibernate.Criterion;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -57,6 +59,22 @@ namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
         public new void Update(Category category)
         {
             base.Update(category);
+        }
+
+        /// <summary>
+        /// Find a category by name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>Returns the corresponding category.</returns>
+        internal Category FindByName(string name)
+        {
+            using (ISession session = NHibernateContext.GetCurrentSession())
+            {
+                return session
+                    .CreateCriteria<Category>()
+                    .Add(Restrictions.Eq("Name", name))
+                    .UniqueResult<Category>();
+            }
         }
     }
 }

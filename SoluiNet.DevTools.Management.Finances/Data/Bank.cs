@@ -1,13 +1,13 @@
-﻿// <copyright file="Account.cs" company="SoluiNet">
+﻿// <copyright file="Bank.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
 namespace SoluiNet.DevTools.Management.Finances.Data
 {
     /// <summary>
-    /// The account.
+    /// The category.
     /// </summary>
-    public class Account : BaseEntity
+    public class Bank : BaseEntity
     {
         /// <summary>
         /// Gets or sets the name.
@@ -18,15 +18,5 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// Gets or sets the Business Identifier Code.
         /// </summary>
         public virtual string BIC { get; set; }
-
-        /// <summary>
-        /// Gets or sets the International Bank Account Number.
-        /// </summary>
-        public virtual string IBAN { get; set; }
-
-        /// <summary>
-        /// Gets or sets the bank.
-        /// </summary>
-        public virtual Bank Bank { get; set; }
     }
 }

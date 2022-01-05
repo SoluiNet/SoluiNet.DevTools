@@ -14,6 +14,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Data\Account.hbm.xml" />
+    <None Remove="Data\Bank.hbm.xml" />
     <None Remove="Data\Category.hbm.xml" />
     <None Remove="Data\Entry.hbm.xml" />
     <None Remove="Data\Invoice.hbm.xml" />
@@ -21,6 +22,7 @@
     <None Remove="FinancesUserControl.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\Bank.hbm.xml" />
     <EmbeddedResource Include="Data\Invoice.hbm.xml" />
     <EmbeddedResource Include="Data\Account.hbm.xml" />
     <EmbeddedResource Include="Data\Category.hbm.xml" />

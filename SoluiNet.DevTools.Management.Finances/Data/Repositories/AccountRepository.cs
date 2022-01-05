@@ -5,6 +5,7 @@
 namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
 {
     using NHibernate;
+    using NHibernate.Criterion;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -57,6 +58,56 @@ namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
         public new void Update(Account account)
         {
             base.Update(account);
+        }
+
+        /// <summary>
+        /// Find an account by IBAN.
+        /// </summary>
+        /// <param name="iban">The International Bank Account Number.</param>
+        /// <returns>Returns the corresponding account.</returns>
+        public Account FindByIban(string iban)
+        {
+            using (ISession session = NHibernateContext.GetCurrentSession())
+            {
+                return session
+                    .CreateCriteria<Account>()
+                    .Add(Restrictions.Eq("IBAN", iban))
+                    .UniqueResult<Account>();
+            }
+        }
+
+        /// <summary>
+        /// Find an account by name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>Returns the corresponding account.</returns>
+        internal ICollection<Account> FindByName(string name)
+        {
+            using (ISession session = NHibernateContext.GetCurrentSession())
+            {
+                return session
+                    .CreateCriteria<Account>()
+                    .Add(Restrictions.Eq("Name", name))
+                    .List<Account>();
+            }
+        }
+
+        /// <summary>
+        /// Find an account by name and IBAN.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="iban">The International Bank Account Number.</param>
+        /// <returns>Returns the corresponding account.</returns>
+        internal Account FindByNameAndIban(string name, string iban)
+        {
+            using (ISession session = NHibernateContext.GetCurrentSession())
+            {
+                return session
+                    .CreateCriteria<Account>()
+                    .Add(Restrictions.Eq("Name", name))
+                    .Add(Restrictions.Eq("IBAN", iban))
+                    .UniqueResult<Account>();
+            }
         }
     }
 }
