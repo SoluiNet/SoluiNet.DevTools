@@ -23,6 +23,7 @@ namespace SoluiNet.DevTools.Management.Finances
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+    using System.Xml.Linq;
 
     /// <summary>
     /// Interaction logic for FinancesUserControl.xaml.
@@ -53,7 +54,7 @@ namespace SoluiNet.DevTools.Management.Finances
             var fileDialog = new Microsoft.Win32.OpenFileDialog()
             {
                 RestoreDirectory = true,
-                Filter = "Hibiscus CSV File (*.csv)|*.csv",
+                Filter = "Hibiscus CSV File (*.csv)|*.csv|Hibiscus XML File (*.xml)|*.xml",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             };
 
@@ -66,48 +67,87 @@ namespace SoluiNet.DevTools.Management.Finances
 
             if (!string.IsNullOrEmpty(filePath))
             {
-                var csvContents = FileHelper.StreamFromFile(filePath);
-
-                var csvData = CsvHelper.TableFromCsvStream(
-                    csvContents,
-                    containsHeaders: true,
-                    delimiter: ';',
-                    lineSeparator: "\n",
-                    encoding: Encoding.GetEncoding("ISO-8859-1"));
-
-                var repository = new EntryRepository();
-
-                foreach (DataRow row in csvData.Rows)
+                if (filePath.ToLowerInvariant().EndsWith(".csv"))
                 {
-                    var entry = new Entry()
+                    var csvContents = FileHelper.StreamFromFile(filePath);
+
+                    var csvData = CsvHelper.TableFromCsvStream(
+                        csvContents,
+                        containsHeaders: true,
+                        delimiter: ';',
+                        lineSeparator: "\n",
+                        encoding: Encoding.GetEncoding("ISO-8859-1"));
+
+                    var repository = new EntryRepository();
+
+                    foreach (DataRow row in csvData.Rows)
                     {
-                        Amount = Convert.ToDecimal(row[7]),
-                        AdditionalInformation = string.Format(
-                            "Purpose 01: {0}\r\nPurpose 02: {1}\r\nPurpose 03: {2}\r\nNote: {3}",
-                            row[10],
-                            row[11],
-                            row[17],
-                            row[16]),
-                        Date = Convert.ToDateTime(row[9]),
-                        ValueDate = Convert.ToDateTime(row[8]),
-                        Type = row[18].ToString(),
-                        Description = row[10].ToString(),
-                    };
+                        var entry = new Entry()
+                        {
+                            Amount = Convert.ToDecimal(row[7]),
+                            AdditionalInformation = string.Format(
+                                "Purpose 01: {0}\r\nPurpose 02: {1}\r\nPurpose 03: {2}\r\nNote: {3}",
+                                row[10],
+                                row[11],
+                                row[17],
+                                row[16]),
+                            Date = Convert.ToDateTime(row[9]),
+                            ValueDate = Convert.ToDateTime(row[8]),
+                            Type = row[18].ToString(),
+                            Description = row[10].ToString(),
+                        };
 
-                    entry.Account = FindOrCreateAccount(
-                            name: row[3].ToString(),
-                            bic: row[2].ToString(),
-                            iban: row[1].ToString());
+                        entry.Account = FindOrCreateAccount(
+                                name: row[3].ToString(),
+                                bic: row[2].ToString(),
+                                iban: row[1].ToString());
 
-                    entry.CounterAccount = FindOrCreateAccount(
-                            name: row[6].ToString(),
-                            bic: row[5].ToString(),
-                            iban: row[4].ToString());
+                        entry.CounterAccount = FindOrCreateAccount(
+                                name: row[6].ToString(),
+                                bic: row[5].ToString(),
+                                iban: row[4].ToString());
 
-                    entry.Category = FindOrCreateCategory(
-                        name: row[15].ToString());
+                        entry.Category = FindOrCreateCategory(
+                            name: row[15].ToString());
 
-                    repository.Add(entry);
+                        repository.Add(entry);
+                    }
+                }
+                else if (filePath.ToLowerInvariant().EndsWith(".xml"))
+                {
+                    var xmlContents = XElement.Load(filePath);
+
+                    var repository = new EntryRepository();
+
+                    foreach (var xmlObject in xmlContents.Elements("object"))
+                    {
+                        var entry = new Entry()
+                        {
+                            Amount = Convert.ToDecimal(xmlObject.Element("betrag")?.Value),
+                            AdditionalInformation = string.Format(
+                                "Purpose 01: {0}\r\nPurpose 02: {1}\r\nPurpose 03: {2}\r\nNote: {3}",
+                                xmlObject.Element("zweck")?.Value,
+                                xmlObject.Element("zweck2")?.Value,
+                                xmlObject.Element("zweck3")?.Value,
+                                xmlObject.Element("kommentar")?.Value),
+                            Date = Convert.ToDateTime(xmlObject.Element("datum")?.Value),
+                            ValueDate = Convert.ToDateTime(xmlObject.Element("valuta")?.Value),
+                            Type = xmlObject.Element("umsatztyp_id")?.Value,
+                            Description = xmlObject.Element("zweck")?.Value,
+                        };
+
+                        entry.Account = FindOrCreateAccount(
+                                name: string.Format("Own Account {0:000}", Convert.ToInt32(xmlObject.Element("konto_id")?.Value)),
+                                bic: string.Empty,
+                                iban: string.Empty);
+
+                        entry.CounterAccount = FindOrCreateAccount(
+                                name: string.Format("{0} {1}", xmlObject.Element("empfaenger_name")?.Value, xmlObject.Element("empfaenger_name2")?.Value),
+                                bic: xmlObject.Element("empfaenger_blz")?.Value,
+                                iban: xmlObject.Element("empfaenger_konto")?.Value);
+
+                        repository.Add(entry);
+                    }
                 }
             }
         }
