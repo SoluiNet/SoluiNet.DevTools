@@ -152,6 +152,17 @@ namespace SoluiNet.DevTools.DataExchange.Jira
         }
 
         /// <summary>
+        /// Get data by key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>Returns a <see cref="object"/> for the requested key.</returns>
+        /// <exception cref="NotImplementedException">Throws a <see cref="NotImplementedException"/> until this method has been implemented.</exception>
+        public object GetDataByKey(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Get data for general purposes.
         /// </summary>
         /// <returns>Returns a dictionary of data for general purposes.</returns>

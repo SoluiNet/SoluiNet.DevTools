@@ -22,6 +22,13 @@ namespace SoluiNet.DevTools.Core.Plugin
         IDictionary<string, object> GetGeneralData();
 
         /// <summary>
+        /// Get data by key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>Returns a <see cref="object"/> which holds the data requested by the passed key.</returns>
+        object GetDataByKey(string key);
+
+        /// <summary>
         /// Get data via a predefined filter string.
         /// </summary>
         /// <param name="whereClause">The filter string.</param>
