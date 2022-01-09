@@ -16,11 +16,17 @@ namespace SoluiNet.DevTools.Core.Plugin
     public interface IAllowsDataExchange : IBasePlugin
     {
         /// <summary>
+        /// Get a data object for general purposes.
+        /// </summary>
+        /// <returns>Returns a <see cref="Dictionary{TKey, TValue}"/> which holds a key-value combination of data for general purposes.</returns>
+        IDictionary<string, object> GetGeneralData();
+
+        /// <summary>
         /// Get data via a predefined filter string.
         /// </summary>
         /// <param name="whereClause">The filter string.</param>
         /// <returns>Returns a <see cref="List{T}">List</see> which matches the filter string.</returns>
-        ICollection<object> GetData(string whereClause); // use dynamic LINQ?
+        ICollection<object> GetData(string whereClause);
 
         /// <summary>
         /// Get data via a predefined filter dictionary.

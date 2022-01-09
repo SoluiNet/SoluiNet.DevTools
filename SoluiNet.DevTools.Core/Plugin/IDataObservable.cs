@@ -1,4 +1,4 @@
-﻿// <copyright file="IDataObserver.cs" company="SoluiNet">
+﻿// <copyright file="IDataObservable.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
@@ -12,7 +12,7 @@ namespace SoluiNet.DevTools.Core.Plugin
     /// <summary>
     /// Provides an interface for observing data.
     /// </summary>
-    public interface IDataObserver : IBasePlugin, IObserver<IDataContainer>
+    public interface IDataObservable : IBasePlugin, IObservable<IDataContainer>
     {
     }
 }

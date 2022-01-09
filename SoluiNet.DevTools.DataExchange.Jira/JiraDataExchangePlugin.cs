@@ -151,6 +151,11 @@ namespace SoluiNet.DevTools.DataExchange.Jira
             throw new NotImplementedException();
         }
 
+        public IDictionary<string, object> GetGeneralData()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Set data in JIRA.
         /// </summary>
