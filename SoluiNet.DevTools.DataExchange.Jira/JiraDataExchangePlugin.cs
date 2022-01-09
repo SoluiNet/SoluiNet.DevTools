@@ -151,6 +151,11 @@ namespace SoluiNet.DevTools.DataExchange.Jira
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Get data for general purposes.
+        /// </summary>
+        /// <returns>Returns a dictionary of data for general purposes.</returns>
+        /// <exception cref="NotImplementedException">Throws a <see cref="NotImplementedException"/> because this method won't be needed for JIRA data exchange.</exception>
         public IDictionary<string, object> GetGeneralData()
         {
             throw new NotImplementedException();
