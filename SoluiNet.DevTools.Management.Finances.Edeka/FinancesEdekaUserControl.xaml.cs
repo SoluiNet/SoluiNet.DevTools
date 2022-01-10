@@ -6,8 +6,6 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
 {
     using SoluiNet.DevTools.Core.Tools.Csv;
     using SoluiNet.DevTools.Core.Tools.File;
-    using SoluiNet.DevTools.Management.Finances.Data;
-    using SoluiNet.DevTools.Management.Finances.Data.Repositories;
     using System;
     using System.Collections.Generic;
     using System.Data;
@@ -33,7 +31,7 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
         /// <summary>
         /// Initializes a new instance of the <see cref="FinancesEdekaUserControl"/> class.
         /// </summary>
-        public FinancesUserControl()
+        public FinancesEdekaUserControl()
         {
             this.InitializeComponent();
         }
