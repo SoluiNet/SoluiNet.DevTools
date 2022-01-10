@@ -105,7 +105,7 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
                     Background = new LinearGradientBrush(this.BackgroundAccentColour, this.BackgroundColour, 45.00)
                 };
 
-                ((Grid)tabItem.Content).Children.Add(new FinancesUserControl());
+                ((Grid)tabItem.Content).Children.Add(new FinancesEdekaUserControl());
             }
         }
     }
