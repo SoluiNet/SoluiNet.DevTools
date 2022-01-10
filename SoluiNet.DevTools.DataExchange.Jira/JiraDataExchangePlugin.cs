@@ -86,7 +86,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
             if (entityName == "ticket")
             {
                 // var request = new RestRequest("rest/api/latest/issue/{issueKey}", Method.GET);
-                var request = new RestRequest("rest/api/latest/search", Method.GET);
+                var request = new RestRequest("rest/api/latest/search", Method.Get);
 
                 // request.AddUrlSegment("issueKey", searchData["issueKey"].ToString());
                 foreach (var searchElement in searchData)
@@ -132,7 +132,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
 
                 // request.AddHeader("Accept", "application/json");
                 // request.AddHeader("Content-Type", "application/json");
-                var response = client.Execute(request);
+                var response = client.ExecuteAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
                 var content = response.Content;
 
                 return new List<object> { content };
