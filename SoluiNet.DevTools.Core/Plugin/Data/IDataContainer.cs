@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Data
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using SoluiNet.DevTools.Core.Data;
 
     /// <summary>
     /// Provides a container for data.
@@ -16,6 +17,6 @@ namespace SoluiNet.DevTools.Core.Plugin.Data
         /// <summary>
         /// Gets the data.
         /// </summary>
-        Dictionary<string, object> Data { get; }
+        BaseDictionary Data { get; }
     }
 }

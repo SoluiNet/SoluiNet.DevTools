@@ -17,7 +17,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Plugin
     /// <summary>
     /// Provides the interface for a plugin which will provide UI elements for Management functions.
     /// </summary>
-    public interface IManagementUiPlugin : IProvidesDatabaseConnectivity, IThemable
+    public interface IManagementUiPlugin : IThemable
     {
         /// <summary>
         /// Method which should be executed to display the plugin in an WPF application.

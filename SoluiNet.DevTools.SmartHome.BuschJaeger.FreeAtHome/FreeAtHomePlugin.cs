@@ -18,31 +18,6 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
     public class FreeAtHomePlugin: ISmartHomeUiPlugin
     {
         /// <summary>
-        /// Gets or sets the environment.
-        /// </summary>
-        public string Environment
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Gets or sets the connection string name.
-        /// </summary>
-        public string ConnectionStringName
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Gets or sets the default connection string name.
-        /// </summary>
-        public string DefaultConnectionStringName
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
         /// Gets or sets the first accent colour.
         /// </summary>
         public Color AccentColour1
@@ -91,32 +66,29 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
         }
 
         /// <summary>
+        /// Gets the entity name.
+        /// </summary>
+        public string EntityName
+        {
+            get { return "BuschJaeger.FreeAtHome"; }
+        }
+
+        /// <summary>
+        /// Gets the type definition.
+        /// </summary>
+        public object TypeDefinition
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
         /// Display the plugin.
         /// </summary>
         /// <param name="mainGrid">The main grid.</param>
         public void Display(Grid mainGrid)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Execute a SQL statement.
-        /// </summary>
-        /// <param name="sqlCommand">The SQL statement.</param>
-        /// <param name="identity">The windows identity under which the statement should be running.</param>
-        /// <returns>Returns a DataTable for the result.</returns>
-        public DataTable ExecuteSql(string sqlCommand, WindowsIdentity identity = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Execute a SQL script.
-        /// </summary>
-        /// <param name="sqlCommand">The SQL script.</param>
-        /// <param name="identity">The windows identity under which the script should be running.</param>
-        /// <returns>Returns a collection of DataTables for the result.</returns>
-        public ICollection<DataTable> ExecuteSqlScript(string sqlCommand, WindowsIdentity identity = null)
         {
             throw new NotImplementedException();
         }
