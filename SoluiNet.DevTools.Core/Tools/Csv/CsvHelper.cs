@@ -16,6 +16,7 @@ namespace SoluiNet.DevTools.Core.Tools.Csv
     /// <summary>
     /// Provides a collection of methods to work with CSV data.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1724:Type names should not match namespaces", Justification = "We want to stay with the class name because other helper classes use the same name scheme.")]
     public static class CsvHelper
     {
         /// <summary>
