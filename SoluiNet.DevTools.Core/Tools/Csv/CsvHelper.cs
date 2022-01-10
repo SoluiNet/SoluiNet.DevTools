@@ -18,7 +18,6 @@ namespace SoluiNet.DevTools.Core.Tools.Csv
     /// </summary>
     public static class CsvHelper
     {
-
         /// <summary>
         /// Generate a data table from CSV stream.
         /// </summary>
