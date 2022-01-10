@@ -20,8 +20,10 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
     /// </summary>
     public static class SecurityTools
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "Added for later usage.")]
         private const int Logon32LogonInteractive = 2;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "Added for later usage.")]
         private const int Logon32ProviderDefault = 0;
 
 #if !COMPILED_FOR_NETSTANDARD

@@ -16,7 +16,10 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
     /// </summary>
     public sealed class SafeTokenHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
-        private SafeTokenHandle()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SafeTokenHandle"/> class.
+        /// </summary>
+        public SafeTokenHandle()
             : base(true)
         {
         }
