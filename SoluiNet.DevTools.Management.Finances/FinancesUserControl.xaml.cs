@@ -4,10 +4,6 @@
 
 namespace SoluiNet.DevTools.Management.Finances
 {
-    using SoluiNet.DevTools.Core.Tools.Csv;
-    using SoluiNet.DevTools.Core.Tools.File;
-    using SoluiNet.DevTools.Management.Finances.Data;
-    using SoluiNet.DevTools.Management.Finances.Data.Repositories;
     using System;
     using System.Collections.Generic;
     using System.Data;
@@ -24,6 +20,10 @@ namespace SoluiNet.DevTools.Management.Finances
     using System.Windows.Navigation;
     using System.Windows.Shapes;
     using System.Xml.Linq;
+    using SoluiNet.DevTools.Core.Tools.Csv;
+    using SoluiNet.DevTools.Core.Tools.File;
+    using SoluiNet.DevTools.Management.Finances.Data;
+    using SoluiNet.DevTools.Management.Finances.Data.Repositories;
 
     /// <summary>
     /// Interaction logic for FinancesUserControl.xaml.
@@ -41,7 +41,7 @@ namespace SoluiNet.DevTools.Management.Finances
 
             repository.GetAll();
 
-            Entries.ItemsSource = repository.GetAll();
+            this.Entries.ItemsSource = repository.GetAll();
         }
 
         /// <summary>
@@ -97,17 +97,17 @@ namespace SoluiNet.DevTools.Management.Finances
                             Description = row[10].ToString(),
                         };
 
-                        entry.Account = FindOrCreateAccount(
+                        entry.Account = this.FindOrCreateAccount(
                                 name: row[3].ToString(),
                                 bic: row[2].ToString(),
                                 iban: row[1].ToString());
 
-                        entry.CounterAccount = FindOrCreateAccount(
+                        entry.CounterAccount = this.FindOrCreateAccount(
                                 name: row[6].ToString(),
                                 bic: row[5].ToString(),
                                 iban: row[4].ToString());
 
-                        entry.Category = FindOrCreateCategory(
+                        entry.Category = this.FindOrCreateCategory(
                             name: row[15].ToString());
 
                         repository.Add(entry);
@@ -136,12 +136,12 @@ namespace SoluiNet.DevTools.Management.Finances
                             Description = xmlObject.Element("zweck")?.Value,
                         };
 
-                        entry.Account = FindOrCreateAccount(
+                        entry.Account = this.FindOrCreateAccount(
                                 name: string.Format("Own Account {0:000}", Convert.ToInt32(xmlObject.Element("konto_id")?.Value)),
                                 bic: string.Empty,
                                 iban: string.Empty);
 
-                        entry.CounterAccount = FindOrCreateAccount(
+                        entry.CounterAccount = this.FindOrCreateAccount(
                                 name: string.Format("{0} {1}", xmlObject.Element("empfaenger_name")?.Value, xmlObject.Element("empfaenger_name2")?.Value),
                                 bic: xmlObject.Element("empfaenger_blz")?.Value,
                                 iban: xmlObject.Element("empfaenger_konto")?.Value);

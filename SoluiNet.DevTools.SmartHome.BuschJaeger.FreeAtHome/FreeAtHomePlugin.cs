@@ -15,10 +15,10 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
     /// <summary>
     /// Provides a plugin for the Busch Jaeger free@home system.
     /// </summary>
-    public class FreeAtHomePlugin: ISmartHomeUiPlugin
+    public class FreeAtHomePlugin : ISmartHomeUiPlugin
     {
         /// <summary>
-        /// Gets or sets the first accent colour.
+        /// Gets the first accent colour.
         /// </summary>
         public Color AccentColour1
         {
@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
         }
 
         /// <summary>
-        /// Gets or sets the second accent colour.
+        /// Gets the second accent colour.
         /// </summary>
         public Color AccentColour2
         {
@@ -34,7 +34,7 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
         }
 
         /// <summary>
-        /// Gets or sets the foreground colour.
+        /// Gets the foreground colour.
         /// </summary>
         public Color ForegroundColour
         {
@@ -42,7 +42,7 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
         }
 
         /// <summary>
-        /// Gets or sets the background colour.
+        /// Gets the background colour.
         /// </summary>
         public Color BackgroundColour
         {
@@ -50,7 +50,7 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
         }
 
         /// <summary>
-        /// Gets or sets the background accent colour.
+        /// Gets the background accent colour.
         /// </summary>
         public Color BackgroundAccentColour
         {
@@ -58,7 +58,7 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
         }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets the name.
         /// </summary>
         public string Name
         {

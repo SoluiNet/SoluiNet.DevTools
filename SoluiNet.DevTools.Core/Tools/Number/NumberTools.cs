@@ -250,5 +250,32 @@ namespace SoluiNet.DevTools.Core.Tools.Number
                     return false;
             }
         }
+
+        /// <summary>
+        /// Get integer value from hexadecimal string value.
+        /// </summary>
+        /// <param name="value">The hexadecimal string value.</param>
+        /// <returns>Returns a <see cref="long"/> with the integer value which has been parsed from the passed hexadecimal value.</returns>
+        public static long FromHexValue(this string value)
+        {
+            if (long.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Get binary string from integer value.
+        /// </summary>
+        /// <param name="value">The integer value.</param>
+        /// <returns>Returns a <see cref="string"/> with the binary representation of the integer value.</returns>
+        public static string ToBinaryString(this long value)
+        {
+            return Convert.ToString(value, 2);
+        }
     }
 }

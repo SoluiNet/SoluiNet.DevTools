@@ -7,12 +7,19 @@ namespace SoluiNet.DevTools.SmartHome.Senec
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Security.Principal;
     using System.Windows.Controls;
     using System.Windows.Media;
+    using Newtonsoft.Json;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Common;
+    using SoluiNet.DevTools.Core.Configuration;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.SmartHome.Data;
+    using SoluiNet.DevTools.Core.Tools.Number;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 
     /// <summary>
@@ -30,11 +37,11 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public SenecPlugin()
         {
-            smartHomeObservers = new List<IObserver<SmartHomeDictionary>>();
+            this.smartHomeObservers = new List<IObserver<SmartHomeDictionary>>();
         }
 
         /// <summary>
-        /// Gets or sets the first accent colour.
+        /// Gets the first accent colour.
         /// </summary>
         public Color AccentColour1
         {
@@ -42,7 +49,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         }
 
         /// <summary>
-        /// Gets or sets the second accent colour.
+        /// Gets the second accent colour.
         /// </summary>
         public Color AccentColour2
         {
@@ -50,7 +57,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         }
 
         /// <summary>
-        /// Gets or sets the foreground colour.
+        /// Gets the foreground colour.
         /// </summary>
         public Color ForegroundColour
         {
@@ -58,7 +65,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         }
 
         /// <summary>
-        /// Gets or sets the background colour.
+        /// Gets the background colour.
         /// </summary>
         public Color BackgroundColour
         {
@@ -66,7 +73,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         }
 
         /// <summary>
-        /// Gets or sets the background accent colour.
+        /// Gets the background accent colour.
         /// </summary>
         public Color BackgroundAccentColour
         {
@@ -74,7 +81,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets the name.
         /// </summary>
         public string Name
         {
@@ -96,11 +103,10 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         {
             get
             {
-                return (new
+                return new
                 {
                     Name = string.Empty,
-
-                })
+                }
                 .GetType();
             }
         }
@@ -156,6 +162,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         {
             throw new NotImplementedException();
         }
+
         /// <summary>
         /// Get general data.
         /// </summary>
@@ -175,7 +182,54 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// <returns>Returns a <see cref="SmartHomeDictionary"/> with data from the SENEC battery storage.</returns>
         public SmartHomeDictionary GetGenericData()
         {
-            throw new NotImplementedException();
+            var client = new HttpClient();
+
+            var jsonObject = new
+            {
+                ENERGY = new
+                {
+                    STAT_STATE = string.Empty,
+                    STAT_STATE_DECODE = string.Empty,
+                    GUI_BAT_DATA_POWER = string.Empty,
+                    GUI_INVERTER_POWER = string.Empty,
+                    GUI_HOUSE_POW = string.Empty,
+                    GUI_GRID_POW = string.Empty,
+                    GUI_BAT_DATA_FUEL_CHARGE = string.Empty,
+                    GUI_CHARGING_INFO = string.Empty,
+                    GUI_BOOSTING_INFO = string.Empty,
+                },
+                SYS_UPDATE = new
+                {
+                    UPDATE_AVAILABLE = string.Empty,
+                },
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(jsonObject));
+            content.Headers.ContentType = new MediaTypeHeaderValue("Content-Type: application/json; charset=utf-8");
+
+            var response = client.PostAsync(
+                ApplicationContext.Configuration.GetByKey("remoteAddress", "SmartHome.Senec").ToString(),
+                content)
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = response.Content.ReadAsStringAsync()
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
+
+                dynamic responseObject = JsonConvert.DeserializeObject(responseString);
+
+                return new SmartHomeDictionary("Senec.PowerValues")
+                {
+                    { "Power.Grid", this.DecodeSenecValues(responseObject.ENERGY.GUI_GRID_POW) },
+                };
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -211,15 +265,103 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         public IDisposable Subscribe(IObserver<SmartHomeDictionary> observer)
         {
             // Check whether observer is already registered. If not, add it
-            if (!smartHomeObservers.Contains(observer))
+            if (!this.smartHomeObservers.Contains(observer))
             {
-                smartHomeObservers.Add(observer);
+                this.smartHomeObservers.Add(observer);
 
                 // Provide observer with existing data.
                 observer.OnNext(this.GetGenericData());
             }
 
             return new GenericUnsubscriber<List<IObserver<SmartHomeDictionary>>, SmartHomeDictionary>(this.smartHomeObservers, observer);
+        }
+
+        /// <summary>
+        /// Decode SENEC response values.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>Returns an <see cref="object"/> with the value of the passed string. May need casting to right data type in the calling method.</returns>
+        private object DecodeSenecValues(string value)
+        {
+            var prefix = value.Substring(0, 3);
+            var valueString = value.Substring(3, value.Length - 3);
+            var number = valueString.FromHexValue();
+
+            switch (prefix)
+            {
+                case "fl_":
+                    var sign = (number & 0x80000000) == 0x80000000 ? -1 : 1;
+                    var exponent = ((number >> 23) & 0xff) - 127;
+                    var mantissa = ((number & 0x7fffff) + 0x800000).ToString();
+
+                    double result = 0;
+
+                    for (var i = 0; i < mantissa.Length; i++)
+                    {
+                        result += mantissa[i] == '1' ? Math.Pow(2, exponent) : 0;
+                        exponent--;
+                    }
+
+                    return sign * result;
+                case "u1_":
+                case "u8_":
+                    if (number < 10)
+                    {
+                        return string.Format("0{0}", number);
+                    }
+
+                    break;
+                case "u3_":
+                case "u6_":
+                    return number;
+                case "i1_":
+                    if (number < 10)
+                    {
+                        return string.Format("0{0}", number);
+                    }
+
+                    if ((number & 0x8000) > 0)
+                    {
+                        return number - 0x10000;
+                    }
+
+                    break;
+                case "i3_":
+                    if (number < 10)
+                    {
+                        return string.Format("0{0}", number);
+                    }
+
+                    if (Math.Abs(number & 0x80000000) > 0)
+                    {
+                        return number - 0x100000000;
+                    }
+
+                    break;
+                case "i8_":
+                    if (number < 10)
+                    {
+                        return string.Format("0{0}", number);
+                    }
+
+                    if ((number & 0x80) > 0)
+                    {
+                        return number - 0x100;
+                    }
+
+                    break;
+                case "ch_":
+                case "st_":
+                    return valueString;
+                case "er_":
+                    throw new SoluiNetPluginException(
+                        string.Format("Error in SENEC value decoding: {0}", value),
+                        this);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(value));
+            }
+
+            return null;
         }
     }
 }

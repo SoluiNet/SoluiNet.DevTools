@@ -18,7 +18,7 @@
     <OutputPath>..\build\windows-client\$(Configuration)\</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
-    <NoWarn>$(NoWarn),SA1123</NoWarn>
+    <NoWarn>$(NoWarn);SA1123</NoWarn>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
@@ -32,6 +32,12 @@
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <LangVersion>7.1</LangVersion>
+    <RepositoryUrl>https://github.com/SoluiNet/SoluiNet.DevTools</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <PackageTags>development-tools</PackageTags>
+    <PackageIcon>..\icons\solui_logo_128x128.png</PackageIcon>
+    <PackageReadmeFile>..\README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
@@ -43,6 +49,10 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
@@ -87,6 +97,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <None Include="..\README.md" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -1,23 +1,25 @@
-﻿using SoluiNet.DevTools.Core.Plugin;
-using SoluiNet.DevTools.Core.UI.WPF.Extensions;
-using SoluiNet.DevTools.Core.UI.WPF.Plugin;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Security.Principal;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+﻿// <copyright file="FinancesEdekaPlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Management.Finances.Edeka
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Security.Principal;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Extensions;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+
     /// <summary>
     /// Provides a plugin that allows one to manage finance information from EDEKA.
     /// </summary>
     public class FinancesEdekaPlugin : IManagementPlugin, IManagementUiPlugin
     {
-        private Grid MainGrid { get; set; }
-
         /// <summary>
         /// Gets the name.
         /// </summary>
@@ -27,7 +29,7 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
         }
 
         /// <summary>
-        /// Gets or sets the first accent colour.
+        /// Gets the first accent colour.
         /// </summary>
         public Color AccentColour1
         {
@@ -35,7 +37,7 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
         }
 
         /// <summary>
-        /// Gets or sets the second accent colour.
+        /// Gets the second accent colour.
         /// </summary>
         public Color AccentColour2
         {
@@ -43,7 +45,7 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
         }
 
         /// <summary>
-        /// Gets or sets the foreground colour.
+        /// Gets the foreground colour.
         /// </summary>
         public Color ForegroundColour
         {
@@ -51,7 +53,7 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
         }
 
         /// <summary>
-        /// Gets or sets the background colour.
+        /// Gets the background colour.
         /// </summary>
         public Color BackgroundColour
         {
@@ -59,12 +61,17 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
         }
 
         /// <summary>
-        /// Gets or sets the background accent colour.
+        /// Gets the background accent colour.
         /// </summary>
         public Color BackgroundAccentColour
         {
             get { return Colors.DimGray; }
         }
+
+        /// <summary>
+        /// Gets or sets the main grid.
+        /// </summary>
+        private Grid MainGrid { get; set; }
 
         /// <summary>
         /// Display the plugin.
@@ -83,12 +90,12 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
                     Header = "Edeka",
                     Name = "Finances_Edeka_TabItem",
                     Background = new LinearGradientBrush(this.AccentColour1, this.AccentColour2, 0.00),
-                    Foreground = new SolidColorBrush(this.ForegroundColour)
+                    Foreground = new SolidColorBrush(this.ForegroundColour),
                 };
 
                 tabControl.SelectionChanged += (sender, eventArgs) =>
                 {
-                    if(eventArgs.Source is TabControl)
+                    if (eventArgs.Source is TabControl)
                     {
                         if (tabItem.IsSelected)
                         {
@@ -102,7 +109,7 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
                 tabItem.Content = new Grid()
                 {
                     Name = "Finances_Edeka_TabItem_Content",
-                    Background = new LinearGradientBrush(this.BackgroundAccentColour, this.BackgroundColour, 45.00)
+                    Background = new LinearGradientBrush(this.BackgroundAccentColour, this.BackgroundColour, 45.00),
                 };
 
                 ((Grid)tabItem.Content).Children.Add(new FinancesEdekaUserControl());

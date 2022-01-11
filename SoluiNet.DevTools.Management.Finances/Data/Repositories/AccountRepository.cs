@@ -4,10 +4,10 @@
 
 namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
 {
-    using NHibernate;
-    using NHibernate.Criterion;
     using System.Collections.Generic;
     using System.Linq;
+    using NHibernate;
+    using NHibernate.Criterion;
 
     /// <summary>
     /// Provides a repository to handle categories.

@@ -4,8 +4,6 @@
 
 namespace SoluiNet.DevTools.Management.Finances.Edeka
 {
-    using SoluiNet.DevTools.Core.Tools.Csv;
-    using SoluiNet.DevTools.Core.Tools.File;
     using System;
     using System.Collections.Generic;
     using System.Data;
@@ -22,6 +20,8 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
     using System.Windows.Navigation;
     using System.Windows.Shapes;
     using System.Xml.Linq;
+    using SoluiNet.DevTools.Core.Tools.Csv;
+    using SoluiNet.DevTools.Core.Tools.File;
 
     /// <summary>
     /// Interaction logic for FinancesEdekaUserControl.xaml.

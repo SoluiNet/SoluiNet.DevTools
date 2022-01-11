@@ -21,7 +21,19 @@ namespace SoluiNet.DevTools.Management.Finances.Data
     public sealed class NHibernateContext
     {
         private const string CurrentSessionKey = "nhibernate.current_session";
-        private static readonly ISessionFactory _sessionFactory;
+        private static readonly ISessionFactory SessionFactory;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="NHibernateContext"/> class.
+        /// </summary>
+        static NHibernateContext()
+        {
+            SessionFactory = Fluently.Configure()
+                .Database(SQLiteConfiguration.Standard.UsingFile(DatabaseLocation))
+                .Mappings(m => m.HbmMappings.AddFromAssemblyOf<NHibernateContext>())
+                .ExposeConfiguration(GenerateDatabase)
+                .BuildSessionFactory();
+        }
 
         /// <summary>
         /// Gets the default database location.
@@ -32,18 +44,6 @@ namespace SoluiNet.DevTools.Management.Finances.Data
             {
                 return string.Format("{0}\\SoluiNet.DevTools\\Finance.sqlite", System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData));
             }
-        }
-
-        /// <summary>
-        /// Construct the NHibernateContext.
-        /// </summary>
-        static NHibernateContext()
-        {
-            _sessionFactory = Fluently.Configure()
-                .Database(SQLiteConfiguration.Standard.UsingFile(DatabaseLocation))
-                .Mappings(m => m.HbmMappings.AddFromAssemblyOf<NHibernateContext>())
-                .ExposeConfiguration(GenerateDatabase)
-                .BuildSessionFactory();
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace SoluiNet.DevTools.Management.Finances.Data
 
                 if (exception is SchemaValidationException validationException)
                 {
-                    foreach(var validationError in validationException.ValidationErrors)
+                    foreach (var validationError in validationException.ValidationErrors)
                     {
                         logger.Warn(validationError);
                     }
@@ -100,19 +100,19 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// <returns>Returns the currently used session or creates a new one if it doesn't exist until now.</returns>
         public static ISession GetCurrentSession()
         {
-            var currentSession = ApplicationContext.Storage.ContainsKey(CurrentSessionKey)
-                ? ApplicationContext.Storage[CurrentSessionKey] as ISession
+            var currentSession = ApplicationContext.SessionValues.ContainsKey(CurrentSessionKey)
+                ? ApplicationContext.SessionValues[CurrentSessionKey] as ISession
                 : null;
 
             if (currentSession == null)
             {
-                currentSession = _sessionFactory.OpenSession();
-                ApplicationContext.Storage[CurrentSessionKey] = currentSession;
+                currentSession = SessionFactory.OpenSession();
+                ApplicationContext.SessionValues[CurrentSessionKey] = currentSession;
             }
             else if (!currentSession.IsOpen)
             {
-                currentSession = _sessionFactory.OpenSession();
-                ApplicationContext.Storage[CurrentSessionKey] = currentSession;
+                currentSession = SessionFactory.OpenSession();
+                ApplicationContext.SessionValues[CurrentSessionKey] = currentSession;
             }
 
             return currentSession;
@@ -123,7 +123,7 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// </summary>
         public static void CloseSession()
         {
-            var currentSession = ApplicationContext.Storage[CurrentSessionKey] as ISession;
+            var currentSession = ApplicationContext.SessionValues[CurrentSessionKey] as ISession;
 
             if (currentSession == null)
             {
@@ -132,7 +132,7 @@ namespace SoluiNet.DevTools.Management.Finances.Data
             }
 
             currentSession.Close();
-            ApplicationContext.Storage.Remove(CurrentSessionKey);
+            ApplicationContext.SessionValues.Remove(CurrentSessionKey);
         }
 
         /// <summary>
@@ -140,9 +140,9 @@ namespace SoluiNet.DevTools.Management.Finances.Data
         /// </summary>
         public static void CloseSessionFactory()
         {
-            if (_sessionFactory != null)
+            if (SessionFactory != null)
             {
-                _sessionFactory.Close();
+                SessionFactory.Close();
             }
         }
     }

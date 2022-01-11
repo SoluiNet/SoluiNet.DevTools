@@ -38,6 +38,7 @@ namespace SoluiNet.DevTools.UI.UserControls
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1721:Property names should not match get methods", Justification = "Value is the most describing property name.")]
         public string Value
         {
             get { return this.ConnectionStringValue.Text; }

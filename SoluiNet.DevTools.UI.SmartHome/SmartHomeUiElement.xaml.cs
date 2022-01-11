@@ -87,6 +87,9 @@ namespace SoluiNet.DevTools.UI.SmartHome
             }
         }
 
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
         private static Logger Logger
         {
             get
@@ -95,6 +98,18 @@ namespace SoluiNet.DevTools.UI.SmartHome
             }
         }
 
+        /// <summary>
+        /// Gets the logging path.
+        /// </summary>
         private string LoggingPath { get; }
+
+        private void MainTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.TitleChanged?.Invoke(this, new Dictionary<string, string>()
+            {
+                { "tab", this.MainTabs.SelectedContentStringFormat },
+                { "tabAdditionalInfo", string.Empty },
+            });
+        }
     }
 }

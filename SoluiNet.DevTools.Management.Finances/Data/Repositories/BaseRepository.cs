@@ -4,20 +4,20 @@
 
 namespace SoluiNet.DevTools.Management.Finances.Data.Repositories
 {
-    using NHibernate;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using NHibernate;
 
     /// <summary>
     /// Basic implementation of a repository.
     /// </summary>
     /// <typeparam name="T">The entity type.</typeparam>
-    public class BaseRepository<T> : IRepository<T> 
+    public class BaseRepository<T> : IRepository<T>
         where T : BaseEntity
     {
         /// <summary>
-        /// Add a record
+        /// Add a record.
         /// </summary>
         /// <param name="record">The record.</param>
         public void Add(T record)

@@ -5,6 +5,7 @@
 namespace SoluiNet.DevTools.Core.Storage
 {
     using System;
+    using System.Collections.Generic;
     using SoluiNet.DevTools.Core.Configuration;
 
     /// <summary>
@@ -18,6 +19,16 @@ namespace SoluiNet.DevTools.Core.Storage
         public static string ConnectionString
         {
             get { return Core.Configuration.Configuration.GetConfigurationEntry("StorageConnectionString"); }
+        }
+
+        /// <summary>
+        /// Store data to the storage.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="data">The data.</param>
+        public static void StoreData(string entity, ICollection<IDictionary<string, object>> data)
+        {
+            // todo: store the data to the entity.
         }
     }
 }

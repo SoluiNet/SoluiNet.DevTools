@@ -1,26 +1,28 @@
-﻿using NHibernate;
-using NHibernate.Cfg;
-using SoluiNet.DevTools.Core.Plugin;
-using SoluiNet.DevTools.Core.UI.WPF.Extensions;
-using SoluiNet.DevTools.Core.UI.WPF.Plugin;
-using SoluiNet.DevTools.Management.Finances.Data;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Security.Principal;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+﻿// <copyright file="FinancesPlugin.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
 
 namespace SoluiNet.DevTools.Management.Finances
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Security.Principal;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using NHibernate;
+    using NHibernate.Cfg;
+    using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Extensions;
+    using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Management.Finances.Data;
+
     /// <summary>
     /// Provides a plugin that allows one to manage finances.
     /// </summary>
     public class FinancesPlugin : IManagementPlugin, IManagementUiPlugin
     {
-        private Grid MainGrid { get; set; }
-
         /// <summary>
         /// Gets the name.
         /// </summary>
@@ -45,7 +47,7 @@ namespace SoluiNet.DevTools.Management.Finances
         public string DefaultConnectionStringName { get; }
 
         /// <summary>
-        /// Gets or sets the first accent colour.
+        /// Gets the first accent colour.
         /// </summary>
         public Color AccentColour1
         {
@@ -53,7 +55,7 @@ namespace SoluiNet.DevTools.Management.Finances
         }
 
         /// <summary>
-        /// Gets or sets the second accent colour.
+        /// Gets the second accent colour.
         /// </summary>
         public Color AccentColour2
         {
@@ -61,7 +63,7 @@ namespace SoluiNet.DevTools.Management.Finances
         }
 
         /// <summary>
-        /// Gets or sets the foreground colour.
+        /// Gets the foreground colour.
         /// </summary>
         public Color ForegroundColour
         {
@@ -69,7 +71,7 @@ namespace SoluiNet.DevTools.Management.Finances
         }
 
         /// <summary>
-        /// Gets or sets the background colour.
+        /// Gets the background colour.
         /// </summary>
         public Color BackgroundColour
         {
@@ -77,12 +79,17 @@ namespace SoluiNet.DevTools.Management.Finances
         }
 
         /// <summary>
-        /// Gets or sets the background accent colour.
+        /// Gets the background accent colour.
         /// </summary>
         public Color BackgroundAccentColour
         {
             get { return Colors.DimGray; }
         }
+
+        /// <summary>
+        /// Gets or sets the main grid.
+        /// </summary>
+        private Grid MainGrid { get; set; }
 
         /// <summary>
         /// Display the plugin.
@@ -101,12 +108,12 @@ namespace SoluiNet.DevTools.Management.Finances
                     Header = "Finances",
                     Name = "Finances_TabItem",
                     Background = new LinearGradientBrush(this.AccentColour1, this.AccentColour2, 0.00),
-                    Foreground = new SolidColorBrush(this.ForegroundColour)
+                    Foreground = new SolidColorBrush(this.ForegroundColour),
                 };
 
                 tabControl.SelectionChanged += (sender, eventArgs) =>
                 {
-                    if(eventArgs.Source is TabControl)
+                    if (eventArgs.Source is TabControl)
                     {
                         if (tabItem.IsSelected)
                         {
@@ -120,7 +127,7 @@ namespace SoluiNet.DevTools.Management.Finances
                 tabItem.Content = new Grid()
                 {
                     Name = "Finances_TabItem_Content",
-                    Background = new LinearGradientBrush(this.BackgroundAccentColour, this.BackgroundColour, 45.00)
+                    Background = new LinearGradientBrush(this.BackgroundAccentColour, this.BackgroundColour, 45.00),
                 };
 
                 ((Grid)tabItem.Content).Children.Add(new FinancesUserControl());

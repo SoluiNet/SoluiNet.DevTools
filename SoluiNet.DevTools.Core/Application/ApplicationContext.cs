@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Core.Application
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using SoluiNet.DevTools.Core.Application.Adapter;
 
     /// <summary>
     /// Defines the application context.
@@ -17,7 +18,7 @@ namespace SoluiNet.DevTools.Core.Application
     {
         static ApplicationContext()
         {
-            Storage = new Dictionary<string, object>();
+            SessionValues = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -26,8 +27,13 @@ namespace SoluiNet.DevTools.Core.Application
         public static ISoluiNetApp Application { get; set; }
 
         /// <summary>
-        /// Gets the storage.
+        /// Gets the session values.
         /// </summary>
-        public static Dictionary<string, object> Storage { get; }
+        public static Dictionary<string, object> SessionValues { get; }
+
+        /// <summary>
+        /// Gets the application configuration.
+        /// </summary>
+        public static ApplicationConfigurationAdapter Configuration { get; }
     }
 }

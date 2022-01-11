@@ -8,6 +8,7 @@ namespace SoluiNet.DevTools.Console
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.Reflection;
     using CommandLine;
     using NLog;
@@ -62,6 +63,7 @@ namespace SoluiNet.DevTools.Console
             foreach (var error in errors)
             {
                 logger.Error(string.Format(
+                    CultureInfo.InvariantCulture,
                     "Error while executing SoluiNet.DevTools.Console - {0} (stops processing: {1})",
                     error.Tag.ToString(),
                     error.StopsProcessing));
