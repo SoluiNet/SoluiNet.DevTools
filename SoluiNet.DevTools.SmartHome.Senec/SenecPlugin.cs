@@ -46,7 +46,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public Color AccentColour1
         {
-            get { throw new NotImplementedException(); }
+            get { return Color.FromRgb(58, 156, 223); }
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public Color AccentColour2
         {
-            get { throw new NotImplementedException(); }
+            get { return Colors.White; }
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public Color ForegroundColour
         {
-            get { throw new NotImplementedException(); }
+            get { return Colors.Black; }
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public Color BackgroundColour
         {
-            get { throw new NotImplementedException(); }
+            get { return Colors.White; }
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public Color BackgroundAccentColour
         {
-            get { throw new NotImplementedException(); }
+            get { return Color.FromRgb(58, 156, 223); }
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public string Name
         {
-            get { throw new NotImplementedException(); }
+            get { return "SmartHome.Senec"; }
         }
 
         /// <summary>
