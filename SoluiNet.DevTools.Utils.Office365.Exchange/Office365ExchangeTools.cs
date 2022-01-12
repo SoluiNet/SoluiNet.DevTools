@@ -11,6 +11,7 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
     using System.Text;
     using Microsoft.Exchange.WebServices.Data;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
 
     /// <summary>
     /// Provides methods to work with Office365 Exchange.
