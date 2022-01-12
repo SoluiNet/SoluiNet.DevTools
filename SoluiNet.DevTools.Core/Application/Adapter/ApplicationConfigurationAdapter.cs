@@ -15,9 +15,23 @@ namespace SoluiNet.DevTools.Core.Application.Adapter
     public class ApplicationConfigurationAdapter : IConfiguration
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationConfigurationAdapter"/> class.
+        /// </summary>
+        public ApplicationConfigurationAdapter()
+        {
+            this.PluginConfiguration = new PluginConfigurationAdapter();
+            this.Settings = new SettingsAdapter();
+        }
+
+        /// <summary>
         /// Gets the plugin configuration.
         /// </summary>
         public PluginConfigurationAdapter PluginConfiguration { get; }
+
+        /// <summary>
+        /// Gets the settings.
+        /// </summary>
+        public SettingsAdapter Settings { get; }
 
         /// <inheritdoc />
         public object GetByKey(string key, string plugin = "", string environment = "")

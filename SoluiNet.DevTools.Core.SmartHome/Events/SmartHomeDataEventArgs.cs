@@ -17,6 +17,10 @@ namespace SoluiNet.DevTools.Core.SmartHome.Events
         /// <summary>
         /// Gets or sets the data.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Usage",
+            "CA2227:Collection properties should be read only",
+            Justification = "We want to set the value while passing a new object. For better readability it should be working without constructor parameters.")]
         public SmartHomeDictionary Data { get; set; }
     }
 }

@@ -37,6 +37,11 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
         /// <inheritdoc/>
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
+            if (displayInPluginContainer == null)
+            {
+                throw new ArgumentNullException(nameof(displayInPluginContainer));
+            }
+
             displayInPluginContainer(new Office365ExchangeUserControl());
         }
     }

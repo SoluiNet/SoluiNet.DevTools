@@ -16,6 +16,7 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Database;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
     using SoluiNet.DevTools.Core.Windows.Tools.Database;

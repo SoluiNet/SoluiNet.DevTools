@@ -19,6 +19,8 @@ namespace SoluiNet.DevTools.Core.Application
         static ApplicationContext()
         {
             SessionValues = new Dictionary<string, object>();
+            Configuration = new ApplicationConfigurationAdapter();
+            Services = new ServicesAdapter();
         }
 
         /// <summary>
@@ -35,5 +37,10 @@ namespace SoluiNet.DevTools.Core.Application
         /// Gets the application configuration.
         /// </summary>
         public static ApplicationConfigurationAdapter Configuration { get; }
+
+        /// <summary>
+        /// Gets the services.
+        /// </summary>
+        public static ServicesAdapter Services { get; }
     }
 }

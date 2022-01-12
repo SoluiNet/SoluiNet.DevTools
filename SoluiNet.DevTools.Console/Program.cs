@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Console
     using CommandLine;
     using NLog;
     using SoluiNet.DevTools.Console.Options;
+    using SoluiNet.DevTools.Core.Application;
 
     /// <summary>
     /// The main entrance point for the SoluiNet.DevTools.Console application.
@@ -28,6 +29,9 @@ namespace SoluiNet.DevTools.Console
 #if DEBUG
             Debugger.Launch();
 #endif
+            ApplicationContext.Application = new ConsoleApplication();
+
+            (ApplicationContext.Application as BaseSoluiNetApp).Initialize();
 
             CommandLine.Parser.Default.ParseArguments<RunOptions>(args)
                 .WithParsed(Run)

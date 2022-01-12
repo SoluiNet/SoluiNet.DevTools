@@ -20,7 +20,9 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
         /// <summary>
         /// Get mails from exchange server.
         /// </summary>
-        /// <returns>Returns a list of mails.</returns>
+        /// <returns>Returns a list of mails.</returns>#
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a service which should be universal. So we use the most common language for information messages - which is English.")]
         public static ICollection<string> GetMails()
         {
             var service = Connect();
@@ -47,6 +49,8 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
             return emailList;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a service which should be universal. So we use the most common language for information messages - which is English.")]
         private static ExchangeService Connect()
         {
             var settings = PluginHelper.GetSettingsAsDictionary(PluginHelper.GetPluginByName<Office365ExchangePlugin>("Office365ExchangePlugin"));

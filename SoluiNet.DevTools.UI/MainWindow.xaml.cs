@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.UI.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;

@@ -13,10 +13,12 @@ namespace SoluiNet.DevTools.UI
     using System.Threading.Tasks;
     using System.Windows;
     using NLog;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
@@ -25,12 +27,34 @@ namespace SoluiNet.DevTools.UI
     /// <summary>
     /// Interaction logic for "App.xaml".
     /// </summary>
-    public partial class App : Application, ISoluiNetUiWpfApp
+    public partial class App : Application, ISoluiNetUiWpfApp, IHoldsBaseApp
     {
+        private BaseSoluiNetApp baseApp;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="App"/> class.
+        /// </summary>
+        public App()
+        {
+            this.InitializeComponent();
+
+            this.baseApp = new BaseSoluiNetUiApp();
+
+            ApplicationContext.Application = this;
+
+            this.baseApp.Initialize();
+        }
+
         /// <summary>
         /// Gets all available plugins.
         /// </summary>
-        public ICollection<IBasePlugin> Plugins { get; private set; }
+        public ICollection<IBasePlugin> Plugins
+        {
+            get
+            {
+                return this.baseApp.Plugins;
+            }
+        }
 
         /// <summary>
         /// Gets all available plugins that provide database connectivity functions.
@@ -55,11 +79,29 @@ namespace SoluiNet.DevTools.UI
         /// <summary>
         /// Gets all available plugins that will run in the background.
         /// </summary>
-        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; private set; }
+        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins
+        {
+            get
+            {
+                return this.baseApp.BackgroundTaskPlugins;
+            }
+        }
 
         /// <inheritdoc/>
         public ICollection<ISoluiNetUIElement> UiElements { get; private set; }
 
+        /// <inheritdoc />
+        public BaseSoluiNetApp BaseApp
+        {
+            get
+            {
+                return this.baseApp;
+            }
+        }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
         private static Logger Logger
         {
             get
@@ -272,12 +314,10 @@ namespace SoluiNet.DevTools.UI
                 App.Logger.Fatal(exception, "Error while assigning plugin types");
             }
 
-            this.Plugins = new List<IBasePlugin>();
             this.SqlPlugins = new List<ISqlUiPlugin>();
             this.SmartHomePlugins = new List<ISmartHomeUiPlugin>();
             this.ManagementPlugins = new List<IManagementUiPlugin>();
             this.UtilityPlugins = new List<IUtilitiesDevPlugin>();
-            this.BackgroundTaskPlugins = new List<IRunsBackgroundTask>();
 
             var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
 

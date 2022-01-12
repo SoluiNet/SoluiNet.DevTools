@@ -1,4 +1,8 @@
-﻿namespace SoluiNet.DevTools.Core.SmartHome
+﻿// <copyright file="SmartHomeDataObserver.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
+
+namespace SoluiNet.DevTools.Core.SmartHome
 {
     using System;
     using System.Collections.Generic;

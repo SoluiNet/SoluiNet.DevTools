@@ -7,13 +7,15 @@ namespace SoluiNet.DevTools.Core.SmartHome
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using SoluiNet.DevTools.Core.Services;
     using SoluiNet.DevTools.Core.SmartHome.Data;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
 
     /// <summary>
     /// The service to work with smart home data.
     /// </summary>
-    public class SmartHomeDataService
+    public class SmartHomeDataService : ISoluiNetService
     {
         private ICollection<IObservable<SmartHomeDictionary>> smartHomeDataPlugins;
 
@@ -25,6 +27,15 @@ namespace SoluiNet.DevTools.Core.SmartHome
             this.smartHomeDataPlugins = PluginHelper.GetPlugins<IObservable<SmartHomeDictionary>>();
 
             this.InitializeObservers();
+        }
+
+        /// <inheritdoc/>
+        public string Name
+        {
+            get
+            {
+                return "SmartHomeData";
+            }
         }
 
         /// <summary>

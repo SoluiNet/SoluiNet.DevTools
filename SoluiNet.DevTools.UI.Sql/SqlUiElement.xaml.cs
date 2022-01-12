@@ -27,6 +27,7 @@ namespace SoluiNet.DevTools.UI.Sql
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.ScriptEngine;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.Tools.Sql;
     using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.Application;

@@ -25,7 +25,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
     /// <summary>
     /// Provides a plugin for the Senec battery storage.
     /// </summary>
-    public class SenecPlugin : ISmartHomeUiPlugin, IObservable<SmartHomeDictionary>, IAllowsGenericDataExchange<SmartHomeDictionary>
+    public class SenecPlugin : ISmartHomeUiPlugin, IObservable<SmartHomeDictionary>, IAllowsGenericDataExchange<SmartHomeDictionary>, IContainsSettings
     {
         /// <summary>
         /// The list of all smart home observers.
@@ -205,10 +205,10 @@ namespace SoluiNet.DevTools.SmartHome.Senec
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(jsonObject));
-            content.Headers.ContentType = new MediaTypeHeaderValue("Content-Type: application/json; charset=utf-8");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var response = client.PostAsync(
-                ApplicationContext.Configuration.GetByKey("remoteAddress", "SmartHome.Senec").ToString(),
+                string.Format("{0}/lala.cgi", ApplicationContext.Configuration.Settings.GetByKey("SmartHome.Senec.RemoteAddress", "SmartHome.Senec").ToString()),
                 content)
                 .ConfigureAwait(false)
                 .GetAwaiter()

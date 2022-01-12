@@ -1,8 +1,8 @@
-﻿// <copyright file="WebApplication.cs" company="SoluiNet">
+﻿// <copyright file="ConsoleApplication.cs" company="SoluiNet">
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.Web.Application
+namespace SoluiNet.DevTools.Core.Application
 {
     using System;
     using System.Collections.Generic;
@@ -12,22 +12,19 @@ namespace SoluiNet.DevTools.Core.Web.Application
     using System.Reflection;
     using System.Threading.Tasks;
     using NLog;
-    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
-    using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.Plugin;
-    using SoluiNet.DevTools.Core.Web.Plugin;
 
     /// <summary>
-    /// The web application.
+    /// The implementation of a console application.
     /// </summary>
-    public class WebApplication : BaseSoluiNetApp, ISoluiNetWebApp
+    public class ConsoleApplication : BaseSoluiNetApp
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WebApplication"/> class.
+        /// Initializes a new instance of the <see cref="ConsoleApplication"/> class.
         /// </summary>
-        public WebApplication()
+        public ConsoleApplication()
             : base()
         {
             string[] dllFileNames = null;
@@ -60,7 +57,7 @@ namespace SoluiNet.DevTools.Core.Web.Application
 
             Type pluginType = typeof(IBasePlugin);
             Type backgroundTaskType = typeof(IRunsBackgroundTask);
-            Type webPluginType = typeof(IProvidesWebCommunication);
+            Type consolePluginType = typeof(ISupportsCommandLine);
 
             IDictionary<Type, List<string>> pluginTypes = new Dictionary<Type, List<string>>();
 
@@ -103,21 +100,21 @@ namespace SoluiNet.DevTools.Core.Web.Application
                         }
                     }
 
-                    if (type.GetInterface(webPluginType.FullName) != null)
+                    if (type.GetInterface(consolePluginType.FullName) != null)
                     {
                         if (pluginTypes.ContainsKey(type))
                         {
-                            pluginTypes[type].Add("Web");
+                            pluginTypes[type].Add("Console");
                         }
                         else
                         {
-                            pluginTypes.Add(type, new List<string>() { "Web" });
+                            pluginTypes.Add(type, new List<string>() { "Console" });
                         }
                     }
                 }
             }
 
-            this.WebPlugins = new List<IProvidesWebCommunication>();
+            this.CommandLinePlugins = new List<ISupportsCommandLine>();
 
             var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
 
@@ -151,10 +148,10 @@ namespace SoluiNet.DevTools.Core.Web.Application
                     });
                 }
 
-                if (type.Value.Contains("PluginDev"))
+                if (type.Value.Contains("Console"))
                 {
-                    var plugin = (IProvidesWebCommunication)Activator.CreateInstance(type.Key);
-                    this.WebPlugins.Add(plugin);
+                    var plugin = (ISupportsCommandLine)Activator.CreateInstance(type.Key);
+                    this.CommandLinePlugins.Add(plugin);
                 }
             }
 
@@ -162,8 +159,10 @@ namespace SoluiNet.DevTools.Core.Web.Application
             currentDomain.AssemblyResolve += PluginHelper.LoadAssembly;
         }
 
-        /// <inheritdoc/>
-        public ICollection<IProvidesWebCommunication> WebPlugins { get; }
+        /// <summary>
+        /// Gets the command line plugins.
+        /// </summary>
+        public ICollection<ISupportsCommandLine> CommandLinePlugins { get; }
 
         /// <summary>
         /// Gets the logger.

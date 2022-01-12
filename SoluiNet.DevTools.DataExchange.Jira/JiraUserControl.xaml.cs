@@ -21,6 +21,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
 
     /// <summary>
     /// Interaction logic for JiraUserControl.xaml.

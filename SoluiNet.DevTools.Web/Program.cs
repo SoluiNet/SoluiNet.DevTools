@@ -38,6 +38,8 @@ namespace SoluiNet.DevTools.Web
             {
                 ApplicationContext.Application = new WebApplication();
 
+                (ApplicationContext.Application as BaseSoluiNetApp).Initialize();
+
                 var servicesToRun = new ServiceBase[]
                 {
                     new SoluiNetService(),
