@@ -41,8 +41,6 @@ namespace SoluiNet.DevTools.UI
             this.baseApp = new BaseSoluiNetUiApp();
 
             ApplicationContext.Application = this;
-
-            this.baseApp.Initialize();
         }
 
         /// <summary>
@@ -125,6 +123,8 @@ namespace SoluiNet.DevTools.UI
 
                 this.LoadPlugins();
                 this.LoadUiElements();
+
+                this.baseApp.Initialize();
 
                 App.CallStartupEvent();
             }
