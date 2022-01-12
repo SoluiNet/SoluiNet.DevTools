@@ -265,7 +265,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
 
                 return new SmartHomeDictionary("Senec.PowerValues")
                 {
-                    { "Power.Grid", this.DecodeSenecValues(responseObject.ENERGY.GUI_GRID_POW) },
+                    { "Power.Grid", this.DecodeSenecValues(responseObject.ENERGY.GUI_GRID_POW.Value) },
                 };
             }
 
