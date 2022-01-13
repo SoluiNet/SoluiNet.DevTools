@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.Core.Application
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Text;
     using NLog;
@@ -171,6 +172,14 @@ namespace SoluiNet.DevTools.Core.Application
                             this.Services.Add(serviceObject);
                         }
                     }
+                }
+                catch (ReflectionTypeLoadException loadException)
+                {
+                    Logger.Fatal(
+                        loadException,
+                        "Error (Load Exception) while assigning plugin types for assembly '{0}': {1}",
+                        assembly.FullName,
+                        loadException.LoaderExceptions.Select(x => x.Message).Aggregate((x, y) => x + "\r\n" + y));
                 }
                 catch (Exception assignmentException)
                 {

@@ -6,13 +6,18 @@ namespace SoluiNet.DevTools.SmartHome.Senec
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Data;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Security.Principal;
+    using System.Threading.Tasks;
     using System.Windows.Controls;
     using System.Windows.Media;
     using Newtonsoft.Json;
+    using NLog;
+    using Quartz;
+    using Quartz.Impl;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Common;
     using SoluiNet.DevTools.Core.Configuration;
@@ -22,11 +27,13 @@ namespace SoluiNet.DevTools.SmartHome.Senec
     using SoluiNet.DevTools.Core.Tools.Number;
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.SmartHome.Senec.Jobs;
 
     /// <summary>
     /// Provides a plugin for the Senec battery storage.
     /// </summary>
-    public class SenecPlugin : ISmartHomeUiPlugin, IObservable<SmartHomeDictionary>, IAllowsGenericDataExchange<SmartHomeDictionary>, IContainsSettings
+    public class SenecPlugin : ISmartHomeUiPlugin, IObservable<SmartHomeDictionary>, IAllowsGenericDataExchange<SmartHomeDictionary>, IContainsSettings,
+        IRunsBackgroundTask
     {
         /// <summary>
         /// The list of all smart home observers.
@@ -38,6 +45,8 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public SenecPlugin()
         {
+            Logger.Debug("Construct SENEC plugin\r\nStacktrace: {0}", Environment.StackTrace);
+
             this.smartHomeObservers = new List<IObserver<SmartHomeDictionary>>();
         }
 
@@ -118,6 +127,17 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         public Grid MainGrid { get; set; }
 
         /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        private static Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
+            }
+        }
+
+        /// <summary>
         /// Display the plugin.
         /// </summary>
         /// <param name="mainGrid">The main grid.</param>
@@ -158,6 +178,40 @@ namespace SoluiNet.DevTools.SmartHome.Senec
 
                 ((Grid)tabItem.Content).Children.Add(new SenecUserControl());
             }
+        }
+
+        /// <summary>
+        /// Runs a background task which will check for new data every 30 seconds.
+        /// </summary>
+        /// <returns>Returns a <see cref="Task"/> which will be executed in the background.</returns>
+        public async Task ExecuteBackgroundTask()
+        {
+            // construct a scheduler factory
+            var props = new NameValueCollection
+            {
+                { "quartz.serializer.type", "binary" },
+            };
+            var factory = new StdSchedulerFactory(props);
+
+            // get a scheduler
+            var scheduler = await factory.GetScheduler().ConfigureAwait(true);
+            await scheduler.Start().ConfigureAwait(true);
+
+            var observerJob = JobBuilder.Create<CallObserversWithNewDataJob>()
+                .WithIdentity("DeliverNewDataToObserversJob", "SmartHome.Senec")
+                .Build();
+
+            var observerTrigger = TriggerBuilder.Create()
+                .WithIdentity("DeliverNewDataToObservers", "SmartHome.Senec")
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInSeconds(30)
+                    .RepeatForever())
+                .Build();
+
+            scheduler.JobFactory = new ObserverJobFactory(this.smartHomeObservers);
+
+            await scheduler.ScheduleJob(observerJob, observerTrigger).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -261,11 +315,17 @@ namespace SoluiNet.DevTools.SmartHome.Senec
                     .GetAwaiter()
                     .GetResult();
 
+                Logger.Debug("SmartHome.Senec - Response: {0}", responseString);
+
                 dynamic responseObject = JsonConvert.DeserializeObject(responseString);
 
                 return new SmartHomeDictionary("Senec.PowerValues")
                 {
+                    { "Power.Battery", this.DecodeSenecValues(responseObject.ENERGY.GUI_BAT_DATA_POWER.Value) },
+                    { "Power.Charge", this.DecodeSenecValues(responseObject.ENERGY.GUI_BAT_DATA_FUEL_CHARGE.Value) },
                     { "Power.Grid", this.DecodeSenecValues(responseObject.ENERGY.GUI_GRID_POW.Value) },
+                    { "Power.House", this.DecodeSenecValues(responseObject.ENERGY.GUI_HOUSE_POW.Value) },
+                    { "Power.Inverter", this.DecodeSenecValues(responseObject.ENERGY.GUI_INVERTER_POWER.Value) },
                 };
             }
 
@@ -330,19 +390,10 @@ namespace SoluiNet.DevTools.SmartHome.Senec
             switch (prefix)
             {
                 case "fl_":
-                    var sign = (number & 0x80000000) == 0x80000000 ? -1 : 1;
-                    var exponent = ((number >> 23) & 0xff) - 127;
-                    var mantissa = ((number & 0x7fffff) + 0x800000).ToString();
+                    var numberValue = uint.Parse(valueString, System.Globalization.NumberStyles.AllowHexSpecifier);
+                    var numberBytes = BitConverter.GetBytes(numberValue);
 
-                    double result = 0;
-
-                    for (var i = 0; i < mantissa.Length; i++)
-                    {
-                        result += mantissa[i] == '1' ? Math.Pow(2, exponent) : 0;
-                        exponent--;
-                    }
-
-                    return sign * result;
+                    return BitConverter.ToSingle(numberBytes, 0);
                 case "u1_":
                 case "u8_":
                     if (number < 10)

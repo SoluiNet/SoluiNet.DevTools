@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.UI
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows;
@@ -303,6 +304,14 @@ namespace SoluiNet.DevTools.UI
                             }
                         }
                     }
+                    catch (ReflectionTypeLoadException loadException)
+                    {
+                        Logger.Fatal(
+                            loadException,
+                            "Error (Load Exception) while assigning plugin types for assembly '{0}': {1}",
+                            assembly.FullName,
+                            loadException.LoaderExceptions.Select(x => x.Message).Aggregate((x, y) => x + "\r\n" + y));
+                    }
                     catch (Exception assignmentException)
                     {
                         App.Logger.Fatal(assignmentException, "Error while assigning plugin types for assembly '{0}'", assembly.FullName);
@@ -342,31 +351,61 @@ namespace SoluiNet.DevTools.UI
 
                 if (type.Value.Contains("SqlDev"))
                 {
-                    var plugin = (ISqlUiPlugin)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as ISqlUiPlugin;
+
+                    if (plugin == null)
+                    {
+                        plugin = (ISqlUiPlugin)Activator.CreateInstance(type.Key);
+                    }
+
                     this.SqlPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("SmartHomeDev"))
                 {
-                    var plugin = (ISmartHomeUiPlugin)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as ISmartHomeUiPlugin;
+
+                    if (plugin == null)
+                    {
+                        plugin = (ISmartHomeUiPlugin)Activator.CreateInstance(type.Key);
+                    }
+
                     this.SmartHomePlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("ManagementDev"))
                 {
-                    var plugin = (IManagementUiPlugin)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as IManagementUiPlugin;
+
+                    if (plugin == null)
+                    {
+                        plugin = (IManagementUiPlugin)Activator.CreateInstance(type.Key);
+                    }
+
                     this.ManagementPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("UtilityDev"))
                 {
-                    var plugin = (IUtilitiesDevPlugin)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as IUtilitiesDevPlugin;
+
+                    if (plugin == null)
+                    {
+                        plugin = (IUtilitiesDevPlugin)Activator.CreateInstance(type.Key);
+                    }
+
                     this.UtilityPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("BackgroundTask"))
                 {
-                    var plugin = (IRunsBackgroundTask)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as IRunsBackgroundTask;
+
+                    if (plugin == null)
+                    {
+                        plugin = (IRunsBackgroundTask)Activator.CreateInstance(type.Key);
+                    }
+
                     this.BackgroundTaskPlugins.Add(plugin);
 
                     Task.Run(() =>

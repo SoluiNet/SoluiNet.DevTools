@@ -18,7 +18,6 @@ namespace SoluiNet.DevTools.Core.Application.Adapter
     public class SettingsAdapter : IConfiguration
     {
         /// <inheritdoc />
-        /// <remarks>This adapter can only return if a plugin has been activated or not for the current environment.</remarks>
         public object GetByKey(string key, string plugin = "", string environment = "")
         {
             IContainsSettings pluginObject = null;

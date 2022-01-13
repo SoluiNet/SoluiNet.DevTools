@@ -12,6 +12,7 @@ namespace SoluiNet.DevTools.Core.Tools.Plugin
     using System.Linq;
     using System.Reflection;
     using NLog;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.ScriptEngine;
@@ -455,7 +456,13 @@ namespace SoluiNet.DevTools.Core.Tools.Plugin
 
                     if (type.GetInterface(pluginType.FullName) != null)
                     {
-                        var plugin = (T)Activator.CreateInstance(type);
+                        T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
+
+                        if (plugin == null)
+                        {
+                            plugin = (T)Activator.CreateInstance(type);
+                        }
+
                         pluginList.Add(plugin);
                     }
 
@@ -488,7 +495,13 @@ namespace SoluiNet.DevTools.Core.Tools.Plugin
                                 }
                             }
 
-                            var plugin = (T)Activator.CreateInstance(type);
+                            T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
+
+                            if (plugin == null)
+                            {
+                                plugin = (T)Activator.CreateInstance(type);
+                            }
+
                             pluginList.Add(plugin);
                         }
                     }
