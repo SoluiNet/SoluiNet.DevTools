@@ -7,11 +7,18 @@ namespace SoluiNet.DevTools.Communication.Telegram
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using global::Telegram.Bot;
+    using global::Telegram.Bot.Exceptions;
+    using global::Telegram.Bot.Extensions.Polling;
+    using global::Telegram.Bot.Types;
+    using global::Telegram.Bot.Types.Enums;
+    using NLog;
     using RestSharp;
     using RestSharp.Authenticators;
     using SoluiNet.DevTools.Core;
@@ -30,6 +37,34 @@ namespace SoluiNet.DevTools.Communication.Telegram
     public class TelegramPlugin : IAllowsDataExchange, IContainsSettings, IUtilitiesDevPlugin, IHandlesEvent<IInitializedEvent>,
         ICommunicationReceiver, ICommunicationSender
     {
+        /// <summary>
+        /// The Telegram bot.
+        /// </summary>
+        private TelegramBotClient telegramBot;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TelegramPlugin"/> class.
+        /// </summary>
+        public TelegramPlugin()
+        {
+            this.telegramBot = new TelegramBotClient(ApplicationContext.Configuration.Settings.GetByKey("Telegram.AccessToken", "Telegram").ToString());
+
+            var botInfo = this.telegramBot.GetMeAsync().ConfigureAwait(true).GetAwaiter().GetResult();
+
+            using (var cts = new CancellationTokenSource())
+            {
+                // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
+                var receiverOptions = new ReceiverOptions() { AllowedUpdates = { } };
+                this.telegramBot.StartReceiving(
+                    this.HandleTelegramUpdates,
+                    this.HandleTelegramErrors,
+                    receiverOptions,
+                    cts.Token);
+
+                Logger.Info($"Start listening for @{botInfo.Username}");
+            }
+        }
+
         /// <summary>
         /// Gets the technical name of the plugin.
         /// </summary>
@@ -64,6 +99,17 @@ namespace SoluiNet.DevTools.Communication.Telegram
             get
             {
                 return new List<string>() { "Message" };
+            }
+        }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        private static Logger Logger
+        {
+            get
+            {
+                return LogManager.GetCurrentClassLogger();
             }
         }
 
@@ -173,6 +219,42 @@ namespace SoluiNet.DevTools.Communication.Telegram
         public object SetData(object identifier, IDictionary<string, object> valueData)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Handle updates from Telegram.
+        /// </summary>
+        private async Task HandleTelegramUpdates(ITelegramBotClient client, Update update, CancellationToken cancellationToken)
+        {
+            if (update.Type == UpdateType.Message)
+            {
+                Logger.Info(CultureInfo.InvariantCulture, "Communication.Telegram - Message received: {0}", update.Message.Text);
+
+                await this.telegramBot.SendTextMessageAsync(
+                    chatId: update.Message.Chat.Id,
+                    text: "Message received",
+                    cancellationToken: cancellationToken)
+                    .ConfigureAwait(true);
+            }
+        }
+
+        /// <summary>
+        /// Handle errors from Telegram.
+        /// </summary>
+        private Task HandleTelegramErrors(ITelegramBotClient client, Exception exception, CancellationToken cancellationToken)
+        {
+            if (exception is ApiRequestException apiException)
+            {
+                Logger.Error(exception, "Communication.Telegram - API Error:\r\n{0}\r\n{1}", apiException.ErrorCode, apiException.Message);
+                throw new SoluiNetPluginException(
+                    string.Format(CultureInfo.InvariantCulture, "Communication.Telegram - API Error:\r\n{0}\r\n{1}", apiException.ErrorCode, apiException.Message),
+                    this);
+            }
+            else
+            {
+                Logger.Error(exception, "Communication.Telegram - Error:\r\n{0}", exception.Message);
+                throw exception;
+            }
         }
     }
 }
