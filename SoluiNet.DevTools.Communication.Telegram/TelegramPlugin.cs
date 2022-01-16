@@ -225,15 +225,67 @@ namespace SoluiNet.DevTools.Communication.Telegram
         /// </summary>
         private async Task HandleTelegramUpdates(ITelegramBotClient client, Update update, CancellationToken cancellationToken)
         {
+            const string unknownCommandMessage = "Unknown Command. Please use one of the following:\n" +
+                "/subscribe <entity>\n" +
+                "/versioninfo";
+
             if (update.Type == UpdateType.Message)
             {
                 Logger.Info(CultureInfo.InvariantCulture, "Communication.Telegram - Message received: {0}", update.Message.Text);
 
-                await this.telegramBot.SendTextMessageAsync(
-                    chatId: update.Message.Chat.Id,
-                    text: "Message received",
-                    cancellationToken: cancellationToken)
-                    .ConfigureAwait(true);
+                var messageText = update.Message.Text;
+
+                if (string.IsNullOrWhiteSpace(messageText) || !messageText.StartsWith("/", StringComparison.InvariantCulture))
+                {
+                    await this.telegramBot.SendTextMessageAsync(
+                        chatId: update.Message.Chat.Id,
+                        text: unknownCommandMessage,
+                        cancellationToken: cancellationToken)
+                        .ConfigureAwait(true);
+                }
+                else if (messageText.StartsWith("/", StringComparison.InvariantCulture))
+                {
+                    var messageParts = messageText.Split(' ');
+
+                    switch (messageParts[0])
+                    {
+                        case "/subscribe":
+                            if (messageParts.Length <= 1)
+                            {
+                                await this.telegramBot.SendTextMessageAsync(
+                                    chatId: update.Message.Chat.Id,
+                                    text: "Please provide an entity name",
+                                    cancellationToken: cancellationToken)
+                                    .ConfigureAwait(true);
+
+                                return;
+                            }
+
+                            Logger.Debug(
+                                CultureInfo.InvariantCulture,
+                                "Communication.Telegram - Called /subscribe with following parameters: {0}",
+                                messageParts.Skip(1).Aggregate((x, y) => x + " " + y));
+                            break;
+                        case "/versioninfo":
+                            await this.telegramBot.SendTextMessageAsync(
+                                chatId: update.Message.Chat.Id,
+                                text: string.Format(
+                                    CultureInfo.InvariantCulture,
+                                    "Provided by SoluiNet.DevTools v{0} and Communication.Telegram v{1}",
+                                    ApplicationContext.Application.Version,
+                                    this.GetType().Assembly.GetName().Version),
+                                cancellationToken: cancellationToken)
+                                .ConfigureAwait(true);
+                            break;
+                        default:
+                            await this.telegramBot.SendTextMessageAsync(
+                                chatId: update.Message.Chat.Id,
+                                text: unknownCommandMessage,
+                                cancellationToken: cancellationToken)
+                                .ConfigureAwait(true);
+                            break;
+                    }
+                }
             }
         }
 

@@ -17,6 +17,11 @@ namespace SoluiNet.DevTools.Core.Application
     public interface ISoluiNetApp
     {
         /// <summary>
+        /// Gets the version.
+        /// </summary>
+        string Version { get; }
+
+        /// <summary>
         /// Gets all available plugins.
         /// </summary>
         ICollection<IBasePlugin> Plugins { get; }

@@ -43,6 +43,15 @@ namespace SoluiNet.DevTools.Core.Application
         /// </summary>
         public ICollection<ISoluiNetService> Services { get; }
 
+        /// <inheritdoc/>
+        public string Version
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        }
+
         /// <summary>
         /// Gets the logger.
         /// </summary>

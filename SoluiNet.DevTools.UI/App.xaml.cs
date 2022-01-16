@@ -98,6 +98,15 @@ namespace SoluiNet.DevTools.UI
             }
         }
 
+        /// <inheritdoc/>
+        public string Version
+        {
+            get
+            {
+                return this.baseApp.Version;
+            }
+        }
+
         /// <summary>
         /// Gets the logger.
         /// </summary>
