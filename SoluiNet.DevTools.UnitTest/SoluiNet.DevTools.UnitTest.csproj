@@ -17,7 +17,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\build\$(TargetFramework)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>..\build\test\$(Configuration)\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn),SA1123</NoWarn>
   </PropertyGroup>

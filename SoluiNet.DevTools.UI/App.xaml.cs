@@ -128,6 +128,8 @@ namespace SoluiNet.DevTools.UI
                 this.baseApp.Initialize();
 
                 App.CallStartupEvent();
+
+                App.CallInitializedEvent();
             }
             catch (Exception exception)
             {
@@ -161,6 +163,14 @@ namespace SoluiNet.DevTools.UI
             foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IStartupEvent>>())
             {
                 plugin.HandleEvent<IStartupEvent>(new Dictionary<string, object>());
+            }
+        }
+
+        private static void CallInitializedEvent()
+        {
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IInitializedEvent>>())
+            {
+                plugin.HandleEvent<IInitializedEvent>(new Dictionary<string, object>());
             }
         }
 

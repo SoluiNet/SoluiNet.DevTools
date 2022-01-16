@@ -168,8 +168,15 @@ namespace SoluiNet.DevTools.Core.Application
 
                         if (type.GetInterface(serviceType.FullName) != null)
                         {
-                            var serviceObject = (ISoluiNetService)Activator.CreateInstance(type);
-                            this.Services.Add(serviceObject);
+                            Logger.Debug("Found class '{0}' in assembly '{1}'", type.FullName, assembly.FullName);
+
+                            if (!this.Services.Any(x => x.GetType() == type))
+                            {
+                                Logger.Debug("Create new instance of '{0}' from assembly '{1}'", type.FullName, assembly.FullName);
+
+                                var serviceObject = (ISoluiNetService)Activator.CreateInstance(type);
+                                this.Services.Add(serviceObject);
+                            }
                         }
                     }
                 }

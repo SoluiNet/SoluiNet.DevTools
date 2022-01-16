@@ -477,32 +477,17 @@ namespace SoluiNet.DevTools.Core.Tools.Plugin
 
                         foreach (var typeInterface in typeInterfaces)
                         {
-                            var pluginGenericArguments = pluginType.GetGenericArguments();
-                            var typeGenericArguments = typeInterface.GetGenericArguments();
-
-                            if (pluginGenericArguments.Length != typeGenericArguments.Length)
+                            if (VerifyGenericType(pluginType, typeInterface))
                             {
-                                continue;
-                            }
+                                T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
 
-                            for (int i = 0; i < pluginGenericArguments.Length; i++)
-                            {
-                                var genericArgument = pluginGenericArguments[i];
-
-                                if (genericArgument.GetType() != typeGenericArguments[i].GetType())
+                                if (plugin == null)
                                 {
-                                    continue;
+                                    plugin = (T)Activator.CreateInstance(type);
                                 }
+
+                                pluginList.Add(plugin);
                             }
-
-                            T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
-
-                            if (plugin == null)
-                            {
-                                plugin = (T)Activator.CreateInstance(type);
-                            }
-
-                            pluginList.Add(plugin);
                         }
                     }
                 }
@@ -531,6 +516,35 @@ namespace SoluiNet.DevTools.Core.Tools.Plugin
             }
 
             return default;
+        }
+
+        /// <summary>
+        /// Verify if a type implements the comparing type.
+        /// </summary>
+        /// <param name="sourceType">The source type.</param>
+        /// <param name="comparingType">The comparing type.</param>
+        /// <returns>Returns <c>true</c> if the comparing type implements the source type.</returns>
+        private static bool VerifyGenericType(Type sourceType, Type comparingType)
+        {
+            var sourceGenericArguments = sourceType.GetGenericArguments();
+            var comparisonGenericArguments = comparingType.GetGenericArguments();
+
+            if (sourceGenericArguments.Length != comparisonGenericArguments.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < sourceGenericArguments.Length; i++)
+            {
+                var genericArgument = sourceGenericArguments[i];
+
+                if (genericArgument.FullName != comparisonGenericArguments[i].FullName)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
