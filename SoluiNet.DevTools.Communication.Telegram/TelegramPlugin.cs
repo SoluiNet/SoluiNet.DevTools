@@ -47,22 +47,6 @@ namespace SoluiNet.DevTools.Communication.Telegram
         /// </summary>
         public TelegramPlugin()
         {
-            this.telegramBot = new TelegramBotClient(ApplicationContext.Configuration.Settings.GetByKey("Telegram.AccessToken", "Telegram").ToString());
-
-            var botInfo = this.telegramBot.GetMeAsync().ConfigureAwait(true).GetAwaiter().GetResult();
-
-            using (var cts = new CancellationTokenSource())
-            {
-                // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
-                var receiverOptions = new ReceiverOptions() { AllowedUpdates = { } };
-                this.telegramBot.StartReceiving(
-                    this.HandleTelegramUpdates,
-                    this.HandleTelegramErrors,
-                    receiverOptions,
-                    cts.Token);
-
-                Logger.Info($"Start listening for @{botInfo.Username}");
-            }
         }
 
         /// <summary>
@@ -179,7 +163,22 @@ namespace SoluiNet.DevTools.Communication.Telegram
         {
             if (typeof(T).IsAssignableFrom(typeof(IInitializedEvent)))
             {
-                this.Send("Initialized", "@kimiyou88");
+                this.telegramBot = new TelegramBotClient(ApplicationContext.Configuration.Settings.GetByKey("Telegram.AccessToken", "Telegram").ToString());
+
+                var botInfo = this.telegramBot.GetMeAsync().ConfigureAwait(true).GetAwaiter().GetResult();
+
+                using (var cts = new CancellationTokenSource())
+                {
+                    // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
+                    var receiverOptions = new ReceiverOptions() { AllowedUpdates = { } };
+                    this.telegramBot.StartReceiving(
+                        this.HandleTelegramUpdates,
+                        this.HandleTelegramErrors,
+                        receiverOptions,
+                        cts.Token);
+
+                    Logger.Info($"Start listening for @{botInfo.Username}");
+                }
             }
         }
 
