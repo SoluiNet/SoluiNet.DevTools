@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{D67F9324-6710-4144-8BA0-B446CD4CB28A}</ProjectGuid>
-    <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>net6.0</TargetFramework>
+    <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.DataExchange.Jira</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.DataExchange.Jira</Product>
@@ -40,7 +42,13 @@
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="107.0.3" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212401">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Web" />
@@ -57,7 +65,7 @@
       <DependentUpon>JiraUserControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Page Include="JiraUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

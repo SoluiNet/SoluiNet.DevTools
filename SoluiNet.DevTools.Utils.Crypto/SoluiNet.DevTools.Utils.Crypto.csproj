@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>net6.0</TargetFramework>
+    <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.Utils.Crypto</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Utils.Crypto</Product>
@@ -36,7 +38,13 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212401">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Xaml" />
@@ -47,7 +55,7 @@
       <DependentUpon>CryptoToolsUserControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Page Include="CryptoToolsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -59,20 +67,6 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="obj\x64\Debug\CryptoToolsUserControl.g.cs" />
-    <Compile Remove="obj\x64\Debug\CryptoToolsUserControl.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Remove="obj\x64\Debug\net461\CryptoToolsUserControl.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\CryptoToolsUserControl.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\SoluiNet.DevTools.Utils.Crypto.AssemblyInfo.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="SoluiNet.DevTools.Utils.Crypto.csproj~RF2f0f0ad8.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>

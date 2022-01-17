@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{B6D04A38-C980-4CEF-93F7-A8FB80F4EEAB}</ProjectGuid>
-    <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>net6.0</TargetFramework>
+    <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.UI.Sql</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.UI.Sql</Product>
@@ -30,11 +32,19 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212401">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -64,7 +74,7 @@
       <DependentUpon>SqlUiElement.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Page Include="PrepareText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

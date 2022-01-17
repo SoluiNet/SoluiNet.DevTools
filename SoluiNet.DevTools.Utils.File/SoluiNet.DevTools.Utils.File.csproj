@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>net6.0</TargetFramework>
+    <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.Utils.File</AssemblyTitle>
     <Product>SoluiNet.DevTools.Utils.File</Product>
     <Copyright>Copyright ©  2019</Copyright>
@@ -36,7 +38,13 @@
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212401">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows.Forms" />
@@ -60,30 +68,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="obj\x64\Debug\FileToolsUserControl.g.cs" />
-    <Compile Remove="obj\x64\Debug\FileToolsUserControl.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Remove="obj\x64\Debug\net461\SoluiNet.DevTools.Utils.File.AssemblyInfo.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Remove="obj\x86\Debug\net461\FileToolsUserControl.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\FileToolsUserControl.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\SoluiNet.DevTools.Utils.File.AssemblyInfo.cs" />
-    <Compile Remove="obj\x86\Debug\net461\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x86\Debug\net461\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x86\Debug\net461\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="SoluiNet.DevTools.Utils.File.csproj~RF2f0fd5f8.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <None Update="FileToolsUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>

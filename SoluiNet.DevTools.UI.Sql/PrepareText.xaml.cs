@@ -46,7 +46,7 @@ namespace SoluiNet.DevTools.UI.Sql
             }
             else
             {
-                outputText = outputText.Replace(this.Pattern.Text, this.Replacement.Text);
+                outputText = outputText.Replace(this.Pattern.Text, this.Replacement.Text, StringComparison.InvariantCulture);
             }
 
             if (this.Trim.IsChecked.HasValue && this.Trim.IsChecked.Value)

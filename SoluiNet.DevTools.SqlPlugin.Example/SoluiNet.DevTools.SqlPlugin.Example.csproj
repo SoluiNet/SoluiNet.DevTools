@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>net6.0</TargetFramework>
+    <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.SqlPlugin.Example</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.SqlPlugin.Example</Product>
@@ -38,7 +40,17 @@
     <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.115.5" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212401">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -47,8 +59,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -67,27 +77,13 @@
     <EmbeddedResource Include="Settings\Settings.xml" />
     <EmbeddedResource Include="WebClientDefinition\WebClientDefinition.xml" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Page Include="ExampleUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="obj\x64\Debug\ExampleUserControl.g.cs" />
-    <Compile Remove="obj\x64\Debug\ExampleUserControl.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Remove="obj\x64\Debug\net461\ExampleUserControl.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\ExampleUserControl.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\SoluiNet.DevTools.SqlPlugin.Example.AssemblyInfo.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="SoluiNet.DevTools.SqlPlugin.Example.csproj~RF2f0dd120.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
