@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
     <ProjectGuid>{5D251F69-C19E-44E5-9FEF-D9E8F1AF1C9F}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
@@ -10,17 +10,26 @@
     <Copyright>Copyright © SoluiNet 2019</Copyright>
     <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
     <DefineConstants Condition=" '$(TargetFramework)' == 'net6.0-windows'">COMPILED_FOR_NET60</DefineConstants>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\build\core\$(Configuration)\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1701;1702;CA1716</NoWarn>
+    <TypescriptOutDir>wwwroot</TypescriptOutDir>
+    <ResolveCurrentProjectStaticWebAssetsInputsDependsOn>
+      CompileTypeScript;
+      $(ResolveCurrentProjectStaticWebAssetsInputs)
+    </ResolveCurrentProjectStaticWebAssetsInputsDependsOn>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
@@ -39,6 +48,9 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+  <ItemGroup>
     <Watch Include="**\*.cshtml" />
     <Watch Include="**\*.razor" />    
   </ItemGroup>
@@ -46,6 +58,15 @@
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
+    <Watch Remove="_Imports.razor" />
+  </ItemGroup>
+  <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 </Project>

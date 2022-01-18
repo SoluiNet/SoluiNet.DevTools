@@ -10,8 +10,6 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using System.Windows.Controls;
-    using System.Windows.Media;
     using SoluiNet.DevTools.Core.Plugin;
 
     /// <summary>
