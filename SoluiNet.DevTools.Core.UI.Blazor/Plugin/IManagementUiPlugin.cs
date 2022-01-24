@@ -17,10 +17,5 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     /// </summary>
     public interface IManagementUiPlugin : IThemable
     {
-        /// <summary>
-        /// Method which should be executed to display the plugin in an WPF application.
-        /// </summary>
-        /// <param name="mainGrid">The grid in which the plugin should be displayed.</param>
-        void Display(Grid mainGrid);
     }
 }

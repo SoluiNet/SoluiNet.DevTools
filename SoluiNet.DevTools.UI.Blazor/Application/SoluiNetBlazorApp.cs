@@ -1,10 +1,14 @@
-﻿namespace SoluiNet.DevTools.UI.Blazor.Application
+﻿// <copyright file="SoluiNetBlazorApp.cs" company="SoluiNet">
+// Copyright (c) SoluiNet. All rights reserved.
+// </copyright>
+
+namespace SoluiNet.DevTools.UI.Blazor.Application
 {
+    using System.Collections.Generic;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.UI.Blazor.Application;
     using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
     using SoluiNet.DevTools.Core.UI.UIElement;
-    using System.Collections.Generic;
 
     /// <summary>
     /// The solui.net Blazor App.

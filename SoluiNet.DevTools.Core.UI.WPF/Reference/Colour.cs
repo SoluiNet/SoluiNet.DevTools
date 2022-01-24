@@ -2,10 +2,11 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.UI.Blazor.Reference
+namespace SoluiNet.DevTools.Core.UI.WPF.Reference
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Globalization;
     using System.Linq;
     using System.Text;
@@ -17,6 +18,8 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Reference
     /// </summary>
     public class Colour : IColour
     {
+        private Color color;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Colour"/> class.
         /// </summary>
@@ -25,9 +28,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Reference
         /// <param name="blue">The blue parts.</param>
         public Colour(byte red, byte green, byte blue)
         {
-            this.Red = red;
-            this.Green = green;
-            this.Blue = blue;
+            this.color = Color.FromArgb(0x00, red, green, blue);
         }
 
         /// <summary>
@@ -39,32 +40,77 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Reference
         /// <param name="transparency">The transparency.</param>
         /// <exception cref="ArgumentOutOfRangeException">Throws <see cref="ArgumentOutOfRangeException"/> if transparency is more than 100%.</exception>
         public Colour(byte red, byte green, byte blue, byte transparency)
-            : this(red, green, blue)
         {
             if (transparency > 100)
             {
                 throw new ArgumentOutOfRangeException(nameof(transparency), "Transparency can be maximum 100%");
             }
+
+            this.color = Color.FromArgb(transparency, red, green, blue);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Colour"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        public Colour(string name)
+        {
+            this.color = Color.FromName(name);
         }
 
         /// <summary>
         /// Gets the red parts in the colour.
         /// </summary>
-        public byte Red { get; }
+        public byte Red
+        {
+            get
+            {
+                return this.color.R;
+            }
+        }
 
         /// <summary>
         /// Gets the green parts in the colour.
         /// </summary>
-        public byte Green { get; }
+        public byte Green
+        {
+            get
+            {
+                return this.color.G;
+            }
+        }
 
         /// <summary>
         /// Gets the blue parts in the colour.
         /// </summary>
-        public byte Blue { get; }
+        public byte Blue
+        {
+            get
+            {
+                return this.color.B;
+            }
+        }
 
         /// <summary>
         /// Gets the transparency of the colour.
         /// </summary>
-        public byte Transparency { get; }
+        public byte Transparency
+        {
+            get
+            {
+                return this.color.A;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Color"/> object.
+        /// </summary>
+        public Color Value
+        {
+            get
+            {
+                return this.color;
+            }
+        }
     }
 }

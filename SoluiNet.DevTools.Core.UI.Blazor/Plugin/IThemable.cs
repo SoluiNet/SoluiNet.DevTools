@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     using System.Text;
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.UI.Blazor.Reference;
 
     /// <summary>
@@ -20,26 +21,26 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
         /// <summary>
         /// Gets the first colour accent.
         /// </summary>
-        Colour AccentColour1 { get; }
+        IColour AccentColour1 { get; }
 
         /// <summary>
         /// Gets the second colour accent.
         /// </summary>
-        Colour AccentColour2 { get; }
+        IColour AccentColour2 { get; }
 
         /// <summary>
         /// Gets the foreground colour.
         /// </summary>
-        Colour ForegroundColour { get; }
+        IColour ForegroundColour { get; }
 
         /// <summary>
         /// Gets the background colour.
         /// </summary>
-        Colour BackgroundColour { get; }
+        IColour BackgroundColour { get; }
 
         /// <summary>
         /// Gets the background accent colour.
         /// </summary>
-        Colour BackgroundAccentColour { get; }
+        IColour BackgroundAccentColour { get; }
     }
 }

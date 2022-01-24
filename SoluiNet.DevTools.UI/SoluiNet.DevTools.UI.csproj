@@ -41,6 +41,10 @@
     <PackageIcon>..\icons\solui_logo_128x128.png</PackageIcon>
     <PackageReadmeFile>..\README.md</PackageReadmeFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="LiveCharts" Version="0.9.7" />
