@@ -5,7 +5,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.Utils.File</AssemblyTitle>
     <Product>SoluiNet.DevTools.Utils.File</Product>
-    <Copyright>Copyright ©  2019</Copyright>
+    <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
