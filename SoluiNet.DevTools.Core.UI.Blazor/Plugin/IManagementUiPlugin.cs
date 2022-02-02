@@ -15,7 +15,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     /// <summary>
     /// Provides the interface for a plugin which will provide UI elements for Management functions.
     /// </summary>
-    public interface IManagementUiPlugin : IThemable
+    public interface IManagementUiPlugin : IBlazorPlugin, IThemable
     {
     }
 }

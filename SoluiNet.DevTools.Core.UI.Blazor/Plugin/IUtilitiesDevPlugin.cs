@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     /// <summary>
     /// Provides an interface for plugins which provides utility functions.
     /// </summary>
-    public interface IUtilitiesDevPlugin : IBasePlugin
+    public interface IUtilitiesDevPlugin : IBlazorPlugin, IBasePlugin
     {
         /// <summary>
         /// Gets the label which should be used for menu items.

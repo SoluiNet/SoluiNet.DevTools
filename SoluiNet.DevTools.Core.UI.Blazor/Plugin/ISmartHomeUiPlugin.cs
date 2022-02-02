@@ -15,7 +15,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     /// <summary>
     /// Provides the interface for a plugin which will provide UI elements for Smart Home functions.
     /// </summary>
-    public interface ISmartHomeUiPlugin : IThemable, ISupportsStorage
+    public interface ISmartHomeUiPlugin : IBlazorPlugin, IThemable, ISupportsStorage
     {
     }
 }

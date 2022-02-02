@@ -15,7 +15,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     /// <summary>
     /// Provides the interface for a plugin which will provide UI elements for SQL functions.
     /// </summary>
-    public interface ISqlUiPlugin : IProvidesDatabaseConnectivity, IThemable
+    public interface ISqlUiPlugin : IBlazorPlugin, IProvidesDatabaseConnectivity, IThemable
     {
     }
 }
