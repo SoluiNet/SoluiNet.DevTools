@@ -17,6 +17,9 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     /// <summary>
     /// Provides an interface for blazor plugins.
     /// </summary>
+    /// <remarks>
+    /// See also: http://codegator.com/blazor-plugins-part-1/.
+    /// </remarks>
     public interface IBlazorPlugin
     {
         /// <summary>

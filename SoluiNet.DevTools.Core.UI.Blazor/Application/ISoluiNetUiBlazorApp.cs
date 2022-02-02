@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Application
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
     using SoluiNet.DevTools.Core.Plugin;
@@ -38,5 +39,10 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Application
         /// Gets all available plugins that provide utility functions.
         /// </summary>
         ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; }
+
+        /// <summary>
+        /// Gets all assemblies that hold a blazor component.
+        /// </summary>
+        ICollection<Assembly> Assemblies { get; }
     }
 }

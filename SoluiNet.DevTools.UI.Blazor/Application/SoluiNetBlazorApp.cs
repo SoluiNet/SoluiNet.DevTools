@@ -5,6 +5,7 @@
 namespace SoluiNet.DevTools.UI.Blazor.Application
 {
     using System.Collections.Generic;
+    using System.Reflection;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.UI.Blazor.Application;
     using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
@@ -53,6 +54,15 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
 
         /// <inheritdoc/>
         public ICollection<ISoluiNetUIElement> UiElements
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <inheritdoc/>
+        public ICollection<Assembly> Assemblies
         {
             get
             {
