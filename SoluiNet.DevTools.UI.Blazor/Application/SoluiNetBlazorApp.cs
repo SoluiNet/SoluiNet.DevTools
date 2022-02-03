@@ -69,5 +69,44 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
                 throw new NotImplementedException();
             }
         }
+
+        /// <inheritdoc/>
+        public ICollection<IBlazorPlugin> BlazorPlugins
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <inheritdoc/>
+        public ICollection<string> StyleSheets
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <inheritdoc/>
+        public ICollection<string> Scripts
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <inheritdoc/>
+        public string RenderCss()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public string RenderScripts(bool aboveTheFold = false)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

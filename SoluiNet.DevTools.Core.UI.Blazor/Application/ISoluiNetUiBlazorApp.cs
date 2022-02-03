@@ -44,5 +44,32 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Application
         /// Gets all assemblies that hold a blazor component.
         /// </summary>
         ICollection<Assembly> Assemblies { get; }
+
+        /// <summary>
+        /// Gets all available plugins that provide blazor UI.
+        /// </summary>
+        ICollection<IBlazorPlugin> BlazorPlugins { get; }
+
+        /// <summary>
+        /// Gets a list of all style sheets.
+        /// </summary>
+        ICollection<string> StyleSheets { get; }
+
+        /// <summary>
+        /// Gets a list of all scripts.
+        /// </summary>
+        ICollection<string> Scripts { get; }
+
+        /// <summary>
+        /// Render the style sheets.
+        /// </summary>
+        /// <returns>Returns a <see cref="string"/> which contains raw HTML to include the style sheets.</returns>
+        string RenderCss();
+
+        /// <summary>
+        /// Render the scripts.
+        /// </summary>
+        /// <returns>Returns a <see cref="string"/> which contains raw HTML to include the scripts.</returns>
+        string RenderScripts(bool aboveTheFold = false);
     }
 }
