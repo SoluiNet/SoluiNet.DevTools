@@ -16,6 +16,17 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
     /// </summary>
     public class SoluiNetBlazorApp : BaseSoluiNetApp, ISoluiNetUiBlazorApp
     {
+        private List<IBlazorPlugin> blazorPlugins;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SoluiNetBlazorApp"/> class.
+        /// </summary>
+        public SoluiNetBlazorApp()
+        {
+            this.blazorPlugins = new List<IBlazorPlugin>();
+            //this.blazorPlugins.InitializePlugins(this.Plugins);
+        }
+
         /// <inheritdoc/>
         public ICollection<ISqlUiPlugin> SqlPlugins
         {

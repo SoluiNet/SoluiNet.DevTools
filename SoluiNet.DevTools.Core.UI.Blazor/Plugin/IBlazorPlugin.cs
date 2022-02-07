@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using SoluiNet.DevTools.Core.Plugin;
 
     /// <summary>
     /// Provides an interface for blazor plugins.
@@ -20,7 +21,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     /// <remarks>
     /// See also: http://codegator.com/blazor-plugins-part-1/.
     /// </remarks>
-    public interface IBlazorPlugin
+    public interface IBlazorPlugin : IBasePlugin
     {
         /// <summary>
         /// Configure the services.

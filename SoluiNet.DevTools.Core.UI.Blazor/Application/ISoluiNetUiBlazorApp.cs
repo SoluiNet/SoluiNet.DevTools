@@ -69,6 +69,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Application
         /// <summary>
         /// Render the scripts.
         /// </summary>
+        /// <param name="aboveTheFold">A value indicating whether the scripts should be rendered above the fold or not.</param>
         /// <returns>Returns a <see cref="string"/> which contains raw HTML to include the scripts.</returns>
         string RenderScripts(bool aboveTheFold = false);
     }

@@ -69,6 +69,115 @@ namespace SoluiNet.DevTools.Core.Application
         }
 
         /// <summary>
+        /// Initialize the plugins.
+        /// </summary>
+        /// <typeparam name="TPlugin">The plugin type.</typeparam>
+        /// <param name="pluginList">The plugin list.</param>
+        /// <param name="alreadyInitializedList">The list of plugins that have already been initialized.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design",
+            "CA1031:Do not catch general exception types",
+            Justification = "We want to catch any exception that occurs during plugin load. Therefore the base exception type will be catched.")]
+        protected static void InitializePlugins<TPlugin>(this ICollection<TPlugin> pluginList, ICollection<IBasePlugin> alreadyInitializedList = null)
+            where TPlugin : IBasePlugin
+        {
+            if (pluginList == null)
+            {
+                throw new ArgumentNullException(nameof(pluginList));
+            }
+
+            /*if (alreadyInitializedList == null)
+            {
+                throw new ArgumentNullException(nameof(alreadyInitializedList));
+            }*/
+
+            string[] dllFileNames = null;
+            dllFileNames = Directory.GetFiles(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                "*.dll",
+                SearchOption.AllDirectories);
+
+            if (dllFileNames == null)
+            {
+                return;
+            }
+
+            ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
+            foreach (string dllFile in dllFileNames)
+            {
+                try
+                {
+                    var an = AssemblyName.GetAssemblyName(dllFile);
+                    var assembly = Assembly.Load(an);
+                    assemblies.Add(assembly);
+                }
+                catch (BadImageFormatException exception)
+                {
+                    Debug.WriteLine(JsonTools.Serialize(exception));
+                    Logger.Warn(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't load '{0}'", dllFile));
+                }
+            }
+
+            Type pluginType = typeof(TPlugin);
+
+            foreach (var assembly in assemblies)
+            {
+                if (assembly == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    var types = assembly.GetTypes();
+                    foreach (var type in types)
+                    {
+                        if (type.IsInterface || type.IsAbstract)
+                        {
+                            continue;
+                        }
+
+                        if (type.GetInterface(pluginType.FullName) != null)
+                        {
+                            Logger.Debug("Found class '{0}' in assembly '{1}'", type.FullName, assembly.FullName);
+
+                            if (alreadyInitializedList == null || !alreadyInitializedList.Any(x => x.GetType() == type))
+                            {
+                                Logger.Debug("Create new instance of '{0}' from assembly '{1}'", type.FullName, assembly.FullName);
+
+                                var pluginObject = (TPlugin)Activator.CreateInstance(type);
+                                alreadyInitializedList?.Add(pluginObject);
+
+                                pluginList.Add(pluginObject);
+                            }
+                            else
+                            {
+                                Logger.Debug("Add already initialized instance of '{0}' from assembly '{1}'", type.FullName, assembly.FullName);
+
+                                pluginList.Add((TPlugin)alreadyInitializedList.First(x => x.GetType() == type));
+                            }
+                        }
+                    }
+                }
+                catch (ReflectionTypeLoadException loadException)
+                {
+                    Logger.Fatal(
+                        loadException,
+                        "Error (Load Exception) while assigning plugin types for assembly '{0}': {1}",
+                        assembly.FullName,
+                        loadException.LoaderExceptions.Select(x => x.Message).Aggregate((x, y) => x + "\r\n" + y));
+                }
+                catch (Exception assignmentException)
+                {
+                    Logger.Fatal(assignmentException, "Error while assigning plugin types for assembly '{0}'", assembly.FullName);
+                }
+            }
+
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.AssemblyResolve += BaseSoluiNetApp.LoadAssembly;
+        }
+
+        /// <summary>
         /// Provide a default implementation for the assembly resolve event.
         /// </summary>
         /// <param name="sender">The sender which triggered the event.</param>
@@ -126,7 +235,10 @@ namespace SoluiNet.DevTools.Core.Application
         /// <summary>
         /// Load services for the application.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to catch any exception that occurs during plugin load. Therefore the base exception type will be catched.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Design", 
+            "CA1031:Do not catch general exception types", 
+            Justification = "We want to catch any exception that occurs during plugin load. Therefore the base exception type will be catched.")]
         private void LoadServices()
         {
             string[] dllFileNames = null;
