@@ -138,7 +138,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                return this.styles;
+                return this.styles.Select(x => !string.IsNullOrEmpty(x) ? x : string.Empty).ToList();
             }
         }
 
@@ -147,7 +147,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                return this.scripts;
+                return this.scripts.Select(x => !string.IsNullOrEmpty(x) ? x : string.Empty).ToList();
             }
         }
 
