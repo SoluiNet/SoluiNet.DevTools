@@ -21,7 +21,7 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     /// <remarks>
     /// See also: http://codegator.com/blazor-plugins-part-1/.
     /// </remarks>
-    public interface IBlazorPlugin : IBasePlugin
+    public interface IBlazorPlugin : IBasePlugin, IHoldsResources
     {
         /// <summary>
         /// Configure the services.

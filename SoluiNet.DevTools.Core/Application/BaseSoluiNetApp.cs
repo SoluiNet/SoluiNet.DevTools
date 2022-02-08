@@ -74,11 +74,15 @@ namespace SoluiNet.DevTools.Core.Application
         /// <typeparam name="TPlugin">The plugin type.</typeparam>
         /// <param name="pluginList">The plugin list.</param>
         /// <param name="alreadyInitializedList">The list of plugins that have already been initialized.</param>
+        /// <param name="correspondingAssemblies">The list of corresponding assemblies which will be filled once a plugin has been added.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
             "Design",
             "CA1031:Do not catch general exception types",
             Justification = "We want to catch any exception that occurs during plugin load. Therefore the base exception type will be catched.")]
-        protected static void InitializePlugins<TPlugin>(this ICollection<TPlugin> pluginList, ICollection<IBasePlugin> alreadyInitializedList = null)
+        protected static void InitializePlugins<TPlugin>(
+            ICollection<TPlugin> pluginList,
+            ICollection<IBasePlugin> alreadyInitializedList = null,
+            ICollection<Assembly> correspondingAssemblies = null)
             where TPlugin : IBasePlugin
         {
             if (pluginList == null)
@@ -149,12 +153,22 @@ namespace SoluiNet.DevTools.Core.Application
                                 alreadyInitializedList?.Add(pluginObject);
 
                                 pluginList.Add(pluginObject);
+
+                                if (correspondingAssemblies != null && !correspondingAssemblies.Contains(type.Assembly))
+                                {
+                                    correspondingAssemblies.Add(type.Assembly);
+                                }
                             }
                             else
                             {
                                 Logger.Debug("Add already initialized instance of '{0}' from assembly '{1}'", type.FullName, assembly.FullName);
 
                                 pluginList.Add((TPlugin)alreadyInitializedList.First(x => x.GetType() == type));
+
+                                if (correspondingAssemblies != null && !correspondingAssemblies.Contains(type.Assembly))
+                                {
+                                    correspondingAssemblies.Add(type.Assembly);
+                                }
                             }
                         }
                     }

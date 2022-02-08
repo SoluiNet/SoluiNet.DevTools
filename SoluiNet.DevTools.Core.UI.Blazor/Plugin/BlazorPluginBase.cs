@@ -20,15 +20,15 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Plugin
     public abstract class BlazorPluginBase : IBlazorPlugin
     {
         /// <inheritdoc />
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Dictionary<string, ICollection<object>> Resources { get; }
 
         /// <inheritdoc />
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract string Name { get; }
+
+        /// <inheritdoc />
+        public abstract void Configure(IApplicationBuilder app, IWebHostEnvironment environment);
+
+        /// <inheritdoc />
+        public abstract void ConfigureServices(IServiceCollection services, IConfiguration configuration);
     }
 }

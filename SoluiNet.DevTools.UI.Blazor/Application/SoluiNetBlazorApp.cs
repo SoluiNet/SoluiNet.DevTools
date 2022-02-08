@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
     using System.Collections.Generic;
     using System.Reflection;
     using SoluiNet.DevTools.Core.Application;
+    using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.UI.Blazor.Application;
     using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
     using SoluiNet.DevTools.Core.UI.UIElement;
@@ -17,14 +18,22 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
     public class SoluiNetBlazorApp : BaseSoluiNetApp, ISoluiNetUiBlazorApp
     {
         private List<IBlazorPlugin> blazorPlugins;
+        private List<Assembly> assemblies;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SoluiNetBlazorApp"/> class.
         /// </summary>
         public SoluiNetBlazorApp()
+            : base()
         {
+            this.assemblies = new List<Assembly>();
+
+            BaseSoluiNetApp.InitializePlugins<IBasePlugin>(this.Plugins);
+
             this.blazorPlugins = new List<IBlazorPlugin>();
-            //this.blazorPlugins.InitializePlugins(this.Plugins);
+            BaseSoluiNetApp.InitializePlugins<IBlazorPlugin>(this.blazorPlugins, this.Plugins, this.assemblies);
+
+            this.Initialize();
         }
 
         /// <inheritdoc/>
@@ -77,7 +86,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.assemblies;
             }
         }
 
@@ -86,7 +95,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.blazorPlugins;
             }
         }
 
