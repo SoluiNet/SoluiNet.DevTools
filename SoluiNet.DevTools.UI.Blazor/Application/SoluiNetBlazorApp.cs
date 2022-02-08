@@ -17,8 +17,15 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
     /// </summary>
     public class SoluiNetBlazorApp : BaseSoluiNetApp, ISoluiNetUiBlazorApp
     {
+        private List<ISqlUiPlugin> sqlPlugins;
+        private List<ISmartHomeUiPlugin> smartHomePlugins;
+        private List<IManagementUiPlugin> managementPlugins;
+        private List<IUtilitiesDevPlugin> utilityPlugins;
+        private List<ISoluiNetUIElement> uiElements;
         private List<IBlazorPlugin> blazorPlugins;
         private List<Assembly> assemblies;
+        private List<string?> scripts;
+        private List<string?> styles;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SoluiNetBlazorApp"/> class.
@@ -30,8 +37,35 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
 
             BaseSoluiNetApp.InitializePlugins<IBasePlugin>(this.Plugins);
 
+            this.sqlPlugins = new List<ISqlUiPlugin>();
+            BaseSoluiNetApp.InitializePlugins<ISqlUiPlugin>(this.sqlPlugins, this.Plugins);
+
+            this.smartHomePlugins = new List<ISmartHomeUiPlugin>();
+            BaseSoluiNetApp.InitializePlugins<ISmartHomeUiPlugin>(this.smartHomePlugins, this.Plugins);
+
+            this.managementPlugins = new List<IManagementUiPlugin>();
+            BaseSoluiNetApp.InitializePlugins<IManagementUiPlugin>(this.managementPlugins, this.Plugins);
+
+            this.utilityPlugins = new List<IUtilitiesDevPlugin>();
+            BaseSoluiNetApp.InitializePlugins<IUtilitiesDevPlugin>(this.utilityPlugins, this.Plugins);
+
+            this.uiElements = new List<ISoluiNetUIElement>();
+            /* BaseSoluiNetApp.InitializePlugins<ISoluiNetUIElement>(this.uiElements, this.Plugins); */
+
             this.blazorPlugins = new List<IBlazorPlugin>();
             BaseSoluiNetApp.InitializePlugins<IBlazorPlugin>(this.blazorPlugins, this.Plugins, this.assemblies);
+
+            this.scripts = new List<string?>();
+            this.styles = new List<string?>();
+
+            foreach (var plugin in this.blazorPlugins)
+            {
+                if (plugin is IHoldsResources resourcesPlugin)
+                {
+                    this.scripts.AddRange(resourcesPlugin.Resources["Scripts"].Select(x => x.ToString()));
+                    this.scripts.AddRange(resourcesPlugin.Resources["Styles"].Select(x => x.ToString()));
+                }
+            }
 
             this.Initialize();
         }
@@ -41,7 +75,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.sqlPlugins;
             }
         }
 
@@ -50,7 +84,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.smartHomePlugins;
             }
         }
 
@@ -59,7 +93,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.managementPlugins;
             }
         }
 
@@ -68,7 +102,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.utilityPlugins;
             }
         }
 
@@ -77,7 +111,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.uiElements;
             }
         }
 
@@ -104,7 +138,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.styles;
             }
         }
 
@@ -113,7 +147,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             get
             {
-                throw new NotImplementedException();
+                return this.scripts;
             }
         }
 
