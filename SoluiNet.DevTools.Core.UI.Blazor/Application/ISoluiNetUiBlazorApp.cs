@@ -56,7 +56,12 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Application
         ICollection<string> StyleSheets { get; }
 
         /// <summary>
-        /// Gets a list of all scripts.
+        /// Gets a list of all scripts that will be integrated above the fold.
+        /// </summary>
+        ICollection<string> AboveTheFoldScripts { get; }
+
+        /// <summary>
+        /// Gets a list of all scripts that will not be integrated above the fold (Default).
         /// </summary>
         ICollection<string> Scripts { get; }
 

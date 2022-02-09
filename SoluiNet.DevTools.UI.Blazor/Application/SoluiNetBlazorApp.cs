@@ -66,7 +66,7 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
                 {
                     this.aboveTheFoldScripts.AddRange(resourcesPlugin.Resources["AboveTheFoldScripts"].Select(x => x.ToString()));
                     this.scripts.AddRange(resourcesPlugin.Resources["Scripts"].Select(x => x.ToString()));
-                    this.scripts.AddRange(resourcesPlugin.Resources["Styles"].Select(x => x.ToString()));
+                    this.styles.AddRange(resourcesPlugin.Resources["Styles"].Select(x => x.ToString()));
                 }
             }
 
@@ -146,6 +146,15 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         }
 
         /// <inheritdoc/>
+        public ICollection<string> AboveTheFoldScripts
+        {
+            get
+            {
+                return this.aboveTheFoldScripts.Select(x => !string.IsNullOrEmpty(x) ? x : string.Empty).ToList();
+            }
+        }
+
+        /// <inheritdoc/>
         public ICollection<string> Scripts
         {
             get
@@ -159,7 +168,10 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
         {
             var renderedCode = string.Empty;
 
-            renderedCode += this.styles.Aggregate((x, y) => string.Format("{0}\r\n{1}", x, y));
+            if (this.styles.Count > 0)
+            {
+                renderedCode += this.StyleSheets.Aggregate((x, y) => string.Format("{0}\r\n{1}", x, y));
+            }
 
             return renderedCode;
         }
@@ -171,11 +183,17 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
 
             if (aboveTheFold)
             {
-                renderedCode += this.aboveTheFoldScripts.Aggregate((x, y) => string.Format("{0}\r\n{1}", x, y));
+                if (this.aboveTheFoldScripts.Count > 0)
+                {
+                    renderedCode += this.aboveTheFoldScripts.Aggregate((x, y) => string.Format("{0}\r\n{1}", x, y));
+                }
             }
             else
             {
-                renderedCode += this.scripts.Aggregate((x, y) => string.Format("{0}\r\n{1}", x, y));
+                if (this.scripts.Count > 0)
+                {
+                    renderedCode += this.Scripts.Aggregate((x, y) => string.Format("{0}\r\n{1}", x, y));
+                }
             }
 
             return renderedCode;
