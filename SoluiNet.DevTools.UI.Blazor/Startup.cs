@@ -47,7 +47,6 @@ namespace SoluiNet.DevTools.UI.Blazor
         /// <param name="environment">The environment.</param>
         public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)
         {
-
             // Configure the HTTP request pipeline.
             if (environment.EnvironmentName != "Development")
             {
