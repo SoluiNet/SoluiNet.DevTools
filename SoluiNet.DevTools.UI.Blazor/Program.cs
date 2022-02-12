@@ -2,38 +2,31 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-#pragma warning disable SA1200 // Using directives should be placed correctly
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using SoluiNet.DevTools.UI.Blazor.Application;
-#pragma warning restore SA1200 // Using directives should be placed correctly
+using Microsoft.AspNetCore;
+using SoluiNet.DevTools.UI.Blazor;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<SoluiNetBlazorApp>();
-/* builder.Services.AddSingleton<WeatherForecastService>(); */
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+/// <summary>
+/// The solui.net blazor app program.
+/// </summary>
+public class Program
 {
-    app.UseExceptionHandler("/Error");
+    /// <summary>
+    /// The main entry point.
+    /// </summary>
+    /// <param name="args">The arguments.</param>
+    public static void Main(string[] args)
+    {
+        var host = CreateWebHostBuilder(args).Build();
+        host.Run();
+    }
 
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    /// <summary>
+    /// Create the web host builder.
+    /// </summary>
+    /// <param name="args">The arguments.</param>
+    /// <returns>Returns a <see cref="IWebHostBuilder"/>.</returns>
+    public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+    {
+        return WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
-
-app.Run();
