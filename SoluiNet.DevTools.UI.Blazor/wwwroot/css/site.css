@@ -2,8 +2,15 @@
 
 @font-face {
     font-family: 'Neo Sans Std Medium';
-    src: url('fonts/Neo-Sans-Std-Medium.otf');
-    src: url('fonts/Neo-Sans-Std-Medium.otf') format("opentype");
+    src: url('fonts/Neo-Sans-Std/Neo-Sans-Std-Medium.otf');
+    src: url('fonts/Neo-Sans-Std/Neo-Sans-Std-Medium.otf') format("opentype");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato Bold';
+    src: url('fonts/Lato/Lato-Bold.ttf');
+    src: url('fonts/Lato/Lato-Bold.ttf') format("truetype");
     font-style: normal;
 }
 
