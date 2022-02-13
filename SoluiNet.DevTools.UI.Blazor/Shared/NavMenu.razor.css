@@ -4,12 +4,24 @@
 
 .top-row {
     height: 3.5rem;
-    background-color: rgba(0,5,13,0.7);
+    background-color: rgba(0,5,13);
 }
 
 .navbar-brand {
     font-size: 1.1rem;
 }
+
+    .navbar-brand .brand-image {
+        float: left;
+    }
+
+    .navbar-brand .brand-name {
+        float: left;
+    }
+
+    .navbar-brand .application-name {
+        float: left;
+    }
 
 .oi {
     width: 2rem;
