@@ -3,6 +3,7 @@
 // </copyright>
 
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using SoluiNet.DevTools.UI.Blazor;
 
 /// <summary>

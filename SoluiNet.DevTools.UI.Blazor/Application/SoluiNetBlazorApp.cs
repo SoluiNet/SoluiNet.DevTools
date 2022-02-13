@@ -5,6 +5,7 @@
 namespace SoluiNet.DevTools.UI.Blazor.Application
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
