@@ -9,18 +9,30 @@
 
 .navbar-brand {
     font-size: 1.1rem;
+    font-family: 'Neo Sans Std Medium';
+    margin-top: -0.5rem;
 }
 
-    .navbar-brand .brand-image {
+    .navbar-brand .brand-logo {
         float: left;
+        height: 3rem;
+    }
+
+    .navbar-brand .brand-description {
+        margin-top: -0.3rem;
     }
 
     .navbar-brand .brand-name {
-        float: left;
+        padding-left: 0.5rem;
+        font-weight: bold;
+        display: block;
+        margin-left: 3rem;
     }
 
     .navbar-brand .application-name {
-        float: left;
+        margin-left: 3rem;
+        padding-left: 1.75rem;
+        display: block;
     }
 
 .oi {
