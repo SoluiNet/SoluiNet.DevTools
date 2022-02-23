@@ -12,7 +12,10 @@ namespace SoluiNet.DevTools.SmartHome.Senec
     using System.Net.Http.Headers;
     using System.Security.Principal;
     using System.Threading.Tasks;
-#if !USE_BLAZOR
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
     using System.Windows.Media;
 #endif
@@ -28,10 +31,9 @@ namespace SoluiNet.DevTools.SmartHome.Senec
     using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.SmartHome.Data;
     using SoluiNet.DevTools.Core.Tools.Number;
-#if USE_BLAZOR
     using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
     using SoluiNet.DevTools.Core.UI.Blazor.Reference;
-#else
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 #endif
@@ -63,7 +65,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public IColour AccentColour1
         {
-            get { return new ColourFactory().FromRgb(58, 156, 223); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(58, 156, 223); }
         }
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public IColour AccentColour2
         {
-            get { return new ColourFactory().FromRgb(0xFF, 0xFF, 0xFF); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(0xFF, 0xFF, 0xFF); }
         }
 
         /// <summary>
@@ -79,7 +81,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public IColour ForegroundColour
         {
-            get { return new ColourFactory().FromRgb(0x00, 0x00, 0x00); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(0x00, 0x00, 0x00); }
         }
 
         /// <summary>
@@ -87,7 +89,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public IColour BackgroundColour
         {
-            get { return new ColourFactory().FromRgb(0xFF, 0xFF, 0xFF); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(0xFF, 0xFF, 0xFF); }
         }
 
         /// <summary>
@@ -95,7 +97,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// </summary>
         public IColour BackgroundAccentColour
         {
-            get { return new ColourFactory().FromRgb(58, 156, 223); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(58, 156, 223); }
         }
 
         /// <summary>
@@ -129,7 +131,13 @@ namespace SoluiNet.DevTools.SmartHome.Senec
             }
         }
 
-#if !USE_BLAZOR
+        /// <inheritdoc/>
+        public Dictionary<string, ICollection<object>> Resources
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Gets or sets the main grid.
         /// </summary>
@@ -147,7 +155,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
             }
         }
 
-#if !USE_BLAZOR
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Display the plugin.
         /// </summary>
@@ -386,6 +394,18 @@ namespace SoluiNet.DevTools.SmartHome.Senec
             }
 
             return new GenericUnsubscriber<List<IObserver<SmartHomeDictionary>>, SmartHomeDictionary>(this.smartHomeObservers, observer);
+        }
+
+        /// <inheritdoc/>
+        public void ConfigureServices(IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

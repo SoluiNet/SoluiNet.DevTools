@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{CB1DB5BC-9DD8-4050-919E-720B35DF882B}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
     <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.Core.UI.WPF</AssemblyTitle>

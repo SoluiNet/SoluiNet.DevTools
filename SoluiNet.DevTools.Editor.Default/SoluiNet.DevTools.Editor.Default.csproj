@@ -2,16 +2,20 @@
   <PropertyGroup>
     <!--<TargetFramework>net472</TargetFramework>-->
     <TargetFramework>net6.0</TargetFramework>
-    <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.Editor.Default</AssemblyTitle>
     <Product>SoluiNet.DevTools.Editor.Default</Product>
-    <Copyright>Copyright ©  2019</Copyright>
+    <Copyright>Copyright © SoluiNet 2019</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <UseWPF>true</UseWPF>
+    <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\build\plugins\$(Configuration)\Plugins\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>1701;1702;CA1716</NoWarn>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -49,7 +53,13 @@
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <Compile Update="DefaultEditorUserControl.xaml.cs">
+      <DependentUpon>DefaultEditorUserControl.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
     <Compile Update="DefaultEditorUserControl.xaml.cs">
       <DependentUpon>DefaultEditorUserControl.xaml</DependentUpon>
     </Compile>
@@ -65,6 +75,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
+    <None Remove="DefaultEditorUserControl.xaml" />
+    <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />

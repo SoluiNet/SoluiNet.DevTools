@@ -47,7 +47,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Reference
                 throw new ArgumentNullException(nameof(colour));
             }
 
-            if(!(colour is Colour))
+            if (!(colour is Colour))
             {
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} has not the correct type {1}", nameof(colour), typeof(Colour).FullName));
             }

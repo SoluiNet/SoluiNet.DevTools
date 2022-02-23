@@ -9,8 +9,10 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
     using System.Reflection;
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.UI.Blazor.Application;
     using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+    using SoluiNet.DevTools.Core.UI.Blazor.Reference;
     using SoluiNet.DevTools.Core.UI.UIElement;
 
     /// <summary>
@@ -70,6 +72,8 @@ namespace SoluiNet.DevTools.UI.Blazor.Application
                     this.styles.AddRange(resourcesPlugin.Resources["Styles"].Select(x => x.ToString()));
                 }
             }
+
+            ApplicationContext.AddSingleton<IColourFactory>("ColourFactory", new ColourFactory());
 
             this.Initialize();
         }
