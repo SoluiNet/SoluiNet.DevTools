@@ -66,5 +66,41 @@ namespace SoluiNet.DevTools.Core.UI.Blazor.Reference
         /// Gets the transparency of the colour.
         /// </summary>
         public byte Transparency { get; }
+
+        /// <inheritdoc />
+        public decimal Cyan
+        {
+            get
+            {
+                return ColourConverter.ToCmyk(this).cyan;
+            }
+        }
+
+        /// <inheritdoc />
+        public decimal Magenta
+        {
+            get
+            {
+                return ColourConverter.ToCmyk(this).magenta;
+            }
+        }
+
+        /// <inheritdoc />
+        public decimal Yellow
+        {
+            get
+            {
+                return ColourConverter.ToCmyk(this).yellow;
+            }
+        }
+
+        /// <inheritdoc />
+        public decimal Black
+        {
+            get
+            {
+                return ColourConverter.ToCmyk(this).black;
+            }
+        }
     }
 }

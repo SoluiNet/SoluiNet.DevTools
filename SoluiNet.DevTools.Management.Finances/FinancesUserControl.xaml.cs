@@ -11,6 +11,7 @@ namespace SoluiNet.DevTools.Management.Finances
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Documents;
@@ -19,6 +20,7 @@ namespace SoluiNet.DevTools.Management.Finances
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+#endif
     using System.Xml.Linq;
     using SoluiNet.DevTools.Core.Tools.Csv;
     using SoluiNet.DevTools.Core.Tools.File;

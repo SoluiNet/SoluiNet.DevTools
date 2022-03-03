@@ -18,6 +18,7 @@ namespace SoluiNet.DevTools.Core.Application
     public static class ApplicationContext
     {
         private static Dictionary<string, object> singletons = new Dictionary<string, object>();
+
         static ApplicationContext()
         {
             SessionValues = new Dictionary<string, object>();

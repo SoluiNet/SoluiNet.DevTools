@@ -29,6 +29,26 @@ namespace SoluiNet.DevTools.Core.Reference
         byte Blue { get; }
 
         /// <summary>
+        /// Gets the cyan parts in the colour.
+        /// </summary>
+        decimal Cyan { get; }
+
+        /// <summary>
+        /// Gets the magenta parts in the colour.
+        /// </summary>
+        decimal Magenta { get; }
+
+        /// <summary>
+        /// Gets the yellow parts in the colour.
+        /// </summary>
+        decimal Yellow { get; }
+
+        /// <summary>
+        /// Gets the black parts in the colour.
+        /// </summary>
+        decimal Black { get; }
+
+        /// <summary>
         /// Gets the transparency of the colour.
         /// </summary>
         byte Transparency { get; }

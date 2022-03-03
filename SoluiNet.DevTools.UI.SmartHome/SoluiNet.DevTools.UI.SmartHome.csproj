@@ -3,24 +3,40 @@
     <ProjectGuid>{0673086C-9BD1-4F6C-A889-335CFC743A0E}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
     <TargetFramework>net6.0</TargetFramework>
-    <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.UI.SmartHome</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.UI.SmartHome</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <UseWPF>true</UseWPF>
+    <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\build\plugins\$(Configuration)\UI\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn),SA1123</NoWarn>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
     <None Remove="SmartHomeUiElement.xaml" />
+    <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.Windows\SoluiNet.DevTools.Core.Windows.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
+    <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
+    <Compile Update="SmartHomeUiElement.xaml.cs">
+      <DependentUpon>SmartHomeUiElement.xaml</DependentUpon>
+    </Compile>
+    <None Update="SmartHomeUiElement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.13" />
@@ -51,15 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core.SmartHome\SoluiNet.DevTools.Core.SmartHome.csproj" />
-    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.Blazor\SoluiNet.DevTools.Core.UI.Blazor.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
-    <ProjectReference Include="..\SoluiNet.DevTools.Core.Windows\SoluiNet.DevTools.Core.Windows.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="SmartHomeUiElement.xaml.cs">
-      <DependentUpon>SmartHomeUiElement.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Page Include="SmartHomeUiElement.xaml">

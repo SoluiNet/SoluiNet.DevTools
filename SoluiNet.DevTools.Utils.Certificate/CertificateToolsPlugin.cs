@@ -9,10 +9,15 @@ namespace SoluiNet.DevTools.Utils.Certificate
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
+#endif
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+#endif
 
     /// <summary>
     /// A plugin which provides utility functions for working with certificates.
@@ -35,6 +40,7 @@ namespace SoluiNet.DevTools.Utils.Certificate
             get { return "Certificate Tools"; }
         }
 
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Call this method if the plugin should be displayed.
         /// </summary>
@@ -48,5 +54,6 @@ namespace SoluiNet.DevTools.Utils.Certificate
 
             displayInPluginContainer(new CertificateUserControl());
         }
+#endif
     }
 }

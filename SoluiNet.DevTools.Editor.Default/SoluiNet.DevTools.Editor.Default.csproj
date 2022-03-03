@@ -39,7 +39,6 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212401">
@@ -59,6 +58,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
     <Compile Update="DefaultEditorUserControl.xaml.cs">
       <DependentUpon>DefaultEditorUserControl.xaml</DependentUpon>
@@ -68,6 +68,7 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
     <Page Include="DefaultEditorUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
