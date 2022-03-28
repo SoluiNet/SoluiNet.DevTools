@@ -26,7 +26,7 @@ namespace SoluiNet.DevTools.Utils.Maps
     /// <summary>
     /// A plugin which provides utility functions for working with maps.
     /// </summary>
-    public class FileToolsPlugin : IUtilitiesDevPlugin
+    public class MapsToolsPlugin : IUtilitiesDevPlugin
     {
         /// <summary>
         /// Gets the technical name of the plugin.
@@ -44,6 +44,7 @@ namespace SoluiNet.DevTools.Utils.Maps
             get { return "Maps Tools"; }
         }
 
+        /// <inheritdoc/>
         public Dictionary<string, ICollection<object>> Resources
         {
             get
@@ -52,11 +53,13 @@ namespace SoluiNet.DevTools.Utils.Maps
             }
         }
 
+        /// <inheritdoc/>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             throw new NotImplementedException();
