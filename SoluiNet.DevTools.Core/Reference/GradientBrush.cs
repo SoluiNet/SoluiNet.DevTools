@@ -14,6 +14,22 @@ namespace SoluiNet.DevTools.Core.Reference
     public class GradientBrush : IBrush
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="GradientBrush"/> class.
+        /// </summary>
+        /// <param name="firstColour">The first colour.</param>
+        /// <param name="secondColour">The second colour.</param>
+        /// <param name="angle">The angle.</param>
+        public GradientBrush(IColour firstColour, IColour secondColour, decimal angle)
+        {
+            this.Parts = new List<GradientBrushPart>();
+
+            this.Parts.Add(new GradientBrushPart() { Colour = firstColour });
+            this.Parts.Add(new GradientBrushPart() { Colour = secondColour });
+
+            this.Angle = angle;
+        }
+
+        /// <summary>
         /// The gradient brush part.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Will be used later.")]
@@ -28,22 +44,6 @@ namespace SoluiNet.DevTools.Core.Reference
             /// Gets or sets the offset.
             /// </summary>
             public double Offset { get; set; }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GradientBrush"/> class.
-        /// </summary>
-        /// <param name="firstColour">The first colour.</param>
-        /// <param name="secondColour">The second colour.</param>
-        /// <param name="angle">The angle.</param>
-        public GradientBrush(IColour firstColour, IColour secondColour, decimal angle)
-        {
-            this.Parts = new List<GradientBrushPart>();
-
-            this.Parts.Add(new GradientBrushPart() { Colour = firstColour });
-            this.Parts.Add(new GradientBrushPart() { Colour = secondColour });
-
-            this.Angle = angle;
         }
 
         /// <summary>
