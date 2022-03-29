@@ -110,8 +110,8 @@
     <None Remove="TimeTrackingToolsUserControl.xaml" />
     <None Remove="UI\AssignmentTargetExtended.xaml" />
     <None Remove="UI\AssignmentTarget.xaml" />
-    <None Remove="UI\CategorySettings.xaml.xaml" />
-    <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
+    <None Remove="UI\CategorySettings.xaml" />
+    <Compile Include="**/*.cs" Exclude="UI/*.*;**/*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0" />

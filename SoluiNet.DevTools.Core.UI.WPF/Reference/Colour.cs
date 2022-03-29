@@ -113,6 +113,21 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Reference
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="System.Windows.Media.Color"/> object.
+        /// </summary>
+        public System.Windows.Media.Color MediaColorValue
+        {
+            get
+            {
+                return System.Windows.Media.Color.FromArgb(
+                    this.color.A,
+                    this.color.R,
+                    this.color.G,
+                    this.color.B);
+            }
+        }
+
         /// <inheritdoc />
         public decimal Cyan
         {

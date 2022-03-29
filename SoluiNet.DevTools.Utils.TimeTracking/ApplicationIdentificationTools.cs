@@ -10,7 +10,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Media;
+#endif
+    using SoluiNet.DevTools.Core.Reference;
 
     /// <summary>
     /// Provides a collection of methods to identify applications.
@@ -189,43 +192,43 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 return string.Empty;
             }
 
-            if (windowTitle.Contains(VisualStudio))
+            if (windowTitle.Contains(VisualStudio, StringComparison.Ordinal))
             {
                 return VisualStudio;
             }
-            else if (windowTitle.Contains(Outlook))
+            else if (windowTitle.Contains(Outlook, StringComparison.Ordinal))
             {
                 return Outlook;
             }
-            else if (windowTitle.Contains(RemoteDesktopManager))
+            else if (windowTitle.Contains(RemoteDesktopManager, StringComparison.Ordinal))
             {
                 return RemoteDesktopManager;
             }
-            else if (windowTitle.Contains(Teams))
+            else if (windowTitle.Contains(Teams, StringComparison.Ordinal))
             {
                 return Teams;
             }
-            else if (windowTitle.Contains(Excel))
+            else if (windowTitle.Contains(Excel, StringComparison.Ordinal))
             {
                 return Excel;
             }
-            else if (windowTitle.Contains(NotepadPlusPlus))
+            else if (windowTitle.Contains(NotepadPlusPlus, StringComparison.Ordinal))
             {
                 return NotepadPlusPlus;
             }
-            else if (windowTitle.Contains(Editor))
+            else if (windowTitle.Contains(Editor, StringComparison.Ordinal))
             {
                 return Editor;
             }
-            else if (windowTitle.Contains(Chrome))
+            else if (windowTitle.Contains(Chrome, StringComparison.Ordinal))
             {
                 return Chrome;
             }
-            else if (windowTitle.Contains(TortoiseGit))
+            else if (windowTitle.Contains(TortoiseGit, StringComparison.Ordinal))
             {
                 return TortoiseGit;
             }
-            else if (windowTitle.Contains(KeePass))
+            else if (windowTitle.Contains(KeePass, StringComparison.Ordinal))
             {
                 return KeePass;
             }
@@ -237,8 +240,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// Get the background accents for the overgiven application identification.
         /// </summary>
         /// <param name="applicationName">The application identification.</param>
-        /// <returns>Returns a <see cref="Brush"/> for the overgiven application identification.</returns>
-        public static Brush GetBackgroundAccent(string applicationName)
+        /// <returns>Returns a <see cref="IBrush"/> for the overgiven application identification.</returns>
+        public static IBrush GetBackgroundAccent(string applicationName)
         {
             if (string.IsNullOrEmpty(applicationName))
             {

@@ -6,6 +6,7 @@ namespace SoluiNet.DevTools.Core.Reference
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Text;
     using SoluiNet.DevTools.Core.Tools.Number;
 
@@ -14,6 +15,31 @@ namespace SoluiNet.DevTools.Core.Reference
     /// </summary>
     public static class ColourConverter
     {
+        /// <summary>
+        /// Convert a colour to Hex.
+        /// </summary>
+        /// <param name="colour">The colour.</param>
+        /// <returns>Returns a <see cref="string"/> which holds a hex colour.</returns>
+        public static string ToHex(this IColour colour)
+        {
+            return ToHexValue(colour);
+        }
+
+        /// <summary>
+        /// Convert a colour to Hex.
+        /// </summary>
+        /// <param name="colour">The colour.</param>
+        /// <returns>Returns a <see cref="string"/> which holds a hex colour.</returns>
+        public static string ToHexValue(IColour colour)
+        {
+            if (colour == null)
+            {
+                throw new ArgumentNullException(nameof(colour));
+            }
+
+            return string.Format(CultureInfo.InvariantCulture, "#{0:X2}{1:X2}{2:X2}", colour.Red, colour.Green, colour.Blue);
+        }
+
         /// <summary>
         /// Convert a colour to CMYK.
         /// </summary>
