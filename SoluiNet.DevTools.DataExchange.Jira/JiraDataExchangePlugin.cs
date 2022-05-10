@@ -109,7 +109,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
                 return new List<object>();
             }
 
-            RestClient client;
+            RestClient client = null;
 
             try
             {

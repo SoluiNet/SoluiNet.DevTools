@@ -14,7 +14,7 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
 #endif
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
-#ifdef BUILD_FOR_WINDOWS
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
 #endif
 
