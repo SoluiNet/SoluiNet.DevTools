@@ -9,9 +9,14 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
+#endif
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+#ifdef BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+#endif
 
     /// <summary>
     /// A plugin which allows to connect with exchange in an office 365 environment.
@@ -35,6 +40,19 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
         }
 
         /// <inheritdoc/>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
+#if BUILD_FOR_WINDOWS
+        /// <inheritdoc/>
         public void Execute(Action<UserControl> displayInPluginContainer)
         {
             if (displayInPluginContainer == null)
@@ -44,5 +62,6 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
 
             displayInPluginContainer(new Office365ExchangeUserControl());
         }
+#endif
     }
 }
