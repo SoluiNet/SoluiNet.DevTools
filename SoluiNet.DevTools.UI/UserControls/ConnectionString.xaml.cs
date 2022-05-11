@@ -64,7 +64,12 @@ namespace SoluiNet.DevTools.UI.UserControls
         /// </summary>
         public string Environment
         {
-            get { return this.NameKey.Contains(".") ? this.NameKey.Substring(this.NameKey.LastIndexOf(".", StringComparison.InvariantCulture) + 1) : "Default"; }
+            get
+            {
+                return this.NameKey.Contains('.', StringComparison.InvariantCulture)
+                  ? this.NameKey.Substring(this.NameKey.LastIndexOf('.') + 1)
+                  : "Default";
+            }
         }
 
         private bool Expanded { get; set; }

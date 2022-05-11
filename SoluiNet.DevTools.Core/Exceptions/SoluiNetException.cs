@@ -5,6 +5,7 @@
 namespace SoluiNet.DevTools.Core.Exceptions
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
     /// A general exception in SoluiNet applications.
@@ -24,6 +25,16 @@ namespace SoluiNet.DevTools.Core.Exceptions
         /// <param name="message">The message.</param>
         public SoluiNetException(string message)
             : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SoluiNetException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="formatValues">The format values.</param>
+        public SoluiNetException(string message, params string[] formatValues)
+            : base(string.Format(CultureInfo.InvariantCulture, message, formatValues))
         {
         }
 

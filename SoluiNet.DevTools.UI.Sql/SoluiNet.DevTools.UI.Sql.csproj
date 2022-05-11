@@ -1,39 +1,77 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{B6D04A38-C980-4CEF-93F7-A8FB80F4EEAB}</ProjectGuid>
-    <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.UI.Sql</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.UI.Sql</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <UseWPF>true</UseWPF>
+    <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\build\plugins\$(Configuration)\UI\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn),SA1123</NoWarn>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
     <None Remove="PrepareText.xaml" />
     <None Remove="ShowText.xaml" />
     <None Remove="SqlUiElement.xaml" />
+    <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.Windows\SoluiNet.DevTools.Core.Windows.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
+    <None Update="PrepareText.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="ShowText.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="SqlUiElement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <Compile Update="PrepareText.xaml.cs">
+      <DependentUpon>PrepareText.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ShowText.xaml.cs">
+      <DependentUpon>ShowText.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="SqlUiElement.xaml.cs">
+      <DependentUpon>SqlUiElement.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="SQL.xshd" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
     <PackageReference Include="NLog" Version="4.7.15" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212401">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
@@ -48,23 +86,12 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.Blazor\SoluiNet.DevTools.Core.UI.Blazor.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
-    <ProjectReference Include="..\SoluiNet.DevTools.Core.Windows\SoluiNet.DevTools.Core.Windows.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="PrepareText.xaml.cs">
-      <DependentUpon>PrepareText.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="ShowText.xaml.cs">
-      <DependentUpon>ShowText.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="SqlUiElement.xaml.cs">
-      <DependentUpon>SqlUiElement.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
     <Page Include="PrepareText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -83,5 +110,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SQL.xshd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>

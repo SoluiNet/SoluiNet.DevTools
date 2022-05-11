@@ -26,10 +26,5 @@
             <StackPanel></StackPanel>
         </DockPanel>
         <TabControl Margin="0,20,0,0" x:Name="UiElements" TabStripPlacement="Bottom" />
-        <tb:TaskbarIcon x:Name="TaskbarNotification"
-                        Visibility="Visible"
-                        ToolTipText="SoluiNet.DevTools"
-                        IconSource="favicon.ico"
-        />
     </Grid>
 </ui:SoluiNetWindow>
