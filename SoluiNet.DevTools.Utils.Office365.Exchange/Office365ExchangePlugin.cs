@@ -9,6 +9,10 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
 #if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
 #endif
@@ -37,6 +41,15 @@ namespace SoluiNet.DevTools.Utils.Office365.Exchange
         public string MenuItemLabel
         {
             get { return "Office 365 Exchange Tools"; }
+        }
+
+        /// <inheritdoc/>
+        public Dictionary<string, ICollection<object>> Resources
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         /// <inheritdoc/>
