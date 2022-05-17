@@ -46,7 +46,7 @@
     <PackageReference Include="EntityFramework.de" Version="6.2.0" />
     <PackageReference Include="LiveCharts" Version="0.9.7" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
-    <PackageReference Include="NLog" Version="4.7.15" />
+    <PackageReference Include="NLog" Version="5.0.0" />
     <PackageReference Include="Quartz" Version="3.4.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
