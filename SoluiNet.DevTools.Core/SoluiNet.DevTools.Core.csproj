@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.115.5" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.116" />
   </ItemGroup>
   <ItemGroup>
