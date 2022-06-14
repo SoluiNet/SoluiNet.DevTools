@@ -10,10 +10,10 @@ namespace SoluiNet.DevTools.Communication.EMail
     using System.Globalization;
     using System.Linq;
     using System.Net;
-    using System.Net.Mail;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using MailKit.Net.Smtp;
 #if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
 #endif
@@ -21,6 +21,7 @@ namespace SoluiNet.DevTools.Communication.EMail
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using MimeKit;
     using NLog;
     using RestSharp;
     using RestSharp.Authenticators;
@@ -200,47 +201,49 @@ namespace SoluiNet.DevTools.Communication.EMail
                 entity = "Message";
             }
 
-            var smtpClient = new SmtpClient(ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSender").ToString())
-            {
-                Port = Convert.ToInt32(
-                    ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailPort"),
-                    CultureInfo.InvariantCulture),
-                Credentials = new NetworkCredential(
-                    ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSenderAddress").ToString(),
-                    ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSenderPassword").ToString()),
-                EnableSsl = Convert.ToBoolean(
-                    ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSslEnabled"),
-                    CultureInfo.InvariantCulture),
-            };
+            var mailMessage = new MimeMessage();
 
             try
             {
-                var mail = new MailMessage()
-                {
-                    From = new MailAddress(ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSenderAddress").ToString()),
-                    Subject = additionalParameters != null && additionalParameters.ContainsKey("Subject")
-                        ? additionalParameters["Subject"].ToString()
-                        : "Info",
-                    Body = message,
+                var sender = ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSender").ToString();
 
-                    // todo: identify HTML with a more profound technique
-                    IsBodyHtml = message.Contains("<p", StringComparison.OrdinalIgnoreCase),
+                mailMessage.From.Add(
+                    new MailboxAddress(
+                        string.IsNullOrEmpty(sender) ? "solui.net" : sender,
+                        ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSenderAddress").ToString()));
+                mailMessage.To.Add(
+                    new MailboxAddress(
+                        receiver,
+                        receiver));
+
+                mailMessage.Subject = additionalParameters != null && additionalParameters.ContainsKey("Subject")
+                        ? additionalParameters["Subject"].ToString()
+                        : "Info";
+
+                mailMessage.Body = new TextPart("plain")
+                {
+                    Text = message,
                 };
 
-                try
+                using (var smtpClient = new SmtpClient())
                 {
-                    mail.To.Add(receiver);
+                    smtpClient.Connect(
+                        ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSender").ToString(),
+                        Convert.ToInt32(ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailPort"), CultureInfo.InvariantCulture),
+                        true);
 
-                    smtpClient.Send(mail);
-                }
-                finally
-                {
-                    mail.Dispose();
+                    smtpClient.Authenticate(
+                        ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSenderAddress").ToString(),
+                        ApplicationContext.Configuration.PluginConfiguration.GetByKey("EMailSenderPassword").ToString());
+
+                    smtpClient.Send(mailMessage);
+
+                    smtpClient.Disconnect(true);
                 }
             }
             finally
             {
-                smtpClient.Dispose();
+                mailMessage.Dispose();
             }
         }
 
