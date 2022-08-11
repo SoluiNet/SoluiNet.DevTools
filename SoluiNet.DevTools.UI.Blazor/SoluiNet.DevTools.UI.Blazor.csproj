@@ -52,7 +52,8 @@
     <Exec Command="cp &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)wwwroot\favicon.ico&quot;" Condition="'$(OS)' == 'Unix'" />
     <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <Exec Command="cp &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Unix'" />
-    <Exec Command="mkdir &quot;$(ProjectDir)wwwroot\images&quot;" />
+    <Exec Command="if not exist &quot;$(ProjectDir)wwwroot\images&quot; mkdir &quot;$(ProjectDir)wwwroot\images&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="mkdir -p &quot;$(ProjectDir)wwwroot\images&quot;" Condition="'$(OS)' == 'Unix'" />
     <Exec Command="copy &quot;$(SolutionDir)icons\soluinet_logo.svg&quot; &quot;$(ProjectDir)wwwroot\images\logo.svg&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <Exec Command="cp &quot;$(SolutionDir)icons\soluinet_logo.svg&quot; &quot;$(ProjectDir)wwwroot\images\logo.svg&quot;" Condition="'$(OS)' == 'Unix'" />
   </Target>
