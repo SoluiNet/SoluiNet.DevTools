@@ -53,6 +53,11 @@ namespace SoluiNet.DevTools.Console
                 Console.WriteLine(@"You can use the following options:");
                 Console.WriteLine(@"v, verbose   Use verbose output");
                 Console.WriteLine(@"h, help      Open additional information about the usage of this application");
+
+                foreach (var plugin in (ApplicationContext.Application.Plugins as ConsoleApplication).CommandLinePlugins)
+                {
+                    Console.WriteLine(plugin.HelpText);
+                }
             }
         }
 
