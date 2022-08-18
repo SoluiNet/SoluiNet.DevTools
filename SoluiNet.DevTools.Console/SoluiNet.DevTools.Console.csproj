@@ -47,10 +47,16 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <None Remove="NLog.config" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
