@@ -972,7 +972,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             if (nameOrConnectionString.StartsWith("name=", StringComparison.InvariantCulture))
             {
-                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty)];
+                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty, StringComparison.InvariantCultureIgnoreCase)];
 
                 if (connectionStringSetting == null)
                 {
@@ -982,7 +982,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 connectionString = connectionStringSetting.ConnectionString;
             }
 
-            return connectionString.ToUpperInvariant().Replace("%LOCALAPPDATA%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+            return connectionString.ToUpperInvariant().Replace("%LOCALAPPDATA%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
