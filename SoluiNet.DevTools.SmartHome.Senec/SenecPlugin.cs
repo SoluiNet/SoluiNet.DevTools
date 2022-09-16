@@ -43,7 +43,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
     /// Provides a plugin for the Senec battery storage.
     /// </summary>
     public class SenecPlugin : ISmartHomeUiPlugin, IObservable<SmartHomeDictionary>, IAllowsGenericDataExchange<SmartHomeDictionary>, IContainsSettings,
-        IRunsBackgroundTask
+        IRunsBackgroundTask, ISupportsCommandLine
     {
         /// <summary>
         /// The list of all smart home observers.
@@ -135,6 +135,17 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         public Dictionary<string, ICollection<object>> Resources
         {
             get { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets the help text.
+        /// </summary>
+        public string HelpText
+        {
+            get
+            {
+                return @"senec        Get Information about senec";
+            }
         }
 
 #if BUILD_FOR_WINDOWS
@@ -404,6 +415,12 @@ namespace SoluiNet.DevTools.SmartHome.Senec
 
         /// <inheritdoc/>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public int RunCommandLine(IDictionary<string, string> arguments)
         {
             throw new NotImplementedException();
         }
