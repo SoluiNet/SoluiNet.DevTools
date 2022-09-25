@@ -80,11 +80,19 @@ namespace SoluiNet.DevTools.Core.UI.WPF.UIElement
                 brushDefinition.typeSpecified = true;
                 brushDefinition.type = SoluiNetBrushType.SimpleLinearGradient;
 
+#if COMPILED_FOR_NETFRAMEWORK
                 brushDefinition.startColour = this.StartColour.SelectedColor.HasValue ? this.StartColour.SelectedColor.Value.ToHexValue() : "#FFFFFF";
                 brushDefinition.endColour = this.EndColour.SelectedColor.HasValue ? this.EndColour.SelectedColor.Value.ToHexValue() : "#FFFFFF";
 
                 brushDefinition.angleSpecified = true;
                 brushDefinition.angle = this.Angle.Value ?? 0.75;
+#else
+                brushDefinition.startColour = this.StartColour.SelectedColor.ToHexValue();
+                brushDefinition.endColour = this.EndColour.SelectedColor.ToHexValue();
+
+                brushDefinition.angleSpecified = true;
+                brushDefinition.angle = this.Angle.Value;
+#endif
             }
             else if (this.BrushDefinitionTypeTabs.SelectedIndex == 1)
             {

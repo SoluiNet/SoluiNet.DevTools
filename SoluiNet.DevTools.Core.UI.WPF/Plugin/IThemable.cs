@@ -11,6 +11,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Plugin
     using System.Threading.Tasks;
     using System.Windows.Media;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Reference;
 
     /// <summary>
     /// Provides an interface for a plugin which can be themed with colour variations.
@@ -20,26 +21,26 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Plugin
         /// <summary>
         /// Gets the first colour accent.
         /// </summary>
-        Color AccentColour1 { get; }
+        IColour AccentColour1 { get; }
 
         /// <summary>
         /// Gets the second colour accent.
         /// </summary>
-        Color AccentColour2 { get; }
+        IColour AccentColour2 { get; }
 
         /// <summary>
         /// Gets the foreground colour.
         /// </summary>
-        Color ForegroundColour { get; }
+        IColour ForegroundColour { get; }
 
         /// <summary>
         /// Gets the background colour.
         /// </summary>
-        Color BackgroundColour { get; }
+        IColour BackgroundColour { get; }
 
         /// <summary>
         /// Gets the background accent colour.
         /// </summary>
-        Color BackgroundAccentColour { get; }
+        IColour BackgroundAccentColour { get; }
     }
 }
