@@ -22,3 +22,4 @@ packages/**
 *.backup
 /SoluiNet.DevTools.UI/NHibernate.config
 /SoluiNet.DevTools.Console/SoluiNet - Backup.DevTools.Console.csproj
+/SoluiNet.DevTools.UI.Blazor/wwwroot/images/logo.svg
