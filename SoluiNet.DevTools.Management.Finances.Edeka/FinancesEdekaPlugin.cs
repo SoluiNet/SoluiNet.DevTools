@@ -9,11 +9,24 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
     using System.Data;
     using System.Security.Principal;
     using System.Windows;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using SoluiNet.DevTools.Core.Application;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
     using System.Windows.Media;
+#endif
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Reference;
+    using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+    using SoluiNet.DevTools.Core.UI.Blazor.Reference;
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Reference;
+#endif
 
     /// <summary>
     /// Provides a plugin that allows one to manage finance information from EDEKA.
@@ -31,43 +44,62 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
         /// <summary>
         /// Gets the first accent colour.
         /// </summary>
-        public Color AccentColour1
+        public IColour AccentColour1
         {
-            get { return Colors.Yellow; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Yellow"); }
         }
 
         /// <summary>
         /// Gets the second accent colour.
         /// </summary>
-        public Color AccentColour2
+        public IColour AccentColour2
         {
-            get { return Colors.Blue; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Blue"); }
         }
 
         /// <summary>
         /// Gets the foreground colour.
         /// </summary>
-        public Color ForegroundColour
+        public IColour ForegroundColour
         {
-            get { return Colors.White; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("White"); }
         }
 
         /// <summary>
         /// Gets the background colour.
         /// </summary>
-        public Color BackgroundColour
+        public IColour BackgroundColour
         {
-            get { return Colors.Black; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Black"); }
         }
 
         /// <summary>
         /// Gets the background accent colour.
         /// </summary>
-        public Color BackgroundAccentColour
+        public IColour BackgroundAccentColour
         {
-            get { return Colors.DimGray; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DimGray"); }
         }
 
+        /// <inheritdoc />
+        public Dictionary<string, ICollection<object>> Resources
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        /// <inheritdoc />
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Gets or sets the main grid.
         /// </summary>
@@ -115,5 +147,6 @@ namespace SoluiNet.DevTools.Management.Finances.Edeka
                 ((Grid)tabItem.Content).Children.Add(new FinancesEdekaUserControl());
             }
         }
+#endif
     }
 }

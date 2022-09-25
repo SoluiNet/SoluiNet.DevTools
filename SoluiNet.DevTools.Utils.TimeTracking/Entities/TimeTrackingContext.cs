@@ -13,11 +13,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Media;
+#endif
     using NLog;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Exceptions;
+    using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.Tools.XML;
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
+#endif
     using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
@@ -446,8 +452,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.BlueViolet.ToHexValue(),
-                                    endColour = Color.FromRgb(50, 50, 50).ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("BlueViolet").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(50, 50, 50).ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -482,8 +488,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DodgerBlue.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DodgerBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -499,8 +505,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DarkViolet.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkViolet").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -515,8 +521,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.WhiteSmoke.ToHexValue(),
-                                    endColour = Colors.DeepSkyBlue.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DeepSkyBlue").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -531,8 +537,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DarkGreen.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkGreen").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -547,8 +553,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.Lime.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Lime").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -563,8 +569,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.LightBlue.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -579,8 +585,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DarkGray.ToHexValue(),
-                                    endColour = Colors.LightBlue.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkGray").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -595,8 +601,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DarkBlue.ToHexValue(),
-                                    endColour = Colors.LightBlue.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -629,22 +635,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                     {
                                         new SoluiNetGradientStopType()
                                         {
-                                            colour = Colors.OrangeRed.ToHexValue(),
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("OrangeRed").ToHex(),
                                             offset = 0.2,
                                         },
                                         new SoluiNetGradientStopType()
                                         {
-                                            colour = Colors.Yellow.ToHexValue(),
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Yellow").ToHex(),
                                             offset = 0.4,
                                         },
                                         new SoluiNetGradientStopType()
                                         {
-                                            colour = Colors.Green.ToHexValue(),
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Green").ToHex(),
                                             offset = 0.6,
                                         },
                                         new SoluiNetGradientStopType()
                                         {
-                                            colour = Colors.DeepSkyBlue.ToHexValue(),
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DeepSkyBlue").ToHex(),
                                             offset = 0.8,
                                         },
                                     },
@@ -966,7 +972,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             if (nameOrConnectionString.StartsWith("name=", StringComparison.InvariantCulture))
             {
-                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty)];
+                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty, StringComparison.InvariantCultureIgnoreCase)];
 
                 if (connectionStringSetting == null)
                 {
@@ -976,7 +982,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 connectionString = connectionStringSetting.ConnectionString;
             }
 
-            return connectionString.ToUpperInvariant().Replace("%LOCALAPPDATA%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+            return connectionString.ToUpperInvariant().Replace("%LOCALAPPDATA%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

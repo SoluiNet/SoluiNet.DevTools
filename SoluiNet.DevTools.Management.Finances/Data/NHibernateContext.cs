@@ -6,7 +6,6 @@ namespace SoluiNet.DevTools.Management.Finances.Data
 {
     using System;
     using System.IO;
-    using System.Web;
     using FluentNHibernate.Cfg;
     using FluentNHibernate.Cfg.Db;
     using NHibernate;
