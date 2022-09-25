@@ -9,10 +9,19 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
+#endif
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+#endif
 
     /// <summary>
     /// A plugin which provides utility functions for working with XML data.
@@ -35,6 +44,28 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
             get { return "XML Tools"; }
         }
 
+        /// <inheritdoc/>
+        public Dictionary<string, ICollection<object>> Resources
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <inheritdoc/>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Call this method if the plugin should be displayed.
         /// </summary>
@@ -48,5 +79,6 @@ namespace SoluiNet.DevTools.Utils.XmlTransformation
 
             displayInPluginContainer(new XmlTransformationUserControl());
         }
+#endif
     }
 }

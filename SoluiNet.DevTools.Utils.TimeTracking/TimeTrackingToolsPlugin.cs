@@ -13,13 +13,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Reflection;
     using System.Resources;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
+#endif
     using Quartz;
     using Quartz.Impl;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
+    using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.General;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+#endif
     using SoluiNet.DevTools.Utils.TimeTracking.Entities;
     using SoluiNet.DevTools.Utils.TimeTracking.Job;
 
@@ -47,14 +56,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             get { return "Time Tracking Tools"; }
         }
 
-        /// <summary>
-        /// Gets the resources.
-        /// </summary>
-        private static ResourceManager Resources
+        /// <inheritdoc/>
+        public Dictionary<string, ICollection<object>> Resources
         {
             get
             {
-                return new ResourceManager("SoluiNet.DevTools.Utils.TimeTracking.Properties.Resources", Assembly.GetExecutingAssembly());
+                throw new NotImplementedException();
             }
         }
 
@@ -101,6 +108,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
             await scheduler.ScheduleJob(dbJob, dbTrigger).ConfigureAwait(true);
         }
 
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Call this method if the plugin should be displayed.
         /// </summary>
@@ -118,6 +126,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             displayInPluginContainer(new TimeTrackingToolsUserControl());
         }
+#endif
 
         /// <summary>
         /// Handle the event.
@@ -170,9 +179,14 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         return;
                     }
 
+#if BUILD_FOR_WINDOWS
                     var usageTimeName = Prompt.ShowDialog(
                         Resources.GetString("DescriptionForMeantime", CultureInfo.CurrentCulture),
                         Resources.GetString("MeantimeDescriptionTitle", CultureInfo.CurrentCulture));
+#else
+                    // todo: implement query for mean time on blazor UI
+                    var usageTimeName = "UNKNOWN";
+#endif
 
                     context.UsageTime.Add(new UsageTime()
                     {
@@ -191,6 +205,18 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     context.Dispose();
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,22 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{0D4512DB-52FF-4477-808E-D857EFB3D219}</ProjectGuid>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.TimeTracking</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Utils.TimeTracking</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <UseWPF>true</UseWPF>
+    <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\build\plugins\$(Configuration)\Plugins\</OutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn),SA1123</NoWarn>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <NeutralLanguage>en</NeutralLanguage>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="icons\automatic_assignment.png" />
@@ -31,12 +36,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="EntityFramework.de" Version="6.2.0" />
+    <PackageReference Include="LiveCharts" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.20" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
@@ -48,22 +55,31 @@
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="NLog" Version="5.0.4" />
     <PackageReference Include="Quartz" Version="3.5.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.116" />
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.15" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.Blazor\SoluiNet.DevTools.Core.UI.Blazor.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -71,25 +87,29 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="TimeTrackingToolsUserControl.xaml.cs">
-      <DependentUpon>TimeTrackingToolsUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\AssignmentTargetExtended.xaml.cs">
-      <DependentUpon>UI\AssignmentTargetExtended.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\AssignmentTarget.xaml.cs">
-      <DependentUpon>UI\AssignmentTarget.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\CategorySettings.xaml.cs">
-      <DependentUpon>UI\CategorySettings.xaml</DependentUpon>
-    </Compile>
+    <None Remove="icons\automatic_assignment.png" />
+    <None Remove="stylecop.json" />
+    <AdditionalFiles Include="stylecop.json" />
+    <Resource Include="icons\automatic_assignment.png" />
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
-    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
-    <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="EntityFramework.de" Version="6.2.0" />
+    <PackageReference Include="LiveCharts" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.115.5" />
+    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.115.5" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Page Include="TimeTrackingToolsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -107,16 +127,37 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\automatic_assignment.png" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212401">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
+    <None Remove="TimeTrackingToolsUserControl.xaml" />
+    <None Remove="UI\AssignmentTargetExtended.xaml" />
+    <None Remove="UI\AssignmentTarget.xaml" />
+    <None Remove="UI\CategorySettings.xaml" />
+    <Compile Include="**/*.cs" Exclude="UI/*.*;**/*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0" />
+    <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
+    <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
+    <Compile Update="TimeTrackingToolsUserControl.xaml.cs">
+      <DependentUpon>TimeTrackingToolsUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\AssignmentTargetExtended.xaml.cs">
+      <DependentUpon>UI\AssignmentTargetExtended.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\AssignmentTarget.xaml.cs">
+      <DependentUpon>UI\AssignmentTarget.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\CategorySettings.xaml.cs">
+      <DependentUpon>UI\CategorySettings.xaml</DependentUpon>
+    </Compile>
     <None Update="TimeTrackingToolsUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
@@ -127,9 +168,17 @@
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>
-  <ProjectExtensions><VisualStudio><UserProperties stylecop_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties stylecop_1json__JSONSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" Condition="'$(OS)' == 'Windows_NT'" />
-    <Exec Command="cp &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" Condition="'$(OS)' == 'Unix'" />
+    <Exec
+      Command="copy &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;"
+      Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec
+      Command="cp &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;"
+      Condition="'$(OS)' == 'Unix'" />
   </Target>
 </Project>
