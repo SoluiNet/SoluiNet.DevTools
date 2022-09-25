@@ -10,7 +10,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
+    using SoluiNet.DevTools.Core.Application;
+    using SoluiNet.DevTools.Core.Exceptions;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Media;
+#endif
+    using SoluiNet.DevTools.Core.Reference;
 
     /// <summary>
     /// Provides a collection of methods to identify applications.
@@ -189,43 +194,43 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                 return string.Empty;
             }
 
-            if (windowTitle.Contains(VisualStudio))
+            if (windowTitle.Contains(VisualStudio, StringComparison.Ordinal))
             {
                 return VisualStudio;
             }
-            else if (windowTitle.Contains(Outlook))
+            else if (windowTitle.Contains(Outlook, StringComparison.Ordinal))
             {
                 return Outlook;
             }
-            else if (windowTitle.Contains(RemoteDesktopManager))
+            else if (windowTitle.Contains(RemoteDesktopManager, StringComparison.Ordinal))
             {
                 return RemoteDesktopManager;
             }
-            else if (windowTitle.Contains(Teams))
+            else if (windowTitle.Contains(Teams, StringComparison.Ordinal))
             {
                 return Teams;
             }
-            else if (windowTitle.Contains(Excel))
+            else if (windowTitle.Contains(Excel, StringComparison.Ordinal))
             {
                 return Excel;
             }
-            else if (windowTitle.Contains(NotepadPlusPlus))
+            else if (windowTitle.Contains(NotepadPlusPlus, StringComparison.Ordinal))
             {
                 return NotepadPlusPlus;
             }
-            else if (windowTitle.Contains(Editor))
+            else if (windowTitle.Contains(Editor, StringComparison.Ordinal))
             {
                 return Editor;
             }
-            else if (windowTitle.Contains(Chrome))
+            else if (windowTitle.Contains(Chrome, StringComparison.Ordinal))
             {
                 return Chrome;
             }
-            else if (windowTitle.Contains(TortoiseGit))
+            else if (windowTitle.Contains(TortoiseGit, StringComparison.Ordinal))
             {
                 return TortoiseGit;
             }
-            else if (windowTitle.Contains(KeePass))
+            else if (windowTitle.Contains(KeePass, StringComparison.Ordinal))
             {
                 return KeePass;
             }
@@ -237,66 +242,80 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
         /// Get the background accents for the overgiven application identification.
         /// </summary>
         /// <param name="applicationName">The application identification.</param>
-        /// <returns>Returns a <see cref="Brush"/> for the overgiven application identification.</returns>
-        public static Brush GetBackgroundAccent(string applicationName)
+        /// <returns>Returns a <see cref="IBrush"/> for the overgiven application identification.</returns>
+        public static IBrush GetBackgroundAccent(string applicationName)
         {
+            var colourFactory = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory");
+
+            if (colourFactory == null)
+            {
+                throw new SoluiNetPluginException("Couldn't resolve colour factory");
+            }
+
+            var brushFactory = ApplicationContext.ResolveSingleton<IBrushFactory>("BrushFactory");
+
+            if (brushFactory == null)
+            {
+                throw new SoluiNetPluginException("Couldn't resolve brush factory");
+            }
+
             if (string.IsNullOrEmpty(applicationName))
             {
-                return new SolidColorBrush(Colors.White);
+                return brushFactory.CreateSolidBrush(colourFactory.FromName("White"));
             }
 
             if (applicationName.Equals(VisualStudio, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.BlueViolet, Color.FromRgb(50, 50, 50), 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("BlueViolet"), colourFactory.FromRgb(50, 50, 50), 0.75m);
             }
             else if (applicationName.Equals(Outlook, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.DodgerBlue, Colors.WhiteSmoke, 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("DodgerBlue"), colourFactory.FromName("WhiteSmoke"), 0.75m);
             }
             else if (applicationName.Equals(Teams, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.DarkViolet, Colors.WhiteSmoke, 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("DarkViolet"), colourFactory.FromName("WhiteSmoke"), 0.75m);
             }
             else if (applicationName.Equals(RemoteDesktopManager, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.WhiteSmoke, Colors.DeepSkyBlue, 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("WhiteSmoke"), colourFactory.FromName("DeepSkyBlue"), 0.75m);
             }
             else if (applicationName.Equals(Excel, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.DarkGreen, Colors.WhiteSmoke, 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("DarkGreen"), colourFactory.FromName("WhiteSmoke"), 0.75m);
             }
             else if (applicationName.Equals(NotepadPlusPlus, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.Lime, Colors.WhiteSmoke, 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("Lime"), colourFactory.FromName("WhiteSmoke"), 0.75m);
             }
             else if (applicationName.Equals(Editor, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.LightBlue, Colors.WhiteSmoke, 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("LightBlue"), colourFactory.FromName("WhiteSmoke"), 0.75m);
             }
             else if (applicationName.Equals(Chrome, StringComparison.Ordinal))
             {
-                var linearGradient = new LinearGradientBrush();
-
-                linearGradient.GradientStops.Add(new GradientStop(Colors.OrangeRed, 0.2));
-                linearGradient.GradientStops.Add(new GradientStop(Colors.Yellow, 0.4));
-                linearGradient.GradientStops.Add(new GradientStop(Colors.Green, 0.6));
-                linearGradient.GradientStops.Add(new GradientStop(Colors.DeepSkyBlue, 0.8));
-
-                linearGradient.StartPoint = new Point(0, 0);
-                linearGradient.EndPoint = new Point(1, 0.2);
-
-                return linearGradient;
+                return brushFactory.CreateGradientBrush(
+                    new List<IColour>()
+                    {
+                        colourFactory.FromName("OrangeRed"),
+                        colourFactory.FromName("Yellow"),
+                        colourFactory.FromName("Green"),
+                        colourFactory.FromName("DeepSkyBlue"),
+                    },
+                    0.75m,
+                    new GradientBrush.GradientPoint(0, 0),
+                    new GradientBrush.GradientPoint(0, 0.2m));
             }
             else if (applicationName.Equals(TortoiseGit, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.DarkGray, Colors.LightBlue, 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("DarkGray"), colourFactory.FromName("LightBlue"), 0.75m);
             }
             else if (applicationName.Equals(KeePass, StringComparison.Ordinal))
             {
-                return new LinearGradientBrush(Colors.DarkBlue, Colors.LightBlue, 0.75);
+                return brushFactory.CreateGradientBrush(colourFactory.FromName("DarkBlue"), colourFactory.FromName("LightBlue"), 0.75m);
             }
 
-            return new SolidColorBrush(Colors.White);
+            return brushFactory.CreateSolidBrush(colourFactory.FromName("White"));
         }
     }
 }

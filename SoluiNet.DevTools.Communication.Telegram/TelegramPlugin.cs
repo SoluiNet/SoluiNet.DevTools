@@ -12,12 +12,18 @@ namespace SoluiNet.DevTools.Communication.Telegram
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
+#endif
     using global::Telegram.Bot;
     using global::Telegram.Bot.Exceptions;
     using global::Telegram.Bot.Extensions.Polling;
     using global::Telegram.Bot.Types;
     using global::Telegram.Bot.Types.Enums;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using NLog;
     using RestSharp;
     using RestSharp.Authenticators;
@@ -29,7 +35,10 @@ namespace SoluiNet.DevTools.Communication.Telegram
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.Tools.String;
+    using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+#endif
 
     /// <summary>
     /// A plugin which provides data exchange methods for Telegram.
@@ -86,6 +95,15 @@ namespace SoluiNet.DevTools.Communication.Telegram
             }
         }
 
+        /// <inheritdoc/>
+        public Dictionary<string, ICollection<object>> Resources
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         /// <summary>
         /// Gets the logger.
         /// </summary>
@@ -97,6 +115,7 @@ namespace SoluiNet.DevTools.Communication.Telegram
             }
         }
 
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Call this method if the plugin should be displayed.
         /// </summary>
@@ -110,6 +129,7 @@ namespace SoluiNet.DevTools.Communication.Telegram
 
             displayInPluginContainer(new TelegramUserControl());
         }
+#endif
 
         /// <summary>
         /// Get data from Telegram.
@@ -216,6 +236,18 @@ namespace SoluiNet.DevTools.Communication.Telegram
         /// <param name="valueData">The properties which should be changed.</param>
         /// <returns>Returns the changed issue.</returns>
         public object SetData(object identifier, IDictionary<string, object> valueData)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
         {
             throw new NotImplementedException();
         }

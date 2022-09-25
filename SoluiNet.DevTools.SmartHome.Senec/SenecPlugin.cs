@@ -12,8 +12,13 @@ namespace SoluiNet.DevTools.SmartHome.Senec
     using System.Net.Http.Headers;
     using System.Security.Principal;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
     using System.Windows.Media;
+#endif
     using Newtonsoft.Json;
     using NLog;
     using Quartz;
@@ -23,17 +28,22 @@ namespace SoluiNet.DevTools.SmartHome.Senec
     using SoluiNet.DevTools.Core.Configuration;
     using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.SmartHome.Data;
     using SoluiNet.DevTools.Core.Tools.Number;
+    using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+    using SoluiNet.DevTools.Core.UI.Blazor.Reference;
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+#endif
     using SoluiNet.DevTools.SmartHome.Senec.Jobs;
 
     /// <summary>
     /// Provides a plugin for the Senec battery storage.
     /// </summary>
     public class SenecPlugin : ISmartHomeUiPlugin, IObservable<SmartHomeDictionary>, IAllowsGenericDataExchange<SmartHomeDictionary>, IContainsSettings,
-        IRunsBackgroundTask
+        IRunsBackgroundTask, ISupportsCommandLine
     {
         /// <summary>
         /// The list of all smart home observers.
@@ -53,41 +63,41 @@ namespace SoluiNet.DevTools.SmartHome.Senec
         /// <summary>
         /// Gets the first accent colour.
         /// </summary>
-        public Color AccentColour1
+        public IColour AccentColour1
         {
-            get { return Color.FromRgb(58, 156, 223); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(58, 156, 223); }
         }
 
         /// <summary>
         /// Gets the second accent colour.
         /// </summary>
-        public Color AccentColour2
+        public IColour AccentColour2
         {
-            get { return Colors.White; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(0xFF, 0xFF, 0xFF); }
         }
 
         /// <summary>
         /// Gets the foreground colour.
         /// </summary>
-        public Color ForegroundColour
+        public IColour ForegroundColour
         {
-            get { return Colors.Black; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(0x00, 0x00, 0x00); }
         }
 
         /// <summary>
         /// Gets the background colour.
         /// </summary>
-        public Color BackgroundColour
+        public IColour BackgroundColour
         {
-            get { return Colors.White; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(0xFF, 0xFF, 0xFF); }
         }
 
         /// <summary>
         /// Gets the background accent colour.
         /// </summary>
-        public Color BackgroundAccentColour
+        public IColour BackgroundAccentColour
         {
-            get { return Color.FromRgb(58, 156, 223); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(58, 156, 223); }
         }
 
         /// <summary>
@@ -121,10 +131,29 @@ namespace SoluiNet.DevTools.SmartHome.Senec
             }
         }
 
+        /// <inheritdoc/>
+        public Dictionary<string, ICollection<object>> Resources
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets the help text.
+        /// </summary>
+        public string HelpText
+        {
+            get
+            {
+                return @"senec        Get Information about senec";
+            }
+        }
+
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Gets or sets the main grid.
         /// </summary>
         public Grid MainGrid { get; set; }
+#endif
 
         /// <summary>
         /// Gets the logger.
@@ -137,6 +166,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
             }
         }
 
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Display the plugin.
         /// </summary>
@@ -153,8 +183,8 @@ namespace SoluiNet.DevTools.SmartHome.Senec
                 {
                     Header = "SENEC",
                     Name = "Senec_TabItem",
-                    Background = new LinearGradientBrush(this.AccentColour1, this.AccentColour2, 0.00),
-                    Foreground = new SolidColorBrush(this.ForegroundColour),
+                    Background = new LinearGradientBrush(this.AccentColour1.AsColor(), this.AccentColour2.AsColor(), 0.00),
+                    Foreground = new SolidColorBrush(this.ForegroundColour.AsColor()),
                 };
 
                 tabControl.SelectionChanged += (sender, eventArgs) =>
@@ -163,7 +193,7 @@ namespace SoluiNet.DevTools.SmartHome.Senec
                     {
                         if (tabItem.IsSelected)
                         {
-                            tabControl.Background = new SolidColorBrush(this.BackgroundColour);
+                            tabControl.Background = new SolidColorBrush(this.BackgroundColour.AsColor());
                         }
                     }
                 };
@@ -173,12 +203,13 @@ namespace SoluiNet.DevTools.SmartHome.Senec
                 tabItem.Content = new Grid()
                 {
                     Name = "Senec_TabItem_Content",
-                    Background = new LinearGradientBrush(this.BackgroundAccentColour, this.BackgroundColour, 45.00),
+                    Background = new LinearGradientBrush(this.BackgroundAccentColour.AsColor(), this.BackgroundColour.AsColor(), 45.00),
                 };
 
                 ((Grid)tabItem.Content).Children.Add(new SenecUserControl());
             }
         }
+#endif
 
         /// <summary>
         /// Runs a background task which will check for new data every 30 seconds.
@@ -374,6 +405,24 @@ namespace SoluiNet.DevTools.SmartHome.Senec
             }
 
             return new GenericUnsubscriber<List<IObserver<SmartHomeDictionary>>, SmartHomeDictionary>(this.smartHomeObservers, observer);
+        }
+
+        /// <inheritdoc/>
+        public void ConfigureServices(IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public int RunCommandLine(IDictionary<string, string> arguments)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

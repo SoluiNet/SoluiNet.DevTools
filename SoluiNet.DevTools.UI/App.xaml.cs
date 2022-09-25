@@ -17,12 +17,14 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
+    using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
     using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Reference;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
 
     /// <summary>
@@ -35,6 +37,7 @@ namespace SoluiNet.DevTools.UI
         /// <summary>
         /// Initializes a new instance of the <see cref="App"/> class.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Doesn't matter. This app is only available for Windows.")]
         public App()
         {
             this.InitializeComponent();
@@ -42,6 +45,7 @@ namespace SoluiNet.DevTools.UI
             this.baseApp = new BaseSoluiNetUiApp();
 
             ApplicationContext.Application = this;
+            ApplicationContext.AddSingleton<IColourFactory>("ColourFactory", new ColourFactory());
         }
 
         /// <summary>
