@@ -17,6 +17,11 @@ namespace SoluiNet.DevTools.Core.Plugin
     public interface ISupportsCommandLine : IBasePlugin
     {
         /// <summary>
+        /// Gets the help text.
+        /// </summary>
+        string HelpText { get; }
+
+        /// <summary>
         /// Parse and run the command.
         /// </summary>
         /// <param name="arguments">The arguments.</param>

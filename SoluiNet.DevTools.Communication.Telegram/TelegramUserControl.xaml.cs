@@ -10,6 +10,7 @@ namespace SoluiNet.DevTools.Communication.Telegram
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Documents;
@@ -18,6 +19,7 @@ namespace SoluiNet.DevTools.Communication.Telegram
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+#endif
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;

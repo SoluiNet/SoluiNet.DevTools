@@ -14,5 +14,3 @@ using System.Runtime.InteropServices;
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
 [assembly: Guid("877ef2d5-c0de-4cc0-bc1f-8d346ccefc92")]
-
-[assembly: CLSCompliant(true)]

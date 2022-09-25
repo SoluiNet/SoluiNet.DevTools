@@ -12,13 +12,16 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Enums;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Database;
     using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.UI.WPF.Extensions;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Reference;
     using SoluiNet.DevTools.Core.Windows.Tools.Database;
     using SoluiNet.DevTools.Core.Windows.Tools.Security;
 
@@ -42,33 +45,33 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
         }
 
         /// <inheritdoc/>
-        public Color AccentColour1
+        public IColour AccentColour1
         {
-            get { return Color.FromRgb(128, 128, 128); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(128, 128, 128); }
         }
 
         /// <inheritdoc/>
-        public Color AccentColour2
+        public IColour AccentColour2
         {
-            get { return Color.FromRgb(200, 200, 200); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(200, 200, 200); }
         }
 
         /// <inheritdoc/>
-        public Color ForegroundColour
+        public IColour ForegroundColour
         {
-            get { return Colors.Black; }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Black"); }
         }
 
         /// <inheritdoc/>
-        public Color BackgroundColour
+        public IColour BackgroundColour
         {
-            get { return Color.FromRgb(200, 200, 200); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(200, 200, 200); }
         }
 
         /// <inheritdoc/>
-        public Color BackgroundAccentColour
+        public IColour BackgroundAccentColour
         {
-            get { return Color.FromRgb(128, 128, 128); }
+            get { return ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(128, 128, 128); }
         }
 
         /// <inheritdoc/>
@@ -165,11 +168,27 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
             if (tabControl.Name == "MainTabs")
             {
-                var tabItem = new TabItem() { Header = "Example", Name = "Example_TabItem", Background = new LinearGradientBrush(this.AccentColour1, this.AccentColour2, 0.00), Foreground = new SolidColorBrush(this.ForegroundColour) };
+                var tabItem = new TabItem()
+                {
+                    Header = "Example",
+                    Name = "Example_TabItem",
+                    Background = new LinearGradientBrush(
+                        (this.AccentColour1 as Colour).MediaColorValue,
+                        (this.AccentColour2 as Colour).MediaColorValue,
+                        0.00),
+                    Foreground = new SolidColorBrush((this.ForegroundColour as Colour).MediaColorValue),
+                };
 
                 tabControl.Items.Add(tabItem);
 
-                tabItem.Content = new Grid() { Name = "Example_TabItem_Content", Background = new LinearGradientBrush(this.BackgroundAccentColour, this.BackgroundColour, 45.00) };
+                tabItem.Content = new Grid()
+                {
+                    Name = "Example_TabItem_Content",
+                    Background = new LinearGradientBrush(
+                        (this.BackgroundAccentColour as Colour).MediaColorValue,
+                        (this.BackgroundColour as Colour).MediaColorValue,
+                        45.00),
+                };
 
                 ((Grid)tabItem.Content).Children.Add(new TextBox()
                 {
@@ -198,20 +217,20 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
                     this.MainGrid.FindChild<TabControl>("Example_TabItem_Tabs").Items.Clear();
 
-                    /*using (var context = new ExampleContext(Environment))
-                    {
-                        var customerResults = context.ConfigurationValues.Where(x => x.ConfigKey.Contains(searchPhrase));
+                /*using (var context = new ExampleContext(Environment))
+                {
+                    var customerResults = context.ConfigurationValues.Where(x => x.ConfigKey.Contains(searchPhrase));
 
-                        UIHelper.FillResultsTab("Example", MainGrid, "Customers", customerResults, new List<string>()
-                        {
-                            "Created",
-                            "Customernumber",
-                            "Firstname",
-                            "Lastname",
-                            "Email",
-                            "LockedOut"
-                        });
-                    }*/
+                    UIHelper.FillResultsTab("Example", MainGrid, "Customers", customerResults, new List<string>()
+                    {
+                        "Created",
+                        "Customernumber",
+                        "Firstname",
+                        "Lastname",
+                        "Email",
+                        "LockedOut"
+                    });
+                }*/
                 };
 
                 ((Grid)tabItem.Content).Children.Add(new TabControl()
