@@ -28,10 +28,10 @@ namespace SoluiNet.DevTools.Core.Application
             : base()
         {
             string[] dllFileNames = null;
-            if (Directory.Exists("Plugins"))
-            {
-                dllFileNames = Directory.GetFiles("Plugins", "*.dll");
-            }
+            dllFileNames = Directory.GetFiles(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                "*.dll",
+                SearchOption.AllDirectories);
 
             if (dllFileNames == null)
             {
@@ -52,6 +52,12 @@ namespace SoluiNet.DevTools.Core.Application
                     Debug.WriteLine(JsonTools.Serialize(exception));
 
                     Logger.Debug(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't load assembly '{0}'", dllFile));
+                }
+                catch (FileNotFoundException exception)
+                {
+                    Debug.WriteLine(JsonTools.Serialize(exception));
+
+                    Logger.Debug(exception, string.Format(CultureInfo.InvariantCulture, "Couldn't find assembly '{0}'", dllFile));
                 }
             }
 
