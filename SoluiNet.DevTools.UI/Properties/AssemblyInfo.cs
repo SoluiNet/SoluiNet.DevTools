@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Windows;
 
 // Durch Festlegen von ComVisible auf FALSE werden die Typen in dieser Assembly
@@ -31,3 +32,5 @@ using System.Windows;
 [assembly: CLSCompliant(true)]
 
 [assembly: AssemblyVersion("0.9.0.0")]
+
+// [assembly: SupportedOSPlatform("windows")]
