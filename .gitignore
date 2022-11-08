@@ -23,3 +23,13 @@ packages/**
 /SoluiNet.DevTools.UI/NHibernate.config
 /SoluiNet.DevTools.Console/SoluiNet - Backup.DevTools.Console.csproj
 /SoluiNet.DevTools.UI.Blazor/wwwroot/images/logo.svg
+/SoluiNet.DevTools.Console/api
+/SoluiNet.DevTools.Console/articles
+/SoluiNet.DevTools.Mobile/SoluiNet.DevTools.Mobile/api
+/SoluiNet.DevTools.Mobile/SoluiNet.DevTools.Mobile/articles
+/SoluiNet.DevTools.Mobile/SoluiNet.DevTools.Mobile/log.txt
+/SoluiNet.DevTools.Mobile/SoluiNet.DevTools.Mobile/index.md
+/SoluiNet.DevTools.Mobile/SoluiNet.DevTools.Mobile/.gitignore
+/SoluiNet.DevTools.Console/log.txt
+/SoluiNet.DevTools.Console/index.md
+/SoluiNet.DevTools.Console/.gitignore
