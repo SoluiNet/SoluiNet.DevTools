@@ -422,7 +422,7 @@ namespace SoluiNet.DevTools.Core.Tools.Plugin
             foreach (string dllFile in dllFileNames)
             {
                 var an = AssemblyName.GetAssemblyName(dllFile);
-                var assembly = Assembly.Load(an);
+                var assembly = Assembly.LoadFrom(dllFile);
                 assemblies.Add(assembly);
             }
 
@@ -430,67 +430,74 @@ namespace SoluiNet.DevTools.Core.Tools.Plugin
 
             var pluginList = new List<T>();
 
-            var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
-
-            foreach (var assembly in assemblies)
+            try
             {
-                if (assembly == null)
-                {
-                    continue;
-                }
+                var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
 
-                var assemblyName = assembly.GetName().Name;
-
-                if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
+                foreach (var assembly in assemblies)
                 {
-                    continue;
-                }
-
-                var types = assembly.GetTypes();
-                foreach (var type in types)
-                {
-                    if (type.IsInterface || type.IsAbstract)
+                    if (assembly == null)
                     {
                         continue;
                     }
 
-                    if (type.GetInterface(pluginType.FullName) != null)
+                    var assemblyName = assembly.GetName().Name;
+
+                    if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
                     {
-                        T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
-
-                        if (plugin == null)
-                        {
-                            plugin = (T)Activator.CreateInstance(type);
-                        }
-
-                        pluginList.Add(plugin);
+                        continue;
                     }
 
-                    if (pluginType.IsInterface && pluginType.IsGenericType)
+                    var types = assembly.GetTypes();
+                    foreach (var type in types)
                     {
-                        var typeInterfaces = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition().FullName == pluginType.GetGenericTypeDefinition().FullName);
-
-                        if (typeInterfaces == null || !typeInterfaces.Any())
+                        if (type.IsInterface || type.IsAbstract)
                         {
                             continue;
                         }
 
-                        foreach (var typeInterface in typeInterfaces)
+                        if (type.GetInterface(pluginType.FullName) != null)
                         {
-                            if (VerifyGenericType(pluginType, typeInterface))
+                            T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
+
+                            if (plugin == null)
                             {
-                                T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
+                                plugin = (T)Activator.CreateInstance(type);
+                            }
 
-                                if (plugin == null)
+                            pluginList.Add(plugin);
+                        }
+
+                        if (pluginType.IsInterface && pluginType.IsGenericType)
+                        {
+                            var typeInterfaces = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition().FullName == pluginType.GetGenericTypeDefinition().FullName);
+
+                            if (typeInterfaces == null || !typeInterfaces.Any())
+                            {
+                                continue;
+                            }
+
+                            foreach (var typeInterface in typeInterfaces)
+                            {
+                                if (VerifyGenericType(pluginType, typeInterface))
                                 {
-                                    plugin = (T)Activator.CreateInstance(type);
-                                }
+                                    T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
 
-                                pluginList.Add(plugin);
+                                    if (plugin == null)
+                                    {
+                                        plugin = (T)Activator.CreateInstance(type);
+                                    }
+
+                                    pluginList.Add(plugin);
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                throw new SoluiNetException($"Plugin with type '{pluginType.FullName}' couldn't be loaded.", exception);
             }
 
             return pluginList;
