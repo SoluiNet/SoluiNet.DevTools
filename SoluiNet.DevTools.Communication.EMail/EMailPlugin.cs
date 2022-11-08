@@ -93,7 +93,7 @@ namespace SoluiNet.DevTools.Communication.EMail
         {
             get
             {
-                throw new NotImplementedException();
+                return null;
             }
         }
 
@@ -132,7 +132,7 @@ namespace SoluiNet.DevTools.Communication.EMail
         /// <returns>Returns a list of issues that are matching the overgiven parameters.</returns>
         public ICollection<object> GetData(string entityName, IDictionary<string, object> searchData)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace SoluiNet.DevTools.Communication.EMail
         /// <returns>Returns a list of issues that are matching the overgiven parameters.</returns>
         public ICollection<object> GetData(string whereClause)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace SoluiNet.DevTools.Communication.EMail
         /// <exception cref="NotImplementedException">Throws a <see cref="NotImplementedException"/> until this method has been implemented.</exception>
         public object GetDataByKey(string key)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace SoluiNet.DevTools.Communication.EMail
         /// <exception cref="NotImplementedException">Throws a <see cref="NotImplementedException"/> because this method won't be needed for Telegram data exchange.</exception>
         public IDictionary<string, object> GetGeneralData()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         /// <summary>
@@ -183,7 +183,6 @@ namespace SoluiNet.DevTools.Communication.EMail
         /// <exception cref="NotImplementedException">Throws a <see cref="NotImplementedException"/> until the functionality has been implemented.</exception>
         public void Receive(string entity = "")
         {
-            throw new NotImplementedException();
         }
 
         /// <inheritdoc />
@@ -255,19 +254,17 @@ namespace SoluiNet.DevTools.Communication.EMail
         /// <returns>Returns the changed issue.</returns>
         public object SetData(object identifier, IDictionary<string, object> valueData)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         /// <inheritdoc/>
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
         {
-            throw new NotImplementedException();
         }
     }
 }
