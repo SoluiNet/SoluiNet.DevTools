@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
     using System.Reflection;
     using CsvHelper;
     using NLog;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Tools.File;
     using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.Tools.XML;
@@ -254,21 +255,8 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                         }
                         catch (Exception exception)
                         {
-                            if (exception is ReflectionTypeLoadException)
-                            {
-                                foreach (var loaderException in (exception as ReflectionTypeLoadException).LoaderExceptions)
-                                {
-                                    Logger.Warn(loaderException);
-                                }
-                            }
-                            else if (exception is TypeLoadException typeLoadException)
-                            {
-                                Logger.Info(typeLoadException);
-                                continue;
-                            }
-
                             Logger.Warn(exception, $"Couldn't process assembly '{assembly.FullName}'");
-                            throw;
+                            throw new SoluiNetException($"Couldn't process assembly '{assembly.FullName}'", exception);
                         }
                     }
                 }
