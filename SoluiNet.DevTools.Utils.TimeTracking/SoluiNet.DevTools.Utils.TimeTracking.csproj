@@ -32,6 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -47,26 +50,14 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.22" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="EntityFramework.de" Version="6.2.0" />
-    <PackageReference Include="LiveCharts" Version="0.9.7" />
-    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="NLog" Version="5.0.5" />
     <PackageReference Include="Quartz" Version="3.5.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.116" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.22" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -174,11 +165,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec
-      Command="copy &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;"
-      Condition="'$(OS)' == 'Windows_NT'" />
-    <Exec
-      Command="cp &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;"
-      Condition="'$(OS)' == 'Unix'" />
+    <Exec Command="copy &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="cp &quot;$(SolutionDir)icons\automatic_assignment_25x25.png&quot; &quot;$(ProjectDir)icons\automatic_assignment.png&quot;" Condition="'$(OS)' == 'Unix'" />
   </Target>
 </Project>
