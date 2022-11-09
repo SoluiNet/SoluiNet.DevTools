@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Windows;
 
 // Durch Festlegen von ComVisible auf FALSE werden die Typen in dieser Assembly
@@ -21,10 +22,15 @@ using System.Windows;
 // des nachstehenden NeutralResourceLanguage-Attributs auf.  Aktualisieren Sie "en-US" in der nachstehenden Zeile,
 // sodass es mit der UICulture-Einstellung in der Projektdatei übereinstimmt.
 
-// [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
+// do not set NeutralResourcesLanguage since we have no resource satellite libraries until now
+// [assembly: NeutralResourcesLanguage("en-GB", UltimateResourceFallbackLocation.Satellite)]
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None,
     ResourceDictionaryLocation.SourceAssembly)
 ]
 
 [assembly: CLSCompliant(true)]
+
+[assembly: AssemblyVersion("0.9.0.0")]
+
+// [assembly: SupportedOSPlatform("windows")]

@@ -13,6 +13,7 @@ namespace SoluiNet.DevTools.UI
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.UI.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
@@ -24,7 +25,10 @@ namespace SoluiNet.DevTools.UI
     /// </summary>
     public partial class MainWindow : SoluiNetWindow
     {
+#pragma warning disable 0649
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("General", "CS0649:Field is never assigned to, and will always have its default value 'null'", Justification = "Prepared for later usage.")]
         private readonly GlobalHotKey hotKey;
+#pragma warning restore 0649
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.

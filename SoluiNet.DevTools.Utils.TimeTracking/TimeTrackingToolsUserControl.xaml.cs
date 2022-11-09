@@ -124,11 +124,18 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
         private static IEnumerable<XElement> GetApplicationAreas(Entities.Application application)
         {
-            return application.ApplicationArea.Select(a => new XElement(
+            var tempList = new List<XElement>();
+
+            foreach (var applicationArea in application.ApplicationArea)
+            {
+                tempList.Add(new XElement(
                         "Area",
-                        new XAttribute("Id", a.ApplicationAreaId),
-                        new XAttribute("Name", a.ApplicationName),
-                        new XText(a.ExtendedConfiguration)));
+                        new XAttribute("Id", applicationArea.ApplicationAreaId),
+                        new XAttribute("Name", applicationArea.AreaName),
+                        new XText(!string.IsNullOrWhiteSpace(applicationArea.ExtendedConfiguration) ? applicationArea.ExtendedConfiguration : string.Empty)));
+            }
+
+            return tempList;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -771,7 +778,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                     if (!localContext.Application.Any(x => x.ApplicationName == applicationAreaName))
                     {
-                        var applicationArea = new Entities.ApplicationArea() { ApplicationName = applicationAreaName };
+                        var applicationArea = new Entities.ApplicationArea() { AreaName = applicationAreaName };
 
                         localContext.ApplicationArea.Add(applicationArea);
                         localContext.SaveChanges();
@@ -1766,34 +1773,38 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
             foreach (var category in this.context.Category)
             {
-                categories.Add(new XElement(
-                    "Categories",
+                categories.Add(
                     new XElement(
                         "Category",
                         new XAttribute("Id", category.CategoryId),
-                        new XAttribute("Name", category.CategoryName),
+                        new XAttribute(
+                            "Name",
+                            !string.IsNullOrWhiteSpace(category.CategoryName) ? category.CategoryName : string.Format(CultureInfo.InvariantCulture, "CATEGORY{0:D5}", category.CategoryId)),
                         new XAttribute("DistributeEvenlyTarget", category.DistributeEvenlyTarget ?? false),
-                        new XText(category.ExtendedConfiguration))));
+                        new XText(!string.IsNullOrWhiteSpace(category.ExtendedConfiguration)
+                            ? category.ExtendedConfiguration
+                            : string.Empty)));
             }
 
             var applications = new List<XElement>();
 
             foreach (var application in this.context.Application)
             {
-                applications.Add(new XElement(
-                    "Applications",
+                applications.Add(
                     new XElement(
                         "Application",
                         new XAttribute("Id", application.ApplicationId),
-                        new XAttribute("Name", application.ApplicationName),
-                        new XText(application.ExtendedConfiguration),
-                        new XElement("Areas", GetApplicationAreas(application)))));
+                        new XAttribute(
+                            "Name",
+                            !string.IsNullOrWhiteSpace(application.ApplicationName) ? application.ApplicationName : string.Format(CultureInfo.InvariantCulture, "APPLICATION{0:D5}", application.ApplicationId)),
+                        new XText(!string.IsNullOrWhiteSpace(application.ExtendedConfiguration) ? application.ExtendedConfiguration : string.Empty),
+                        new XElement("Areas", GetApplicationAreas(application))));
             }
 
             var assignmentConfig = new XElement(
                 "AssignmentConfig",
-                categories,
-                applications);
+                new XElement("Categories", categories),
+                new XElement("Applications", applications));
 
             Clipboard.SetText(assignmentConfig.ToString());
             this.AssignmentConfig.Text = assignmentConfig.ToString();
@@ -1807,7 +1818,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 foreach (var category in assignmentConfig.Descendants("Category"))
                 {
-                    if (!this.context.Category.Any(x => x.CategoryName == category.Attribute("Name").Value))
+                    var categoryName = category.Attribute("Name").Value;
+
+                    if (!this.context.Category.Any(x => x.CategoryName == categoryName))
                     {
                         this.context.Category.Add(new Category()
                         {
@@ -1820,20 +1833,24 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                 foreach (var application in assignmentConfig.Descendants("Application"))
                 {
-                    if (!this.context.Application.Any(x => x.ApplicationName == application.Attribute("Name").Value))
+                    var applicationName = application.Attribute("Name").Value;
+
+                    if (!this.context.Application.Any(x => x.ApplicationName == applicationName))
                     {
                         this.context.Application.Add(new Entities.Application()
                         {
                             ApplicationName = application.Attribute("Name").Value,
                             ApplicationArea = application.Descendants("Area").Select(a => new ApplicationArea()
                             {
-                                ApplicationName = a.Attribute("Name").Value,
+                                AreaName = a.Attribute("Name").Value,
                                 ExtendedConfiguration = a.Value,
                             }).ToList(),
                             ExtendedConfiguration = application.Value,
                         });
                     }
                 }
+
+                this.context.SaveChanges();
             }
         }
     }

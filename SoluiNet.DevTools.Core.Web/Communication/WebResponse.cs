@@ -40,12 +40,12 @@ namespace SoluiNet.DevTools.Core.Web.Communication
         /// <summary>
         /// Initializes a new instance of the <see cref="WebResponse"/> class.
         /// </summary>
-        /// <param name="responseText">The response text.</param>
+        /// <param name="response">The response text.</param>
         /// <param name="encoding">The encoding.</param>
-        public WebResponse(string responseText, Encoding encoding)
+        public WebResponse(string response, Encoding encoding)
             : this(encoding)
         {
-            this.ResponseText = responseText;
+            this.Response = response;
         }
 
         /// <summary>
@@ -92,9 +92,9 @@ namespace SoluiNet.DevTools.Core.Web.Communication
         public Stream ResponseStream { get; set; }
 
         /// <summary>
-        /// Gets or sets the response text.
+        /// Gets or sets the response.
         /// </summary>
-        public string ResponseText { get; set; }
+        public string Response { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the stream value or the response text should be used.
@@ -127,7 +127,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
             }
             else
             {
-                responseTextBytes = this.Encoding.GetBytes(this.ResponseText);
+                responseTextBytes = this.Encoding.GetBytes(this.Response);
             }
 
             var headersByteArray = this.Encoding.GetBytes(this.AddHttpHeaders(responseTextBytes.Length, this.ContentType, this.Encoding));
@@ -156,7 +156,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
             }
             else
             {
-                responseTextBytes = this.Encoding.GetBytes(this.ResponseText);
+                responseTextBytes = this.Encoding.GetBytes(this.Response);
             }
 
             result += this.AddHttpHeaders(responseTextBytes.Length, this.ContentType, this.Encoding);
@@ -167,7 +167,7 @@ namespace SoluiNet.DevTools.Core.Web.Communication
             }
             else
             {
-                result += this.ResponseText;
+                result += this.Response;
             }
 
             return result;

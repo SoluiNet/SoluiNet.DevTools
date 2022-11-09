@@ -32,7 +32,7 @@ namespace SoluiNet.DevTools.Utils.File
             {
                 foreach (var line in System.IO.File.ReadAllLines(filePath))
                 {
-                    if (line.Contains(searchPattern))
+                    if (line.Contains(searchPattern, StringComparison.Ordinal))
                     {
                         result.Add(line);
                     }
@@ -52,7 +52,7 @@ namespace SoluiNet.DevTools.Utils.File
         /// <param name="filePath">The file path.</param>
         /// <param name="regExPattern">The RegEx search pattern.</param>
         /// <returns>Returns every line which matches the RegEx search pattern.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "Stay with 'Ex' for better readability.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "RegEx is a known description.")]
         public static IList<string> ExtractLinesMatchingRegEx(string filePath, string regExPattern)
         {
             var result = new List<string>();
@@ -99,7 +99,7 @@ namespace SoluiNet.DevTools.Utils.File
                     {
                         var hash = md5.ComputeHash(stream);
 
-                        return BitConverter.ToString(hash).Replace("-", string.Empty).ToLowerInvariant();
+                        return BitConverter.ToString(hash).Replace("-", string.Empty, StringComparison.Ordinal).ToLowerInvariant();
                     }
                 }
             }

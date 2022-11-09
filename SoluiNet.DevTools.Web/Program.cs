@@ -38,6 +38,8 @@ namespace SoluiNet.DevTools.Web
             {
                 ApplicationContext.Application = new WebApplication();
 
+                (ApplicationContext.Application as BaseSoluiNetApp).Initialize();
+
                 var servicesToRun = new ServiceBase[]
                 {
                     new SoluiNetService(),
@@ -64,7 +66,7 @@ namespace SoluiNet.DevTools.Web
         /// <summary>
         /// Run services in interactive mode.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "The service will use english as default language.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a service which should be universal. So we use the most common language for information messages - which is English.")]
         private static void RunInteractiveServices(ServiceBase[] servicesToRun)
         {
             Console.WriteLine();

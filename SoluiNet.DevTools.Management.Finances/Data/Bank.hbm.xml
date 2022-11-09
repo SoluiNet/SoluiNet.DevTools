@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    namespace="SoluiNet.DevTools.Management.Finances.Data" assembly="SoluiNet.DevTools.Management.Finances">
+  <class name="Bank" table="Bank">
+    <id name="Id">
+      <column name="Id" not-null="true"/>
+      <generator class="increment" />
+    </id>
+    <property name="Name">
+      <column name="Name" length="50" not-null="true" />
+    </property>
+    <property name="BIC">
+      <column name="BIC" length="11" />
+    </property>
+  </class>
+</hibernate-mapping>

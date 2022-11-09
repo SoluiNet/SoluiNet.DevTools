@@ -9,28 +9,55 @@ namespace SoluiNet.DevTools.UI
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows;
     using NLog;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Plugin.Events;
+    using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.UI.UIElement;
     using SoluiNet.DevTools.Core.UI.WPF.Application;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+    using SoluiNet.DevTools.Core.UI.WPF.Reference;
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
 
     /// <summary>
     /// Interaction logic for "App.xaml".
     /// </summary>
-    public partial class App : Application, ISoluiNetUiWpfApp
+    public partial class App : Application, ISoluiNetUiWpfApp, IHoldsBaseApp
     {
+        private BaseSoluiNetApp baseApp;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="App"/> class.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Doesn't matter. This app is only available for Windows.")]
+        public App()
+        {
+            this.InitializeComponent();
+
+            this.baseApp = new BaseSoluiNetUiApp();
+
+            ApplicationContext.Application = this;
+            ApplicationContext.AddSingleton<IColourFactory>("ColourFactory", new ColourFactory());
+        }
+
         /// <summary>
         /// Gets all available plugins.
         /// </summary>
-        public ICollection<IBasePlugin> Plugins { get; private set; }
+        public ICollection<IBasePlugin> Plugins
+        {
+            get
+            {
+                return this.baseApp.Plugins;
+            }
+        }
 
         /// <summary>
         /// Gets all available plugins that provide database connectivity functions.
@@ -43,6 +70,11 @@ namespace SoluiNet.DevTools.UI
         public ICollection<ISmartHomeUiPlugin> SmartHomePlugins { get; private set; }
 
         /// <summary>
+        /// Gets all available plugins that provide management functions.
+        /// </summary>
+        public ICollection<IManagementUiPlugin> ManagementPlugins { get; private set; }
+
+        /// <summary>
         /// Gets all available plugins that provide utility functions.
         /// </summary>
         public ICollection<IUtilitiesDevPlugin> UtilityPlugins { get; private set; }
@@ -50,11 +82,38 @@ namespace SoluiNet.DevTools.UI
         /// <summary>
         /// Gets all available plugins that will run in the background.
         /// </summary>
-        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; private set; }
+        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins
+        {
+            get
+            {
+                return this.baseApp.BackgroundTaskPlugins;
+            }
+        }
 
         /// <inheritdoc/>
         public ICollection<ISoluiNetUIElement> UiElements { get; private set; }
 
+        /// <inheritdoc />
+        public BaseSoluiNetApp BaseApp
+        {
+            get
+            {
+                return this.baseApp;
+            }
+        }
+
+        /// <inheritdoc/>
+        public string Version
+        {
+            get
+            {
+                return this.baseApp.Version;
+            }
+        }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
         private static Logger Logger
         {
             get
@@ -79,7 +138,11 @@ namespace SoluiNet.DevTools.UI
                 this.LoadPlugins();
                 this.LoadUiElements();
 
+                this.baseApp.Initialize();
+
                 App.CallStartupEvent();
+
+                App.CallInitializedEvent();
             }
             catch (Exception exception)
             {
@@ -116,6 +179,14 @@ namespace SoluiNet.DevTools.UI
             }
         }
 
+        private static void CallInitializedEvent()
+        {
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IInitializedEvent>>())
+            {
+                plugin.HandleEvent<IInitializedEvent>(new Dictionary<string, object>());
+            }
+        }
+
         private static void CallShutdownEvent()
         {
             foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IShutdownEvent>>())
@@ -124,6 +195,7 @@ namespace SoluiNet.DevTools.UI
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to catch any exception that occurs during plugin load. Therefore the base exception type will be catched.")]
         private void LoadPlugins()
         {
             string[] dllFileNames = null;
@@ -143,7 +215,7 @@ namespace SoluiNet.DevTools.UI
                 try
                 {
                     var an = AssemblyName.GetAssemblyName(dllFile);
-                    var assembly = Assembly.Load(an);
+                    var assembly = Assembly.LoadFrom(dllFile);
                     assemblies.Add(assembly);
                 }
                 catch (BadImageFormatException exception)
@@ -157,6 +229,7 @@ namespace SoluiNet.DevTools.UI
             Type pluginType = typeof(IBasePlugin);
             Type sqlPluginType = typeof(ISqlUiPlugin);
             Type smartHomePluginType = typeof(ISmartHomeUiPlugin);
+            Type managementPluginType = typeof(IManagementUiPlugin);
             Type utilityPluginType = typeof(IUtilitiesDevPlugin);
             Type backgroundTaskType = typeof(IRunsBackgroundTask);
 
@@ -217,6 +290,18 @@ namespace SoluiNet.DevTools.UI
                                 }
                             }
 
+                            if (type.GetInterface(managementPluginType.FullName) != null)
+                            {
+                                if (pluginTypes.ContainsKey(type))
+                                {
+                                    pluginTypes[type].Add("ManagementDev");
+                                }
+                                else
+                                {
+                                    pluginTypes.Add(type, new List<string>() { "ManagementDev" });
+                                }
+                            }
+
                             if (type.GetInterface(utilityPluginType.FullName) != null)
                             {
                                 if (pluginTypes.ContainsKey(type))
@@ -242,6 +327,14 @@ namespace SoluiNet.DevTools.UI
                             }
                         }
                     }
+                    catch (ReflectionTypeLoadException loadException)
+                    {
+                        Logger.Fatal(
+                            loadException,
+                            "Error (Load Exception) while assigning plugin types for assembly '{0}': {1}",
+                            assembly.FullName,
+                            loadException.LoaderExceptions.Select(x => x.Message).Aggregate((x, y) => x + "\r\n" + y));
+                    }
                     catch (Exception assignmentException)
                     {
                         App.Logger.Fatal(assignmentException, "Error while assigning plugin types for assembly '{0}'", assembly.FullName);
@@ -253,11 +346,10 @@ namespace SoluiNet.DevTools.UI
                 App.Logger.Fatal(exception, "Error while assigning plugin types");
             }
 
-            this.Plugins = new List<IBasePlugin>();
             this.SqlPlugins = new List<ISqlUiPlugin>();
             this.SmartHomePlugins = new List<ISmartHomeUiPlugin>();
+            this.ManagementPlugins = new List<IManagementUiPlugin>();
             this.UtilityPlugins = new List<IUtilitiesDevPlugin>();
-            this.BackgroundTaskPlugins = new List<IRunsBackgroundTask>();
 
             var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
 
@@ -282,25 +374,61 @@ namespace SoluiNet.DevTools.UI
 
                 if (type.Value.Contains("SqlDev"))
                 {
-                    var plugin = (ISqlUiPlugin)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as ISqlUiPlugin;
+
+                    if (plugin == null)
+                    {
+                        plugin = (ISqlUiPlugin)Activator.CreateInstance(type.Key);
+                    }
+
                     this.SqlPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("SmartHomeDev"))
                 {
-                    var plugin = (ISmartHomeUiPlugin)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as ISmartHomeUiPlugin;
+
+                    if (plugin == null)
+                    {
+                        plugin = (ISmartHomeUiPlugin)Activator.CreateInstance(type.Key);
+                    }
+
                     this.SmartHomePlugins.Add(plugin);
+                }
+
+                if (type.Value.Contains("ManagementDev"))
+                {
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as IManagementUiPlugin;
+
+                    if (plugin == null)
+                    {
+                        plugin = (IManagementUiPlugin)Activator.CreateInstance(type.Key);
+                    }
+
+                    this.ManagementPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("UtilityDev"))
                 {
-                    var plugin = (IUtilitiesDevPlugin)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as IUtilitiesDevPlugin;
+
+                    if (plugin == null)
+                    {
+                        plugin = (IUtilitiesDevPlugin)Activator.CreateInstance(type.Key);
+                    }
+
                     this.UtilityPlugins.Add(plugin);
                 }
 
                 if (type.Value.Contains("BackgroundTask"))
                 {
-                    var plugin = (IRunsBackgroundTask)Activator.CreateInstance(type.Key);
+                    var plugin = ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type.Key) as IRunsBackgroundTask;
+
+                    if (plugin == null)
+                    {
+                        plugin = (IRunsBackgroundTask)Activator.CreateInstance(type.Key);
+                    }
+
                     this.BackgroundTaskPlugins.Add(plugin);
 
                     Task.Run(() =>

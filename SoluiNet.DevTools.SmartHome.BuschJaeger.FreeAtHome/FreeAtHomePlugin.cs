@@ -8,88 +8,109 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
     using System.Collections.Generic;
     using System.Data;
     using System.Security.Principal;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using SoluiNet.DevTools.Core.Reference;
+    using SoluiNet.DevTools.Core.UI.Blazor.Plugin;
+#if BUILD_FOR_WINDOWS
     using System.Windows.Controls;
     using System.Windows.Media;
     using SoluiNet.DevTools.Core.UI.WPF.Plugin;
+#endif
 
     /// <summary>
     /// Provides a plugin for the Busch Jaeger free@home system.
     /// </summary>
-    public class FreeAtHomePlugin: ISmartHomeUiPlugin
+    public class FreeAtHomePlugin : ISmartHomeUiPlugin
     {
         /// <summary>
-        /// Gets or sets the environment.
+        /// Gets the first accent colour.
         /// </summary>
-        public string Environment
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Gets or sets the connection string name.
-        /// </summary>
-        public string ConnectionStringName
+        public IColour AccentColour1
         {
             get { throw new NotImplementedException(); }
         }
 
         /// <summary>
-        /// Gets or sets the default connection string name.
+        /// Gets the second accent colour.
         /// </summary>
-        public string DefaultConnectionStringName
+        public IColour AccentColour2
         {
             get { throw new NotImplementedException(); }
         }
 
         /// <summary>
-        /// Gets or sets the first accent colour.
+        /// Gets the foreground colour.
         /// </summary>
-        public Color AccentColour1
+        public IColour ForegroundColour
         {
             get { throw new NotImplementedException(); }
         }
 
         /// <summary>
-        /// Gets or sets the second accent colour.
+        /// Gets the background colour.
         /// </summary>
-        public Color AccentColour2
+        public IColour BackgroundColour
         {
             get { throw new NotImplementedException(); }
         }
 
         /// <summary>
-        /// Gets or sets the foreground colour.
+        /// Gets the background accent colour.
         /// </summary>
-        public Color ForegroundColour
+        public IColour BackgroundAccentColour
         {
             get { throw new NotImplementedException(); }
         }
 
         /// <summary>
-        /// Gets or sets the background colour.
-        /// </summary>
-        public Color BackgroundColour
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background accent colour.
-        /// </summary>
-        public Color BackgroundAccentColour
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Gets or sets the name.
+        /// Gets the name.
         /// </summary>
         public string Name
         {
             get { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets the entity name.
+        /// </summary>
+        public string EntityName
+        {
+            get { return "BuschJaeger.FreeAtHome"; }
+        }
+
+        /// <summary>
+        /// Gets the type definition.
+        /// </summary>
+        public object TypeDefinition
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <inheritdoc/>
+        public Dictionary<string, ICollection<object>> Resources
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        /// <inheritdoc/>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Display the plugin.
         /// </summary>
@@ -98,27 +119,6 @@ namespace SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome
         {
             throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Execute a SQL statement.
-        /// </summary>
-        /// <param name="sqlCommand">The SQL statement.</param>
-        /// <param name="identity">The windows identity under which the statement should be running.</param>
-        /// <returns>Returns a DataTable for the result.</returns>
-        public DataTable ExecuteSql(string sqlCommand, WindowsIdentity identity = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Execute a SQL script.
-        /// </summary>
-        /// <param name="sqlCommand">The SQL script.</param>
-        /// <param name="identity">The windows identity under which the script should be running.</param>
-        /// <returns>Returns a collection of DataTables for the result.</returns>
-        public ICollection<DataTable> ExecuteSqlScript(string sqlCommand, WindowsIdentity identity = null)
-        {
-            throw new NotImplementedException();
-        }
+#endif
     }
 }

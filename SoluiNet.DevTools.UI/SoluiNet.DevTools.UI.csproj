@@ -1,7 +1,9 @@
-<Project Sdk="MSBuild.Sdk.Extras/1.6.65">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>net472</TargetFramework>-->
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>SoluiNet.DevTools.UI</AssemblyTitle>
@@ -15,10 +17,10 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <OutputPath>..\build\$(TargetFramework)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>..\build\windows-client\$(Configuration)\</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
-    <NoWarn>$(NoWarn),SA1123</NoWarn>
+    <NoWarn>$(NoWarn);SA1123</NoWarn>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
@@ -32,26 +34,60 @@
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <LangVersion>7.1</LangVersion>
+    <RepositoryUrl>https://github.com/SoluiNet/SoluiNet.DevTools</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <PackageTags>development-tools</PackageTags>
+    <PackageIcon>..\icons\solui_logo_128x128.png</PackageIcon>
+    <PackageReadmeFile>..\README.md</PackageReadmeFile>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <!--<PackageReference Include="EntityFramework.SqlServer" Version="6.2.0" />-->
     <PackageReference Include="LiveCharts" Version="0.9.7" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.516" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="NLog" Version="4.7.12" />
+    <PackageReference Include="NLog" Version="5.0.5" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
-    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.115.5" />
-    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.115.5" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.116" />
+    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.116" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -62,16 +98,8 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <!--<ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />-->
     <Resource Include="favicon.ico" />
     <Content Include="Settings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -93,6 +121,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <None Include="..\README.md" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -105,73 +134,9 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="obj\x64\Debug\App.g.cs" />
-    <Compile Remove="obj\x64\Debug\App.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\MainWindow.g.cs" />
-    <Compile Remove="obj\x64\Debug\MainWindow.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\Options.g.cs" />
-    <Compile Remove="obj\x64\Debug\Options.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\PrepareText.g.cs" />
-    <Compile Remove="obj\x64\Debug\PrepareText.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\ShowText.g.cs" />
-    <Compile Remove="obj\x64\Debug\ShowText.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\SoluiNet.DevTools.UI_Content.g.cs" />
-    <Compile Remove="obj\x64\Debug\SoluiNet.DevTools.UI_Content.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Remove="obj\x64\Debug\VisualPluginContainer.g.cs" />
-    <Compile Remove="obj\x64\Debug\VisualPluginContainer.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\App.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\App.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\Options.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\Options.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\PrepareText.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\PrepareText.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\SoluiNet.DevTools.UI.AssemblyInfo.cs" />
-    <Compile Remove="obj\x64\Debug\net461\SoluiNet.DevTools.UI_Content.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\SoluiNet.DevTools.UI_Content.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x64\Debug\net461\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Remove="obj\x64\Debug\net461\VisualPluginContainer.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\VisualPluginContainer.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\UserControls\ConnectionString.g.cs" />
-    <Compile Remove="obj\x64\Debug\UserControls\ConnectionString.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\UserControls\ManageConnectionStrings.g.cs" />
-    <Compile Remove="obj\x64\Debug\UserControls\ManageConnectionStrings.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\App.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\App.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\MainWindow.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\MainWindow.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\Options.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\Options.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\PrepareText.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\PrepareText.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\ShowText.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\ShowText.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\SoluiNet.DevTools.UI.AssemblyInfo.cs" />
-    <Compile Remove="obj\x86\Debug\net461\SoluiNet.DevTools.UI_Content.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\SoluiNet.DevTools.UI_Content.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Remove="obj\x86\Debug\net461\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Remove="obj\x86\Debug\net461\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Remove="obj\x86\Debug\net461\VisualPluginContainer.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\VisualPluginContainer.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\UserControls\ConnectionString.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\UserControls\ConnectionString.g.i.cs" />
-    <Compile Remove="obj\x64\Debug\net461\UserControls\ManageConnectionStrings.g.cs" />
-    <Compile Remove="obj\x64\Debug\net461\UserControls\ManageConnectionStrings.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\UserControls\ConnectionString.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\UserControls\ConnectionString.g.i.cs" />
-    <Compile Remove="obj\x86\Debug\net461\UserControls\ManageConnectionStrings.g.cs" />
-    <Compile Remove="obj\x86\Debug\net461\UserControls\ManageConnectionStrings.g.i.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="ConnectionStrings.Default.config" />
     <None Remove="Settings.Default.xml" />
     <None Remove="Settings.xml" />
-    <None Remove="SoluiNet.DevTools.UI.csproj~RF2f0a17b2.TMP" />
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
@@ -185,5 +150,8 @@
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <Exec Command="cp &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Unix'" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\$(ConfigurationName)\UI&quot; &quot;$(SolutionDir)build\windows-client\$(ConfigurationName)\UI\&quot; /y /s /e /I&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\$(ConfigurationName)\Plugins&quot; &quot;$(SolutionDir)build\windows-client\$(ConfigurationName)\Plugins\&quot; /y /s /e /I&#xD;&#xA;)" />
   </Target>
 </Project>

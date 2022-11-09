@@ -12,20 +12,23 @@ namespace SoluiNet.DevTools.Core.Web.Application
     using System.Reflection;
     using System.Threading.Tasks;
     using NLog;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
     using SoluiNet.DevTools.Core.Tools.Json;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.Web.Plugin;
 
     /// <summary>
     /// The web application.
     /// </summary>
-    public class WebApplication : ISoluiNetWebApp
+    public class WebApplication : BaseSoluiNetApp, ISoluiNetWebApp
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WebApplication"/> class.
         /// </summary>
         public WebApplication()
+            : base()
         {
             string[] dllFileNames = null;
             if (Directory.Exists("Plugins"))
@@ -114,8 +117,6 @@ namespace SoluiNet.DevTools.Core.Web.Application
                 }
             }
 
-            this.Plugins = new List<IBasePlugin>();
-            this.BackgroundTaskPlugins = new List<IRunsBackgroundTask>();
             this.WebPlugins = new List<IProvidesWebCommunication>();
 
             var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
@@ -164,12 +165,9 @@ namespace SoluiNet.DevTools.Core.Web.Application
         /// <inheritdoc/>
         public ICollection<IProvidesWebCommunication> WebPlugins { get; }
 
-        /// <inheritdoc/>
-        public ICollection<IBasePlugin> Plugins { get; }
-
-        /// <inheritdoc/>
-        public ICollection<IRunsBackgroundTask> BackgroundTaskPlugins { get; }
-
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
         private static Logger Logger
         {
             get

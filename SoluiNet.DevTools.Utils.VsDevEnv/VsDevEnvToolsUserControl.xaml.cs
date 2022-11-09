@@ -20,7 +20,7 @@ namespace SoluiNet.DevTools.Utils.VsDevEnv
     using System.Windows.Shapes;
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
-    using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
 
     /// <summary>
     /// Interaction logic for VsDevEnvToolsUserControl.xaml.

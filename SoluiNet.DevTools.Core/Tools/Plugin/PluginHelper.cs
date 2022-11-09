@@ -2,7 +2,7 @@
 // Copyright (c) SoluiNet. All rights reserved.
 // </copyright>
 
-namespace SoluiNet.DevTools.Core.Tools
+namespace SoluiNet.DevTools.Core.Tools.Plugin
 {
     using System;
     using System.Collections.Generic;
@@ -11,6 +11,9 @@ namespace SoluiNet.DevTools.Core.Tools
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using NLog;
+    using SoluiNet.DevTools.Core.Application;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.ScriptEngine;
     using SoluiNet.DevTools.Core.Tools.File;
@@ -396,10 +399,18 @@ namespace SoluiNet.DevTools.Core.Tools
         /// <returns>Returns a <see cref="List{T}"/> of all available plugins which are castable to the overgiven plugin type.</returns>
         public static IList<T> GetPlugins<T>()
         {
+            var logger = LogManager.GetCurrentClassLogger();
+
             string[] dllFileNames = null;
             if (Directory.Exists("Plugins"))
             {
                 dllFileNames = Directory.GetFiles("Plugins", "*.dll");
+            }
+            else
+            {
+                logger.Error("Missing 'Plugin' folder.");
+
+                throw new SoluiNetException("The 'Plugin' folder is missing. Please create the folder and add the plugins you want to use.");
             }
 
             if (dllFileNames == null)
@@ -410,79 +421,101 @@ namespace SoluiNet.DevTools.Core.Tools
             ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
             foreach (string dllFile in dllFileNames)
             {
-                var an = AssemblyName.GetAssemblyName(dllFile);
-                var assembly = Assembly.Load(an);
-                assemblies.Add(assembly);
+                try
+                {
+                    var an = AssemblyName.GetAssemblyName(dllFile);
+                    var assembly = Assembly.LoadFrom(dllFile);
+                    assemblies.Add(assembly);
+                }
+                catch (FileLoadException fileLoadException)
+                {
+                    logger.Trace($"Couldn't load DLL file '{dllFile}' (Current Path: '{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}', pluginType: '{typeof(T).Name}')", fileLoadException);
+                }
+                catch (Exception exception)
+                {
+                    throw new SoluiNetException($"Couldn't load DLL '{dllFile}' (Current Path: '{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}', pluginType: '{typeof(T).Name}')", exception);
+                }
             }
 
             Type pluginType = typeof(T);
 
             var pluginList = new List<T>();
 
-            var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
-
-            foreach (var assembly in assemblies)
+            try
             {
-                if (assembly == null)
-                {
-                    continue;
-                }
+                var enabledPlugins = SoluiNet.DevTools.Core.Plugin.Configuration.Configuration.Effective;
 
-                var assemblyName = assembly.GetName().Name;
-
-                if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
+                foreach (var assembly in assemblies)
                 {
-                    continue;
-                }
-
-                var types = assembly.GetTypes();
-                foreach (var type in types)
-                {
-                    if (type.IsInterface || type.IsAbstract)
+                    if (assembly == null)
                     {
                         continue;
                     }
 
-                    if (type.GetInterface(pluginType.FullName) != null)
+                    var assemblyName = assembly.GetName().Name;
+
+                    if (!enabledPlugins.ContainsKey(assemblyName) || !enabledPlugins[assemblyName])
                     {
-                        var plugin = (T)Activator.CreateInstance(type);
-                        pluginList.Add(plugin);
+                        continue;
                     }
 
-                    if (pluginType.IsInterface && pluginType.IsGenericType)
+                    try
                     {
-                        var typeInterfaces = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition().FullName == pluginType.GetGenericTypeDefinition().FullName);
-
-                        if (typeInterfaces == null || !typeInterfaces.Any())
+                        var types = assembly.GetTypes();
+                        foreach (var type in types)
                         {
-                            continue;
-                        }
-
-                        foreach (var typeInterface in typeInterfaces)
-                        {
-                            var pluginGenericArguments = pluginType.GetGenericArguments();
-                            var typeGenericArguments = typeInterface.GetGenericArguments();
-
-                            if (pluginGenericArguments.Length != typeGenericArguments.Length)
+                            if (type.IsInterface || type.IsAbstract)
                             {
                                 continue;
                             }
 
-                            for (int i = 0; i < pluginGenericArguments.Length; i++)
+                            if (type.GetInterface(pluginType.FullName) != null)
                             {
-                                var genericArgument = pluginGenericArguments[i];
+                                T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
 
-                                if (genericArgument.GetType() != typeGenericArguments[i].GetType())
+                                if (plugin == null)
+                                {
+                                    plugin = (T)Activator.CreateInstance(type);
+                                }
+
+                                pluginList.Add(plugin);
+                            }
+
+                            if (pluginType.IsInterface && pluginType.IsGenericType)
+                            {
+                                var typeInterfaces = type.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition().FullName == pluginType.GetGenericTypeDefinition().FullName);
+
+                                if (typeInterfaces == null || !typeInterfaces.Any())
                                 {
                                     continue;
                                 }
-                            }
 
-                            var plugin = (T)Activator.CreateInstance(type);
-                            pluginList.Add(plugin);
+                                foreach (var typeInterface in typeInterfaces)
+                                {
+                                    if (VerifyGenericType(pluginType, typeInterface))
+                                    {
+                                        T plugin = (T)ApplicationContext.Application.Plugins.FirstOrDefault(x => x.GetType() == type);
+
+                                        if (plugin == null)
+                                        {
+                                            plugin = (T)Activator.CreateInstance(type);
+                                        }
+
+                                        pluginList.Add(plugin);
+                                    }
+                                }
+                            }
                         }
                     }
+                    catch (ReflectionTypeLoadException reflectionTypeLoadException)
+                    {
+                        logger.Trace(reflectionTypeLoadException, $"Couldn't process type from assembly '{assembly.FullName}'");
+                    }
                 }
+            }
+            catch (Exception exception)
+            {
+                throw new SoluiNetException($"Plugin with type '{pluginType.FullName}' couldn't be loaded.", exception);
             }
 
             return pluginList;
@@ -508,6 +541,35 @@ namespace SoluiNet.DevTools.Core.Tools
             }
 
             return default;
+        }
+
+        /// <summary>
+        /// Verify if a type implements the comparing type.
+        /// </summary>
+        /// <param name="sourceType">The source type.</param>
+        /// <param name="comparingType">The comparing type.</param>
+        /// <returns>Returns <c>true</c> if the comparing type implements the source type.</returns>
+        private static bool VerifyGenericType(Type sourceType, Type comparingType)
+        {
+            var sourceGenericArguments = sourceType.GetGenericArguments();
+            var comparisonGenericArguments = comparingType.GetGenericArguments();
+
+            if (sourceGenericArguments.Length != comparisonGenericArguments.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < sourceGenericArguments.Length; i++)
+            {
+                var genericArgument = sourceGenericArguments[i];
+
+                if (genericArgument.FullName != comparisonGenericArguments[i].FullName)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

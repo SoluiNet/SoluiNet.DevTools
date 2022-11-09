@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    namespace="SoluiNet.DevTools.Management.Finances.Data" assembly="SoluiNet.DevTools.Management.Finances">
+  <class name="Entry" table="Entry">
+    <id name="Id">
+      <column name="Id" not-null="true"/>
+      <generator class="increment" />
+    </id>
+    <property name="Description">
+      <column name="Description" length="50" not-null="true" />
+    </property>
+    <property name="Amount">
+      <column name="Amount" not-null="true" />
+    </property>
+    <property name="AdditionalInformation">
+      <column name="AdditionalInformation" />
+    </property>
+    <property name="Date">
+      <column name="Date" />
+    </property>
+    <property name="ValueDate">
+      <column name="ValueDate" />
+    </property>
+    <property name="Type">
+      <column name="Type" />
+    </property>    
+    <many-to-one name="Category" column="CategoryId" />
+    <many-to-one not-null="true" name="Account" column="AccountId" />
+    <many-to-one not-null="true" name="CounterAccount" column="CounterAccountId" />
+    <many-to-one name="Invoice" column="InvoiceId" />
+    <bag name="SubEntries"
+         lazy="true"
+         inverse="true"
+         batch-size="25"
+         cascade="all-delete-orphan">
+      <key column="Id" />
+      <one-to-many class="SubEntry" />
+    </bag>
+  </class>
+</hibernate-mapping>

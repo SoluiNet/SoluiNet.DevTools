@@ -40,6 +40,35 @@ namespace SoluiNet.DevTools.Core.Tools.File
         }
 
         /// <summary>
+        /// Load the content from the overgiven file path to a stream.
+        /// </summary>
+        /// <param name="path">The file path.</param>
+        /// <returns>The file content as <see cref="Stream"/>.</returns>
+        public static Stream StreamFromFile(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            using (var fileContents = new FileStream(path, FileMode.Open))
+            {
+                var result = new MemoryStream();
+
+                fileContents.CopyTo(result);
+
+                fileContents.Seek(0, SeekOrigin.Begin);
+
+                var buffer = new byte[result.Length];
+                result.Read(buffer, 0, buffer.Length);
+
+                result.Position = 0;
+
+                return result;
+            }
+        }
+
+        /// <summary>
         /// Get all files which are contained in the overgiven directory.
         /// </summary>
         /// <param name="directoryPath">The directory path.</param>

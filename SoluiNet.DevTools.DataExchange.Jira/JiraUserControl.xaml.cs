@@ -9,6 +9,7 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+#if BUILD_FOR_WINDOWS
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -18,9 +19,11 @@ namespace SoluiNet.DevTools.DataExchange.Jira
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
+#endif
     using SoluiNet.DevTools.Core;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
 
     /// <summary>
     /// Interaction logic for JiraUserControl.xaml.

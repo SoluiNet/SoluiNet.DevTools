@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    namespace="SoluiNet.DevTools.Management.Finances.Data" assembly="SoluiNet.DevTools.Management.Finances">
+  <class name="SubEntry" table="SubEntry">
+    <id name="Id">
+      <column name="Id" not-null="true"/>
+      <generator class="increment" />
+    </id>
+    <property name="Description">
+      <column name="Description" length="50" not-null="true" />
+    </property>
+    <many-to-one not-null="true" name="Entry" column="EntryId" />
+    <many-to-one not-null="true" name="Category" column="CategoryId" />
+  </class>
+</hibernate-mapping>

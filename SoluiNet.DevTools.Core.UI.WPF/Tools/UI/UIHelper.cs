@@ -56,7 +56,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
                 throw new ArgumentNullException(nameof(results));
             }
 
-            var tableKey = title.Replace(" ", string.Empty);
+            var tableKey = title.Replace(" ", string.Empty, StringComparison.InvariantCulture);
 
             var dataGrid = new DataGrid
             {
@@ -798,7 +798,7 @@ namespace SoluiNet.DevTools.Core.UI.WPF.Tools.UI
                                 data += string.Format(CultureInfo.InvariantCulture, "CAST('{0}' AS DATETIME)", ((DateTime)columnData).ToString("yyyy-MM-ddTHH:mm:ss.ffffzzz", CultureInfo.InvariantCulture));
                                 break;
                             default:
-                                data += string.Format(CultureInfo.InvariantCulture, "'{0}'", columnData.ToString().Replace("'", "''"));
+                                data += string.Format(CultureInfo.InvariantCulture, "'{0}'", columnData.ToString().Replace("'", "''", StringComparison.InvariantCulture));
                                 break;
                         }
                     }

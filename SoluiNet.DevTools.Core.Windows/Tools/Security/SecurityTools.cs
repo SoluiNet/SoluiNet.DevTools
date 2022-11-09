@@ -5,7 +5,7 @@
 namespace SoluiNet.DevTools.Core.Windows.Tools.Security
 {
     using System;
-#if !COMPILED_FOR_NETSTANDARD
+#if !COMPILED_FOR_NETSTANDARD && !COMPILED_FOR_NETCORE
     using System.DirectoryServices.AccountManagement;
 #endif
     using System.Runtime.InteropServices;
@@ -20,11 +20,13 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
     /// </summary>
     public static class SecurityTools
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "Added for later usage.")]
         private const int Logon32LogonInteractive = 2;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "Added for later usage.")]
         private const int Logon32ProviderDefault = 0;
 
-#if !COMPILED_FOR_NETSTANDARD
+#if !COMPILED_FOR_NETSTANDARD && !COMPILED_FOR_NETCORE
         /// <summary>
         /// Impersonate to a specific user.
         /// </summary>
@@ -130,7 +132,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                 throw new ArgumentNullException(nameof(identity));
             }
 
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
             WindowsIdentity.RunImpersonated(identity.AccessToken, task);
 #else
             var impersonationContext = identity.Impersonate();
@@ -159,7 +161,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                 throw new ArgumentNullException(nameof(identity));
             }
 
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
             return WindowsIdentity.RunImpersonated(identity.AccessToken, task);
 #else
             var impersonationContext = identity.Impersonate();
@@ -189,7 +191,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
                 throw new ArgumentNullException(nameof(identity));
             }
 
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
             return WindowsIdentity.RunImpersonated<T>(identity.AccessToken, task);
 #else
             var impersonationContext = identity.Impersonate();
@@ -218,7 +220,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Security
             domainName = string.IsNullOrWhiteSpace(domainName) ? Environment.UserDomainName : domainName;
             userName = string.IsNullOrWhiteSpace(userName) ? Environment.UserName : userName;
 
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
             var windowsIdentity = new WindowsLogin(userName, domainName, password);
 
             return windowsIdentity.Identity;

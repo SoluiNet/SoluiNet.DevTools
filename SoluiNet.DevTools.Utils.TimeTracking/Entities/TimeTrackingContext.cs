@@ -6,30 +6,58 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 {
     using System;
     using System.Configuration;
+    using System.Data.Entity.Core.EntityClient;
+    using System.Data.SQLite;
+#if BUILD_FOR_WINDOWS
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.SQLite;
+#endif
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+#if !BUILD_FOR_WINDOWS
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Proxies;
+#endif
+#if BUILD_FOR_WINDOWS
     using System.Windows.Media;
+#endif
     using NLog;
+    using SoluiNet.DevTools.Core.Application;
     using SoluiNet.DevTools.Core.Exceptions;
+    using SoluiNet.DevTools.Core.Reference;
     using SoluiNet.DevTools.Core.Tools.XML;
+#if BUILD_FOR_WINDOWS
     using SoluiNet.DevTools.Core.UI.WPF.Tools.UI;
+#endif
     using SoluiNet.DevTools.Core.XmlData;
 
     /// <summary>
     /// The database context which can be used for time tracking purposes.
     /// </summary>
-    public class TimeTrackingContext : DbContext
+#if BUILD_FOR_WINDOWS
+    public class TimeTrackingContext : System.Data.Entity.DbContext
+#else
+    public class TimeTrackingContext : Microsoft.EntityFrameworkCore.DbContext
+#endif
     {
         /// <summary>
         /// A value which indicates if the database has already been created.
         /// </summary>
         private static bool created;
 
+        /// <summary>
+        /// The connection string which will be used for this context.
+        /// </summary>
+        private string connectionString;
+
+        /// <summary>
+        /// The connection name which will be used for this context.
+        /// </summary>
+        private string connectionName;
+
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
         /// </summary>
@@ -47,6 +75,29 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             RunPerformanceTweaks();
         }
+#endif
+
+#if !BUILD_FOR_WINDOWS
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
+        /// </summary>
+        /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "The constructor called with parameter contextOwnsConnection=true should activate the disposing of the DbConnection after use.")]
+        public TimeTrackingContext(string nameOrConnectionString = "name=TimeTrackingContext")
+        {
+            this.connectionName = nameOrConnectionString;
+            this.connectionString = GetConnectionString(nameOrConnectionString);
+
+            if (!created)
+            {
+                created = true;
+
+                CreateIfNotExists();
+            }
+
+            RunPerformanceTweaks();
+        }
+#endif
 
         /// <summary>
         /// Gets or sets the Application accessor.
@@ -112,13 +163,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
+#if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
+#else
+            var connection = new EntityConnection(nameOrConnectionString);
+#endif
 
             try
             {
                 connection.Open();
 
+#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("pragma vacuum;", connection);
+#else
+                var command = new EntityCommand("pragma vacuum;", connection);
+#endif
 
                 try
                 {
@@ -157,13 +216,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
+#if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
+#else
+            var connection = new EntityConnection(nameOrConnectionString);
+#endif
 
             try
             {
                 connection.Open();
 
+#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("pragma optimize;", connection);
+#else
+                var command = new EntityCommand("pragma optimize;", connection);
+#endif
 
                 try
                 {
@@ -202,13 +269,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
+#if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
+#else
+            var connection = new EntityConnection(nameOrConnectionString);
+#endif
 
             try
             {
                 connection.Open();
 
+#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("pragma journal_mode = WAL;", connection);
+#else
+                var command = new EntityCommand("pragma journal_mode = WAL;", connection);
+#endif
 
                 try
                 {
@@ -271,13 +346,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             {
                 SQLiteConnection.CreateFile(filePath);
 
+#if BUILD_FOR_WINDOWS
                 var firstConnection = new SQLiteConnection(connectionString);
+#else
+                var firstConnection = new EntityConnection(nameOrConnectionString);
+#endif
 
                 try
                 {
                     firstConnection.Open();
 
+#if BUILD_FOR_WINDOWS
                     var createVersionHistory = new SQLiteCommand("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)", firstConnection);
+#else
+                    var createVersionHistory = new EntityCommand("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)", firstConnection);
+#endif
 
                     try
                     {
@@ -303,13 +386,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 }
             }
 
+#if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
+#else
+            var connection = new EntityConnection(nameOrConnectionString);
+#endif
 
             try
             {
                 connection.Open();
 
+#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
+#else
+                var command = new EntityCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
+#endif
 
                 try
                 {
@@ -446,8 +537,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.BlueViolet.ToHexValue(),
-                                    endColour = Color.FromRgb(50, 50, 50).ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("BlueViolet").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(50, 50, 50).ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -482,8 +573,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DodgerBlue.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DodgerBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -499,8 +590,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DarkViolet.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkViolet").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -515,8 +606,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.WhiteSmoke.ToHexValue(),
-                                    endColour = Colors.DeepSkyBlue.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DeepSkyBlue").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -531,8 +622,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DarkGreen.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkGreen").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -547,8 +638,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.Lime.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Lime").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -563,8 +654,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.LightBlue.ToHexValue(),
-                                    endColour = Colors.WhiteSmoke.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -579,8 +670,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DarkGray.ToHexValue(),
-                                    endColour = Colors.LightBlue.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkGray").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -595,8 +686,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                 {
                                     angle = 0.75,
                                     angleSpecified = true,
-                                    startColour = Colors.DarkBlue.ToHexValue(),
-                                    endColour = Colors.LightBlue.ToHexValue(),
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
                                     type = SoluiNetBrushType.SimpleLinearGradient,
                                     typeSpecified = true,
                                 },
@@ -629,22 +720,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                                     {
                                         new SoluiNetGradientStopType()
                                         {
-                                            colour = Colors.OrangeRed.ToHexValue(),
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("OrangeRed").ToHex(),
                                             offset = 0.2,
                                         },
                                         new SoluiNetGradientStopType()
                                         {
-                                            colour = Colors.Yellow.ToHexValue(),
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Yellow").ToHex(),
                                             offset = 0.4,
                                         },
                                         new SoluiNetGradientStopType()
                                         {
-                                            colour = Colors.Green.ToHexValue(),
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Green").ToHex(),
                                             offset = 0.6,
                                         },
                                         new SoluiNetGradientStopType()
                                         {
-                                            colour = Colors.DeepSkyBlue.ToHexValue(),
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DeepSkyBlue").ToHex(),
                                             offset = 0.8,
                                         },
                                     },
@@ -889,11 +980,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             }
         }
 
+        /// <inheritdoc />
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite(this.connectionString);
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
         /// <summary>
         /// The event handler for model creation.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
+#if BUILD_FOR_WINDOWS
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
+#else
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+#endif
         {
             if (modelBuilder == null)
             {
@@ -909,9 +1011,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => x.ApplicationAreaId);
 
             modelBuilder.Entity<ApplicationArea>()
+#if BUILD_FOR_WINDOWS
                 .HasRequired<Application>(x => x.Application)
                 .WithMany(x => x.ApplicationArea)
                 .HasForeignKey(x => x.ApplicationId);
+#else
+                .HasOne<Application>(x => x.Application)
+                .WithMany(x => x.ApplicationArea)
+                .HasForeignKey(x => x.ApplicationId)
+                .IsRequired();
+#endif
 
             modelBuilder.Entity<Category>()
                 .ToTable(typeof(Category).Name)
@@ -922,28 +1031,54 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => new { x.CategoryId, x.UsageTimeId });
 
             modelBuilder.Entity<CategoryUsageTime>()
+#if BUILD_FOR_WINDOWS
                 .HasRequired<UsageTime>(x => x.UsageTime)
                 .WithMany(x => x.CategoryUsageTime)
                 .HasForeignKey(x => x.UsageTimeId);
+#else
+                .HasOne<UsageTime>(x => x.UsageTime)
+                .WithMany(x => x.CategoryUsageTime)
+                .HasForeignKey(x => x.UsageTimeId)
+                .IsRequired();
+#endif
 
             modelBuilder.Entity<CategoryUsageTime>()
+#if BUILD_FOR_WINDOWS
                 .HasRequired<Category>(x => x.Category)
                 .WithMany(x => x.CategoryUsageTime)
                 .HasForeignKey(x => x.CategoryId);
+#else
+                .HasOne<Category>(x => x.Category)
+                .WithMany(x => x.CategoryUsageTime)
+                .HasForeignKey(x => x.CategoryId)
+                .IsRequired();
+#endif
 
             modelBuilder.Entity<UsageTime>()
                 .ToTable(typeof(UsageTime).Name)
                 .HasKey(x => x.UsageTimeId);
 
             modelBuilder.Entity<UsageTime>()
+#if BUILD_FOR_WINDOWS
                 .HasOptional<Application>(x => x.Application)
                 .WithMany(x => x.UsageTime)
                 .HasForeignKey(x => x.ApplicationId);
+#else
+                .HasOne<Application>(x => x.Application)
+                .WithMany(x => x.UsageTime)
+                .HasForeignKey(x => x.ApplicationId);
+#endif
 
             modelBuilder.Entity<UsageTime>()
+#if BUILD_FOR_WINDOWS
                 .HasOptional<ApplicationArea>(x => x.ApplicationArea)
                 .WithMany(x => x.UsageTime)
                 .HasForeignKey(x => x.ApplicationAreaId);
+#else
+                .HasOne<ApplicationArea>(x => x.ApplicationArea)
+                .WithMany(x => x.UsageTime)
+                .HasForeignKey(x => x.ApplicationAreaId);
+#endif
 
             modelBuilder.Entity<VersionHistory>()
                 .ToTable(typeof(VersionHistory).Name)
@@ -954,6 +1089,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => x.FilterHistoryId);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "We want to know that the setting is empty. The parameter(s) should be fine at this moment.")]
         private static string GetConnectionString(string nameOrConnectionString)
         {
             if (nameOrConnectionString == null)
@@ -965,7 +1101,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             if (nameOrConnectionString.StartsWith("name=", StringComparison.InvariantCulture))
             {
-                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty)];
+                var connectionStringSetting = ConfigurationManager.ConnectionStrings[nameOrConnectionString.Replace("name=", string.Empty, StringComparison.InvariantCultureIgnoreCase)];
 
                 if (connectionStringSetting == null)
                 {
@@ -975,7 +1111,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 connectionString = connectionStringSetting.ConnectionString;
             }
 
-            return connectionString.ToUpperInvariant().Replace("%LOCALAPPDATA%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+            return connectionString.ToUpperInvariant().Replace("%LOCALAPPDATA%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace SoluiNet.DevTools.Utils.WebClient
     using SoluiNet.DevTools.Core.Extensions;
     using SoluiNet.DevTools.Core.Plugin;
     using SoluiNet.DevTools.Core.Tools;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.Tools.String;
     using SoluiNet.DevTools.Core.Tools.XML;
 

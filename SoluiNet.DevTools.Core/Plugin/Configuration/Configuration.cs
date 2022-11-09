@@ -11,8 +11,11 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using CsvHelper;
     using NLog;
+    using SoluiNet.DevTools.Core.Exceptions;
     using SoluiNet.DevTools.Core.Tools.File;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
     using SoluiNet.DevTools.Core.Tools.XML;
 
     /// <summary>
@@ -29,6 +32,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         /// </summary>
         static Configuration()
         {
+            AppDomain.CurrentDomain.AssemblyResolve += PluginHelper.LoadAssembly;
             ReadOrCreateConfiguration();
         }
 
@@ -43,7 +47,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         public static Dictionary<string, bool> Effective
         {
             get
-            {
+             {
                 return GetConfigurationForExecutingPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
         }
@@ -223,28 +227,39 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
 
                     foreach (var assembly in assemblies)
                     {
-                        if (assembly == null)
+                        try
                         {
-                            continue;
-                        }
-
-                        var types = assembly.GetTypes();
-                        foreach (var type in types)
-                        {
-                            if (type.IsInterface || type.IsAbstract)
+                            if (assembly == null)
                             {
                                 continue;
                             }
 
-                            if (type.GetInterface(pluginType.FullName) != null)
+                            var types = assembly.GetTypes();
+                            foreach (var type in types)
                             {
-                                pluginList.Add(new SoluiNetPluginEntryType()
+                                if (type.IsInterface || type.IsAbstract)
                                 {
-                                    name = assembly.GetName().Name,
-                                    enabledSpecified = true,
-                                    enabled = true,
-                                });
+                                    continue;
+                                }
+
+                                if (type.GetInterface(pluginType.FullName) != null)
+                                {
+                                    pluginList.Add(new SoluiNetPluginEntryType()
+                                    {
+                                        name = assembly.GetName().Name,
+                                        enabledSpecified = true,
+                                        enabled = true,
+                                    });
+                                }
                             }
+                        }
+                        catch (ReflectionTypeLoadException reflectionTypeLoadException)
+                        {
+                            Logger.Trace(reflectionTypeLoadException, $"Couldn't process type from assembly '{assembly.FullName}'");
+                        }
+                        catch (Exception exception)
+                        {
+                            throw new SoluiNetException($"Couldn't process assembly '{assembly.FullName}'", exception);
                         }
                     }
                 }

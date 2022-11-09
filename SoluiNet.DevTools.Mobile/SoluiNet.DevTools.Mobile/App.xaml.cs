@@ -4,6 +4,7 @@
 
 namespace SoluiNet.DevTools.Mobile
 {
+    using System.Collections.Generic;
     using SoluiNet.DevTools.Mobile.Services;
     using Xamarin.Forms;
 

@@ -33,6 +33,60 @@ namespace SoluiNet.DevTools.Core.Tools.Number
         }
 
         /// <summary>
+        /// Get the maximum of all passed values.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <returns>Returns a <see cref="decimal"/> with the highest value.</returns>
+        public static decimal Max(params decimal[] values)
+        {
+            if (values == null || values.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            if (values.Length == 1)
+            {
+                return values[0];
+            }
+
+            var max = values[0];
+
+            for (int i = 1; i < values.Length; i++)
+            {
+                max = Math.Max(max, values[i]);
+            }
+
+            return max;
+        }
+
+        /// <summary>
+        /// Get the minimum of all passed values.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <returns>Returns a <see cref="decimal"/> with the lowest value.</returns>
+        public static decimal Min(params decimal[] values)
+        {
+            if (values == null || values.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            if (values.Length == 1)
+            {
+                return values[0];
+            }
+
+            var max = values[0];
+
+            for (int i = 1; i < values.Length; i++)
+            {
+                max = Math.Min(max, values[i]);
+            }
+
+            return max;
+        }
+
+        /// <summary>
         /// Get a list of numbers which count from an overgiven start to this variable value with a predefined step size.
         /// </summary>
         /// <param name="end">The end number.</param>
@@ -249,6 +303,33 @@ namespace SoluiNet.DevTools.Core.Tools.Number
                 default:
                     return false;
             }
+        }
+
+        /// <summary>
+        /// Get integer value from hexadecimal string value.
+        /// </summary>
+        /// <param name="value">The hexadecimal string value.</param>
+        /// <returns>Returns a <see cref="long"/> with the integer value which has been parsed from the passed hexadecimal value.</returns>
+        public static long FromHexValue(this string value)
+        {
+            if (long.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Get binary string from integer value.
+        /// </summary>
+        /// <param name="value">The integer value.</param>
+        /// <returns>Returns a <see cref="string"/> with the binary representation of the integer value.</returns>
+        public static string ToBinaryString(this long value)
+        {
+            return Convert.ToString(value, 2);
         }
     }
 }
