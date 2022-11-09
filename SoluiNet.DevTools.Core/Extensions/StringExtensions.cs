@@ -153,7 +153,7 @@ namespace SoluiNet.DevTools.Core.Extensions
                 throw new ArgumentNullException(nameof(originalString));
             }
 
-            return originalString.Replace("[Environment]", environment);
+            return originalString.Replace("[Environment]", environment, StringComparison.Ordinal);
         }
 
         /// <summary>

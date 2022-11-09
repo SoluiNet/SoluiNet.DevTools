@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{A1191A59-437E-460F-9F75-B6E302FF20D4}</ProjectGuid>
     <!--<TargetFrameworks>netstandard2.0;net472</TargetFrameworks>-->
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Transform.ErDiagram</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Transform.ErDiagram</Product>

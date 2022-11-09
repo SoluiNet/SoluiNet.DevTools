@@ -253,9 +253,12 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
                                 }
                             }
                         }
+                        catch (ReflectionTypeLoadException reflectionTypeLoadException)
+                        {
+                            Logger.Trace(reflectionTypeLoadException, $"Couldn't process type from assembly '{assembly.FullName}'");
+                        }
                         catch (Exception exception)
                         {
-                            Logger.Warn(exception, $"Couldn't process assembly '{assembly.FullName}'");
                             throw new SoluiNetException($"Couldn't process assembly '{assembly.FullName}'", exception);
                         }
                     }

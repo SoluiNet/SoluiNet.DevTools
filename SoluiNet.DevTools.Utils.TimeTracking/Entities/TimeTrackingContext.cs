@@ -6,13 +6,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 {
     using System;
     using System.Configuration;
+    using System.Data.Entity.Core.EntityClient;
+    using System.Data.SQLite;
+#if BUILD_FOR_WINDOWS
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.SQLite;
+#endif
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+#if !BUILD_FOR_WINDOWS
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Proxies;
+#endif
 #if BUILD_FOR_WINDOWS
     using System.Windows.Media;
 #endif
@@ -29,13 +36,28 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     /// <summary>
     /// The database context which can be used for time tracking purposes.
     /// </summary>
-    public class TimeTrackingContext : DbContext
+#if BUILD_FOR_WINDOWS
+    public class TimeTrackingContext : System.Data.Entity.DbContext
+#else
+    public class TimeTrackingContext : Microsoft.EntityFrameworkCore.DbContext
+#endif
     {
         /// <summary>
         /// A value which indicates if the database has already been created.
         /// </summary>
         private static bool created;
 
+        /// <summary>
+        /// The connection string which will be used for this context.
+        /// </summary>
+        private string connectionString;
+
+        /// <summary>
+        /// The connection name which will be used for this context.
+        /// </summary>
+        private string connectionName;
+
+#if BUILD_FOR_WINDOWS
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
         /// </summary>
@@ -53,6 +75,29 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             RunPerformanceTweaks();
         }
+#endif
+
+#if !BUILD_FOR_WINDOWS
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
+        /// </summary>
+        /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "The constructor called with parameter contextOwnsConnection=true should activate the disposing of the DbConnection after use.")]
+        public TimeTrackingContext(string nameOrConnectionString = "name=TimeTrackingContext")
+        {
+            this.connectionName = nameOrConnectionString;
+            this.connectionString = GetConnectionString(nameOrConnectionString);
+
+            if (!created)
+            {
+                created = true;
+
+                CreateIfNotExists();
+            }
+
+            RunPerformanceTweaks();
+        }
+#endif
 
         /// <summary>
         /// Gets or sets the Application accessor.
@@ -118,13 +163,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
+#if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
+#else
+            var connection = new EntityConnection(nameOrConnectionString);
+#endif
 
             try
             {
                 connection.Open();
 
+#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("pragma vacuum;", connection);
+#else
+                var command = new EntityCommand("pragma vacuum;", connection);
+#endif
 
                 try
                 {
@@ -163,13 +216,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
+#if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
+#else
+            var connection = new EntityConnection(nameOrConnectionString);
+#endif
 
             try
             {
                 connection.Open();
 
+#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("pragma optimize;", connection);
+#else
+                var command = new EntityCommand("pragma optimize;", connection);
+#endif
 
                 try
                 {
@@ -208,13 +269,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
+#if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
+#else
+            var connection = new EntityConnection(nameOrConnectionString);
+#endif
 
             try
             {
                 connection.Open();
 
+#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("pragma journal_mode = WAL;", connection);
+#else
+                var command = new EntityCommand("pragma journal_mode = WAL;", connection);
+#endif
 
                 try
                 {
@@ -277,13 +346,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             {
                 SQLiteConnection.CreateFile(filePath);
 
+#if BUILD_FOR_WINDOWS
                 var firstConnection = new SQLiteConnection(connectionString);
+#else
+                var firstConnection = new EntityConnection(nameOrConnectionString);
+#endif
 
                 try
                 {
                     firstConnection.Open();
 
+#if BUILD_FOR_WINDOWS
                     var createVersionHistory = new SQLiteCommand("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)", firstConnection);
+#else
+                    var createVersionHistory = new EntityCommand("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)", firstConnection);
+#endif
 
                     try
                     {
@@ -309,13 +386,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 }
             }
 
+#if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
+#else
+            var connection = new EntityConnection(nameOrConnectionString);
+#endif
 
             try
             {
                 connection.Open();
 
+#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
+#else
+                var command = new EntityCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
+#endif
 
                 try
                 {
@@ -895,11 +980,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             }
         }
 
+        /// <inheritdoc />
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite(this.connectionString);
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
         /// <summary>
         /// The event handler for model creation.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
+#if BUILD_FOR_WINDOWS
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
+#else
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+#endif
         {
             if (modelBuilder == null)
             {
@@ -915,9 +1011,16 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => x.ApplicationAreaId);
 
             modelBuilder.Entity<ApplicationArea>()
+#if BUILD_FOR_WINDOWS
                 .HasRequired<Application>(x => x.Application)
                 .WithMany(x => x.ApplicationArea)
                 .HasForeignKey(x => x.ApplicationId);
+#else
+                .HasOne<Application>(x => x.Application)
+                .WithMany(x => x.ApplicationArea)
+                .HasForeignKey(x => x.ApplicationId)
+                .IsRequired();
+#endif
 
             modelBuilder.Entity<Category>()
                 .ToTable(typeof(Category).Name)
@@ -928,28 +1031,54 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => new { x.CategoryId, x.UsageTimeId });
 
             modelBuilder.Entity<CategoryUsageTime>()
+#if BUILD_FOR_WINDOWS
                 .HasRequired<UsageTime>(x => x.UsageTime)
                 .WithMany(x => x.CategoryUsageTime)
                 .HasForeignKey(x => x.UsageTimeId);
+#else
+                .HasOne<UsageTime>(x => x.UsageTime)
+                .WithMany(x => x.CategoryUsageTime)
+                .HasForeignKey(x => x.UsageTimeId)
+                .IsRequired();
+#endif
 
             modelBuilder.Entity<CategoryUsageTime>()
+#if BUILD_FOR_WINDOWS
                 .HasRequired<Category>(x => x.Category)
                 .WithMany(x => x.CategoryUsageTime)
                 .HasForeignKey(x => x.CategoryId);
+#else
+                .HasOne<Category>(x => x.Category)
+                .WithMany(x => x.CategoryUsageTime)
+                .HasForeignKey(x => x.CategoryId)
+                .IsRequired();
+#endif
 
             modelBuilder.Entity<UsageTime>()
                 .ToTable(typeof(UsageTime).Name)
                 .HasKey(x => x.UsageTimeId);
 
             modelBuilder.Entity<UsageTime>()
+#if BUILD_FOR_WINDOWS
                 .HasOptional<Application>(x => x.Application)
                 .WithMany(x => x.UsageTime)
                 .HasForeignKey(x => x.ApplicationId);
+#else
+                .HasOne<Application>(x => x.Application)
+                .WithMany(x => x.UsageTime)
+                .HasForeignKey(x => x.ApplicationId);
+#endif
 
             modelBuilder.Entity<UsageTime>()
+#if BUILD_FOR_WINDOWS
                 .HasOptional<ApplicationArea>(x => x.ApplicationArea)
                 .WithMany(x => x.UsageTime)
                 .HasForeignKey(x => x.ApplicationAreaId);
+#else
+                .HasOne<ApplicationArea>(x => x.ApplicationArea)
+                .WithMany(x => x.UsageTime)
+                .HasForeignKey(x => x.ApplicationAreaId);
+#endif
 
             modelBuilder.Entity<VersionHistory>()
                 .ToTable(typeof(VersionHistory).Name)

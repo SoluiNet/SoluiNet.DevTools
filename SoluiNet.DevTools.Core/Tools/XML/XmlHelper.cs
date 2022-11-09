@@ -240,7 +240,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
 
             var endNode = xmlRegex.Match(xmlText);
 
-            return endNode.Success && xmlText.Contains(string.Format(CultureInfo.InvariantCulture, "<{0}", endNode.Groups[1].Value));
+            return endNode.Success && xmlText.Contains(string.Format(CultureInfo.InvariantCulture, "<{0}", endNode.Groups[1].Value), StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace SoluiNet.DevTools.Core.Tools.XML
                 throw new ArgumentNullException(nameof(xmlText));
             }
 
-            return xmlText.Contains("<?xml") || IsValidXmlRootNode(xmlText);
+            return xmlText.Contains("<?xml", StringComparison.Ordinal) || IsValidXmlRootNode(xmlText);
         }
 
         /// <summary>

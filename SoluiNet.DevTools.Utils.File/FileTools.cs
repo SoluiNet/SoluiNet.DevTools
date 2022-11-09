@@ -32,7 +32,7 @@ namespace SoluiNet.DevTools.Utils.File
             {
                 foreach (var line in System.IO.File.ReadAllLines(filePath))
                 {
-                    if (line.Contains(searchPattern))
+                    if (line.Contains(searchPattern, StringComparison.Ordinal))
                     {
                         result.Add(line);
                     }
@@ -99,7 +99,7 @@ namespace SoluiNet.DevTools.Utils.File
                     {
                         var hash = md5.ComputeHash(stream);
 
-                        return BitConverter.ToString(hash).Replace("-", string.Empty).ToLowerInvariant();
+                        return BitConverter.ToString(hash).Replace("-", string.Empty, StringComparison.Ordinal).ToLowerInvariant();
                     }
                 }
             }

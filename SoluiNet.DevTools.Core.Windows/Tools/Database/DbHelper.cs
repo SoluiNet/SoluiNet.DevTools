@@ -87,7 +87,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
 
             DataTable result = null;
 
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
             WindowsIdentity.RunImpersonated(impersonationIdentity.AccessToken, () =>
 #else
             using (var context = impersonationIdentity.Impersonate())
@@ -106,11 +106,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
                         break;
                 }
 
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
                 return;
 #endif
             }
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
             );
 #endif
 
@@ -138,7 +138,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
 
             IList<DataTable> result = null;
 
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
             WindowsIdentity.RunImpersonated(impersonationIdentity.AccessToken, () =>
 #else
             using (var context = impersonationIdentity.Impersonate())
@@ -157,11 +157,11 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.Database
                         break;
                 }
 
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
                 return;
 #endif
             }
-#if COMPILED_FOR_NETSTANDARD
+#if COMPILED_FOR_NETSTANDARD || COMPILED_FOR_NETCORE
             );
 #endif
 

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{CED664BB-8DAA-44DE-8DB7-977DC0BA84D7}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>SoluiNet.DevTools.Web</AssemblyTitle>
     <Company>SoluiNet</Company>

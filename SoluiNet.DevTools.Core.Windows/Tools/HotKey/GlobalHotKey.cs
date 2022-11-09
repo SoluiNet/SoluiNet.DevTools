@@ -8,7 +8,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
     using System.Runtime.InteropServices;
 #if COMPILED_FOR_NETSTANDARD
     using System.Windows.Input;
-#else
+#elif !COMPILED_FOR_NETCORE
     using System.Windows.Forms;
 #endif
     using SoluiNet.DevTools.Core.Windows.Application;
@@ -23,6 +23,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
         private readonly IntPtr hWnd;
         private readonly int id;
 
+#if !COMPILED_FOR_NETCORE
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalHotKey"/> class.
         /// </summary>
@@ -38,6 +39,7 @@ namespace SoluiNet.DevTools.Core.Windows.Tools.HotKey
             this.hWnd = windowHandle;
             this.id = this.GetHashCode();
         }
+#endif
 
         /// <summary>
         /// Get the hash code of the hot key.

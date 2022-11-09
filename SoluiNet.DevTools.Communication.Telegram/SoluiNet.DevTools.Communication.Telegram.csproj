@@ -18,6 +18,8 @@
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn)</NoWarn>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+	<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>

@@ -215,7 +215,7 @@ namespace SoluiNet.DevTools.UI
                 try
                 {
                     var an = AssemblyName.GetAssemblyName(dllFile);
-                    var assembly = Assembly.Load(an);
+                    var assembly = Assembly.LoadFrom(dllFile);
                     assemblies.Add(assembly);
                 }
                 catch (BadImageFormatException exception)
