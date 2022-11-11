@@ -63,7 +63,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Job
                                 x.StartTime < upperDayLimit).OrderByDescending(x => x.StartTime).FirstOrDefault();
 
                 if (lastEntry == null ||
-                    (DateTime.UtcNow - lastEntry.StartTime.ToUniversalTime().AddSeconds(lastEntry.Duration))
+                    (DateTime.UtcNow - lastEntry.StartTime.AddSeconds(lastEntry.Duration))
                     .TotalSeconds > 15)
                 {
                     context.UsageTime.Add(new UsageTime()

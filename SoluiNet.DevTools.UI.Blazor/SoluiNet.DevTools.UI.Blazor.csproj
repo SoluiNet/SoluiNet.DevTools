@@ -24,7 +24,13 @@
     <Content Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="C:\Users\dgrosse-venhaus\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config" />
+  </ItemGroup>
+  <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="C:\Users\dgrosse-venhaus\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
@@ -38,6 +44,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+	  <PackageReference Include="NLog" Version="5.0.5" />
+	  <PackageReference Include="NLog.Config" Version="4.7.15" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -55,7 +63,10 @@
     <Exec Command="cp &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Unix'" />
     <Exec Command="if not exist &quot;$(ProjectDir)wwwroot\images&quot; mkdir &quot;$(ProjectDir)wwwroot\images&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <Exec Command="mkdir -p &quot;$(ProjectDir)wwwroot\images&quot;" Condition="'$(OS)' == 'Unix'" />
-    <Exec Command="copy &quot;$(SolutionDir)icons\soluinet_logo.svg&quot; &quot;$(ProjectDir)wwwroot\images\logo.svg&quot;" Condition="'$(OS)' == 'Windows_NT'" />
-    <Exec Command="cp &quot;$(SolutionDir)icons\soluinet_logo.svg&quot; &quot;$(ProjectDir)wwwroot\images\logo.svg&quot;" Condition="'$(OS)' == 'Unix'" />
+    <Exec Command="copy &quot;$(SolutionDir)icons\solui_logo.svg&quot; &quot;$(ProjectDir)wwwroot\images\logo.svg&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="cp &quot;$(SolutionDir)icons\solui_logo.svg&quot; &quot;$(ProjectDir)wwwroot\images\logo.svg&quot;" Condition="'$(OS)' == 'Unix'" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\$(ConfigurationName)\UI&quot; &quot;$(SolutionDir)build\blazor-client\$(ConfigurationName)\UI\&quot; /y /s /e /I&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\$(ConfigurationName)\Plugins&quot; &quot;$(SolutionDir)build\blazor-client\$(ConfigurationName)\Plugins\&quot; /y /s /e /I&#xD;&#xA;)" />
   </Target>
 </Project>

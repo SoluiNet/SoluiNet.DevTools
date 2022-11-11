@@ -14,8 +14,10 @@ namespace SoluiNet.DevTools.Core.Application
     using System.Text;
     using NLog;
     using SoluiNet.DevTools.Core.Plugin;
+    using SoluiNet.DevTools.Core.Plugin.Events;
     using SoluiNet.DevTools.Core.Services;
     using SoluiNet.DevTools.Core.Tools.Json;
+    using SoluiNet.DevTools.Core.Tools.Plugin;
 
     /// <summary>
     /// The base implementation of a solui.net Application.
@@ -69,6 +71,57 @@ namespace SoluiNet.DevTools.Core.Application
         }
 
         /// <summary>
+        /// Calls the startup event of the application.
+        /// </summary>
+        /// <param name="eventArguments">The event arguments.</param>
+        public virtual void Startup(Dictionary<string, object> eventArguments = null)
+        {
+            if (eventArguments == null)
+            {
+                eventArguments = new Dictionary<string, object>();
+            }
+
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IStartupEvent>>())
+            {
+                plugin.HandleEvent<IStartupEvent>(eventArguments);
+            }
+        }
+
+        /// <summary>
+        /// Calls the initialized event of the application.
+        /// </summary>
+        /// <param name="eventArguments">The event arguments.</param>
+        public virtual void Initialized(Dictionary<string, object> eventArguments = null)
+        {
+            if (eventArguments == null)
+            {
+                eventArguments = new Dictionary<string, object>();
+            }
+
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IInitializedEvent>>())
+            {
+                plugin.HandleEvent<IInitializedEvent>(eventArguments);
+            }
+        }
+
+        /// <summary>
+        /// Calls the shut down event of the application.
+        /// </summary>
+        /// <param name="eventArguments">The event arguments.</param>
+        public virtual void Shutdown(Dictionary<string, object> eventArguments = null)
+        {
+            if (eventArguments == null)
+            {
+                eventArguments = new Dictionary<string, object>();
+            }
+
+            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IShutdownEvent>>())
+            {
+                plugin.HandleEvent<IShutdownEvent>(eventArguments);
+            }
+        }
+
+        /// <summary>
         /// Initialize the plugins.
         /// </summary>
         /// <typeparam name="TPlugin">The plugin type.</typeparam>
@@ -112,7 +165,7 @@ namespace SoluiNet.DevTools.Core.Application
                 try
                 {
                     var an = AssemblyName.GetAssemblyName(dllFile);
-                    var assembly = Assembly.Load(an);
+                    var assembly = Assembly.LoadFrom(dllFile);
                     assemblies.Add(assembly);
                 }
                 catch (BadImageFormatException exception)

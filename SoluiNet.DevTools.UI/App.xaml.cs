@@ -140,9 +140,9 @@ namespace SoluiNet.DevTools.UI
 
                 this.baseApp.Initialize();
 
-                App.CallStartupEvent();
+                this.CallStartupEvent();
 
-                App.CallInitializedEvent();
+                this.CallInitializedEvent();
             }
             catch (Exception exception)
             {
@@ -163,7 +163,7 @@ namespace SoluiNet.DevTools.UI
 
                 App.Logger.Info(string.Format(CultureInfo.InvariantCulture, "Stop SoluiNet.DevTools from '{0}'", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
-                App.CallShutdownEvent();
+                this.CallShutdownEvent();
             }
             catch (Exception exception)
             {
@@ -171,28 +171,19 @@ namespace SoluiNet.DevTools.UI
             }
         }
 
-        private static void CallStartupEvent()
+        private void CallStartupEvent()
         {
-            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IStartupEvent>>())
-            {
-                plugin.HandleEvent<IStartupEvent>(new Dictionary<string, object>());
-            }
+            this.baseApp.Startup();
         }
 
-        private static void CallInitializedEvent()
+        private void CallInitializedEvent()
         {
-            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IInitializedEvent>>())
-            {
-                plugin.HandleEvent<IInitializedEvent>(new Dictionary<string, object>());
-            }
+            this.baseApp.Initialized();
         }
 
-        private static void CallShutdownEvent()
+        private void CallShutdownEvent()
         {
-            foreach (var plugin in PluginHelper.GetPlugins<IHandlesEvent<IShutdownEvent>>())
-            {
-                plugin.HandleEvent<IShutdownEvent>(new Dictionary<string, object>());
-            }
+            this.baseApp.Shutdown();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to catch any exception that occurs during plugin load. Therefore the base exception type will be catched.")]

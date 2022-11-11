@@ -92,10 +92,10 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             {
                 created = true;
 
-                CreateIfNotExists();
+                CreateIfNotExists(dbContext: this);
             }
 
-            RunPerformanceTweaks();
+            RunPerformanceTweaks(dbContext: this);
         }
 #endif
 
@@ -256,11 +256,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// See also: https://phiresky.github.io/blog/2020/sqlite-performance-tuning/.
         /// </summary>
         /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        /// <param name="dbContext">The database context.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
             "Design",
             "CA1031:Do not catch general exception types",
             Justification = "All exceptions should be catched and written to log")]
-        public static void RunPerformanceTweaks(string nameOrConnectionString = "name=TimeTrackingContext")
+        public static void RunPerformanceTweaks(string nameOrConnectionString = "name=TimeTrackingContext", DbContext dbContext = null)
         {
             if (nameOrConnectionString == null)
             {
@@ -272,18 +273,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 #if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
 #else
-            var connection = new EntityConnection(nameOrConnectionString);
+            if (dbContext == null)
+            {
+                throw new ArgumentNullException(nameof(dbContext));
+            }
+
+            // var connection = new EntityConnection(nameOrConnectionString);
 #endif
 
             try
             {
+#if BUILD_FOR_WINDOWS
                 connection.Open();
 
-#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("pragma journal_mode = WAL;", connection);
-#else
-                var command = new EntityCommand("pragma journal_mode = WAL;", connection);
-#endif
 
                 try
                 {
@@ -302,6 +305,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 {
                     command.Dispose();
                 }
+#else
+                dbContext.Database.ExecuteSqlRaw("pragma journal_mode = WAL;");
+                dbContext.Database.ExecuteSqlRaw("pragma synchronous = normal;");
+                dbContext.Database.ExecuteSqlRaw("pragma temp_store = memory;");
+                dbContext.Database.ExecuteSqlRaw("pragma mmap_size = 30000000000;");
+#endif
+
             }
             catch (Exception exception)
             {
@@ -309,7 +319,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             }
             finally
             {
+#if BUILD_FOR_WINDOWS
                 connection.Close();
+#endif
             }
         }
 
@@ -317,11 +329,12 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// Create the database if it doesn't exist.
         /// </summary>
         /// <param name="nameOrConnectionString">The name or connection string for the time tracking database context.</param>
+        /// <param name="dbContext">The database context.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
             "Design",
             "CA1031:Do not catch general exception types",
             Justification = "All exceptions should be catched and written to log")]
-        public static void CreateIfNotExists(string nameOrConnectionString = "name=TimeTrackingContext")
+        public static void CreateIfNotExists(string nameOrConnectionString = "name=TimeTrackingContext", DbContext dbContext = null)
         {
             if (nameOrConnectionString == null)
             {
@@ -349,19 +362,25 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 #if BUILD_FOR_WINDOWS
                 var firstConnection = new SQLiteConnection(connectionString);
 #else
-                var firstConnection = new EntityConnection(nameOrConnectionString);
+                if (dbContext == null)
+                {
+                    throw new ArgumentNullException(nameof(dbContext));
+                }
+
+                // var firstConnection = new EntityConnection(nameOrConnectionString);
 #endif
 
                 try
                 {
-                    firstConnection.Open();
-
 #if BUILD_FOR_WINDOWS
+                    firstConnection.Open();
                     var createVersionHistory = new SQLiteCommand("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)", firstConnection);
 #else
-                    var createVersionHistory = new EntityCommand("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)", firstConnection);
+                    // var createVersionHistory = new EntityCommand("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)", firstConnection);
+                    dbContext.Database.ExecuteSqlRaw("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)");
 #endif
 
+#if BUILD_FOR_WINDOWS
                     try
                     {
                         createVersionHistory.ExecuteNonQuery();
@@ -379,35 +398,48 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                     {
                         createVersionHistory.Dispose();
                     }
+#else
+                    dbContext.Database.ExecuteSqlRaw(
+                        "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                        "1.0.0.0",
+                        DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
                 }
                 finally
                 {
+#if BUILD_FOR_WINDOWS
                     firstConnection.Close();
+#endif
                 }
             }
 
 #if BUILD_FOR_WINDOWS
             var connection = new SQLiteConnection(connectionString);
 #else
-            var connection = new EntityConnection(nameOrConnectionString);
+            // var connection = new EntityConnection(nameOrConnectionString);
 #endif
 
             try
             {
+#if BUILD_FOR_WINDOWS
                 connection.Open();
 
-#if BUILD_FOR_WINDOWS
                 var command = new SQLiteCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
 #else
-                var command = new EntityCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
+                // var command = new EntityCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
 #endif
 
                 try
                 {
+#if BUILD_FOR_WINDOWS
                     var appliedVersion = new Version(command.ExecuteScalar().ToString());
+#else
+                    var appliedVersion = new Version(dbContext.Database.SqlQueryRaw<string>("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1").FirstOrDefault());
+#endif
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.1")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText =
                             "CREATE TABLE UsageTime (UsageTimeId INTEGER PRIMARY KEY, ApplicationIdentification TEXT, StartTime TEXT, Duration INTEGER)";
                         command.ExecuteNonQuery();
@@ -419,15 +451,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                             "$appliedAt",
                             DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
 
-                        command.ExecuteNonQuery();
-
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("CREATE TABLE UsageTime (UsageTimeId INTEGER PRIMARY KEY, ApplicationIdentification TEXT, StartTime TEXT, Duration INTEGER)");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.1",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.1");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.2")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText =
                             "CREATE TABLE Category (CategoryId INTEGER PRIMARY KEY, CategoryName TEXT)";
                         command.ExecuteNonQuery();
@@ -446,12 +485,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("CREATE TABLE Category (CategoryId INTEGER PRIMARY KEY, CategoryName TEXT)");
+                        dbContext.Database.ExecuteSqlRaw("CREATE TABLE Category_UsageTime (CategoryId INTEGER, UsageTimeId INTEGER, Duration INTEGER, PRIMARY KEY (CategoryId, UsageTimeId))");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.2",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.2");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.3")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText =
                             "CREATE TABLE Application (ApplicationId INTEGER PRIMARY KEY, ApplicationName TEXT)";
                         command.ExecuteNonQuery();
@@ -469,12 +518,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("CREATE TABLE Application (ApplicationId INTEGER PRIMARY KEY, ApplicationName TEXT)");
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE UsageTime ADD ApplicationId INTEGER");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.3",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.3");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.4")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText =
                             "CREATE TABLE ApplicationArea (ApplicationAreaId INTEGER PRIMARY KEY, ApplicationId INTEGER, AreaName TEXT)";
                         command.ExecuteNonQuery();
@@ -492,12 +551,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("CREATE TABLE ApplicationArea (ApplicationAreaId INTEGER PRIMARY KEY, ApplicationId INTEGER, AreaName TEXT)");
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE UsageTime ADD ApplicationAreaId INTEGER");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.4",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.4");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.5")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE Category_UsageTime RENAME TO Category_UsageTime_PreV1005";
                         command.ExecuteNonQuery();
 
@@ -519,12 +588,24 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE Category_UsageTime RENAME TO Category_UsageTime_PreV1005");
+                        dbContext.Database.ExecuteSqlRaw("CREATE TABLE Category_UsageTime (CategoryId INTEGER, UsageTimeId INTEGER, Duration DOUBLE, PRIMARY KEY (CategoryId, UsageTimeId))");
+                        dbContext.Database.ExecuteSqlRaw("INSERT INTO Category_UsageTime (CategoryId, UsageTimeId, Duration)"
+                            + "SELECT CategoryId, UsageTimeId, Duration FROM Category_UsageTime_PreV1005");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.5",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.5");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.6")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE Application ADD ExtendedConfiguration TEXT";
                         command.ExecuteNonQuery();
 
@@ -558,12 +639,37 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE Application ADD ExtendedConfiguration TEXT");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("BlueViolet").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromRgb(50, 50, 50).ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "Microsoft Visual Studio");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.6",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.6");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.7")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText =
                             "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName";
                         command.Parameters.AddWithValue("$extendedConfiguration", XmlHelper.Serialize(
@@ -755,12 +861,197 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DodgerBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "Outlook");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkViolet").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "Microsoft Teams");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DeepSkyBlue").ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "Remote Desktop Manager");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkGreen").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "Excel");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Lime").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "Notepad++");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("WhiteSmoke").ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "Editor");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkGray").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "TortoiseGit");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    angle = 0.75,
+                                    angleSpecified = true,
+                                    startColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DarkBlue").ToHex(),
+                                    endColour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("LightBlue").ToHex(),
+                                    type = SoluiNetBrushType.SimpleLinearGradient,
+                                    typeSpecified = true,
+                                },
+                            }),
+                            "KeePass");
+                        dbContext.Database.ExecuteSqlRaw(
+                            "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName",
+                            XmlHelper.Serialize(
+                            new SoluiNetExtendedConfigurationType()
+                            {
+                                SoluiNetBrushDefinition = new SoluiNetBrushDefinitionType()
+                                {
+                                    type = SoluiNetBrushType.LinearGradient,
+                                    typeSpecified = true,
+                                    SoluiNetStartPoint = new SoluiNetPointType()
+                                    {
+                                        xAxis = 0,
+                                        xAxisSpecified = true,
+                                        yAxis = 0,
+                                        yAxisSpecified = true,
+                                    },
+                                    SoluiNetEndPoint = new SoluiNetPointType()
+                                    {
+                                        xAxis = 1,
+                                        xAxisSpecified = true,
+                                        yAxis = 0.2,
+                                        yAxisSpecified = true,
+                                    },
+                                    SoluiNetGradientStop = new SoluiNetGradientStopType[]
+                                    {
+                                        new SoluiNetGradientStopType()
+                                        {
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("OrangeRed").ToHex(),
+                                            offset = 0.2,
+                                        },
+                                        new SoluiNetGradientStopType()
+                                        {
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Yellow").ToHex(),
+                                            offset = 0.4,
+                                        },
+                                        new SoluiNetGradientStopType()
+                                        {
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("Green").ToHex(),
+                                            offset = 0.6,
+                                        },
+                                        new SoluiNetGradientStopType()
+                                        {
+                                            colour = ApplicationContext.ResolveSingleton<IColourFactory>("ColourFactory").FromName("DeepSkyBlue").ToHex(),
+                                            offset = 0.8,
+                                        },
+                                    },
+                                },
+                            }),
+                            "Google Chrome");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.7",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.7");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.8")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE UsageTime ADD AdditionalInformation TEXT";
                         command.ExecuteNonQuery();
 
@@ -774,12 +1065,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE UsageTime ADD AdditionalInformation TEXT");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.8",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.8");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.9")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE Category ADD ExtendedConfiguration TEXT";
                         command.ExecuteNonQuery();
 
@@ -794,12 +1094,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE Category ADD ExtendedConfiguration TEXT");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.9",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.9");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.10")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE Category ADD DistributeEvenlyTarget BOOLEAN";
                         command.ExecuteNonQuery();
 
@@ -814,12 +1123,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE Category ADD DistributeEvenlyTarget BOOLEAN");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.10",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.10");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.11")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText =
                             "CREATE TABLE FilterHistory (FilterHistoryId INTEGER PRIMARY KEY, FilterString TEXT, LastExecutionDateTime TEXT, ExecutionUser TEXT)";
                         command.ExecuteNonQuery();
@@ -835,12 +1153,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("CREATE TABLE FilterHistory (FilterHistoryId INTEGER PRIMARY KEY, FilterString TEXT, LastExecutionDateTime TEXT, ExecutionUser TEXT)");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.11",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.11");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.12")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE ApplicationArea ADD ExtendedConfiguration TEXT";
                         command.ExecuteNonQuery();
 
@@ -855,12 +1182,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE ApplicationArea ADD ExtendedConfiguration TEXT");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.12",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.12");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.13")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "CREATE INDEX idx_usage_starttime ON UsageTime(StartTime);";
                         command.ExecuteNonQuery();
 
@@ -875,12 +1211,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("CREATE INDEX idx_usage_starttime ON UsageTime(StartTime);");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.13",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.13");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.14")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "CREATE INDEX idx_usage_application ON UsageTime(ApplicationId);";
                         command.ExecuteNonQuery();
 
@@ -895,12 +1240,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("CREATE INDEX idx_usage_application ON UsageTime(ApplicationId);");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.14",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.14");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.15")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE UsageTime ADD ApplicationAutomaticAssigned BOOLEAN;";
                         command.ExecuteNonQuery();
 
@@ -918,12 +1272,22 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE UsageTime ADD ApplicationAutomaticAssigned BOOLEAN;");
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE UsageTime ADD CategoryAutomaticAssigned BOOLEAN;");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.15",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.15");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.16")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE Category_UsageTime ADD DistributedEvenly BOOLEAN;";
                         command.ExecuteNonQuery();
 
@@ -938,12 +1302,21 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE Category_UsageTime ADD DistributedEvenly BOOLEAN;");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.16",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.16");
                     }
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.17")) < 0)
                     {
+#if BUILD_FOR_WINDOWS
                         command.CommandText = "ALTER TABLE UsageTime ADD ApplicationManualAssigned BOOLEAN;";
                         command.ExecuteNonQuery();
 
@@ -961,13 +1334,24 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                         command.ExecuteNonQuery();
 
                         command.Parameters.Clear();
+#else
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE UsageTime ADD ApplicationManualAssigned BOOLEAN;");
+                        dbContext.Database.ExecuteSqlRaw("ALTER TABLE UsageTime ADD CategoryManualAssigned BOOLEAN;");
+
+                        dbContext.Database.ExecuteSqlRaw(
+                            "INSERT INTO VersionHistory (VersionNumber, AppliedDateTime) VALUES ($versionNo, $appliedAt)",
+                            "1.0.0.17",
+                            DateTime.UtcNow.ToString("yyyy-MM-dd\"T\"HH:mm:ss.fff", CultureInfo.InvariantCulture));
+#endif
 
                         appliedVersion = new Version("1.0.0.17");
                     }
                 }
                 finally
                 {
+#if BUILD_FOR_WINDOWS
                     command.Dispose();
+#endif
                 }
             }
             catch (Exception exception)
@@ -976,7 +1360,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             }
             finally
             {
+#if BUILD_FOR_WINDOWS
                 connection.Close();
+#endif
             }
         }
 

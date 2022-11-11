@@ -35,6 +35,7 @@ namespace SoluiNet.DevTools.UI.Blazor
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHostedService<Program>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<SoluiNetBlazorApp>();
@@ -45,8 +46,11 @@ namespace SoluiNet.DevTools.UI.Blazor
         /// </summary>
         /// <param name="application">The application.</param>
         /// <param name="environment">The environment.</param>
-        public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)
+        /// <param name="app">The solui.net application core.</param>
+        public void Configure(IApplicationBuilder application, IWebHostEnvironment environment, SoluiNetBlazorApp app)
         {
+            app.Startup();
+
             // Configure the HTTP request pipeline.
             if (environment.EnvironmentName != "Development")
             {
@@ -67,6 +71,8 @@ namespace SoluiNet.DevTools.UI.Blazor
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            app.Initialized();
         }
     }
 }
