@@ -303,8 +303,8 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                         colourFactory.FromName("DeepSkyBlue"),
                     },
                     0.75m,
-                    new GradientBrush.GradientPoint(0, 0),
-                    new GradientBrush.GradientPoint(0, 0.2m));
+                    new Core.Reference.GradientBrush.GradientPoint(0, 0),
+                    new Core.Reference.GradientBrush.GradientPoint(0, 0.2m));
             }
             else if (applicationName.Equals(TortoiseGit, StringComparison.Ordinal))
             {

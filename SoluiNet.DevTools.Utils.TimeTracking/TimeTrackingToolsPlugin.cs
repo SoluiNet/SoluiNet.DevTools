@@ -36,7 +36,15 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
     /// A plugin which provides utility functions for time tracking.
     /// </summary>
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Will be used from outside sources")]
-    public class TimeTrackingToolsPlugin : IUtilitiesDevPlugin, IRunsBackgroundTask, IHandlesEvent<IStartupEvent>, IHandlesEvent<IShutdownEvent>, IHandlesEvent<IApplicationStartedEvent>
+    public class TimeTrackingToolsPlugin :
+        SoluiNet.DevTools.Core.UI.Blazor.Plugin.IUtilitiesDevPlugin,
+#if BUILD_FOR_WINDOWS
+        SoluiNet.DevTools.Core.UI.WPF.Plugin.IUtilitiesDevPlugin,
+#endif
+        IRunsBackgroundTask,
+        IHandlesEvent<IStartupEvent>,
+        IHandlesEvent<IShutdownEvent>,
+        IHandlesEvent<IApplicationStartedEvent>
     {
         private static System.Threading.Mutex mutex;
 
@@ -169,20 +177,20 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
                     var currentDateTime = DateTime.UtcNow;
                     var currentDate = currentDateTime.Date;
 
-                    var lastUsageTime = context.UsageTime.Where(x => x.StartTime > currentDate)
+                    var lastUsageTime = context.UsageTime
+                        .Where(x => x.StartTime > currentDate)
                         .OrderByDescending(x => x.StartTime).FirstOrDefault();
 
                     if (lastUsageTime == null ||
-                        !((DateTime.UtcNow - lastUsageTime.StartTime.ToUniversalTime()
-                               .AddSeconds(lastUsageTime.Duration)).TotalSeconds > 15))
+                        !((DateTime.UtcNow - lastUsageTime.StartTime.AddSeconds(lastUsageTime.Duration)).TotalSeconds > 15))
                     {
                         return;
                     }
 
 #if BUILD_FOR_WINDOWS
                     var usageTimeName = Prompt.ShowDialog(
-                        Resources.GetString("DescriptionForMeantime", CultureInfo.CurrentCulture),
-                        Resources.GetString("MeantimeDescriptionTitle", CultureInfo.CurrentCulture));
+                        Properties.Resources.DescriptionForMeantime,
+                        Properties.Resources.MeantimeDescriptionTitle);
 #else
                     // todo: implement query for mean time on blazor UI
                     var usageTimeName = "UNKNOWN";
@@ -190,12 +198,9 @@ namespace SoluiNet.DevTools.Utils.TimeTracking
 
                     context.UsageTime.Add(new UsageTime()
                     {
-                        StartTime =
-                            lastUsageTime.StartTime.ToUniversalTime().AddSeconds(lastUsageTime.Duration),
+                        StartTime = lastUsageTime.StartTime.AddSeconds(lastUsageTime.Duration),
                         ApplicationIdentification = usageTimeName,
-                        Duration = Convert.ToInt32(
-                            (currentDateTime - lastUsageTime.StartTime.ToUniversalTime()
-                                 .AddSeconds(lastUsageTime.Duration)).TotalSeconds),
+                        Duration = Convert.ToInt32((currentDateTime - lastUsageTime.StartTime.AddSeconds(lastUsageTime.Duration)).TotalSeconds),
                     });
 
                     context.SaveChanges();

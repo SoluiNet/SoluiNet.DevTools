@@ -8,7 +8,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.Configuration;
     using System.Data.Entity.Core.EntityClient;
     using System.Data.SQLite;
-#if BUILD_FOR_WINDOWS
+#if !NET
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
 #endif
@@ -16,7 +16,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
-#if !BUILD_FOR_WINDOWS
+#if NET
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Proxies;
 #endif
@@ -36,7 +36,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
     /// <summary>
     /// The database context which can be used for time tracking purposes.
     /// </summary>
-#if BUILD_FOR_WINDOWS
+#if !NET
     public class TimeTrackingContext : System.Data.Entity.DbContext
 #else
     public class TimeTrackingContext : Microsoft.EntityFrameworkCore.DbContext
@@ -57,7 +57,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// </summary>
         private string connectionName;
 
-#if BUILD_FOR_WINDOWS
+#if !NET
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
         /// </summary>
@@ -77,7 +77,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         }
 #endif
 
-#if !BUILD_FOR_WINDOWS
+#if NET
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTrackingContext"/> class.
         /// </summary>
@@ -163,7 +163,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
-#if BUILD_FOR_WINDOWS
+#if !NET
             var connection = new SQLiteConnection(connectionString);
 #else
             var connection = new EntityConnection(nameOrConnectionString);
@@ -173,7 +173,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             {
                 connection.Open();
 
-#if BUILD_FOR_WINDOWS
+#if !NET
                 var command = new SQLiteCommand("pragma vacuum;", connection);
 #else
                 var command = new EntityCommand("pragma vacuum;", connection);
@@ -216,7 +216,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
-#if BUILD_FOR_WINDOWS
+#if !NET
             var connection = new SQLiteConnection(connectionString);
 #else
             var connection = new EntityConnection(nameOrConnectionString);
@@ -226,7 +226,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             {
                 connection.Open();
 
-#if BUILD_FOR_WINDOWS
+#if !NET
                 var command = new SQLiteCommand("pragma optimize;", connection);
 #else
                 var command = new EntityCommand("pragma optimize;", connection);
@@ -270,7 +270,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             var connectionString = GetConnectionString(nameOrConnectionString);
 
-#if BUILD_FOR_WINDOWS
+#if !NET
             var connection = new SQLiteConnection(connectionString);
 #else
             if (dbContext == null)
@@ -283,7 +283,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             try
             {
-#if BUILD_FOR_WINDOWS
+#if !NET
                 connection.Open();
 
                 var command = new SQLiteCommand("pragma journal_mode = WAL;", connection);
@@ -319,7 +319,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             }
             finally
             {
-#if BUILD_FOR_WINDOWS
+#if !NET
                 connection.Close();
 #endif
             }
@@ -359,7 +359,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             {
                 SQLiteConnection.CreateFile(filePath);
 
-#if BUILD_FOR_WINDOWS
+#if !NET
                 var firstConnection = new SQLiteConnection(connectionString);
 #else
                 if (dbContext == null)
@@ -372,7 +372,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                 try
                 {
-#if BUILD_FOR_WINDOWS
+#if !NET
                     firstConnection.Open();
                     var createVersionHistory = new SQLiteCommand("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)", firstConnection);
 #else
@@ -380,7 +380,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                     dbContext.Database.ExecuteSqlRaw("CREATE TABLE VersionHistory (VersionHistoryId INTEGER PRIMARY KEY, VersionNumber TEXT, AppliedDateTime TEXT)");
 #endif
 
-#if BUILD_FOR_WINDOWS
+#if !NET
                     try
                     {
                         createVersionHistory.ExecuteNonQuery();
@@ -407,13 +407,13 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 }
                 finally
                 {
-#if BUILD_FOR_WINDOWS
+#if !NET
                     firstConnection.Close();
 #endif
                 }
             }
 
-#if BUILD_FOR_WINDOWS
+#if !NET
             var connection = new SQLiteConnection(connectionString);
 #else
             // var connection = new EntityConnection(nameOrConnectionString);
@@ -421,7 +421,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
             try
             {
-#if BUILD_FOR_WINDOWS
+#if !NET
                 connection.Open();
 
                 var command = new SQLiteCommand("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1", connection);
@@ -431,15 +431,17 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                 try
                 {
-#if BUILD_FOR_WINDOWS
+#if !NET
                     var appliedVersion = new Version(command.ExecuteScalar().ToString());
 #else
-                    var appliedVersion = new Version(dbContext.Database.SqlQueryRaw<string>("SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1").FirstOrDefault());
+                    var versionNo = dbContext?.Database.SqlQuery<string>($"SELECT VersionNumber FROM VersionHistory ORDER BY AppliedDateTime DESC LIMIT 1").FirstOrDefault();
+
+                    var appliedVersion = new Version(versionNo);
 #endif
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.1")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText =
                             "CREATE TABLE UsageTime (UsageTimeId INTEGER PRIMARY KEY, ApplicationIdentification TEXT, StartTime TEXT, Duration INTEGER)";
                         command.ExecuteNonQuery();
@@ -466,7 +468,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.2")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText =
                             "CREATE TABLE Category (CategoryId INTEGER PRIMARY KEY, CategoryName TEXT)";
                         command.ExecuteNonQuery();
@@ -500,7 +502,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.3")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText =
                             "CREATE TABLE Application (ApplicationId INTEGER PRIMARY KEY, ApplicationName TEXT)";
                         command.ExecuteNonQuery();
@@ -533,7 +535,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.4")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText =
                             "CREATE TABLE ApplicationArea (ApplicationAreaId INTEGER PRIMARY KEY, ApplicationId INTEGER, AreaName TEXT)";
                         command.ExecuteNonQuery();
@@ -566,7 +568,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.5")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE Category_UsageTime RENAME TO Category_UsageTime_PreV1005";
                         command.ExecuteNonQuery();
 
@@ -605,7 +607,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.6")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE Application ADD ExtendedConfiguration TEXT";
                         command.ExecuteNonQuery();
 
@@ -669,7 +671,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.7")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText =
                             "UPDATE Application SET ExtendedConfiguration = $extendedConfiguration WHERE ApplicationName = $applicationName";
                         command.Parameters.AddWithValue("$extendedConfiguration", XmlHelper.Serialize(
@@ -1051,7 +1053,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.8")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE UsageTime ADD AdditionalInformation TEXT";
                         command.ExecuteNonQuery();
 
@@ -1079,7 +1081,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.9")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE Category ADD ExtendedConfiguration TEXT";
                         command.ExecuteNonQuery();
 
@@ -1108,7 +1110,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.10")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE Category ADD DistributeEvenlyTarget BOOLEAN";
                         command.ExecuteNonQuery();
 
@@ -1137,7 +1139,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.11")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText =
                             "CREATE TABLE FilterHistory (FilterHistoryId INTEGER PRIMARY KEY, FilterString TEXT, LastExecutionDateTime TEXT, ExecutionUser TEXT)";
                         command.ExecuteNonQuery();
@@ -1167,7 +1169,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.12")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE ApplicationArea ADD ExtendedConfiguration TEXT";
                         command.ExecuteNonQuery();
 
@@ -1196,7 +1198,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.13")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "CREATE INDEX idx_usage_starttime ON UsageTime(StartTime);";
                         command.ExecuteNonQuery();
 
@@ -1225,7 +1227,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.14")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "CREATE INDEX idx_usage_application ON UsageTime(ApplicationId);";
                         command.ExecuteNonQuery();
 
@@ -1254,7 +1256,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.15")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE UsageTime ADD ApplicationAutomaticAssigned BOOLEAN;";
                         command.ExecuteNonQuery();
 
@@ -1287,7 +1289,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.16")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE Category_UsageTime ADD DistributedEvenly BOOLEAN;";
                         command.ExecuteNonQuery();
 
@@ -1316,7 +1318,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 
                     if (appliedVersion.CompareTo(new Version("1.0.0.17")) < 0)
                     {
-#if BUILD_FOR_WINDOWS
+#if !NET
                         command.CommandText = "ALTER TABLE UsageTime ADD ApplicationManualAssigned BOOLEAN;";
                         command.ExecuteNonQuery();
 
@@ -1349,7 +1351,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 }
                 finally
                 {
-#if BUILD_FOR_WINDOWS
+#if !NET
                     command.Dispose();
 #endif
                 }
@@ -1360,7 +1362,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
             }
             finally
             {
-#if BUILD_FOR_WINDOWS
+#if !NET
                 connection.Close();
 #endif
             }
@@ -1377,7 +1379,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
         /// The event handler for model creation.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
-#if BUILD_FOR_WINDOWS
+#if !NET
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 #else
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -1397,7 +1399,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => x.ApplicationAreaId);
 
             modelBuilder.Entity<ApplicationArea>()
-#if BUILD_FOR_WINDOWS
+#if !NET
                 .HasRequired<Application>(x => x.Application)
                 .WithMany(x => x.ApplicationArea)
                 .HasForeignKey(x => x.ApplicationId);
@@ -1417,7 +1419,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => new { x.CategoryId, x.UsageTimeId });
 
             modelBuilder.Entity<CategoryUsageTime>()
-#if BUILD_FOR_WINDOWS
+#if !NET
                 .HasRequired<UsageTime>(x => x.UsageTime)
                 .WithMany(x => x.CategoryUsageTime)
                 .HasForeignKey(x => x.UsageTimeId);
@@ -1429,7 +1431,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 #endif
 
             modelBuilder.Entity<CategoryUsageTime>()
-#if BUILD_FOR_WINDOWS
+#if !NET
                 .HasRequired<Category>(x => x.Category)
                 .WithMany(x => x.CategoryUsageTime)
                 .HasForeignKey(x => x.CategoryId);
@@ -1445,7 +1447,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
                 .HasKey(x => x.UsageTimeId);
 
             modelBuilder.Entity<UsageTime>()
-#if BUILD_FOR_WINDOWS
+#if !NET
                 .HasOptional<Application>(x => x.Application)
                 .WithMany(x => x.UsageTime)
                 .HasForeignKey(x => x.ApplicationId);
@@ -1456,7 +1458,7 @@ namespace SoluiNet.DevTools.Utils.TimeTracking.Entities
 #endif
 
             modelBuilder.Entity<UsageTime>()
-#if BUILD_FOR_WINDOWS
+#if !NET
                 .HasOptional<ApplicationArea>(x => x.ApplicationArea)
                 .WithMany(x => x.UsageTime)
                 .HasForeignKey(x => x.ApplicationAreaId);
