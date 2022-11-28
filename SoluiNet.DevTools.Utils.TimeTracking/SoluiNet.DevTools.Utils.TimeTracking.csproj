@@ -33,7 +33,7 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
@@ -137,7 +137,7 @@
     <Compile Include="**/*.cs" Exclude="UI/*.*;**/*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
     <Compile Update="TimeTrackingToolsUserControl.xaml.cs">
