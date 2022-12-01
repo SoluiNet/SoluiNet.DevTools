@@ -37,7 +37,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Tesseract" Version="4.1.1" />
+    <PackageReference Include="Tesseract" Version="5.2.0" />
     <PackageReference Include="ZXing.Net" Version="0.16.8" />
   </ItemGroup>
   <ItemGroup>
