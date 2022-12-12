@@ -80,7 +80,7 @@
     <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
-    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
+    <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
     <Compile Update="MachineLearningUserControl.xaml.cs">
