@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{0673086C-9BD1-4F6C-A889-335CFC743A0E}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.UI.SmartHome</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.UI.SmartHome</Product>

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{877EF2D5-C0DE-4CC0-BC1F-8D346CCEFC92}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Communication.Telegram</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Communication.Telegram</Product>

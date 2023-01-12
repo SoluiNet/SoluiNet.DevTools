@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{D3211735-A2DE-4F2C-930D-92CEFB34EC67}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.UI.Management</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.UI.Management</Product>

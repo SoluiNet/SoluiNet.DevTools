@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{D67F9324-6710-4144-8BA0-B446CD4CB28A}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.DataExchange.Jira</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.DataExchange.Jira</Product>

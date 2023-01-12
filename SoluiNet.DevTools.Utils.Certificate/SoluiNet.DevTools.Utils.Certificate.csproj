@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{E70D4DBD-7320-4CC4-AF45-A19BCBAE97D4}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.Certificate</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Utils.Certificate</Product>

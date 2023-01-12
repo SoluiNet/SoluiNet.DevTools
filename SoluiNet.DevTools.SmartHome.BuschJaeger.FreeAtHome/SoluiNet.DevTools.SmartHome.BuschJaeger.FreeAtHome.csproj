@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome</AssemblyTitle>
     <Product>SoluiNet.DevTools.SmartHome.BuschJaeger.FreeAtHome</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>

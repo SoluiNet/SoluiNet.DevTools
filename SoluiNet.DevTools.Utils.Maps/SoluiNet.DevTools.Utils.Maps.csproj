@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.Maps</AssemblyTitle>
     <Product>SoluiNet.DevTools.Utils.File</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{FDEDA2F7-611B-4E77-9D84-1BB8802E27B5}</ProjectGuid>
     <!--<TargetFrameworks>netstandard2.0;net472</TargetFrameworks>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Transform.Uml</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Transform.Uml</Product>
