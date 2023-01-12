@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Console</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Console</Product>

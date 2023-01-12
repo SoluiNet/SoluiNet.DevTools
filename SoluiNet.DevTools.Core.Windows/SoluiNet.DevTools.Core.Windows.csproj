@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{64B47EED-3674-47F1-80FE-969339A8D34C}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Core.Windows</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core.Windows</Product>

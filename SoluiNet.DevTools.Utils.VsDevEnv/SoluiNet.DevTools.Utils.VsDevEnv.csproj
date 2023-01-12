@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Utils.VsDevEnv</AssemblyTitle>
     <Product>SoluiNet.DevTools.Utils.VsDevEnv</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<ProjectGuid>{906B056F-5C3C-4673-B31A-8B02EBBF6680}</ProjectGuid>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<AssemblyTitle>SoluiNet.DevTools.Core.UI</AssemblyTitle>
 		<Company>SoluiNet</Company>
 		<Product>SoluiNet.DevTools.Core.UI</Product>

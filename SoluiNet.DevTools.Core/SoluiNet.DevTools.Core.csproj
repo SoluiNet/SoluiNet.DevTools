@@ -4,7 +4,7 @@
     <!--<TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>-->
     <!--<TargetFramework>net472</TargetFramework>-->
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
-	<TargetFramework>net6.0</TargetFramework>
+	<TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Core</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core</Product>

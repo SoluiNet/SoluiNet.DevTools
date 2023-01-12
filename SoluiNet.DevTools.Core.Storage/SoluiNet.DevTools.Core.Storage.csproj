@@ -3,8 +3,8 @@
     <ProjectGuid>{3D9A8308-34AB-4318-AE20-97BA9BEF1482}</ProjectGuid>
     <!--<TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>-->
     <!--<TargetFramework>net472</TargetFramework>-->
-    <!--<TargetFramework>net6.0</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <!--<TargetFramework>net7.0</TargetFramework>-->
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Core.Storage</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core.Storage</Product>
