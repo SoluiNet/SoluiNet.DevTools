@@ -7,7 +7,7 @@
     <Copyright>Copyright © SoluiNet 2019</Copyright>
     <DefineConstants Condition="'$(TargetFramework)' == 'net6.0'">USE_BLAZOR</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <UseWPF>true</UseWPF>
     <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
@@ -19,7 +19,7 @@
     <LangVersion>8.0</LangVersion>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.Blazor\SoluiNet.DevTools.Core.UI.Blazor.csproj" />
     <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
   </ItemGroup>

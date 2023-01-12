@@ -9,7 +9,7 @@
     <Product>SoluiNet.DevTools.Core.UI.Blazor</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
     <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFramework)' == 'net6.0-windows'">COMPILED_FOR_NET60</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'net7.0-windows'">COMPILED_FOR_NET60</DefineConstants>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
   <PropertyGroup>

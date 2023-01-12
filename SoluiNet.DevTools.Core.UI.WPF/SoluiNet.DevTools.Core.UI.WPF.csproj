@@ -11,8 +11,8 @@
     <Copyright>Copyright © SoluiNet 2019</Copyright>
     <DefineConstants Condition=" '$(TargetFramework)' == 'net472'">COMPILED_FOR_NETFRAMEWORK</DefineConstants>
     <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFramework)' == 'net6.0-windows'">COMPILED_FOR_NET60</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFramework)' == 'net6.0-windows'">BUILD_FOR_WINDOWS</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'net7.0-windows'">COMPILED_FOR_NET60</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'net7.0-windows'">BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -53,7 +53,7 @@
     <PackageReference Include="Microsoft.Windows.Compatibility" />
     <PackageReference Include="Microsoft.DotNet.Wpf" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
     <PackageReference Include="Dirkster.NumericUpDownLib" Version="3.3.1" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">

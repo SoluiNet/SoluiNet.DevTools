@@ -7,7 +7,7 @@
     <Product>SoluiNet.DevTools.Utils.CodeOnTheFly</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <UseWPF>true</UseWPF>
     <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
@@ -64,11 +64,11 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'net7.0-windows'">
     <None Remove="CodeOnTheFlyUserControl.xaml" />
     <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />

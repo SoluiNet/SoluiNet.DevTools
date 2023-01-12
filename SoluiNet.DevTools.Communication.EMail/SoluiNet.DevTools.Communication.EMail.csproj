@@ -8,7 +8,7 @@
     <Product>SoluiNet.DevTools.Communication.EMail</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <UseWPF>true</UseWPF>
     <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
@@ -25,11 +25,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="stylecop.json" />
-    <None Remove="EMailUserControl.xaml" Condition="'$(TargetFramework)' != 'net6.0-windows'" />
+    <None Remove="EMailUserControl.xaml" Condition="'$(TargetFramework)' != 'net7.0-windows'" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" Condition="'$(TargetFramework)' != 'net6.0-windows'" />
-    <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" Condition="'$(TargetFramework)' == 'net6.0-windows'" />
+    <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" Condition="'$(TargetFramework)' != 'net7.0-windows'" />
+    <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" Condition="'$(TargetFramework)' == 'net7.0-windows'" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
@@ -73,7 +73,7 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI\SoluiNet.DevTools.Core.UI.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472' ">
@@ -81,7 +81,7 @@
       <DependentUpon>EMailUserControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' ">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows' ">
     <Compile Update="EMailUserControl.xaml.cs">
       <DependentUpon>EMailUserControl.xaml</DependentUpon>
     </Compile>
@@ -97,7 +97,7 @@
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <None Update="EMailUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
