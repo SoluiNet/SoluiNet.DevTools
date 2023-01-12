@@ -8,6 +8,7 @@ namespace SoluiNet.DevTools.Core.Tools.File
     using System.Collections.Generic;
 #if COMPILED_FOR_NETCORE
     using System.Drawing;
+    using System.Drawing.Common;
 #else
     using System.Drawing;
 #endif

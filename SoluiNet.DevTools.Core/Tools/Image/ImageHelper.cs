@@ -7,6 +7,7 @@ namespace SoluiNet.DevTools.Core.Tools.Image
     using System;
 #if COMPILED_FOR_NETCORE
     using System.Drawing;
+    using System.Drawing.Common;
 #else
     using System.Drawing;
 #endif
