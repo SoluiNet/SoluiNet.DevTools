@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{5D251F69-C19E-44E5-9FEF-D9E8F1AF1C9F}</ProjectGuid>
     <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
     <AssemblyTitle>SoluiNet.DevTools.Core.UI.Blazor</AssemblyTitle>
     <Company>SoluiNet</Company>
