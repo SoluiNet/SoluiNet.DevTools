@@ -6,7 +6,7 @@
     <Product>SoluiNet.DevTools.Utils.General</Product>
     <Copyright>Copyright © SoluiNet 2018</Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <UseWPF>true</UseWPF>
     <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
@@ -70,11 +70,11 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'net7.0-windows'">
     <None Remove="GeneralToolsUserControl.xaml" />
     <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
     <Compile Update="GeneralToolsUserControl.xaml.cs">

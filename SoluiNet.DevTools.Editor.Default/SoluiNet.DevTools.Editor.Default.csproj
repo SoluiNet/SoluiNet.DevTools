@@ -6,7 +6,7 @@
     <Product>SoluiNet.DevTools.Editor.Default</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <UseWPF>true</UseWPF>
     <DefineConstants>BUILD_FOR_WINDOWS</DefineConstants>
   </PropertyGroup>
@@ -57,7 +57,7 @@
       <DependentUpon>DefaultEditorUserControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
     <Compile Update="DefaultEditorUserControl.xaml.cs">
@@ -77,7 +77,7 @@
   <ItemGroup>
     <None Remove="stylecop.json" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'net7.0-windows'">
     <None Remove="DefaultEditorUserControl.xaml" />
     <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
