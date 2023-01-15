@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{64B47EED-3674-47F1-80FE-969339A8D34C}</ProjectGuid>
-    <!--<TargetFramework>net472</TargetFramework>-->
     <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Core.Windows</AssemblyTitle>
     <Company>SoluiNet</Company>
@@ -9,6 +8,7 @@
     <Copyright>Copyright © SoluiNet 2019</Copyright>
     <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
     <DefineConstants Condition=" '$(TargetFramework)' == 'net6.0'">COMPILED_FOR_NETCORE</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'net7.0'">COMPILED_FOR_NETCORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -37,7 +37,7 @@
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.116" />
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.116" />
@@ -60,6 +60,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <Reference Include="System.Windows.Input" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
     <Reference Include="System.Windows.Input" />
   </ItemGroup>
 </Project>
