@@ -8,29 +8,23 @@ jobs:
     runs-on: windows-latest
  
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
       name: Checkout Code
       
     - name: Prepare Build Environment
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '7.0.x'
         include-prerelease: true
      
     - name: Setup MSBuild Path
-      uses: microsoft/setup-msbuild@v1.0.3
+      uses: microsoft/setup-msbuild@v1.1
        
     - name: Setup NuGet
-      uses: nuget/setup-nuget@v1.0.5
+      uses: nuget/setup-nuget@v1.1.1
      
     - name: Restore NuGet Packages
       run: nuget restore SoluiNet.DevTools.sln
-      
-#    - name: Generate build number
-#      id: buildnumber
-#      uses: einaregilsson/build-number@v3
-#      with:
-#        token: ${{secrets.github_token}}        
  
     - name: Prepare Build
       run: |
@@ -52,24 +46,21 @@ jobs:
         cp -R build\plugins\Release\* build\web\Release
  
     - name: Upload Windows Client
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v3
       with:
         name: SoluiNet.DevTools.UI_v0.9.0.${{ github.run_number }}
-#        path: build\net472\AnyCPU\Release
         path: build\windows-client\Release
 
     - name: Upload Console App
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v3
       with:
         name: SoluiNet.DevTools.Console_v0.9.0.${{ github.run_number }}
-#        path: build\net6.0\AnyCPU\Release
         path: build\console\Release
 
     - name: Upload Web Server
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v3
       with:
         name: SoluiNet.DevTools.Web_v0.9.0.${{ github.run_number }}
-#        path: build\netstandard2.0\AnyCPU\Release
         path: build\web\Release
 
   build_android:
@@ -77,20 +68,20 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
       name: Checkout Code
       
     - name: Prepare Build Environment
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '7.0.x'
         include-prerelease: true
      
     - name: Setup MSBuild Path
-      uses: microsoft/setup-msbuild@v1.0.3
+      uses: microsoft/setup-msbuild@v1.1
        
     - name: Setup NuGet
-      uses: nuget/setup-nuget@v1.0.5
+      uses: nuget/setup-nuget@v1.1.1
      
     - name: Restore NuGet Packages
       run: |
@@ -114,7 +105,7 @@ jobs:
       run: msbuild SoluiNet.DevTools.Mobile\SoluiNet.DevTools.Mobile.Android\SoluiNet.DevTools.Mobile.Android.csproj /p:Configuration=Release /t:PackageForAndroid
       
     - name: Upload Android App
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v3
       with:
         name: SoluiNet.DevTools.Mobile_v0.9.0.${{ github.run_number }}.aab
         path: build\mobile\Release\soluinet.devtools.mobile.aab

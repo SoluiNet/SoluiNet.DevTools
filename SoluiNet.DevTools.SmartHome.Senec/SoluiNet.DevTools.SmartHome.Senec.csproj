@@ -5,7 +5,7 @@
     <AssemblyTitle>SoluiNet.DevTools.SmartHome.Senec</AssemblyTitle>
     <Product>SoluiNet.DevTools.SmartHome.Senec</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
-    <DefineConstants Condition="'$(TargetFramework)' == 'net6.0'">USE_BLAZOR</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net7.0'">USE_BLAZOR</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <UseWPF>true</UseWPF>
@@ -40,7 +40,7 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />   
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.Blazor\SoluiNet.DevTools.Core.UI.Blazor.csproj" />
     <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
@@ -71,7 +71,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
