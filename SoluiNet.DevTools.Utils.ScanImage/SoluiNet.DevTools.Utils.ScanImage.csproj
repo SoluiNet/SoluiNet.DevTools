@@ -38,7 +38,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Tesseract" Version="5.2.0" />
-    <PackageReference Include="ZXing.Net" Version="0.16.8" />
+    <PackageReference Include="ZXing.Net" Version="0.16.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.Blazor\SoluiNet.DevTools.Core.UI.Blazor.csproj" />
