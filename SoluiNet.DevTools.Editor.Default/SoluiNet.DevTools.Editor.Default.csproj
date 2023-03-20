@@ -58,7 +58,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
-    <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
     <Compile Include="**/*.cs" Exclude="**/obj/**/*.cs" />
     <Compile Update="DefaultEditorUserControl.xaml.cs">
       <DependentUpon>DefaultEditorUserControl.xaml</DependentUpon>
@@ -68,7 +68,7 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
     <Page Include="DefaultEditorUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

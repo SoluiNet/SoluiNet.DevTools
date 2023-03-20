@@ -30,7 +30,7 @@
     <Compile Include="**/*.cs" Exclude="*.xaml.cs;**/obj/**/*.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
-    <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.Windows\SoluiNet.DevTools.Core.Windows.csproj" />
     <ProjectReference Include="..\SoluiNet.DevTools.Core.UI.WPF\SoluiNet.DevTools.Core.UI.WPF.csproj" />
@@ -91,7 +91,7 @@
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
     <Page Include="PrepareText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
