@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{0D4512DB-52FF-4477-808E-D857EFB3D219}</ProjectGuid>
     <TargetFramework>net7.0</TargetFramework>
@@ -51,7 +51,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.1" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.2" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="NLog" Version="5.1.3" />
     <PackageReference Include="Quartz" Version="3.6.2" />
