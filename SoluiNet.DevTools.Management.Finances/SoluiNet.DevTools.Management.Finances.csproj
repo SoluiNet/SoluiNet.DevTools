@@ -36,7 +36,7 @@
     <EmbeddedResource Include="Data\Entry.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentNHibernate" Version="3.1.0" />
+    <PackageReference Include="FluentNHibernate" Version="3.2.0" />
     <PackageReference Include="Kveer.XmlRPC" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
