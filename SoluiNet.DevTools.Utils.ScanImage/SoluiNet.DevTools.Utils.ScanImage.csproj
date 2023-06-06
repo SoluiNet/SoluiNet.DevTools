@@ -24,7 +24,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FredsImageMagickScripts.TextCleaner" Version="2.2020.822.858" />
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.1.2" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.1">
