@@ -56,7 +56,7 @@
     <PackageReference Include="NLog" Version="5.2.2" />
     <PackageReference Include="Quartz" Version="3.6.3" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.117" />
     <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.118" />
     <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.118" />
@@ -95,7 +95,7 @@
     <PackageReference Include="EntityFramework.de" Version="6.2.0" />
     <PackageReference Include="LiveCharts" Version="0.9.7" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.118" />
     <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.118" />
     <Reference Include="PresentationCore" />
