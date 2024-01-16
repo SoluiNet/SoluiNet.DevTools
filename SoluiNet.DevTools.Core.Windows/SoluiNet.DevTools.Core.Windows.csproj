@@ -32,13 +32,13 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.117" />
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.117" />
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
