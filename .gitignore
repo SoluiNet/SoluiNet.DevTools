@@ -33,3 +33,5 @@ packages/**
 /SoluiNet.DevTools.Console/log.txt
 /SoluiNet.DevTools.Console/index.md
 /SoluiNet.DevTools.Console/.gitignore
+/SoluiNet.DevTools.Console/_site
+/SoluiNet.DevTools.Mobile/SoluiNet.DevTools.Mobile/_site
