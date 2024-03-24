@@ -22,7 +22,13 @@ jobs:
        
     - name: Setup NuGet
       uses: nuget/setup-nuget@v1.1.1
-     
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin' # See 'Supported distributions' for available options
+        java-version: '21'
+         
     - name: Restore NuGet Packages
       run: nuget restore SoluiNet.DevTools.sln
  
@@ -82,6 +88,12 @@ jobs:
        
     - name: Setup NuGet
       uses: nuget/setup-nuget@v1.1.1
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin' # See 'Supported distributions' for available options
+        java-version: '21'
      
     - name: Restore NuGet Packages
       run: |
