@@ -14,11 +14,14 @@ namespace SoluiNet.DevTools.Console
     using NLog;
     using SoluiNet.DevTools.Console.Options;
     using SoluiNet.DevTools.Core.Application;
+    using SoluiNet.DevTools.Core.Configuration;
+    using SoluiNet.DevTools.Core.Configuration.Models;
+    using SoluiNet.DevTools.Core.Services.Platform;
 
     /// <summary>
     /// The main entrance point for the SoluiNet.DevTools.Console application.
     /// </summary>
-    internal class Program
+    internal static class Program
     {
         /// <summary>
         /// The main method which should be called when executing this application.
@@ -27,11 +30,32 @@ namespace SoluiNet.DevTools.Console
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "All exceptions should be catched and written to log")]
         public static void Main(string[] args)
         {
+            IPlatformService platformService = null;
+            IConfigurationManager configurationManager = null;
+            
             try
             {
 #if DEBUG && WINDOWS
                 Debugger.Launch();
 #endif
+                // Initialize platform services
+                platformService = PlatformServiceFactory.Create();
+                
+                // Configure cross-platform logging
+                CrossPlatformNLogConfigurator.Configure(platformService, "console");
+                
+                var logger = LogManager.GetCurrentClassLogger();
+                logger.Info($"Starting SoluiNet.DevTools.Console on {GetPlatformName()}");
+                
+                // Initialize configuration manager
+                configurationManager = new CrossPlatformConfigurationManager(platformService);
+                
+                // Perform configuration migration if needed
+                PerformConfigurationMigration(configurationManager, platformService, logger);
+                
+                // Load or create application configuration
+                LoadApplicationConfiguration(configurationManager, logger);
+                
                 ApplicationContext.Application = new ConsoleApplication();
 
                 (ApplicationContext.Application as BaseSoluiNetApp).Initialize();
@@ -44,7 +68,7 @@ namespace SoluiNet.DevTools.Console
             {
                 var logger = LogManager.GetCurrentClassLogger();
 
-                logger.Error(string.Format(
+                logger.Error(exception, string.Format(
                     CultureInfo.InvariantCulture,
                     "Error while executing SoluiNet.DevTools.Console - {0}",
                     exception.ToString()));
@@ -95,6 +119,89 @@ namespace SoluiNet.DevTools.Console
                     error.Tag.ToString(),
                     error.StopsProcessing));
             }
+        }
+
+        /// <summary>
+        /// Performs configuration migration from Windows-specific locations if needed.
+        /// </summary>
+        /// <param name="configurationManager">The configuration manager.</param>
+        /// <param name="platformService">The platform service.</param>
+        /// <param name="logger">The logger.</param>
+        private static void PerformConfigurationMigration(IConfigurationManager configurationManager, IPlatformService platformService, Logger logger)
+        {
+            try
+            {
+                var migrationService = new ConfigurationMigrationService(configurationManager, platformService);
+                
+                // Only attempt migration on non-Windows platforms or if no configuration exists
+                if (!OperatingSystem.IsWindows() || !configurationManager.ConfigurationExists("application"))
+                {
+                    var migrated = migrationService.MigrateFromWindowsLocations();
+                    if (migrated)
+                    {
+                        logger.Info("Successfully migrated configuration from Windows locations.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex, "Configuration migration failed, but application will continue with default settings.");
+            }
+        }
+
+        /// <summary>
+        /// Loads or creates the application configuration.
+        /// </summary>
+        /// <param name="configurationManager">The configuration manager.</param>
+        /// <param name="logger">The logger.</param>
+        /// <returns>The application configuration.</returns>
+        private static ApplicationConfiguration LoadApplicationConfiguration(IConfigurationManager configurationManager, Logger logger)
+        {
+            try
+            {
+                var config = configurationManager.GetConfiguration<ApplicationConfiguration>("application");
+                if (config == null)
+                {
+                    logger.Info("No existing application configuration found, creating default configuration.");
+                    config = new ApplicationConfiguration();
+                    configurationManager.SaveConfiguration("application", config);
+                }
+                else
+                {
+                    logger.Debug("Loaded existing application configuration.");
+                }
+
+                return config;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Failed to load application configuration, using defaults.");
+                return new ApplicationConfiguration();
+            }
+        }
+
+        /// <summary>
+        /// Gets a human-readable platform name.
+        /// </summary>
+        /// <returns>The platform name.</returns>
+        private static string GetPlatformName()
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                return "Windows";
+            }
+
+            if (OperatingSystem.IsLinux())
+            {
+                return "Linux";
+            }
+
+            if (OperatingSystem.IsMacOS())
+            {
+                return "macOS";
+            }
+
+            return "Unknown";
         }
     }
 }
