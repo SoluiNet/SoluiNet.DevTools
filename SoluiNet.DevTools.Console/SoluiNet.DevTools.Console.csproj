@@ -2,14 +2,27 @@
   <PropertyGroup>
     <ProjectGuid>{0C80E03A-54C1-4A90-AFB3-A55848BD9A72}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
+    <UseAppHost>true</UseAppHost>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
     <AssemblyTitle>SoluiNet.DevTools.Console</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Console</Product>
     <Copyright>Copyright © SoluiNet 2018</Copyright>
-    <DefineConstants Condition=" '$(TargetFramework)' == 'netcoreapp3.1'">COMPILED_FOR_NETCORE</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.0'">COMPILED_FOR_NETSTANDARD</DefineConstants>
     <TargetName>sndt</TargetName>
+  </PropertyGroup>
+  
+  <!-- Conditional compilation symbols for platform-specific code -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64' OR '$(RuntimeIdentifier)' == 'win-arm64'">
+    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64' OR '$(RuntimeIdentifier)' == 'linux-arm64'">
+    <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64' OR '$(RuntimeIdentifier)' == 'osx-arm64'">
+    <DefineConstants>$(DefineConstants);MACOS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -28,20 +41,21 @@
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AssemblyName>sndt</AssemblyName>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="docfx.console" Version="2.59.4">
+    <!-- Temporarily disabled docfx.console for cross-platform compatibility -->
+    <!--<PackageReference Include="docfx.console" Version="2.59.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4">
+    </PackageReference>-->
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NLog" Version="5.2.4" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="NLog" Version="5.3.4" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -61,10 +75,17 @@
   <ItemGroup>
     <ProjectReference Include="..\SoluiNet.DevTools.Core\SoluiNet.DevTools.Core.csproj" />
   </ItemGroup>
+  <!-- Cross-platform build targets using dotnet CLI equivalents -->
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\icons\favicon.ico" DestinationFiles="$(ProjectDir)favicon.ico" />
   </Target>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\$(ConfigurationName)\Plugins&quot; &quot;$(SolutionDir)build\console\$(ConfigurationName)\Plugins\&quot; /y /s /e /I&#xD;&#xA;)" />
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'">
+    <ItemGroup>
+      <PluginFiles Include="$(SolutionDir)build\plugins\$(Configuration)\Plugins\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PluginFiles)" 
+          DestinationFiles="@(PluginFiles->'$(SolutionDir)build\console\$(Configuration)\Plugins\%(RecursiveDir)%(Filename)%(Extension)')" 
+          SkipUnchangedFiles="true" />
   </Target>
 </Project>

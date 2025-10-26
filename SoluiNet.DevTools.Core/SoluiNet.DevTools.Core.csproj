@@ -4,7 +4,7 @@
     <!--<TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>-->
     <!--<TargetFramework>net472</TargetFramework>-->
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
-	<TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>SoluiNet.DevTools.Core</AssemblyTitle>
     <Company>SoluiNet</Company>
     <Product>SoluiNet.DevTools.Core</Product>
@@ -146,7 +146,8 @@
     </None>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="mkdir &quot;$(ProjectDir)images&quot;&#xD;&#xA;copy &quot;$(SolutionDir)icons\soluinet_logo_51x51.svg&quot; &quot;$(ProjectDir)images\logo.svg&quot;&#xD;&#xA;copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)images\favicon.ico&quot;" Condition="'$(OS)' == 'Windows_NT'" />
-    <Exec Command="mkdir &quot;$(ProjectDir)images&quot;&#xD;&#xA;cp &quot;$(SolutionDir)icons\soluinet_logo_51x51.svg&quot; &quot;$(ProjectDir)images\logo.svg&quot;&#xD;&#xA;cp &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)images\favicon.ico&quot;" Condition="'$(OS)' == 'Unix'" />
+    <MakeDir Directories="$(ProjectDir)images" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\icons\soluinet_logo_51x51.svg" DestinationFiles="$(ProjectDir)images\logo.svg" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\icons\favicon.ico" DestinationFiles="$(ProjectDir)images\favicon.ico" />
   </Target>
 </Project>

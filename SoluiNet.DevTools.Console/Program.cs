@@ -29,7 +29,7 @@ namespace SoluiNet.DevTools.Console
         {
             try
             {
-#if DEBUG
+#if DEBUG && WINDOWS
                 Debugger.Launch();
 #endif
                 ApplicationContext.Application = new ConsoleApplication();
