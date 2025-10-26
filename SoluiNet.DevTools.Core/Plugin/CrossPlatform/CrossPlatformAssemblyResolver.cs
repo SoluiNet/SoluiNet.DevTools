@@ -53,7 +53,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
                 }
 
                 var assemblyPath = Path.Combine(searchPath, assemblyFileName);
-                
+
                 if (File.Exists(assemblyPath))
                 {
                     try
@@ -82,13 +82,13 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         public IEnumerable<string> GetPluginSearchPaths()
         {
             var searchPaths = new List<string>();
-            
+
             // Get the application directory
             var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (!string.IsNullOrEmpty(appDirectory))
             {
                 searchPaths.Add(appDirectory);
-                
+
                 // Add Plugins subdirectory
                 var pluginsDirectory = Path.Combine(appDirectory, "Plugins");
                 if (Directory.Exists(pluginsDirectory))
@@ -99,7 +99,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
                 // Add platform-specific plugin directories
                 var currentPlatform = this.GetCurrentPlatformName();
                 var currentArchitecture = this.GetCurrentArchitectureName();
-                
+
                 var platformSpecificPath = Path.Combine(pluginsDirectory, currentPlatform);
                 if (Directory.Exists(platformSpecificPath))
                 {
@@ -128,13 +128,13 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             {
                 // Check if we can get assembly name (basic validation)
                 var assemblyName = AssemblyName.GetAssemblyName(assemblyPath);
-                
+
                 // Check processor architecture compatibility
                 var assemblyArchitecture = assemblyName.ProcessorArchitecture;
                 var currentArchitecture = RuntimeInformation.ProcessArchitecture;
 
                 // Allow MSIL (AnyCPU) assemblies on any architecture
-                if (assemblyArchitecture == ProcessorArchitecture.MSIL || 
+                if (assemblyArchitecture == ProcessorArchitecture.MSIL ||
                     assemblyArchitecture == ProcessorArchitecture.None)
                 {
                     return true;
@@ -162,7 +162,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             {
                 // Basic validation - try to load assembly metadata
                 var assemblyName = AssemblyName.GetAssemblyName(assemblyPath);
-                
+
                 // Check if it's a .NET assembly
                 if (assemblyName == null)
                 {
@@ -199,7 +199,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
 
                 // Try to load assembly to get more detailed metadata
                 var assembly = Assembly.LoadFrom(assemblyPath);
-                
+
                 // Look for plugin metadata attributes or embedded resources
                 var supportedPlatforms = this.ExtractSupportedPlatforms(assembly);
                 var supportedArchitectures = this.ExtractSupportedArchitectures(assembly);

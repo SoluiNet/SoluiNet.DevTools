@@ -15,7 +15,8 @@ namespace SoluiNet.DevTools.Core.Configuration
         /// <typeparam name="T">The type of configuration to retrieve.</typeparam>
         /// <param name="configurationName">The name of the configuration.</param>
         /// <returns>The configuration object, or null if not found.</returns>
-        T GetConfiguration<T>(string configurationName) where T : class;
+        T GetConfiguration<T>(string configurationName)
+            where T : class;
 
         /// <summary>
         /// Saves a configuration object.
@@ -23,7 +24,8 @@ namespace SoluiNet.DevTools.Core.Configuration
         /// <typeparam name="T">The type of configuration to save.</typeparam>
         /// <param name="configurationName">The name of the configuration.</param>
         /// <param name="configuration">The configuration object to save.</param>
-        void SaveConfiguration<T>(string configurationName, T configuration) where T : class;
+        void SaveConfiguration<T>(string configurationName, T configuration)
+            where T : class;
 
         /// <summary>
         /// Gets the full path to a configuration file.

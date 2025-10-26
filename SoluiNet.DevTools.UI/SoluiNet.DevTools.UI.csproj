@@ -8,6 +8,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>SoluiNet.DevTools.UI</AssemblyTitle>
     <Company>SoluiNet</Company>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Product>SoluiNet.DevTools.UI</Product>
     <Copyright>Copyright © SoluiNet 2018</Copyright>
     <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>

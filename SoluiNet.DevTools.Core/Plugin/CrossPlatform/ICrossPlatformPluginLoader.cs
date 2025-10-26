@@ -17,7 +17,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         /// </summary>
         /// <typeparam name="T">The plugin type to load.</typeparam>
         /// <returns>An enumerable of loaded plugin instances.</returns>
-        IEnumerable<T> LoadPlugins<T>() where T : class;
+        IEnumerable<T> LoadPlugins<T>()
+            where T : class;
 
         /// <summary>
         /// Loads a specific plugin by name.
@@ -25,7 +26,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         /// <typeparam name="T">The plugin type to load.</typeparam>
         /// <param name="pluginName">The name of the plugin to load.</param>
         /// <returns>The loaded plugin instance or null if not found.</returns>
-        T LoadPlugin<T>(string pluginName) where T : class, IBasePlugin;
+        T LoadPlugin<T>(string pluginName)
+            where T : class, IBasePlugin;
 
         /// <summary>
         /// Loads plugins from a specific assembly path.
@@ -33,7 +35,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         /// <typeparam name="T">The plugin type to load.</typeparam>
         /// <param name="assemblyPath">The path to the assembly to load plugins from.</param>
         /// <returns>An enumerable of loaded plugin instances from the assembly.</returns>
-        IEnumerable<T> LoadPluginsFromAssembly<T>(string assemblyPath) where T : class;
+        IEnumerable<T> LoadPluginsFromAssembly<T>(string assemblyPath)
+            where T : class;
 
         /// <summary>
         /// Gets information about incompatible plugins that could not be loaded.

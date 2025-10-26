@@ -29,7 +29,7 @@ namespace SoluiNet.DevTools.UnitTest
             Assert.IsTrue(tempPath.Contains("SoluiNet.DevTools"));
             Assert.IsTrue(tempPath.Contains("temp"));
             Assert.IsTrue(tempPath.EndsWith(".tmp"));
-            
+
             // Verify the path uses correct separators for the platform
             var normalizedPath = CrossPlatformFileHelper.NormalizePath(tempPath);
             Assert.AreEqual(tempPath, normalizedPath);
@@ -47,7 +47,7 @@ namespace SoluiNet.DevTools.UnitTest
             // Assert
             Assert.IsNotNull(appDataPath);
             Assert.IsTrue(appDataPath.Length > 0);
-            
+
             // Verify the path is absolute
             Assert.IsTrue(CrossPlatformFileHelper.IsAbsolutePath(appDataPath));
         }
@@ -64,7 +64,7 @@ namespace SoluiNet.DevTools.UnitTest
             // Assert
             Assert.IsNotNull(configPath);
             Assert.IsTrue(configPath.Length > 0);
-            
+
             // Verify the path is absolute
             Assert.IsTrue(CrossPlatformFileHelper.IsAbsolutePath(configPath));
         }
@@ -83,7 +83,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(normalizedPath);
-            
+
             // Verify that the path uses consistent separators
             var expectedSeparator = Path.DirectorySeparatorChar;
             Assert.IsFalse(normalizedPath.Contains(expectedSeparator == '\\' ? '/' : '\\'));
@@ -108,7 +108,7 @@ namespace SoluiNet.DevTools.UnitTest
             Assert.IsTrue(combinedPath.Contains(path1));
             Assert.IsTrue(combinedPath.Contains(path2));
             Assert.IsTrue(combinedPath.Contains(path3));
-            
+
             // Verify the path uses correct separators
             var normalizedPath = CrossPlatformFileHelper.NormalizePath(combinedPath);
             Assert.AreEqual(combinedPath, normalizedPath);
@@ -125,7 +125,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(extension);
-            
+
             // On Windows, should return ".exe", on Unix-like systems, should return empty string
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {

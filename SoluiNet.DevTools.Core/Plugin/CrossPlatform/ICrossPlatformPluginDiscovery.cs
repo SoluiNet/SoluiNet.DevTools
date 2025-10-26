@@ -22,7 +22,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         /// </summary>
         /// <typeparam name="T">The plugin type to discover.</typeparam>
         /// <returns>An enumerable of plugin assembly paths that contain the specified type.</returns>
-        IEnumerable<string> DiscoverPluginAssemblies<T>() where T : class;
+        IEnumerable<string> DiscoverPluginAssemblies<T>()
+            where T : class;
 
         /// <summary>
         /// Gets all compatible plugin assemblies for the current platform.

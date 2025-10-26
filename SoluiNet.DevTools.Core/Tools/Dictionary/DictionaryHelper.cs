@@ -38,21 +38,21 @@ namespace SoluiNet.DevTools.Core.Tools.Dictionary
             switch (mergeOperation)
             {
                 case "sum":
-                {
-                    foreach (var item in secondDictionary)
                     {
-                        if (firstDictionary.ContainsKey(item.Key))
+                        foreach (var item in secondDictionary)
                         {
-                            firstDictionary[item.Key] += item.Value;
+                            if (firstDictionary.ContainsKey(item.Key))
+                            {
+                                firstDictionary[item.Key] += item.Value;
+                            }
+                            else
+                            {
+                                firstDictionary.Add(item.Key, item.Value);
+                            }
                         }
-                        else
-                        {
-                            firstDictionary.Add(item.Key, item.Value);
-                        }
-                    }
 
-                    return firstDictionary;
-                }
+                        return firstDictionary;
+                    }
 
                 default:
                     return null;

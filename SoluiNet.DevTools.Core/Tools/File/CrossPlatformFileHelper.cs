@@ -32,10 +32,10 @@ namespace SoluiNet.DevTools.Core.Tools.File
 
             var tempDir = PlatformService.GetTempDirectory();
             var soluiNetTempDir = Path.Combine(tempDir, "SoluiNet.DevTools", "temp");
-            
+
             // Ensure the directory exists
             Directory.CreateDirectory(soluiNetTempDir);
-            
+
             return PlatformService.NormalizePath(Path.Combine(soluiNetTempDir, temporaryFileName));
         }
 
@@ -47,12 +47,12 @@ namespace SoluiNet.DevTools.Core.Tools.File
         public static string GetApplicationDataPath(string subDirectory = null)
         {
             var appDataDir = PlatformService.GetApplicationDataDirectory();
-            
+
             if (!string.IsNullOrEmpty(subDirectory))
             {
                 appDataDir = Path.Combine(appDataDir, subDirectory);
             }
-            
+
             return PlatformService.NormalizePath(appDataDir);
         }
 
@@ -64,12 +64,12 @@ namespace SoluiNet.DevTools.Core.Tools.File
         public static string GetConfigurationPath(string subDirectory = null)
         {
             var configDir = PlatformService.GetConfigurationDirectory();
-            
+
             if (!string.IsNullOrEmpty(subDirectory))
             {
                 configDir = Path.Combine(configDir, subDirectory);
             }
-            
+
             return PlatformService.NormalizePath(configDir);
         }
 
@@ -109,7 +109,7 @@ namespace SoluiNet.DevTools.Core.Tools.File
             {
                 // On Windows, use FileAttributes
                 var attributes = File.GetAttributes(filePath);
-                
+
                 if (isReadOnly)
                 {
                     attributes |= FileAttributes.ReadOnly;
@@ -118,7 +118,7 @@ namespace SoluiNet.DevTools.Core.Tools.File
                 {
                     attributes &= ~FileAttributes.ReadOnly;
                 }
-                
+
                 File.SetAttributes(filePath, attributes);
             }
             else
@@ -142,7 +142,7 @@ namespace SoluiNet.DevTools.Core.Tools.File
                         // In a production environment, you might want to log this
                     }
                 }
-                
+
                 if (isReadOnly)
                 {
                     File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.ReadOnly);

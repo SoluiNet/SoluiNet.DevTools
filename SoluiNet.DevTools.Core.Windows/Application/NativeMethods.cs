@@ -33,9 +33,9 @@ namespace SoluiNet.DevTools.Core.Windows.Application
         [return: MarshalAs(UnmanagedType.Bool)]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA2101:Specify marshaling for P/Invoke string arguments", Justification = "We will use ANSI strings for this method. So marshal specification is okay.")]
         internal static extern bool LogonUser(
-            [MarshalAs(UnmanagedType.LPStr)]string lpszUsername,
-            [MarshalAs(UnmanagedType.LPStr)]string lpszDomain,
-            [MarshalAs(UnmanagedType.LPStr)]string lpszPassword,
+            [MarshalAs(UnmanagedType.LPStr)] string lpszUsername,
+            [MarshalAs(UnmanagedType.LPStr)] string lpszDomain,
+            [MarshalAs(UnmanagedType.LPStr)] string lpszPassword,
             int dwLogonType,
             int dwLogonProvider,
             ref IntPtr phToken);
@@ -54,9 +54,9 @@ namespace SoluiNet.DevTools.Core.Windows.Application
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool LogonUserW(
-            [MarshalAs(UnmanagedType.LPWStr)]string lpszUserName,
-            [MarshalAs(UnmanagedType.LPWStr)]string lpszDomain,
-            [MarshalAs(UnmanagedType.LPWStr)]string lpszPassword,
+            [MarshalAs(UnmanagedType.LPWStr)] string lpszUserName,
+            [MarshalAs(UnmanagedType.LPWStr)] string lpszDomain,
+            [MarshalAs(UnmanagedType.LPWStr)] string lpszPassword,
             int dwLogonType,
             int dwLogonProvider,
             ref IntPtr phToken);

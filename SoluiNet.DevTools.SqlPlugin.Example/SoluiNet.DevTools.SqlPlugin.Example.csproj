@@ -5,6 +5,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.SqlPlugin.Example</AssemblyTitle>
     <Company>SoluiNet</Company>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Product>SoluiNet.DevTools.SqlPlugin.Example</Product>
     <Copyright>Copyright © SoluiNet 2018</Copyright>
   </PropertyGroup>

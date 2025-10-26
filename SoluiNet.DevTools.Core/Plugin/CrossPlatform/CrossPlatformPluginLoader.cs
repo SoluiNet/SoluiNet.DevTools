@@ -36,7 +36,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         }
 
         /// <inheritdoc />
-        public IEnumerable<T> LoadPlugins<T>() where T : class
+        public IEnumerable<T> LoadPlugins<T>()
+            where T : class
         {
             var loadedPlugins = new List<T>();
             var compatibleAssemblies = this.pluginDiscovery.GetCompatiblePluginAssemblies();
@@ -63,7 +64,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         }
 
         /// <inheritdoc />
-        public T LoadPlugin<T>(string pluginName) where T : class, IBasePlugin
+        public T LoadPlugin<T>(string pluginName)
+            where T : class, IBasePlugin
         {
             if (string.IsNullOrEmpty(pluginName))
             {
@@ -75,7 +77,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         }
 
         /// <inheritdoc />
-        public IEnumerable<T> LoadPluginsFromAssembly<T>(string assemblyPath) where T : class
+        public IEnumerable<T> LoadPluginsFromAssembly<T>(string assemblyPath)
+            where T : class
         {
             var loadedPlugins = new List<T>();
 
@@ -163,7 +166,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
                    this.assemblyResolver.IsCompatibleAssembly(assemblyPath);
         }
 
-        private bool IsPluginType<T>(Type type, Type pluginType) where T : class
+        private bool IsPluginType<T>(Type type, Type pluginType)
+            where T : class
         {
             // Check if type implements the target interface
             if (pluginType.IsInterface && type.GetInterface(pluginType.FullName) != null)
@@ -199,7 +203,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             return false;
         }
 
-        private T CreatePluginInstance<T>(Type type) where T : class
+        private T CreatePluginInstance<T>(Type type)
+            where T : class
         {
             // Check if plugin instance already exists in application context
             if (ApplicationContext.Application?.Plugins != null)
@@ -215,7 +220,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
 
             // Create new instance
             var plugin = (T)Activator.CreateInstance(type);
-            
+
             // Add to application context if it's a base plugin
             if (plugin is IBasePlugin basePlugin && ApplicationContext.Application?.Plugins != null)
             {

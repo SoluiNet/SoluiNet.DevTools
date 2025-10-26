@@ -112,7 +112,7 @@ namespace SoluiNet.DevTools.Core.Configuration
                     (Path.Combine(localAppDataPath, SoluiNetFolderName, DevToolsFolderName, SettingsFileName), SettingsConfigName),
                     (Path.Combine(localAppDataPath, SoluiNetFolderName, DevToolsFolderName, PluginsFileName), PluginsConfigName),
                     (Path.Combine(localAppDataPath, SoluiNetFolderName, DevToolsFolderName, ApplicationFileName), ApplicationConfigName),
-                    
+
                     // Legacy paths (if any existed)
                     (Path.Combine(appDataPath, LegacyFolderName, SettingsFileName), SettingsConfigName),
                     (Path.Combine(appDataPath, LegacyFolderName, PluginsFileName), PluginsConfigName),

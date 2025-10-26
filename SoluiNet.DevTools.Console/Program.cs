@@ -32,7 +32,7 @@ namespace SoluiNet.DevTools.Console
         {
             IPlatformService platformService = null;
             IConfigurationManager configurationManager = null;
-            
+
             try
             {
 #if DEBUG && WINDOWS
@@ -40,22 +40,22 @@ namespace SoluiNet.DevTools.Console
 #endif
                 // Initialize platform services
                 platformService = PlatformServiceFactory.Create();
-                
+
                 // Configure cross-platform logging
                 CrossPlatformNLogConfigurator.Configure(platformService, "console");
-                
+
                 var logger = LogManager.GetCurrentClassLogger();
                 logger.Info($"Starting SoluiNet.DevTools.Console on {GetPlatformName()}");
-                
+
                 // Initialize configuration manager
                 configurationManager = new CrossPlatformConfigurationManager(platformService);
-                
+
                 // Perform configuration migration if needed
                 PerformConfigurationMigration(configurationManager, platformService, logger);
-                
+
                 // Load or create application configuration
                 LoadApplicationConfiguration(configurationManager, logger);
-                
+
                 ApplicationContext.Application = new ConsoleApplication();
 
                 (ApplicationContext.Application as BaseSoluiNetApp).Initialize();
@@ -132,7 +132,7 @@ namespace SoluiNet.DevTools.Console
             try
             {
                 var migrationService = new ConfigurationMigrationService(configurationManager, platformService);
-                
+
                 // Only attempt migration on non-Windows platforms or if no configuration exists
                 if (!OperatingSystem.IsWindows() || !configurationManager.ConfigurationExists("application"))
                 {

@@ -100,7 +100,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
                 AssemblyPath = assemblyPath,
                 CurrentPlatform = this.GetCurrentPlatformName(),
                 CurrentArchitecture = this.GetCurrentArchitectureName(),
-                CurrentDotNetVersion = Environment.Version.ToString()
+                CurrentDotNetVersion = Environment.Version.ToString(),
             };
 
             if (!File.Exists(assemblyPath))
@@ -120,7 +120,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
                 // Load assembly to get more detailed information
                 var assembly = Assembly.LoadFrom(assemblyPath);
                 var metadata = this.ExtractPluginMetadata(assembly);
-                
+
                 if (metadata != null)
                 {
                     info.SupportedPlatforms.AddRange(metadata.SupportedPlatforms);
@@ -133,7 +133,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
                 // Validate compatibility
                 var validationResult = this.ValidatePlugin(assemblyPath);
                 info.IsCompatible = validationResult.IsValid;
-                
+
                 if (!validationResult.IsValid)
                 {
                     info.IncompatibilityReasons.Add(validationResult.Reason);
@@ -155,12 +155,12 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             {
                 var assembly = Assembly.LoadFrom(assemblyPath);
                 var metadata = this.ExtractPluginMetadata(assembly);
-                
+
                 if (metadata?.SupportedPlatforms != null)
                 {
                     var currentPlatform = this.GetCurrentPlatformName();
                     var supportedPlatforms = metadata.SupportedPlatforms.ToList();
-                    
+
                     if (!supportedPlatforms.Contains(currentPlatform, StringComparer.OrdinalIgnoreCase))
                     {
                         return new PluginValidationResult(
@@ -184,7 +184,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             var currentArchitecture = RuntimeInformation.ProcessArchitecture;
 
             // Allow MSIL (AnyCPU) assemblies on any architecture
-            if (assemblyArchitecture == ProcessorArchitecture.MSIL || 
+            if (assemblyArchitecture == ProcessorArchitecture.MSIL ||
                 assemblyArchitecture == ProcessorArchitecture.None)
             {
                 return new PluginValidationResult(true, "Architecture compatibility validated (AnyCPU)");
@@ -217,11 +217,11 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             {
                 var assembly = Assembly.LoadFrom(assemblyPath);
                 var metadata = this.ExtractPluginMetadata(assembly);
-                
+
                 if (metadata?.MinimumDotNetVersion != null)
                 {
                     var currentVersion = Environment.Version;
-                    
+
                     if (currentVersion < metadata.MinimumDotNetVersion)
                     {
                         return new PluginValidationResult(
@@ -245,7 +245,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             {
                 var assembly = Assembly.LoadFrom(assemblyPath);
                 var referencedAssemblies = assembly.GetReferencedAssemblies();
-                
+
                 foreach (var referencedAssembly in referencedAssemblies)
                 {
                     try
@@ -274,10 +274,10 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             // This is a simplified implementation
             // In a real scenario, you might look for custom attributes or embedded resources
             var assemblyName = assembly.GetName();
-            
+
             // Use platform service to determine default supported platforms
             var defaultPlatforms = new[] { this.platformService.GetType().Name.Replace("PlatformService", string.Empty) };
-            
+
             return new PluginMetadata(
                 assemblyName.Name,
                 assemblyName.Version?.ToString() ?? "1.0.0.0",

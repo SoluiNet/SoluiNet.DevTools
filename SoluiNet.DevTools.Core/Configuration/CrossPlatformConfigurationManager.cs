@@ -28,7 +28,8 @@ namespace SoluiNet.DevTools.Core.Configuration
         }
 
         /// <inheritdoc/>
-        public T GetConfiguration<T>(string configurationName) where T : class
+        public T GetConfiguration<T>(string configurationName)
+            where T : class
         {
             if (string.IsNullOrEmpty(configurationName))
             {
@@ -36,7 +37,7 @@ namespace SoluiNet.DevTools.Core.Configuration
             }
 
             var configPath = this.GetConfigurationPath(configurationName);
-            
+
             if (!File.Exists(configPath))
             {
                 Logger.Debug($"Configuration file not found: {configPath}");
@@ -58,7 +59,8 @@ namespace SoluiNet.DevTools.Core.Configuration
         }
 
         /// <inheritdoc/>
-        public void SaveConfiguration<T>(string configurationName, T configuration) where T : class
+        public void SaveConfiguration<T>(string configurationName, T configuration)
+            where T : class
         {
             if (string.IsNullOrEmpty(configurationName))
             {
@@ -102,10 +104,10 @@ namespace SoluiNet.DevTools.Core.Configuration
             }
 
             var configDir = this.platformService.GetConfigurationDirectory();
-            var fileName = configurationName.EndsWith(".json", StringComparison.OrdinalIgnoreCase) 
-                ? configurationName 
+            var fileName = configurationName.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
+                ? configurationName
                 : $"{configurationName}.json";
-            
+
             return this.platformService.NormalizePath(Path.Combine(configDir, fileName));
         }
 
@@ -136,7 +138,7 @@ namespace SoluiNet.DevTools.Core.Configuration
             }
 
             var newConfigPath = this.GetConfigurationPath(configurationName);
-            
+
             // Don't overwrite existing configuration
             if (File.Exists(newConfigPath))
             {

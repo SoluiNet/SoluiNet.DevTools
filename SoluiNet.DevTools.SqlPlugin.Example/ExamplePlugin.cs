@@ -217,20 +217,20 @@ namespace SoluiNet.DevTools.SqlPlugin.Example
 
                     this.MainGrid.FindChild<TabControl>("Example_TabItem_Tabs").Items.Clear();
 
-                /*using (var context = new ExampleContext(Environment))
-                {
-                    var customerResults = context.ConfigurationValues.Where(x => x.ConfigKey.Contains(searchPhrase));
-
-                    UIHelper.FillResultsTab("Example", MainGrid, "Customers", customerResults, new List<string>()
+                    /*using (var context = new ExampleContext(Environment))
                     {
-                        "Created",
-                        "Customernumber",
-                        "Firstname",
-                        "Lastname",
-                        "Email",
-                        "LockedOut"
-                    });
-                }*/
+                        var customerResults = context.ConfigurationValues.Where(x => x.ConfigKey.Contains(searchPhrase));
+
+                        UIHelper.FillResultsTab("Example", MainGrid, "Customers", customerResults, new List<string>()
+                        {
+                            "Created",
+                            "Customernumber",
+                            "Firstname",
+                            "Lastname",
+                            "Email",
+                            "LockedOut"
+                        });
+                    }*/
                 };
 
                 ((Grid)tabItem.Content).Children.Add(new TabControl()

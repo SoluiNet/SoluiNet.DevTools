@@ -47,7 +47,7 @@ namespace SoluiNet.DevTools.Core.Plugin.Configuration
         public static Dictionary<string, bool> Effective
         {
             get
-             {
+            {
                 return GetConfigurationForExecutingPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
         }

@@ -60,11 +60,12 @@ namespace SoluiNet.DevTools.Core.Configuration
                 // Create logging rules
                 config.AddRule(LogLevel.Error, LogLevel.Fatal, errorTarget);
                 config.AddRule(LogLevel.Debug, LogLevel.Fatal, fileTarget);
-                
+
                 // Add trace rule (disabled by default)
                 var traceRule = new LoggingRule("*", LogLevel.Trace, traceTarget);
                 traceRule.SetLoggingLevels(LogLevel.Trace, LogLevel.Info);
                 traceRule.Final = false;
+
                 // Note: LoggingRule.Enabled property doesn't exist in this NLog version
                 // The rule will be added but can be controlled via configuration
                 config.LoggingRules.Add(traceRule);
@@ -120,13 +121,12 @@ namespace SoluiNet.DevTools.Core.Configuration
                 ArchiveNumbering = ArchiveNumberingMode.Rolling,
                 MaxArchiveFiles = 7, // Keep 7 days of logs
                 ConcurrentWrites = true,
-                KeepFileOpen = false // Better for cross-platform compatibility
+                KeepFileOpen = false, // Better for cross-platform compatibility
             };
 
             // Note: FileAttributes property expects Win32FileAttributes, not System.IO.FileAttributes
             // For cross-platform compatibility, we'll skip setting file attributes here
             // and rely on the operating system's default file permissions
-
             return target;
         }
 

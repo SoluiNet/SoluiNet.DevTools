@@ -7,6 +7,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyTitle>SoluiNet.DevTools.Core.UI.WPF</AssemblyTitle>
     <Company>SoluiNet</Company>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Product>SoluiNet.DevTools.Core.UI.WPF</Product>
     <Copyright>Copyright © SoluiNet 2019</Copyright>
     <DefineConstants Condition=" '$(TargetFramework)' == 'net472'">COMPILED_FOR_NETFRAMEWORK</DefineConstants>

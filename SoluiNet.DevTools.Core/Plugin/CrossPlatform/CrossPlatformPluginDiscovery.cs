@@ -69,7 +69,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> DiscoverPluginAssemblies<T>() where T : class
+        public IEnumerable<string> DiscoverPluginAssemblies<T>()
+            where T : class
         {
             var discoveredAssemblies = new List<string>();
             var allAssemblies = this.DiscoverPluginAssemblies();
@@ -143,7 +144,8 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
             }
         }
 
-        private bool AssemblyContainsType<T>(string assemblyPath) where T : class
+        private bool AssemblyContainsType<T>(string assemblyPath)
+            where T : class
         {
             try
             {
@@ -174,7 +176,7 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
                     if (targetType.IsInterface && targetType.IsGenericType)
                     {
                         var typeInterfaces = type.GetInterfaces()
-                            .Where(x => x.IsGenericType && 
+                            .Where(x => x.IsGenericType &&
                                        x.GetGenericTypeDefinition().FullName == targetType.GetGenericTypeDefinition().FullName);
 
                         if (typeInterfaces.Any())
@@ -205,10 +207,10 @@ namespace SoluiNet.DevTools.Core.Plugin.CrossPlatform
                 "PresentationCore",
                 "PresentationFramework",
                 "NLog",
-                "Newtonsoft.Json"
+                "Newtonsoft.Json",
             };
 
-            return systemPrefixes.Any(prefix => 
+            return systemPrefixes.Any(prefix =>
                 fileName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
         }
     }
