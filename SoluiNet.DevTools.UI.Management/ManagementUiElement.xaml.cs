@@ -63,7 +63,8 @@ namespace SoluiNet.DevTools.UI.Management
                 }
             }
 
-            this.LoggingPath = string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SoluiNet.DevTools.UI.Management");
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            this.LoggingPath = Path.Combine(documentsPath, "SoluiNet.DevTools.UI.Management");
         }
 
         /// <inheritdoc />

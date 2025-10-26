@@ -122,17 +122,7 @@ namespace SoluiNet.DevTools.Core.Tools.File
         /// <returns>Returns a temporary file path.</returns>
         public static string GetTemporaryFilePath()
         {
-            var temporaryFileName = string.Format(
-                CultureInfo.InvariantCulture,
-                "{0}_{1}.tmp",
-                StringHelper.GetRandomString(8),
-                DateTime.UtcNow.ToString("yyyyMMdd_HHmmss", CultureInfo.InvariantCulture));
-
-            return string.Format(
-                CultureInfo.InvariantCulture,
-                "{0}\\SoluiNet.DevTools\\temp\\{1}",
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                temporaryFileName);
+            return CrossPlatformFileHelper.GetTemporaryFilePath();
         }
     }
 }
