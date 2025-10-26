@@ -1,32 +1,114 @@
-name: Build SoluiNet.DevTools
+name: Build SoluiNet.DevTools Multi-Platform
  
-on: [push]
+on: 
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
  
+env:
+  DOTNET_VERSION: '8.0.x'
+  BUILD_VERSION: '0.9.${{ github.run_number }}'
+
 jobs:
-  build:
- 
+  # Multi-platform console build
+  build-console-multiplatform:
+    name: Build Console (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        include:
+          - os: windows-latest
+            platform: windows
+            script: scripts/build-windows.ps1
+            shell: pwsh
+          - os: ubuntu-latest
+            platform: linux
+            script: scripts/build-linux.sh
+            shell: bash
+          - os: macos-latest
+            platform: macos
+            script: scripts/build-macos.sh
+            shell: bash
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Cache NuGet packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+    
+    - name: Make build script executable (Unix)
+      if: matrix.os != 'windows-latest'
+      run: chmod +x ${{ matrix.script }}
+    
+    - name: Build Console Application
+      shell: ${{ matrix.shell }}
+      run: ${{ matrix.script }} -Configuration Release -OutputPath ./build/${{ matrix.platform }}
+      
+    - name: Run Platform Tests
+      shell: ${{ matrix.shell }}
+      run: |
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          pwsh scripts/test-all-platforms.ps1 -Configuration Release -TestOutputPath ./test-results
+        else
+          # For Unix systems, we'll run basic dotnet test
+          dotnet test SoluiNet.DevTools.UnitTest/SoluiNet.DevTools.UnitTest.csproj --configuration Release --logger trx --results-directory ./test-results
+        fi
+      continue-on-error: true
+      
+    - name: Upload Console Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: SoluiNet.DevTools.Console_${{ matrix.platform }}_v${{ env.BUILD_VERSION }}
+        path: build/${{ matrix.platform }}/
+        retention-days: 30
+        
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.platform }}
+        path: test-results/
+        retention-days: 7
+
+  # Legacy Windows build for UI and Web components
+  build-windows-legacy:
+    name: Build Windows UI & Web
     runs-on: windows-latest
+    needs: build-console-multiplatform
  
     steps:
-    - uses: actions/checkout@v3
-      name: Checkout Code
+    - name: Checkout Code
+      uses: actions/checkout@v4
       
-    - name: Prepare Build Environment
-      uses: actions/setup-dotnet@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '7.0.x'
-        include-prerelease: true
+        dotnet-version: ${{ env.DOTNET_VERSION }}
      
     - name: Setup MSBuild Path
-      uses: microsoft/setup-msbuild@v1.1
+      uses: microsoft/setup-msbuild@v2
        
     - name: Setup NuGet
-      uses: nuget/setup-nuget@v1.1.1
+      uses: nuget/setup-nuget@v2
 
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
-        distribution: 'temurin' # See 'Supported distributions' for available options
+        distribution: 'temurin'
         java-version: '21'
          
     - name: Restore NuGet Packages
@@ -40,34 +122,82 @@ jobs:
     - name: Set version
       uses: dannevesdantas/set-version-assemblyinfo@v.1.0.0
       with:
-        version: '0.9.${{ github.run_number }}'
+        version: ${{ env.BUILD_VERSION }}
  
     - name: Build Application
       run: msbuild SoluiNet.DevTools.sln /p:Configuration=Release
 
     - name: Move Plugins
       run: |
-        cp -R build\plugins\Release\* build\windows-client\Release
-        cp -R build\plugins\Release\* build\console\Release
-        cp -R build\plugins\Release\* build\web\Release
+        if (Test-Path "build\plugins\Release") {
+          Copy-Item -Path "build\plugins\Release\*" -Destination "build\windows-client\Release" -Recurse -Force
+          Copy-Item -Path "build\plugins\Release\*" -Destination "build\web\Release" -Recurse -Force
+        }
+      shell: pwsh
  
     - name: Upload Windows Client
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: SoluiNet.DevTools.UI_v0.9.0.${{ github.run_number }}
+        name: SoluiNet.DevTools.UI_v${{ env.BUILD_VERSION }}
         path: build\windows-client\Release
-
-    - name: Upload Console App
-      uses: actions/upload-artifact@v3
-      with:
-        name: SoluiNet.DevTools.Console_v0.9.0.${{ github.run_number }}
-        path: build\console\Release
+        retention-days: 30
 
     - name: Upload Web Server
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: SoluiNet.DevTools.Web_v0.9.0.${{ github.run_number }}
+        name: SoluiNet.DevTools.Web_v${{ env.BUILD_VERSION }}
         path: build\web\Release
+        retention-days: 30
+
+  # Create release packages
+  create-release-packages:
+    name: Create Release Packages
+    runs-on: ubuntu-latest
+    needs: [build-console-multiplatform, build-windows-legacy]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+        
+    - name: Create platform-specific packages
+      run: |
+        mkdir -p packages
+        
+        # Create Windows package
+        if [ -d "artifacts/SoluiNet.DevTools.Console_windows_v${{ env.BUILD_VERSION }}" ]; then
+          cd artifacts/SoluiNet.DevTools.Console_windows_v${{ env.BUILD_VERSION }}
+          zip -r ../../packages/SoluiNet.DevTools.Console_Windows_v${{ env.BUILD_VERSION }}.zip .
+          cd ../..
+        fi
+        
+        # Create Linux package
+        if [ -d "artifacts/SoluiNet.DevTools.Console_linux_v${{ env.BUILD_VERSION }}" ]; then
+          cd artifacts/SoluiNet.DevTools.Console_linux_v${{ env.BUILD_VERSION }}
+          tar -czf ../../packages/SoluiNet.DevTools.Console_Linux_v${{ env.BUILD_VERSION }}.tar.gz .
+          cd ../..
+        fi
+        
+        # Create macOS package
+        if [ -d "artifacts/SoluiNet.DevTools.Console_macos_v${{ env.BUILD_VERSION }}" ]; then
+          cd artifacts/SoluiNet.DevTools.Console_macos_v${{ env.BUILD_VERSION }}
+          tar -czf ../../packages/SoluiNet.DevTools.Console_macOS_v${{ env.BUILD_VERSION }}.tar.gz .
+          cd ../..
+        fi
+        
+        ls -la packages/
+        
+    - name: Upload Release Packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: SoluiNet.DevTools.ReleasePackages_v${{ env.BUILD_VERSION }}
+        path: packages/
+        retention-days: 90
 
   build_android:
       
