@@ -1,14 +1,19 @@
 # Multi-Platform Build System
 
-This document describes the multi-platform build system for SoluiNet.DevTools.Console, which supports building and packaging for Windows, Linux, and macOS on both x64 and ARM64 architectures.
+This document describes the multi-platform build system for SoluiNet.DevTools.Console, which supports building and packaging for Windows, Linux, and macOS on both x64 and ARM64 architectures using the .NET 8.0 CLI.
 
 ## Overview
 
 The build system consists of:
-- **Build Scripts**: Cross-platform scripts for building the application
+- **dotnet CLI Commands**: Modern .NET CLI-based build process
+- **Cross-Platform Scripts**: Platform-agnostic build automation
 - **CI/CD Pipeline**: GitHub Actions workflow for automated builds and testing
 - **Packaging Scripts**: Platform-specific packaging for distribution
 - **Testing Framework**: Automated testing across platforms and architectures
+
+## dotnet CLI Build Commands
+
+All builds use the modern dotnet CLI instead of MSBuild for cross-platform compatibility.
 
 ## Prerequisites
 
@@ -34,11 +39,35 @@ The build system consists of:
 
 ## Build Scripts
 
-### Universal Build Script
+### Basic dotnet CLI Commands
 
-Build for all platforms and architectures:
-
+#### Build for Current Platform
 ```bash
+# Build for current platform and architecture
+dotnet build SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj --configuration Release
+
+# Restore dependencies first (if needed)
+dotnet restore SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj
+```
+
+#### Build for Specific Runtime
+```bash
+# Build for specific runtime identifier
+dotnet build SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj \
+  --configuration Release \
+  --runtime win-x64
+
+# Publish self-contained for specific runtime
+dotnet publish SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj \
+  --configuration Release \
+  --runtime linux-x64 \
+  --self-contained true \
+  --output ./build/linux-x64
+```
+
+#### Build for All Supported Runtimes
+```bash
+# Build for all supported platforms (using scripts)
 # PowerShell (Windows/Cross-platform)
 ./scripts/build-all-platforms.ps1 -Configuration Release
 
@@ -46,62 +75,112 @@ Build for all platforms and architectures:
 ./scripts/build-all-platforms.sh --configuration Release
 ```
 
-**Parameters:**
-- `-Configuration` / `--configuration`: Build configuration (Debug/Release)
-- `-OutputPath` / `--output`: Output directory (default: `./build/multi-platform`)
-- `--self-contained`: Create self-contained deployments
-- `--no-single-file`: Disable single-file publishing
+**Common dotnet CLI Parameters:**
+- `--configuration`: Build configuration (Debug/Release)
+- `--runtime`: Target runtime identifier (win-x64, linux-x64, osx-x64, etc.)
+- `--output`: Output directory
+- `--self-contained`: Create self-contained deployment (includes .NET runtime)
+- `--no-self-contained`: Framework-dependent deployment (requires .NET runtime installed)
+- `--verbosity`: Logging verbosity (quiet, minimal, normal, detailed, diagnostic)
 
-### Platform-Specific Build Scripts
+### Platform-Specific dotnet CLI Commands
 
-#### Windows
-```powershell
+#### Windows Builds
+```bash
+# Windows x64
+dotnet publish SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj \
+  --configuration Release \
+  --runtime win-x64 \
+  --output ./build/windows/win-x64
+
+# Windows ARM64
+dotnet publish SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj \
+  --configuration Release \
+  --runtime win-arm64 \
+  --output ./build/windows/win-arm64
+
+# Using build script
 ./scripts/build-windows.ps1 -Configuration Release -Architecture both
 ```
 
-**Parameters:**
-- `-Architecture`: Target architecture (x64, arm64, both)
-- `-OutputPath`: Output directory (default: `./build/windows`)
-
-#### Linux
+#### Linux Builds
 ```bash
+# Linux x64
+dotnet publish SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj \
+  --configuration Release \
+  --runtime linux-x64 \
+  --output ./build/linux/linux-x64
+
+# Linux ARM64
+dotnet publish SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj \
+  --configuration Release \
+  --runtime linux-arm64 \
+  --output ./build/linux/linux-arm64
+
+# Using build script
 ./scripts/build-linux.sh --configuration Release --architecture both
 ```
 
-**Parameters:**
-- `--architecture`: Target architecture (x64, arm64, both)
-- `--output`: Output directory (default: `./build/linux`)
-
-#### macOS
+#### macOS Builds
 ```bash
+# macOS x64 (Intel)
+dotnet publish SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj \
+  --configuration Release \
+  --runtime osx-x64 \
+  --output ./build/macos/osx-x64
+
+# macOS ARM64 (Apple Silicon)
+dotnet publish SoluiNet.DevTools.Console/SoluiNet.DevTools.Console.csproj \
+  --configuration Release \
+  --runtime osx-arm64 \
+  --output ./build/macos/osx-arm64
+
+# Using build script
 ./scripts/build-macos.sh --configuration Release --architecture both
 ```
 
-**Parameters:**
-- `--architecture`: Target architecture (x64, arm64, both)
-- `--output`: Output directory (default: `./build/macos`)
+## Testing with dotnet CLI
 
-## Testing
+### Running Tests
 
-### Automated Testing
+```bash
+# Run all tests
+dotnet test SoluiNet.DevTools.UnitTest/SoluiNet.DevTools.UnitTest.csproj
 
-Run comprehensive tests across platforms:
+# Run tests with specific configuration
+dotnet test SoluiNet.DevTools.UnitTest/SoluiNet.DevTools.UnitTest.csproj \
+  --configuration Release \
+  --logger "trx;LogFileName=test-results.trx" \
+  --results-directory ./test-results
 
-```powershell
-# PowerShell
-./scripts/test-all-platforms.ps1 -Configuration Release
+# Run tests for specific runtime
+dotnet test SoluiNet.DevTools.UnitTest/SoluiNet.DevTools.UnitTest.csproj \
+  --runtime linux-x64 \
+  --configuration Release
 
-# The script will:
-# - Run unit tests
-# - Test console application functionality
-# - Verify cross-platform compatibility
-# - Generate test reports
+# Run tests with coverage
+dotnet test SoluiNet.DevTools.UnitTest/SoluiNet.DevTools.UnitTest.csproj \
+  --collect:"XPlat Code Coverage" \
+  --results-directory ./test-results
 ```
 
-**Parameters:**
-- `-Configuration`: Build configuration to test
-- `-TestOutputPath`: Directory for test results (default: `./test-results`)
-- `-SkipBuild`: Skip build step and test existing binaries
+### Automated Cross-Platform Testing
+
+```bash
+# PowerShell script for comprehensive testing
+./scripts/test-all-platforms.ps1 -Configuration Release
+
+# Bash script for comprehensive testing  
+./scripts/test-all-platforms.sh --configuration Release
+```
+
+**dotnet test Parameters:**
+- `--configuration`: Build configuration to test
+- `--runtime`: Target runtime for tests
+- `--logger`: Test result logger (trx, junit, console)
+- `--results-directory`: Directory for test results
+- `--collect`: Data collector (code coverage, etc.)
+- `--verbosity`: Logging verbosity
 
 ### Manual Testing
 
