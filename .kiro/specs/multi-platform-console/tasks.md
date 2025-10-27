@@ -61,7 +61,7 @@
   - Configure log rotation policies appropriate for each platform
   - _Requirements: 1.5, 2.5_
 
-- [ ]* 9. Create comprehensive cross-platform tests
+- [ ] 9. Create comprehensive cross-platform tests
   - Write unit tests for platform service implementations
   - Create integration tests for plugin loading on different platforms
   - Add configuration migration tests
