@@ -32,20 +32,28 @@ namespace SoluiNet.DevTools.Console
         {
             IPlatformService platformService = null;
             IConfigurationManager configurationManager = null;
+            Logger logger = null;
 
             try
             {
-#if DEBUG && WINDOWS
-                Debugger.Launch();
+                // Conditional debugger launch only on Windows in debug mode
+#if DEBUG
+                if (PlatformHelper.IsWindows)
+                {
+                    Debugger.Launch();
+                }
 #endif
+
                 // Initialize platform services
                 platformService = PlatformServiceFactory.Create();
 
                 // Configure cross-platform logging
                 CrossPlatformNLogConfigurator.Configure(platformService, "console");
 
-                var logger = LogManager.GetCurrentClassLogger();
-                logger.Info($"Starting SoluiNet.DevTools.Console on {GetPlatformName()}");
+                logger = LogManager.GetCurrentClassLogger();
+                
+                // Log detailed platform information for troubleshooting
+                LogPlatformInformation(logger);
 
                 // Initialize configuration manager
                 configurationManager = new CrossPlatformConfigurationManager(platformService);
@@ -60,23 +68,27 @@ namespace SoluiNet.DevTools.Console
 
                 (ApplicationContext.Application as BaseSoluiNetApp).Initialize();
 
-                CommandLine.Parser.Default.ParseArguments<RunOptions>(args)
-                    .WithParsed(Run)
-                    .WithNotParsed(Error);
+                // Enhanced command-line parsing with cross-platform error handling
+                var parseResult = CommandLine.Parser.Default.ParseArguments<RunOptions>(args);
+                parseResult
+                    .WithParsed(options => Run(options, logger))
+                    .WithNotParsed(errors => Error(errors, logger));
+            }
+            catch (PlatformNotSupportedException platformException)
+            {
+                HandlePlatformException(platformException, logger);
+            }
+            catch (UnauthorizedAccessException accessException)
+            {
+                HandleAccessException(accessException, logger);
+            }
+            catch (System.IO.DirectoryNotFoundException dirException)
+            {
+                HandleDirectoryException(dirException, logger, platformService);
             }
             catch (Exception exception)
             {
-                var logger = LogManager.GetCurrentClassLogger();
-
-                logger.Error(exception, string.Format(
-                    CultureInfo.InvariantCulture,
-                    "Error while executing SoluiNet.DevTools.Console - {0}",
-                    exception.ToString()));
-
-                Console.WriteLine(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "Error while executing SoluiNet.DevTools.Console - {0}",
-                    exception.ToString()));
+                HandleGeneralException(exception, logger, platformService);
             }
         }
 
@@ -84,22 +96,48 @@ namespace SoluiNet.DevTools.Console
         /// Run with parsed options.
         /// </summary>
         /// <param name="options">The parsed options.</param>
+        /// <param name="logger">The logger instance.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "We want to provide a neutral console tool. So there won't be any localizations for now.")]
-        internal static void Run(RunOptions options)
+        internal static void Run(RunOptions options, Logger logger = null)
         {
-            Console.WriteLine($@"SoluiNet.DevTools.Console v{Assembly.GetEntryAssembly()?.GetName().Version.ToString()}");
-            Console.WriteLine($@"Current Arguments: -v {options.Verbose} -h {options.Help}");
-
-            if (options.Help)
+            try
             {
-                Console.WriteLine(@"You can use the following options:");
-                Console.WriteLine(@"v, verbose   Use verbose output");
-                Console.WriteLine(@"h, help      Open additional information about the usage of this application");
+                var version = Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "Unknown";
+                var platformInfo = PlatformHelper.GetDetailedPlatformInfo();
+                
+                Console.WriteLine($@"SoluiNet.DevTools.Console v{version} ({platformInfo})");
+                Console.WriteLine($@"Current Arguments: -v {options.Verbose} -h {options.Help}");
 
-                foreach (var plugin in (ApplicationContext.Application.Plugins as ConsoleApplication).CommandLinePlugins)
+                logger?.Info($"Application started with arguments: verbose={options.Verbose}, help={options.Help}");
+
+                if (options.Help)
                 {
-                    Console.WriteLine(plugin.HelpText);
+                    Console.WriteLine(@"You can use the following options:");
+                    Console.WriteLine(@"v, verbose   Use verbose output");
+                    Console.WriteLine(@"h, help      Open additional information about the usage of this application");
+
+                    try
+                    {
+                        var consoleApp = ApplicationContext.Application.Plugins as ConsoleApplication;
+                        if (consoleApp?.CommandLinePlugins != null)
+                        {
+                            foreach (var plugin in consoleApp.CommandLinePlugins)
+                            {
+                                Console.WriteLine(plugin.HelpText);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger?.Warn(ex, "Failed to load plugin help information");
+                        Console.WriteLine("Warning: Some plugin help information could not be loaded.");
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger?.Error(ex, "Error in Run method");
+                Console.WriteLine($"Error during execution: {ex.Message}");
             }
         }
 
@@ -107,18 +145,26 @@ namespace SoluiNet.DevTools.Console
         /// Couldn't identify the options.
         /// </summary>
         /// <param name="errors">A enumerable which holds the errors.</param>
-        internal static void Error(IEnumerable<Error> errors)
+        /// <param name="logger">The logger instance.</param>
+        internal static void Error(IEnumerable<Error> errors, Logger logger = null)
         {
-            var logger = LogManager.GetCurrentClassLogger();
+            logger ??= LogManager.GetCurrentClassLogger();
 
+            Console.WriteLine("Command line parsing errors occurred:");
+            
             foreach (var error in errors)
             {
-                logger.Error(string.Format(
+                var errorMessage = string.Format(
                     CultureInfo.InvariantCulture,
-                    "Error while executing SoluiNet.DevTools.Console - Run - {0} (stops processing: {1})",
+                    "Command line error: {0} (stops processing: {1})",
                     error.Tag.ToString(),
-                    error.StopsProcessing));
+                    error.StopsProcessing);
+                
+                logger.Error(errorMessage);
+                Console.WriteLine($"  - {error.Tag}");
             }
+            
+            Console.WriteLine("Use --help for usage information.");
         }
 
         /// <summary>
@@ -154,8 +200,7 @@ namespace SoluiNet.DevTools.Console
         /// </summary>
         /// <param name="configurationManager">The configuration manager.</param>
         /// <param name="logger">The logger.</param>
-        /// <returns>The application configuration.</returns>
-        private static ApplicationConfiguration LoadApplicationConfiguration(IConfigurationManager configurationManager, Logger logger)
+        private static void LoadApplicationConfiguration(IConfigurationManager configurationManager, Logger logger)
         {
             try
             {
@@ -170,38 +215,121 @@ namespace SoluiNet.DevTools.Console
                 {
                     logger.Debug("Loaded existing application configuration.");
                 }
-
-                return config;
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Failed to load application configuration, using defaults.");
-                return new ApplicationConfiguration();
             }
         }
 
         /// <summary>
-        /// Gets a human-readable platform name.
+        /// Logs detailed platform information for troubleshooting.
         /// </summary>
-        /// <returns>The platform name.</returns>
-        private static string GetPlatformName()
+        /// <param name="logger">The logger instance.</param>
+        private static void LogPlatformInformation(Logger logger)
         {
-            if (OperatingSystem.IsWindows())
-            {
-                return "Windows";
-            }
+            logger.Info($"Starting SoluiNet.DevTools.Console on {PlatformHelper.PlatformName} - {PlatformHelper.GetDetailedPlatformInfo()}");
+            logger.Info($"Runtime: {PlatformHelper.FrameworkDescription} | OS: {PlatformHelper.OSDescription}");
+            logger.Debug($"Architecture Details: {PlatformHelper.Architecture} ({PlatformHelper.RuntimeIdentifier}) | ARM64: {PlatformHelper.IsArm64} | x64: {PlatformHelper.IsX64}");
+            logger.Debug($"Platform Features: Windows={PlatformHelper.SupportsWindowsFeatures()}, Unix={PlatformHelper.SupportsUnixFeatures()}");
+        }
 
-            if (OperatingSystem.IsLinux())
-            {
-                return "Linux";
-            }
+        /// <summary>
+        /// Handles platform not supported exceptions with appropriate messaging.
+        /// </summary>
+        /// <param name="exception">The platform exception.</param>
+        /// <param name="logger">The logger instance.</param>
+        private static void HandlePlatformException(PlatformNotSupportedException exception, Logger logger)
+        {
+            var message = $"Platform not supported: {PlatformHelper.GetDetailedPlatformInfo()}. Error: {exception.Message}";
+            
+            logger?.Error(exception, message);
+            Console.WriteLine($"ERROR: {message}");
+            Console.WriteLine("This application requires Windows, Linux, or macOS.");
+            
+            Environment.Exit(1);
+        }
 
-            if (OperatingSystem.IsMacOS())
+        /// <summary>
+        /// Handles unauthorized access exceptions with platform-specific guidance.
+        /// </summary>
+        /// <param name="exception">The access exception.</param>
+        /// <param name="logger">The logger instance.</param>
+        private static void HandleAccessException(UnauthorizedAccessException exception, Logger logger)
+        {
+            var message = $"Access denied on {PlatformHelper.PlatformName}: {exception.Message}";
+            
+            logger?.Error(exception, message);
+            Console.WriteLine($"ERROR: {message}");
+            
+            if (PlatformHelper.IsUnixLike)
             {
-                return "macOS";
+                Console.WriteLine("On Unix-like systems, you may need to:");
+                Console.WriteLine("  - Check file permissions with 'ls -la'");
+                Console.WriteLine("  - Run with appropriate user permissions");
+                Console.WriteLine("  - Ensure the application directory is writable");
             }
+            else if (PlatformHelper.IsWindows)
+            {
+                Console.WriteLine("On Windows, you may need to:");
+                Console.WriteLine("  - Run as Administrator");
+                Console.WriteLine("  - Check folder permissions");
+                Console.WriteLine("  - Ensure antivirus is not blocking the application");
+            }
+            
+            Environment.Exit(2);
+        }
 
-            return "Unknown";
+        /// <summary>
+        /// Handles directory not found exceptions with platform-specific paths.
+        /// </summary>
+        /// <param name="exception">The directory exception.</param>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="platformService">The platform service.</param>
+        private static void HandleDirectoryException(System.IO.DirectoryNotFoundException exception, Logger logger, IPlatformService platformService)
+        {
+            var message = $"Directory not found on {PlatformHelper.PlatformName}: {exception.Message}";
+            
+            logger?.Error(exception, message);
+            Console.WriteLine($"ERROR: {message}");
+            
+            if (platformService != null)
+            {
+                Console.WriteLine($"Expected configuration directory: {platformService.GetConfigurationDirectory()}");
+                Console.WriteLine($"Expected application data directory: {platformService.GetApplicationDataDirectory()}");
+            }
+            
+            Console.WriteLine("The application will attempt to create necessary directories on next run.");
+            Environment.Exit(3);
+        }
+
+        /// <summary>
+        /// Handles general exceptions with platform context.
+        /// </summary>
+        /// <param name="exception">The general exception.</param>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="platformService">The platform service.</param>
+        private static void HandleGeneralException(Exception exception, Logger logger, IPlatformService platformService)
+        {
+            var platformContext = $"Platform: {PlatformHelper.GetDetailedPlatformInfo()}";
+            var message = $"Unexpected error on {PlatformHelper.PlatformName}: {exception.Message}";
+            
+            logger?.Error(exception, $"{message} | {platformContext}");
+            
+            Console.WriteLine($"ERROR: {message}");
+            Console.WriteLine($"Platform Information: {platformContext}");
+            Console.WriteLine($"Exception Type: {exception.GetType().Name}");
+            
+            if (logger != null)
+            {
+                Console.WriteLine("Check the application logs for detailed error information.");
+                if (platformService != null)
+                {
+                    Console.WriteLine($"Log location may be in: {platformService.GetApplicationDataDirectory()}");
+                }
+            }
+            
+            Environment.Exit(4);
         }
     }
 }
