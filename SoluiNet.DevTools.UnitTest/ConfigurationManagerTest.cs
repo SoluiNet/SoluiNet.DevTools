@@ -29,7 +29,7 @@ namespace SoluiNet.DevTools.UnitTest
         {
             this.platformService = PlatformServiceFactory.Create();
             this.configurationManager = new CrossPlatformConfigurationManager(this.platformService);
-            
+
             // Create a temporary test directory
             this.testConfigDirectory = Path.Combine(Path.GetTempPath(), "SoluiNetTest_" + Guid.NewGuid().ToString("N").Substring(0, 8));
             Directory.CreateDirectory(this.testConfigDirectory);
@@ -256,7 +256,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsFalse(result);
-            
+
             // Verify existing config wasn't overwritten
             var loadedConfig = this.configurationManager.GetConfiguration<ApplicationConfiguration>(configName);
             Assert.IsNotNull(loadedConfig);
@@ -293,7 +293,7 @@ namespace SoluiNet.DevTools.UnitTest
                 {
                     { "Plugin1", true },
                     { "Plugin2", false }
-                }
+                },
             };
 
             // Act
@@ -306,7 +306,7 @@ namespace SoluiNet.DevTools.UnitTest
             Assert.AreEqual(originalConfig.EnabledPlugins.Count, loadedConfig.EnabledPlugins.Count);
             Assert.AreEqual(originalConfig.EnabledPlugins["Plugin1"], loadedConfig.EnabledPlugins["Plugin1"]);
             Assert.AreEqual(originalConfig.EnabledPlugins["Plugin2"], loadedConfig.EnabledPlugins["Plugin2"]);
-            
+
             // Verify configuration exists
             Assert.IsTrue(this.configurationManager.ConfigurationExists(configName));
         }

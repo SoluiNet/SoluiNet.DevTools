@@ -35,9 +35,9 @@ namespace SoluiNet.DevTools.Core.Configuration
         /// <param name="logEvent">The log event being processed.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (Detailed)
+            if (this.Detailed)
             {
-                builder.Append(GetDetailedPlatformInfo());
+                builder.Append(this.GetDetailedPlatformInfo());
             }
             else
             {
@@ -53,7 +53,7 @@ namespace SoluiNet.DevTools.Core.Configuration
         {
             var platformName = GetPlatformName();
             var architecture = RuntimeInformation.ProcessArchitecture.ToString();
-            
+
             return $"{platformName}/{architecture}";
         }
 
@@ -64,23 +64,23 @@ namespace SoluiNet.DevTools.Core.Configuration
         private string GetDetailedPlatformInfo()
         {
             var sb = new StringBuilder();
-            
+
             sb.Append(GetPlatformName());
-            
-            if (IncludeArchitecture)
+
+            if (this.IncludeArchitecture)
             {
                 sb.Append('/');
                 sb.Append(RuntimeInformation.ProcessArchitecture.ToString());
             }
-            
-            if (Detailed)
+
+            if (this.Detailed)
             {
                 sb.Append(" | ");
                 sb.Append(RuntimeInformation.FrameworkDescription);
                 sb.Append(" | ");
                 sb.Append(Environment.OSVersion.VersionString);
             }
-            
+
             return sb.ToString();
         }
 

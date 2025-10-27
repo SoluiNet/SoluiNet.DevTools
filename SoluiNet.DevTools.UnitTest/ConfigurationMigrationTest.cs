@@ -30,7 +30,7 @@ namespace SoluiNet.DevTools.UnitTest
             this.platformService = PlatformServiceFactory.Create();
             this.configurationManager = new CrossPlatformConfigurationManager(this.platformService);
             this.migrationService = new ConfigurationMigrationService(this.configurationManager, this.platformService);
-            
+
             // Create a temporary test directory
             this.testDirectory = Path.Combine(Path.GetTempPath(), "SoluiNetMigrationTest_" + Guid.NewGuid().ToString("N").Substring(0, 8));
             Directory.CreateDirectory(this.testDirectory);
@@ -154,7 +154,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             var configName = "existing-config";
             var existingConfigContent = "{\"Version\":\"2.0.0\"}";
-            
+
             // Create existing configuration
             var existingConfigPath = this.configurationManager.GetConfigurationPath(configName);
             var existingConfigDir = Path.GetDirectoryName(existingConfigPath);
@@ -162,6 +162,7 @@ namespace SoluiNet.DevTools.UnitTest
             {
                 Directory.CreateDirectory(existingConfigDir);
             }
+
             File.WriteAllText(existingConfigPath, existingConfigContent);
 
             // Act
@@ -169,7 +170,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsFalse(result);
-            
+
             // Verify existing configuration wasn't changed
             var currentContent = File.ReadAllText(existingConfigPath);
             Assert.AreEqual(existingConfigContent, currentContent);
@@ -239,7 +240,7 @@ namespace SoluiNet.DevTools.UnitTest
             var longFileName = new string('a', 100) + ".json";
             var oldConfigPath = Path.Combine(this.testDirectory, longFileName);
             var configContent = "{\"Version\":\"1.0.0\"}";
-            
+
             try
             {
                 File.WriteAllText(oldConfigPath, configContent);

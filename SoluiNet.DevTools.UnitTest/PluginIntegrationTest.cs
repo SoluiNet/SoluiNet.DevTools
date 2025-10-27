@@ -34,7 +34,7 @@ namespace SoluiNet.DevTools.UnitTest
             this.assemblyResolver = new CrossPlatformAssemblyResolver(this.platformService);
             this.pluginDiscovery = new CrossPlatformPluginDiscovery(this.assemblyResolver);
             this.pluginLoader = new CrossPlatformPluginLoader(this.pluginDiscovery, this.assemblyResolver);
-            
+
             // Create a temporary test directory for plugins
             this.testPluginDirectory = Path.Combine(Path.GetTempPath(), "SoluiNetPluginTest_" + Guid.NewGuid().ToString("N").Substring(0, 8));
             Directory.CreateDirectory(this.testPluginDirectory);
@@ -70,6 +70,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(plugins);
+
             // Note: May find actual plugins in the system, so we just verify it returns a valid collection
         }
 
@@ -84,6 +85,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(plugins);
+
             // Note: May find actual plugins in the system, so we just verify it returns a valid collection
         }
 
@@ -98,6 +100,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(plugins);
+
             // Note: May find actual plugins in the system, so we just verify it returns a valid collection
         }
 
@@ -111,7 +114,7 @@ namespace SoluiNet.DevTools.UnitTest
             var textFile = Path.Combine(this.testPluginDirectory, "readme.txt");
             var configFile = Path.Combine(this.testPluginDirectory, "config.json");
             var imageFile = Path.Combine(this.testPluginDirectory, "icon.png");
-            
+
             File.WriteAllText(textFile, "This is a readme file");
             File.WriteAllText(configFile, "{}");
             File.WriteAllBytes(imageFile, new byte[] { 0x89, 0x50, 0x4E, 0x47 }); // PNG header
@@ -121,6 +124,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(plugins);
+
             // Note: May find actual plugins in the system, so we just verify it returns a valid collection
             // The non-assembly files we created should be ignored
         }
@@ -140,6 +144,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(plugins);
+
             // Should find the file but it won't be loadable
             Assert.IsTrue(plugins.Any());
         }
@@ -156,7 +161,7 @@ namespace SoluiNet.DevTools.UnitTest
             // Assert
             Assert.IsNotNull(searchPaths);
             Assert.IsTrue(searchPaths.Any());
-            
+
             foreach (var path in searchPaths)
             {
                 Assert.IsNotNull(path);
@@ -358,7 +363,7 @@ namespace SoluiNet.DevTools.UnitTest
             // Arrange
             var subDir = Path.Combine(this.testPluginDirectory, "subdirectory");
             Directory.CreateDirectory(subDir);
-            
+
             var invalidDll = Path.Combine(subDir, "subplugin.dll");
             File.WriteAllText(invalidDll, "This is not a valid DLL file");
 

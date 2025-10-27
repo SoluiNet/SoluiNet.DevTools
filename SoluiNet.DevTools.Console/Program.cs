@@ -51,7 +51,7 @@ namespace SoluiNet.DevTools.Console
                 CrossPlatformNLogConfigurator.Configure(platformService, "console");
 
                 logger = LogManager.GetCurrentClassLogger();
-                
+
                 // Log detailed platform information for troubleshooting
                 LogPlatformInformation(logger);
 
@@ -104,7 +104,7 @@ namespace SoluiNet.DevTools.Console
             {
                 var version = Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "Unknown";
                 var platformInfo = PlatformHelper.GetDetailedPlatformInfo();
-                
+
                 Console.WriteLine($@"SoluiNet.DevTools.Console v{version} ({platformInfo})");
                 Console.WriteLine($@"Current Arguments: -v {options.Verbose} -h {options.Help}");
 
@@ -151,7 +151,7 @@ namespace SoluiNet.DevTools.Console
             logger ??= LogManager.GetCurrentClassLogger();
 
             Console.WriteLine("Command line parsing errors occurred:");
-            
+
             foreach (var error in errors)
             {
                 var errorMessage = string.Format(
@@ -159,11 +159,11 @@ namespace SoluiNet.DevTools.Console
                     "Command line error: {0} (stops processing: {1})",
                     error.Tag.ToString(),
                     error.StopsProcessing);
-                
+
                 logger.Error(errorMessage);
                 Console.WriteLine($"  - {error.Tag}");
             }
-            
+
             Console.WriteLine("Use --help for usage information.");
         }
 
@@ -242,11 +242,11 @@ namespace SoluiNet.DevTools.Console
         private static void HandlePlatformException(PlatformNotSupportedException exception, Logger logger)
         {
             var message = $"Platform not supported: {PlatformHelper.GetDetailedPlatformInfo()}. Error: {exception.Message}";
-            
+
             logger?.Error(exception, message);
             Console.WriteLine($"ERROR: {message}");
             Console.WriteLine("This application requires Windows, Linux, or macOS.");
-            
+
             Environment.Exit(1);
         }
 
@@ -258,10 +258,10 @@ namespace SoluiNet.DevTools.Console
         private static void HandleAccessException(UnauthorizedAccessException exception, Logger logger)
         {
             var message = $"Access denied on {PlatformHelper.PlatformName}: {exception.Message}";
-            
+
             logger?.Error(exception, message);
             Console.WriteLine($"ERROR: {message}");
-            
+
             if (PlatformHelper.IsUnixLike)
             {
                 Console.WriteLine("On Unix-like systems, you may need to:");
@@ -276,7 +276,7 @@ namespace SoluiNet.DevTools.Console
                 Console.WriteLine("  - Check folder permissions");
                 Console.WriteLine("  - Ensure antivirus is not blocking the application");
             }
-            
+
             Environment.Exit(2);
         }
 
@@ -289,16 +289,16 @@ namespace SoluiNet.DevTools.Console
         private static void HandleDirectoryException(System.IO.DirectoryNotFoundException exception, Logger logger, IPlatformService platformService)
         {
             var message = $"Directory not found on {PlatformHelper.PlatformName}: {exception.Message}";
-            
+
             logger?.Error(exception, message);
             Console.WriteLine($"ERROR: {message}");
-            
+
             if (platformService != null)
             {
                 Console.WriteLine($"Expected configuration directory: {platformService.GetConfigurationDirectory()}");
                 Console.WriteLine($"Expected application data directory: {platformService.GetApplicationDataDirectory()}");
             }
-            
+
             Console.WriteLine("The application will attempt to create necessary directories on next run.");
             Environment.Exit(3);
         }
@@ -313,13 +313,13 @@ namespace SoluiNet.DevTools.Console
         {
             var platformContext = $"Platform: {PlatformHelper.GetDetailedPlatformInfo()}";
             var message = $"Unexpected error on {PlatformHelper.PlatformName}: {exception.Message}";
-            
+
             logger?.Error(exception, $"{message} | {platformContext}");
-            
+
             Console.WriteLine($"ERROR: {message}");
             Console.WriteLine($"Platform Information: {platformContext}");
             Console.WriteLine($"Exception Type: {exception.GetType().Name}");
-            
+
             if (logger != null)
             {
                 Console.WriteLine("Check the application logs for detailed error information.");
@@ -328,7 +328,7 @@ namespace SoluiNet.DevTools.Console
                     Console.WriteLine($"Log location may be in: {platformService.GetApplicationDataDirectory()}");
                 }
             }
-            
+
             Environment.Exit(4);
         }
     }

@@ -94,6 +94,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(normalizedPath);
+
             // On Windows, should convert to backslashes; on other platforms, behavior may vary
             if (OperatingSystem.IsWindows())
             {
@@ -242,7 +243,7 @@ namespace SoluiNet.DevTools.UnitTest
             {
                 new WindowsPlatformService(),
                 new LinuxPlatformService(),
-                new MacOSPlatformService()
+                new MacOSPlatformService(),
             };
 
             foreach (var service in services)
@@ -264,7 +265,7 @@ namespace SoluiNet.DevTools.UnitTest
             {
                 new WindowsPlatformService(),
                 new LinuxPlatformService(),
-                new MacOSPlatformService()
+                new MacOSPlatformService(),
             };
 
             foreach (var service in services)
@@ -290,7 +291,7 @@ namespace SoluiNet.DevTools.UnitTest
             {
                 new WindowsPlatformService(),
                 new LinuxPlatformService(),
-                new MacOSPlatformService()
+                new MacOSPlatformService(),
             };
 
             var nonExistentFile = "non-existent-file.exe";

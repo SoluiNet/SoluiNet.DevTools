@@ -31,7 +31,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(platformService);
-            
+
             // Verify platform detection works
             if (OperatingSystem.IsWindows())
             {
@@ -89,9 +89,9 @@ namespace SoluiNet.DevTools.UnitTest
             // Act & Assert - Test path normalization
             var mixedPath = "folder\\subfolder/file.txt";
             var normalizedPath = platformService.NormalizePath(mixedPath);
-            
+
             Assert.IsNotNull(normalizedPath);
-            
+
             // Verify path uses correct separators for platform
             if (OperatingSystem.IsWindows())
             {
@@ -221,6 +221,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(frameworkVersion);
+
             // Should be running on .NET 8.0 or later
             Assert.IsTrue(frameworkVersion.Contains(".NET") || frameworkVersion.Contains("Core"));
         }
@@ -262,7 +263,7 @@ namespace SoluiNet.DevTools.UnitTest
             // Assert
             Assert.IsNotNull(pluginConfigPath);
             Assert.IsTrue(pluginConfigPath.EndsWith(".json"));
-            
+
             var configDir = Path.GetDirectoryName(pluginConfigPath);
             Assert.IsNotNull(configDir);
             Assert.IsTrue(Path.IsPathRooted(configDir));
@@ -276,15 +277,15 @@ namespace SoluiNet.DevTools.UnitTest
         {
             // Act & Assert - Test modern .NET APIs are available
             Assert.IsTrue(OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS());
-            
+
             // Test RuntimeInformation APIs
             Assert.IsNotNull(RuntimeInformation.RuntimeIdentifier);
             Assert.IsNotNull(RuntimeInformation.FrameworkDescription);
             Assert.IsNotNull(RuntimeInformation.OSDescription);
-            
+
             // Test architecture detection
             var architecture = RuntimeInformation.ProcessArchitecture;
-            Assert.IsTrue(architecture == Architecture.X64 || architecture == Architecture.Arm64 || 
+            Assert.IsTrue(architecture == Architecture.X64 || architecture == Architecture.Arm64 ||
                          architecture == Architecture.X86 || architecture == Architecture.Arm);
         }
 
@@ -302,7 +303,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Assert
             Assert.IsNotNull(extension);
-            
+
             if (OperatingSystem.IsWindows())
             {
                 Assert.AreEqual(".exe", extension);
@@ -328,10 +329,10 @@ namespace SoluiNet.DevTools.UnitTest
             // Assert
             Assert.IsNotNull(tempDir);
             Assert.IsTrue(Directory.Exists(tempDir));
-            
+
             // Test that we can create a file in temp directory
             var testFile = Path.Combine(tempDir, "soluinet-test-" + Guid.NewGuid().ToString("N").Substring(0, 8) + ".tmp");
-            
+
             try
             {
                 File.WriteAllText(testFile, "test");
@@ -359,7 +360,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Act & Assert - Migration service should handle non-existent files gracefully
             var result = migrationService.MigrateFromWindowsLocations();
-            
+
             // Should not throw exceptions and return false when no files exist
             Assert.IsFalse(result);
         }
@@ -375,7 +376,7 @@ namespace SoluiNet.DevTools.UnitTest
 
             // Act & Assert
             var result = validator.ValidatePlugin("non-existent-plugin.dll");
-            
+
             Assert.IsNotNull(result);
             Assert.IsFalse(result.IsValid);
             Assert.IsNotNull(result.Reason);

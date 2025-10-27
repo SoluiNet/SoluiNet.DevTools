@@ -26,6 +26,7 @@ namespace SoluiNet.DevTools.Core.Configuration
         /// The enhanced log layout with platform information.
         /// </summary>
         private const string EnhancedLogLayout = "${longdate} [${proce  ssid}] ${uppercase:${level}} [${platform-info}] ${message} (${logger})";
+
         /// <summary>
         /// Configures NLog with platform-specific log directories and settings.
         /// </summary>
@@ -63,7 +64,7 @@ namespace SoluiNet.DevTools.Core.Configuration
                 // Create file targets with platform-specific settings
                 var fileTarget = CreateFileTarget("fileLog", logDirectory, applicationName, enhancedLayout);
                 var traceTarget = CreateFileTarget("traceLog", logDirectory, $"trace_{applicationName}", enhancedLayout);
-                var errorTarget = CreateFileTarget("errorLog", logDirectory, $"{applicationName}_errors", 
+                var errorTarget = CreateFileTarget("errorLog", logDirectory, $"{applicationName}_errors",
                     "${longdate} [${processid}] ${uppercase:${level}} [${platform-info}] ${message}${newline}${exception:format=tostring}");
 
                 // Configure console target with platform information
@@ -280,7 +281,8 @@ namespace SoluiNet.DevTools.Core.Configuration
                     try
                     {
                         // Set directory permissions: owner read/write/execute, group read/execute, others read/execute
-                        File.SetUnixFileMode(logDirectory, 
+                        File.SetUnixFileMode(
+                            logDirectory,
                             UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute |
                             UnixFileMode.GroupRead | UnixFileMode.GroupExecute |
                             UnixFileMode.OtherRead | UnixFileMode.OtherExecute);
@@ -313,7 +315,8 @@ namespace SoluiNet.DevTools.Core.Configuration
                     try
                     {
                         // Set file permissions: owner read/write, group read, others read
-                        File.SetUnixFileMode(logFile,
+                        File.SetUnixFileMode(
+                            logFile,
                             UnixFileMode.UserRead | UnixFileMode.UserWrite |
                             UnixFileMode.GroupRead |
                             UnixFileMode.OtherRead);
