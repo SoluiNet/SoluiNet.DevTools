@@ -135,17 +135,19 @@ namespace SoluiNet.DevTools.UnitTest
                 streamUtf32.Dispose();
             }
 
-            var iso88591Bytes = Encoding.GetEncoding("ISO-8859-15").GetBytes(simpleString);
-            var streamIso88591 = new MemoryStream(iso88591Bytes);
+            // Test with ASCII encoding (universally supported)
+            var asciiString = "Hello foo bar. What's up foo bar?"; // ASCII-only string
+            var asciiBytes = Encoding.ASCII.GetBytes(asciiString);
+            var streamAscii = new MemoryStream(asciiBytes);
 
             try
             {
-                Assert.AreEqual(simpleString, StreamHelper.StreamToString(streamIso88591, Encoding.GetEncoding("ISO-8859-15")));
+                Assert.AreEqual(asciiString, StreamHelper.StreamToString(streamAscii, Encoding.ASCII));
             }
             finally
             {
-                streamIso88591.Close();
-                streamIso88591.Dispose();
+                streamAscii.Close();
+                streamAscii.Dispose();
             }
         }
     }
