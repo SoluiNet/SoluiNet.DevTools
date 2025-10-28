@@ -6,48 +6,27 @@
   - Set up dependency injection container for cross-platform services
   - _Requirements: 1.1, 3.1, 7.1_
 
-- [x] 2. Implement platform abstraction layer for window monitoring
-
-
-
+- [x] 2. Implement platform abstraction layer for window monito
 
   - [x] 2.1 Create base platform provider interface and common types
-
-
     - Define IPlatformProvider interface with GetActiveWindowAsync method
     - Create WindowInfo and ProcessInfo data transfer objects
     - Implement PlatformProviderFactory for runtime platform detection
     - _Requirements: 3.1, 3.5_
 
   - [x] 2.2 Implement Windows platform provider
-
-
     - Create WindowsPlatformProvider using existing Win32 APIs
     - Migrate existing NativeMethods.cs to new platform provider structure
     - Implement GetActiveWindowAsync and GetActiveProcessAsync methods
     - _Requirements: 3.4_
 
-
-
   - [x] 2.3 Implement Linux platform provider
-
-
-
-
-
     - Create LinuxPlatformProvider using X11 and Wayland APIs
     - Implement window detection for both X11 and Wayland display servers
     - Handle Linux-specific process and window information retrieval
-
-
     - _Requirements: 3.2_
 
   - [x] 2.4 Implement macOS platform provider
-
-
-
-
-
     - Create MacOSPlatformProvider using Cocoa APIs
     - Implement native macOS window and process monitoring
     - Handle macOS security permissions and accessibility requirements
@@ -55,35 +34,27 @@
 
 - [x] 3. Create cross-platform storage layer with advanced querying
 
-
-
-
   - [x] 3.1 Enhance existing TimeTrackingContext for cross-platform usage
-
-
     - Modify TimeTrackingContext to work with .NET Core and SQLite
     - Remove Windows-specific dependencies from entity framework code
     - Implement platform-specific database path resolution
     - _Requirements: 3.5, 7.1_
 
   - [x] 3.2 Implement advanced query repository
-
-
     - Create QueryRepository class with regex and LIKE pattern support
     - Implement TimeRangeQueryService for time-based filtering
     - Add support for SQLite REGEXP function and pattern matching
     - _Requirements: 4.2, 4.3, 4.9_
 
   - [x] 3.3 Implement limited SQL query processor
-
-
     - Create LimitedSqlQueryProcessor with SQL parsing and validation
     - Implement whitelist-based security for allowed operations and tables
     - Add support for SELECT, WHERE, GROUP BY, ORDER BY operations
     - Implement aggregate functions (COUNT, SUM, AVG, MIN, MAX)
     - _Requirements: 4.4, 4.5_
 
-  - [ ]* 3.4 Write unit tests for storage layer
+  - [ ] 3.4 Write unit tests for storage layer
+
     - Create unit tests for QueryRepository methods
     - Test SQL query validation and security restrictions
     - Test cross-platform database operations
@@ -91,26 +62,16 @@
 
 - [x] 4. Implement core time tracking service
 
-
-
-
-
   - [x] 4.1 Create CrossPlatformTimeTracker service
-
-
     - Implement ITimeTracker interface with start/stop functionality
     - Integrate platform providers for window monitoring
     - Implement usage data processing and storage
     - _Requirements: 1.1, 1.2, 5.1, 5.2_
 
-
-
   - [ ] 4.2 Implement WindowMonitor with configurable intervals
     - Create WindowMonitor class with async monitoring loop
     - Implement configurable monitoring intervals (1-60 seconds)
     - Add change detection to minimize resource usage when idle
-
-
     - _Requirements: 1.2, 5.3, 5.5_
 
   - [ ] 4.3 Implement TimeTrackingScheduler using Quartz.NET
