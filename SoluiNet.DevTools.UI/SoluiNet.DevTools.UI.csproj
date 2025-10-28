@@ -88,7 +88,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
-    
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -150,8 +149,7 @@
     </Compile>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Windows_NT'" />
-    <Exec Command="cp &quot;$(SolutionDir)icons\favicon.ico&quot; &quot;$(ProjectDir)favicon.ico&quot;" Condition="'$(OS)' == 'Unix'" />
+    <Copy SourceFiles="$(SolutionDir)icons\favicon.ico" DestinationFiles="$(ProjectDir)favicon.ico" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\$(ConfigurationName)\UI&quot; &quot;$(SolutionDir)build\windows-client\$(ConfigurationName)\UI\&quot; /y /s /e /I&#xD;&#xA;  xcopy &quot;$(SolutionDir)build\plugins\$(ConfigurationName)\Plugins&quot; &quot;$(SolutionDir)build\windows-client\$(ConfigurationName)\Plugins\&quot; /y /s /e /I&#xD;&#xA;)" />

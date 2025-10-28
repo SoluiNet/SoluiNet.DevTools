@@ -292,7 +292,7 @@ namespace SoluiNet.DevTools.UnitTest
                 EnabledPlugins = new System.Collections.Generic.Dictionary<string, bool>
                 {
                     { "Plugin1", true },
-                    { "Plugin2", false }
+                    { "Plugin2", false },
                 },
             };
 
