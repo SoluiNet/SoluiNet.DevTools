@@ -12,7 +12,7 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
     using SoluiNet.DevTools.Core.TimeTracking.Models;
 
     /// <summary>
-    /// Service for monitoring window changes.
+    /// Service for monitoring window changes with configurable intervals and resource optimization.
     /// </summary>
     public class WindowMonitor : IWindowMonitor
     {
@@ -20,6 +20,10 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
         private readonly ILogger<WindowMonitor>? logger;
         private CancellationTokenSource? monitoringCancellationTokenSource;
         private Task? monitoringTask;
+        private TimeSpan currentInterval;
+        private int consecutiveNoChangeCount;
+        private const int MaxConsecutiveNoChangeBeforeSlowdown = 10;
+        private const double SlowdownMultiplier = 2.0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowMonitor"/> class.
@@ -60,6 +64,16 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
                 this.logger?.LogWarning("Window monitoring is already active");
                 return Task.CompletedTask;
             }
+
+            // Validate interval is between 1-60 seconds as per requirements
+            if (interval.TotalSeconds < 1 || interval.TotalSeconds > 60)
+            {
+                throw new ArgumentOutOfRangeException(nameof(interval),
+                    "Monitoring interval must be between 1 and 60 seconds");
+            }
+
+            this.currentInterval = interval;
+            this.consecutiveNoChangeCount = 0;
 
             this.logger?.LogInformation("Starting window monitoring with interval: {Interval}", interval);
 
@@ -104,14 +118,15 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
         }
 
         /// <summary>
-        /// Monitors windows for changes.
+        /// Monitors windows for changes with adaptive interval adjustment for resource optimization.
         /// </summary>
-        /// <param name="interval">The monitoring interval.</param>
+        /// <param name="interval">The base monitoring interval.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
         private async Task MonitorWindowsAsync(TimeSpan interval, CancellationToken cancellationToken)
         {
             WindowInfo? previousWindow = null;
+            var adaptiveInterval = interval;
 
             try
             {
@@ -126,15 +141,37 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
 
                         if (hasChanged)
                         {
-                            this.logger?.LogDebug("Window changed from '{Previous}' to '{Current}'", 
-                                previousWindow?.ToString() ?? "null", 
+                            this.logger?.LogDebug("Window changed from '{Previous}' to '{Current}'",
+                                previousWindow?.ToString() ?? "null",
                                 currentWindow?.ToString() ?? "null");
 
                             this.WindowChanged?.Invoke(this, new WindowChangedEventArgs(previousWindow, currentWindow));
                             previousWindow = currentWindow?.Clone();
+
+                            // Reset adaptive interval when change is detected
+                            this.consecutiveNoChangeCount = 0;
+                            adaptiveInterval = interval;
+                        }
+                        else
+                        {
+                            // Increment no-change counter for adaptive interval adjustment
+                            this.consecutiveNoChangeCount++;
+
+                            // Gradually increase interval when no changes occur to save resources
+                            if (this.consecutiveNoChangeCount >= MaxConsecutiveNoChangeBeforeSlowdown)
+                            {
+                                var newInterval = TimeSpan.FromMilliseconds(adaptiveInterval.TotalMilliseconds * SlowdownMultiplier);
+
+                                // Cap the maximum adaptive interval to 5 times the original interval
+                                var maxAdaptiveInterval = TimeSpan.FromMilliseconds(interval.TotalMilliseconds * 5);
+                                adaptiveInterval = newInterval > maxAdaptiveInterval ? maxAdaptiveInterval : newInterval;
+
+                                this.logger?.LogTrace("Adaptive interval increased to {AdaptiveInterval} due to {ConsecutiveNoChange} consecutive no-change cycles",
+                                    adaptiveInterval, this.consecutiveNoChangeCount);
+                            }
                         }
 
-                        await Task.Delay(interval, cancellationToken).ConfigureAwait(false);
+                        await Task.Delay(adaptiveInterval, cancellationToken).ConfigureAwait(false);
                     }
                     catch (OperationCanceledException)
                     {
@@ -143,7 +180,7 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
                     catch (Exception ex)
                     {
                         this.logger?.LogError(ex, "Error during window monitoring iteration");
-                        
+
                         // Wait a bit before retrying to avoid tight error loops
                         await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
                     }

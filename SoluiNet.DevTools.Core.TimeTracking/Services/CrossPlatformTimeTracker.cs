@@ -5,11 +5,14 @@
 namespace SoluiNet.DevTools.Core.TimeTracking.Services
 {
     using System;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
     using SoluiNet.DevTools.Core.TimeTracking.Interfaces;
     using SoluiNet.DevTools.Core.TimeTracking.Models;
+    using SoluiNet.DevTools.Core.TimeTracking.Storage;
+    using SoluiNet.DevTools.Utils.TimeTracking.Entities;
 
     /// <summary>
     /// Cross-platform implementation of the time tracker.
@@ -18,33 +21,38 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
     {
         private readonly IWindowMonitor windowMonitor;
         private readonly ITimeTrackingConfiguration configuration;
+        private readonly IPlatformProvider platformProvider;
         private readonly ILogger<CrossPlatformTimeTracker>? logger;
         private readonly object statusLock = new object();
-        
+
         private TimeTrackerStatus status;
         private WindowInfo? currentWindow;
         private DateTime? windowStartTime;
+        private CrossPlatformTimeTrackingContext? dbContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CrossPlatformTimeTracker"/> class.
         /// </summary>
         /// <param name="windowMonitor">The window monitor service.</param>
         /// <param name="configuration">The time tracking configuration.</param>
+        /// <param name="platformProvider">The platform provider for window monitoring.</param>
         /// <param name="logger">The logger instance.</param>
         public CrossPlatformTimeTracker(
             IWindowMonitor windowMonitor,
             ITimeTrackingConfiguration configuration,
+            IPlatformProvider platformProvider,
             ILogger<CrossPlatformTimeTracker>? logger = null)
         {
             this.windowMonitor = windowMonitor ?? throw new ArgumentNullException(nameof(windowMonitor));
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.platformProvider = platformProvider ?? throw new ArgumentNullException(nameof(platformProvider));
             this.logger = logger;
 
             this.status = new TimeTrackerStatus
             {
                 IsRunning = false,
                 MonitoringInterval = configuration.MonitoringInterval,
-                PlatformProvider = "Unknown",
+                PlatformProvider = platformProvider.PlatformName,
             };
 
             this.windowMonitor.WindowChanged += this.OnWindowChanged;
@@ -73,6 +81,9 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
 
             try
             {
+                // Initialize database context
+                this.dbContext = new CrossPlatformTimeTrackingContext(logger: this.logger);
+
                 await this.windowMonitor.StartMonitoringAsync(this.configuration.MonitoringInterval, cancellationToken)
                     .ConfigureAwait(false);
 
@@ -111,6 +122,10 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
                 await this.ProcessCurrentWindowDataAsync().ConfigureAwait(false);
 
                 await this.windowMonitor.StopMonitoringAsync(cancellationToken).ConfigureAwait(false);
+
+                // Dispose database context
+                this.dbContext?.Dispose();
+                this.dbContext = null;
 
                 lock (this.statusLock)
                 {
@@ -212,21 +227,99 @@ namespace SoluiNet.DevTools.Core.TimeTracking.Services
             if (duration.TotalSeconds >= 1)
             {
                 var usageData = new UsageDataEventArgs(this.currentWindow, duration);
-                
+
                 lock (this.statusLock)
                 {
                     this.status.DataPointsCaptured++;
                 }
 
-                this.logger?.LogDebug("Captured usage data: {Window} for {Duration}", 
+                this.logger?.LogDebug("Captured usage data: {Window} for {Duration}",
                     this.currentWindow.ToString(), duration);
 
-                // TODO: Store usage data in database (will be implemented in task 3)
-                // For now, just raise the event
+                // Store usage data in database
+                await this.StoreUsageDataAsync(usageData).ConfigureAwait(false);
+
+                // Raise the event for any listeners
                 this.UsageDataCaptured?.Invoke(this, usageData);
             }
 
             await Task.CompletedTask.ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Stores usage data in the database.
+        /// </summary>
+        /// <param name="usageData">The usage data to store.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        private async Task StoreUsageDataAsync(UsageDataEventArgs usageData)
+        {
+            if (this.dbContext == null)
+            {
+                this.logger?.LogWarning("Database context is not initialized, cannot store usage data");
+                return;
+            }
+
+            try
+            {
+                // Find or create application record
+                var application = await this.GetOrCreateApplicationAsync(usageData.WindowInfo).ConfigureAwait(false);
+
+                // Create usage time record
+                var usageTime = new UsageTime
+                {
+                    ApplicationId = application.ApplicationId,
+                    ApplicationIdentification = usageData.WindowInfo.ProcessName,
+                    StartTime = usageData.CapturedAt - usageData.Duration,
+                    Duration = (int)usageData.Duration.TotalSeconds,
+                    AdditionalInformation = $"Title: {usageData.WindowInfo.Title}; Platform: {usageData.WindowInfo.Platform}; ProcessPath: {usageData.WindowInfo.ProcessPath}; WindowClass: {usageData.WindowInfo.WindowClass}",
+                };
+
+                this.dbContext.UsageTime.Add(usageTime);
+                await this.dbContext.SaveChangesAsync().ConfigureAwait(false);
+
+                this.logger?.LogDebug("Stored usage data for {Application} - {Duration}s",
+                    usageData.WindowInfo.ProcessName, usageData.Duration.TotalSeconds);
+            }
+            catch (Exception ex)
+            {
+                this.logger?.LogError(ex, "Failed to store usage data for {Application}",
+                    usageData.WindowInfo.ProcessName);
+            }
+        }
+
+        /// <summary>
+        /// Gets or creates an application record in the database.
+        /// </summary>
+        /// <param name="windowInfo">The window information.</param>
+        /// <returns>The application record.</returns>
+        private async Task<Application> GetOrCreateApplicationAsync(WindowInfo windowInfo)
+        {
+            if (this.dbContext == null)
+            {
+                throw new InvalidOperationException("Database context is not initialized");
+            }
+
+            // Try to find existing application
+            var existingApp = this.dbContext.Application
+                .FirstOrDefault(a => a.ApplicationName == windowInfo.ProcessName);
+
+            if (existingApp != null)
+            {
+                return existingApp;
+            }
+
+            // Create new application record
+            var newApp = new Application
+            {
+                ApplicationName = windowInfo.ProcessName,
+                ExtendedConfiguration = $"<config><platform>{windowInfo.Platform}</platform><processPath>{windowInfo.ProcessPath}</processPath></config>",
+            };
+
+            this.dbContext.Application.Add(newApp);
+            await this.dbContext.SaveChangesAsync().ConfigureAwait(false);
+
+            this.logger?.LogDebug("Created new application record for {Application}", windowInfo.ProcessName);
+            return newApp;
         }
     }
 }

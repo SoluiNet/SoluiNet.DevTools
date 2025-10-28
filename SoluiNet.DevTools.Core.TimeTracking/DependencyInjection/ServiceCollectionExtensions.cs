@@ -54,9 +54,10 @@ namespace SoluiNet.DevTools.Core.TimeTracking.DependencyInjection
                 return provider;
             });
 
-            // Register core services (these will be implemented in later tasks)
+            // Register core services
             services.AddSingleton<IWindowMonitor, WindowMonitor>();
             services.AddSingleton<ITimeTracker, CrossPlatformTimeTracker>();
+            services.AddSingleton<ITimeTrackingScheduler, TimeTrackingScheduler>();
 
             return services;
         }
@@ -98,9 +99,10 @@ namespace SoluiNet.DevTools.Core.TimeTracking.DependencyInjection
                 return provider;
             });
 
-            // Register core services (these will be implemented in later tasks)
+            // Register core services
             services.AddSingleton<IWindowMonitor, WindowMonitor>();
             services.AddSingleton<ITimeTracker, CrossPlatformTimeTracker>();
+            services.AddSingleton<ITimeTrackingScheduler, TimeTrackingScheduler>();
 
             return services;
         }
@@ -156,6 +158,7 @@ namespace SoluiNet.DevTools.Core.TimeTracking.DependencyInjection
                 serviceProvider.GetRequiredService<IPlatformProvider>();
                 serviceProvider.GetRequiredService<IWindowMonitor>();
                 serviceProvider.GetRequiredService<ITimeTracker>();
+                serviceProvider.GetRequiredService<ITimeTrackingScheduler>();
             }
             catch (Exception ex)
             {
