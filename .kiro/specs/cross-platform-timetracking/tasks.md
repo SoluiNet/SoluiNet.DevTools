@@ -43,20 +43,30 @@
     - Handle macOS security permissions and accessibility requirements
     - _Requirements: 3.3_
 
-- [ ] 3. Create cross-platform storage layer with advanced querying
-  - [ ] 3.1 Enhance existing TimeTrackingContext for cross-platform usage
+- [x] 3. Create cross-platform storage layer with advanced querying
+
+
+
+
+  - [x] 3.1 Enhance existing TimeTrackingContext for cross-platform usage
+
+
     - Modify TimeTrackingContext to work with .NET Core and SQLite
     - Remove Windows-specific dependencies from entity framework code
     - Implement platform-specific database path resolution
     - _Requirements: 3.5, 7.1_
 
-  - [ ] 3.2 Implement advanced query repository
+  - [x] 3.2 Implement advanced query repository
+
+
     - Create QueryRepository class with regex and LIKE pattern support
     - Implement TimeRangeQueryService for time-based filtering
     - Add support for SQLite REGEXP function and pattern matching
     - _Requirements: 4.2, 4.3, 4.9_
 
-  - [ ] 3.3 Implement limited SQL query processor
+  - [x] 3.3 Implement limited SQL query processor
+
+
     - Create LimitedSqlQueryProcessor with SQL parsing and validation
     - Implement whitelist-based security for allowed operations and tables
     - Add support for SELECT, WHERE, GROUP BY, ORDER BY operations

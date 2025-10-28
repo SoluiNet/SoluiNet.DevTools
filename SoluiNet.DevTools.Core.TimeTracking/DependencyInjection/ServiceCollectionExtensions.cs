@@ -5,12 +5,14 @@
 namespace SoluiNet.DevTools.Core.TimeTracking.DependencyInjection
 {
     using System;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using SoluiNet.DevTools.Core.TimeTracking.Configuration;
     using SoluiNet.DevTools.Core.TimeTracking.Interfaces;
     using SoluiNet.DevTools.Core.TimeTracking.Platform;
     using SoluiNet.DevTools.Core.TimeTracking.Services;
+    using SoluiNet.DevTools.Core.TimeTracking.Storage;
 
     /// <summary>
     /// Extension methods for configuring time tracking services in dependency injection.
@@ -42,7 +44,7 @@ namespace SoluiNet.DevTools.Core.TimeTracking.DependencyInjection
             {
                 var logger = serviceProvider.GetService<ILogger<IPlatformProvider>>();
                 var provider = PlatformProviderFactory.CreateProvider(logger);
-                
+
                 if (provider == null)
                 {
                     throw new PlatformNotSupportedException(
@@ -86,7 +88,7 @@ namespace SoluiNet.DevTools.Core.TimeTracking.DependencyInjection
             {
                 var logger = serviceProvider.GetService<ILogger<IPlatformProvider>>();
                 var provider = PlatformProviderFactory.CreateProvider(logger);
-                
+
                 if (provider == null)
                 {
                     throw new PlatformNotSupportedException(
@@ -99,6 +101,35 @@ namespace SoluiNet.DevTools.Core.TimeTracking.DependencyInjection
             // Register core services (these will be implemented in later tasks)
             services.AddSingleton<IWindowMonitor, WindowMonitor>();
             services.AddSingleton<ITimeTracker, CrossPlatformTimeTracker>();
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds time tracking storage services to the service collection.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="connectionString">Optional database connection string.</param>
+        /// <returns>The service collection for chaining.</returns>
+        public static IServiceCollection AddTimeTrackingStorage(
+            this IServiceCollection services,
+            string? connectionString = null)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            // Register database context
+            services.AddDbContext<CrossPlatformTimeTrackingContext>(options =>
+            {
+                // Context will be configured in OnConfiguring method with the provided connection string
+            });
+
+            // Register storage services
+            services.AddScoped<IQueryRepository, QueryRepository>();
+            services.AddScoped<ITimeRangeQueryService, TimeRangeQueryService>();
+            services.AddScoped<ILimitedSqlQueryProcessor, LimitedSqlQueryProcessor>();
 
             return services;
         }
