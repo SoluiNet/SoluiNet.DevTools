@@ -79,6 +79,7 @@ namespace SoluiNet.DevTools.Utils.Crypto
                     encryptedText = GeneralUtils.Base64Encode(toEncrypt);
                     break;
 
+#pragma warning disable IDE0010
                 // Hashing
                 case "Hashing":
                     switch (options["hashMethod"].ToString())
@@ -139,6 +140,7 @@ namespace SoluiNet.DevTools.Utils.Crypto
 
                             break;
                     }
+#pragma warning restore IDE0010
 
                     break;
             }
