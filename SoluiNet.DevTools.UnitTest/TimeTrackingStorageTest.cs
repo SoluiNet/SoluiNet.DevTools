@@ -238,7 +238,9 @@ namespace SoluiNet.DevTools.UnitTest
                 @";\s*(DROP|DELETE|UPDATE|INSERT|ALTER|CREATE)",
                 @"UNION\s+SELECT",
                 @"/\*.*?\*/",
-                @"--\s*[^\r\n]*"
+                @"--\s*[^\r\n]*",
+                @"\bOR\s+1\s*=\s*1\b",
+                @"\bAND\s+1\s*=\s*1\b"
             };
 
             return !injectionPatterns.Any(pattern => Regex.IsMatch(sqlQuery, pattern, RegexOptions.IgnoreCase));
